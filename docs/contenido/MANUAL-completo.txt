@@ -1,0 +1,1372 @@
+pbta — MANUAL COMPLETO (texto)
+Fuente: docs/capitulos/*.md (edición clara / reorganizada)
+Referencia original (solo lectura): docs/ref/pbta-original.docx
+Word generado: cyberpunk-pbta.docx (raíz del proyecto)
+========================================================================
+
+========================================================================
+ARCHIVO: 00-sistema.md
+========================================================================
+
+# Sistema
+
+## Cómo se juega
+
+Este juego usa una variante de PbtA (*Powered by the Apocalypse*): las reglas siguen a la ficción, no al revés.
+
+- Los jugadores dicen qué hace su personaje.
+
+- Si la acción tiene riesgo, incertidumbre o consecuencias serias, se tira.
+
+- El resultado cambia la escena; la historia sigue incluso con fallos.
+
+---
+## Los cuatro atributos
+
+Cada personaje tiene cuatro atributos. Se suman a la tirada cuando encajan con la acción.
+
+| Código | Nombre | Sirve para |
+| --- | --- | --- |
+| **EN** | Enlaces Neuronales | Lógica, memoria, técnica, redes, implantes, sistemas |
+| **MC** | Manipulación Cognitiva | Leer personas, empatía, persuasión, presión social |
+| **RC** | Reacción Cinética | Reflejos, coordinación, esquivar, actuar bajo fuego |
+| **TM** | Tejido Muscular | Fuerza, aguante, daño físico, condiciones extremas |
+
+---
+## Tiradas (2d6 + atributo)
+
+Cuando toca tirar, lanza 2d6 y suma el atributo que corresponda.
+
+| Resultado | Qué pasa |
+| --- | --- |
+| **10 o más** | **Éxito completo.** Logras lo que buscabas sin un coste gordo. |
+| **7 a 9** | **Éxito parcial.** Lo logras, pero pagas un precio: complicación, elección fea o giro inesperado. |
+| **6 o menos** | **Fallo.** El Director empeora la escena: más peligro, mala información, tiempo que se acaba, etc. |
+
+Los fallos no paran la partida: abren conflicto, presión y nuevas jugadas.
+
+---
+## Movimientos
+
+Un movimiento es una acción importante que se resuelve con reglas (tirada, elecciones, efectos).
+
+- Se activa cuando hay riesgo, incertidumbre o consecuencias que importan.
+
+- Cualquier personaje puede intentar cualquier movimiento si la ficción lo permite.
+
+- Lo que cambia entre personajes no es «qué pueden intentar», sino con qué herramientas lo resuelven.
+
+---
+Dos tipos de herramientas definen el poder en Night City:
+
+## Cromos
+
+| Aspecto | Cromos |
+| --- | --- |
+| Qué es | Implantes y tecnología **dentro del cuerpo** |
+| En la ficción | Justifica capacidades «sobrehumanas» integradas |
+| Reglas | Humanidad, @Psique, catálogo en *Cyberware* |
+
+## Chapería
+
+| Aspecto | Chapería |
+| --- | --- |
+| Qué es | Equipo **externo**: armas, armadura, herramientas, vehículos |
+| En la ficción | Justifica lo que llevas, ocultas o despliegas |
+| Reglas | Sin @Psique; catálogo en *Chapería* |
+
+Muchas acciones avanzadas exigen el implante o la pieza adecuada, además de la tirada.
+
+El personaje no progresa solo subiendo atributos. También consigue mejores cromos, mejor chapería y recursos (ver *Neurodata, Estrellas y Créditos*). Un infiltrador con camuflaje y un mercenario blindado resuelven los mismos movimientos de formas muy distintas.
+
+---
+## Rol del Director
+
+El Director no compite contra la mesa. Su trabajo:
+
+- Presentar amenazas y escenas.
+
+- Interpretar el mundo y la gente.
+
+- Aplicar consecuencias, sobre todo en 7–9 y 6− (amenazas, datos que duelen, seguridad que se activa, reloj en marcha, reacción enemiga).
+
+---
+## Tono de campaña
+
+El sistema busca historias de alto riesgo: corporaciones, cuerpo modificado, calle violenta. Las decisiones importan. Cada tirada construye una historia donde cuentan la supervivencia, la ambición y cuánto de humano te queda.
+
+En la mesa, la creatividad y el buen uso de Cromos y Chapería pesan tanto como los modificadores de la ficha.
+
+---
+
+========================================================================
+ARCHIVO: 01-crear-un-cyberpunk.md
+========================================================================
+
+# Crear un Cyberpunk
+
+## Crear tu Cyberpunk
+
+Aquí defines quién eres al empezar: arquetipo, atributos iniciales y el equipo con el que sales a la calle.
+
+No eliges bonos sueltos: eliges un personaje con historia, contactos y límites. Cada profesión resuelve problemas de otra forma (negocios, violencia, información, arte, espionaje, vida nómada…) dentro del mismo sistema PbtA de *Sistema*.
+
+### Qué obtienes al crear el personaje
+
+- Rasgos iniciales — Los valores `EN`, `MC`, `RC` y `TM` de la profesión son tus modificadores de partida (se suman a 2d6).
+
+- Cyberware y chapería inicial — Según *Equipamiento inicial* más abajo.
+
+- Arsenal inicial — Un arma de la lista de tu profesión.
+
+- Estrellas de creación — 5 estrellas con las mismas reglas de campaña (*Cyberware → Neurodata, Estrellas y Créditos*): para adquirir o mejorar una pieza de chapería o cromo.
+
+Elige una profesión, anótala en la ficha y usa el trasfondo como guía (no añade reglas salvo acuerdo del Director).
+
+---
+## Profesión
+
+Elige el arquetipo que encaje con tu concepto.
+
+---
+## Equipamiento inicial
+
+Cyberware inicial: 2 cromos improvisados o 1 cromo corriente, más 2 piezas de chapería improvisada o 1 pieza de chapería corriente que no sea arma.
+
+Arsenal inicial: 1 arma corriente de las asociadas a tu profesión (lista bajo cada una).
+
+Recursos: 5 estrellas para accesorios, un cromo nuevo o mejorar un cromo ya adquirido.
+
+---
+## Profesiones
+
+Cada arquetipo: En la mesa = mecánica; el resto = trasfondo.
+
+---
+### Arreglador
+
+**En la mesa:** EN [+1] · MC [+1] · RC [-1] · TM [-1]. **Arsenal inicial:** pistola, escopeta o fusil.
+
+Empezaste abajo: matón de esquina, intermediario de poca monta, el tipo que sabía quién vendía qué en qué callejón. Night City no premia la lealtad; premia a quien entiende el hambre ajena. Tú viste el patrón antes que los demás: cada deseo tiene precio, cada miedo tiene comprador, y quien une ambos lados se queda con el margen. No eres un héroe de barrio. Eres el puente que la Calle cruza cuando la Corporación no contesta el teléfono.
+
+Hoy tu mercancía ya no es solo metal robado. Armas que cruzan fronteras, packs médicos “extraviados”, chips con firmware que nadie debería tener. Si el mercado no existe, lo inventas: un desabastecimiento bien contado, un rumor en el club correcto, un favor cobrado tres semanas después. Sabes crear demanda porque sabes leer la desesperación. Y cuando alguien te llama *Fixer*, no es un cumplido: es un contrato verbal con sangre en la letra chica.
+
+Tu verdadero capital no cabe en una caja fuerte. Es una red: mercenarios que necesitan representación, netrunners que quieren un cliente que no los venda, forasteros que mueven carga sin preguntar de más. Compras y vendes favores como quien cambia divisas. Un local nocturno a tu nombre. Un soborno que abre un muelle. Una tregua entre dos bandos que todavía se odian… mediada por ti, cobrada por ti. Cuando termina una guerra corporativa, alguien tiene que repartir los restos. Ese alguien suele ser un Arreglador.
+
+Hay días en que escondes a un fugitivo, metes comida en un bloqueo o le das techo a alguien que no puede pagar. No es caridad: es inversión. En una ciudad hecha de fragmentos, tú eres el cable que une lo que el sistema cortó. El proletariado no cruza ciertas puertas; tú sí. Y cada puerta abierta deja un débito. Cobrarás. Siempre cobras. Porque en Night City la única ética que sobrevive es la del precio justo… según quién lo define.
+
+---
+### Artista
+
+**En la mesa:** EN [-1] · MC [+1] · RC [+1] · TM [-1]. **Arsenal inicial:** pistola o rifle.
+
+No cantas para ambientar un bar. Cantas —o filmas, o pintas en muros que la policía borra al amanecer— porque la Calle aún necesita una voz que no venga con logo corporativo. Eres el Rockerboy de esta era: poeta de asfalto, agitador, conciencia que sangra en amplificadores y pantallas pirateadas. Con estudios de bolsillo y satélites que cualquiera puede hackear una noche, tu mensaje llega más lejos que cualquier discurso oficial. Y eso aterra a quien gobierna de verdad.
+
+Las Corporaciones y el Gobierno preferirían que fueras ruido de fondo: moda, nostalgia, producto. Tú prefieres ser problema. Una canción que nombra lo que nadie quiere nombrar. Un clip que muestra el cuerpo bajo el rascacielos. Un show que vacía los sofás y llena las calles. Sabes que hay linajes detrás: guitarras chirriantes, letras honestas, imágenes crudas que derribaron peores mentiras. No pretendes ser santo. Pretendes no callarte mientras todavía te quede un escenario… o una azotea.
+
+El poder que manejas no es el de un fusil, pero mueve fusiles. Una obra tuya puede empujar a un tímido a la barricada y a un cobarde a mirar de frente. Artistas de leyenda lideraron motines contra torres de vidrio y expusieron dictadores con tres acordes y una cámara robada. Es demasiado peso para alguien que duerme en camerinos distintos cada semana. Aun así lo cargas, porque el silencio también mata: solo que más despacio.
+
+Night City te ofrece contratos, sponsors y una jaula dorada con buen sonido. Aceptarás lo justo para no morir de hambre y rechazarás lo que te convierta en jingle. Sabes que te van a amenazar, a comprar, a clonar tu estilo. Que te van a amar en público y odiar en privado. Sigues igual: cada noche el mismo pacto con el público —decir algo verdadero antes de que apaguen las luces—. Si el sistema quiere artistas decorativos, que contrate maniquíes. Tú vienes a hacer ruido que duele.
+
+---
+### Biohacker
+
+**En la mesa:** EN [+1] · MC [-1] · RC [0] · TM [0]. **Arsenal inicial:** pistola o lanzadardos.
+
+Si algo permanece intacto cerca de ti más de cinco minutos, es porque todavía no lo abriste. Destornilladores en los bolsillos, olor a soldadura en la ropa, la cabeza llena de esquemas que nadie dibujó en un manual oficial. En un mundo donde media ciudad funciona con tecnología que nadie entiende del todo, tú eres el que todavía se atreve a mirar adentro. Arreglas lo imposible por costumbre. Lo legal, cuando conviene. Lo ilegal, cuando paga.
+
+Los trabajos chicos te mantienen vivo: un Metrocar que no enciende, un HUD que sangra estática, un interface que se niega a hablar con el resto del cuerpo. Los trabajos grandes te hacen peligroso: armas que no deberían existir, cromos robados, kits de espionaje para operaciones negras, termita, drones cazadores, juguetes que terminan en funerales. Cobras bien porque el mercado negro no tiene departamento de garantías. Y gastas mejor: cada crédito vuelve en herramientas, datos y prototipos que mañana serán contrabando.
+
+Tus clientes no siempre te quieren después. Hay gente que camina con tus mods y te odia por lo que les hiciste capaz de hacer… o por lo que les falló a las tres de la mañana. Por eso tu taller parece una fortaleza improvisada y tu lista de mercenarios de confianza nunca está vacía. En Night City, el Tech que sobrevive no es el más brillante: es el que asume que alguien va a venir a cobrar una deuda técnica con plomo.
+
+Tienes un primo —o un hermano de oficio— que corta carne y cable con la misma calma: el Tecnomédico. Mientras tú resucitas una tostadora, él abre pechos en sótanos y clava implantes que Trauma Team fingirá no haber visto. Ambos conocen el mismo secreto: aquí la medicina ya es mecánica, y la mecánica ya es política. Él espera que un contrato “limpio” lo salve. Tú esperas no necesitarlo demasiado pronto. Mentira piadosa. En esta ciudad, tarde o temprano todos vuelven al mismo banco de trabajo… o a la misma camilla.
+
+---
+### Comunicador
+
+**En la mesa:** EN [0] · MC [+1] · RC [-1] · TM [0]. **Arsenal inicial:** pistola.
+
+Ellos fabrican la verdad a medida. Tú la desarmas en vivo. Las Corporaciones derraman tóxicos, compran jueces, desatan guerras de proxy y sonríen en los screamsheets. El Gobierno no las frena: es un cliente más. El último dique entre el monopolio total y la Calle todavía medio despierta son los Media… y tú estás en esa trinchera con un pase de prensa, contactos en cada rave y una audiencia que todavía cree —o finge creer— que la información puede dolerles a los de arriba.
+
+Cuando excavas, primero llega el encubrimiento: funcionarios, abogados, perros falderos con traje. Después la amenaza. Después el intento de borrarte del aire. Una vez te cancelaron el netblog entero; volviste con tu equipo y empujaste la historia hasta que la Dirección tuvo que tragar. Te han apuntado demasiadas veces. Por eso un mercenario camina a tu sombra y un netrunner bueno —caro, nervioso, imprescindible— escarba la Red mientras tú miras a cámara. No alcanza con ser valiente. Hay que ser mejor que la máquina de olvido corporativa.
+
+La semana pasada: una farmacéutica vendiendo veneno en la Calle con envoltorio médico. Esta semana: una guerra secreta en el sur con cibertropas y cifras de muertos que ningún boletín oficial va a admitir. Mañana puede ser un cargamento “posible nuclear” camino a un puerto que nadie quiere nombrar. Cada pista es un detonador. Cada emisión, una apuesta a que tu cara sigue en pantalla y no en una fosa.
+
+Sabes que tu propia Corporación mediática te usa tanto como tú la usas a ella. Sponsors, ratings, límites “editoriales”. Juegas ese juego sin olvidar el otro: el de la Calle, donde la gente necesita nombres, pruebas y alguien que diga en voz alta lo que todos susurran. Si te callas, el silencio no es neutral: es cómplice. Así que cargas el equipo, avisas a tus apoyos y sales otra vez. Exponer bastardos no es un eslogan. Es tu forma de no convertirte en uno.
+
+---
+### Corpo
+
+**En la mesa:** EN [0] · MC [+1] · RC [0] · TM [-1]. **Arsenal inicial:** pistola.
+
+En otro siglo te habrían llamado yuppie con MBA y sonrisa de catálogo. Hoy eres Exec: alma hipotecada a la Compañía, acceso a pisos donde el aire se filtra y la moral no. Las Corporaciones no influyen en el mundo cyberpunk. Lo administran. Gobiernos, mercados, ejércitos, órbita baja. Quien controla la torre controla el tablero. Tú entraste para subir. Todavía no decidiste si fue ambición o miedo a quedarte abajo.
+
+La vida de ejecutivo junior no es un open space con café gratis. Es una guerra de pasillos. Los de abajo matarían por tu silla. Los de arriba matarían para que no llegues a la suya. Sabotaje, soborno, chantaje, “accidentes” de ascenso: rutina. Cada joven lobo mantiene mercenarios y netrunners como quien mantiene un seguro de vida… o un arma bajo el escritorio. El premio es poder real. El castigo es la Calle, o una necropsia que nadie investigará.
+
+Tus proyectos oscilan entre lo gris y lo monstruoso. Un plan de productividad para la filial médica. Un equipo negro sembrando una plaga de diseño para que Marketing venda la cura. Caza de talentos: secuestrar al investigador rival. Robo de planos de una lanzadera suborbital para copiarla y revenderla al mejor postor geoestratégico. Firmas órdenes que otros ejecutan. Duermes contando que “alguien más apretó el gatillo”. La ciudad no distingue esa sutileza.
+
+Te repites que entraste para cambiar la Corporación desde adentro. Cada trimestre esa frase suena más hueca. La ética es un lujo de quien no tiene un informe en una hora y un colega de Ventas planeando congelarte la base de datos —y la carrera— para siempre. En el comedor ejecutivo se habla de sinergias; en los sótanos, de cuerpos. Tú ya no confundes el mapa con el territorio. Vas a mover primero. No porque seas el villano de la película. Porque en el piso treinta, la única narrativa que importa es la del que sigue respirando con badge activo… y con un equipo negro al otro lado de la línea, esperando tu OK.
+
+---
+### Espía
+
+**En la mesa:** EN [-1] · MC [0] · RC [+1] · TM [0]. **Arsenal inicial:** pistola o lanzadardos.
+
+Te alistaste creyendo en banderas. País, orden, “alguien tiene que hacerlo”. Tras una docena de trabajos, las banderas se ven como logos más viejos: todavía mandan morir, pero ya no explican por qué. Sigues igual en el oficio, porque el oficio te reescribe. Llevas meses con el nombre de otro, la ropa de otro, la risa de otro. No para lucirte. Para estar exactamente donde el expediente dice que hace falta un fantasma con pulso.
+
+No eres el espía de cartelera. Los que sobreviven no brillan: se disuelven. Te entrenaron para apilar objetivos en una misma infiltración: sacar un archivo, marcar un blanco, abrir una puerta que otro cruzará con un rifle. Asesinato, secuestro, extracción de datos, vigilancia larga en un complejo que hiede a ozono y mentiras. Cambiar de identidad no es disfraz de fiesta: es cirugía social. Entras en la rutina del lugar hasta que el lugar te trata como mobiliario. Ahí recién robas lo que viniste a robar.
+
+Tus empleadores cambian de máscara: agencias estatales que ya no controlan su propio patio, divisiones de inteligencia corporativa, brokers que venden secretos al mejor postor. A veces el “lado correcto” te manda a proteger un activo. A veces a enterrarlo. Aprendiste a no preguntar en voz alta. Preguntar se nota. Y lo que se nota, mata. Tu peor enemigo no es el guarda del lobby: es el reflejo en un vidrio a las 03:14, cuando olvidas por un segundo qué nombre debías responder.
+
+El cuerpo paga el precio que el informe no menciona. Implantes discretos, hábitos de paranoia, amistades que son leyendas de cobertura. Duermes en camas prestadas y despiertas repasando rutas de escape. Si fallas, no hay funeral con bandera: hay un hueco en una base de datos y un reemplazo con tu mismo corte de pelo. Aun así vuelves a entrar. Porque en Night City la información es munición, y alguien va a dispararla. Prefieres ser el dedo en el gatillo —o el que desvía el cañón— antes que el cartel en la pared. Silencioso. Preciso. Ya casi sin ideales… y por eso más peligroso.
+
+---
+### Forastero
+
+**En la mesa:** EN [0] · MC [-1] · RC [0] · TM [+1]. **Arsenal inicial:** pistola, escopeta, fusil o rifle.
+
+Cuando el colapso financiero barrió empleos y casas, las carreteras se llenaron de gente que ya no tenía dirección postal. Disturbios, toques de queda, corporaciones comprando lo que el Estado no podía sostener. De ese éxodo nació algo que la ciudad aún mira de reojo: los Nomads, los forasteros. No son turistas. Son un pueblo en movimiento, unido por deuda compartida, sangre y la certeza de que quedarse quieto es morir de a poco.
+
+Tu vida es el convoy, el clan, el pacto de no abandonar al que se queda sin rueda a las tres de la madrugada. Familias, clanes, tribus, naciones: escalas de lealtad más reales que cualquier ciudadanía. Las Siete Naciones tienen líderes, rutas y orgullo. Los Raffen Shiv son la sombra en el asfalto: parias, bandidos, la prueba de que también entre nómadas hay quien solo entiende el lenguaje del saqueo. Tú sabes de qué lado caminas… o finges no saberlo cuando el trabajo lo exige.
+
+Aceptas encargos porque el pack necesita combustible, comida y piezas: transporte legal, contrabando, cosecha de temporada, mano de obra en obras que nadie más quiere. Mientras unos cumplen, otros cuidan ancianos, niños y motores. Después se levantan las carpas y el campamento vuelve a ser polvo en el espejo retrovisor. Vives en el límite de la ley: comercias con lo robado, ayudas a fugitivos, peinas ruinas y bases abandonadas. Atacar un convoy corporativo entero suele ser locura… salvo para quienes ya no tienen nada que perder.
+
+En Night City eres el olor a aceite y desierto que entra cuando alguien abre la puerta del garage equivocado. Te necesitan para mover lo que no debe verse y para recordar que el mundo no termina en el anillo de neón. Tu familia es tu nación. Tu vehículo, tu casa. Tu palabra, a veces, vale más que un contrato corpo… y a veces se rompe igual de feo. Sigues en la ruta porque la ruta no miente: o avanzas juntos, o la carretera se traga a los rezagados.
+
+---
+### Mercenario
+
+**En la mesa:** EN [-1] · MC [-1] · RC [+1] · TM [+1]. **Arsenal inicial:** pistola, escopeta, fusil o rifle + pistola impr.
+
+Naciste con un arma en la mano de carne. La otra —la de metal, la que fabrica muerte con precisión de catálogo— llegó después, cuando el cuerpo original ya no alcanzó. Eres Solo: guarda de alquiler, ejecutor, cibersoldado de contrato. Ya sea bajo bandera corporativa o en “acciones policiales” que nunca se llaman guerras, tu oficio es el mismo: convertir violencia en resultado facturable.
+
+La mayoría de los tuyos salió de ejércitos privados o de campañas oficiales que dejaron más cromo que medallas. Cada herida empuja más hardware: extremidades-arma, blindaje bajo la piel, chips que afilan reflejos, combat drugs que compran segundos a costa de años. Si llegas a la cima del escalafón samurái, tal vez te conviertas en ronin: asesino, escolta o martillo para quien pague tu tarifa obscena. El mercado adora a los mejores. El mercado también los descarta sin funeral.
+
+El precio no es poesía. Es adicción, paranoia y un cuerpo que ya no reconoce del todo como propio. Tus instintos están tan entrenados que la calma se siente como fallo del sistema. No confías en madres, amantes ni “hermanos de unidad”: en este trabajo la traición es un beneficio marginal. Una noche duermes en un ático con vista a torres iluminadas. La siguiente, en un callejón que huele a ozono y sangre seca. Misma persona. Mismo gatillo. Distinto recibo.
+
+Sabes que la Calle te mira como arma andante… y no se equivoca del todo. También sabes que sin gente como tú, los Exec no salen del ascensor y los Media no llegan vivos a la emisión. No pides que te quieran. Pides que paguen por adelantado y que el contrato diga claro quién muere si alguien improvisa. En el fondo, todos compran lo mismo: la ilusión de control a través de tu gatillo. Ser el mejor no es gloria. Es sobrevivir una noche más siendo exactamente lo que Night City fabricó: una solución letal con nombre en la factura.
+
+---
+### Netrunner
+
+**En la mesa:** EN [+1] · MC [0] · RC [0] · TM [-1]. **Arsenal inicial:** pistola.
+
+Empezaste temprano: una máquina vieja, una pantalla que humedecía los ojos, la certeza infantil de que el mundo real era una interfaz mal diseñada. En la escuela ya doblabas sistemas que los adultos creían seguros. A los trece movías dinero suficiente —desde cuentas que nadie vigilaba bien— para comprar tus primeros interface. Desde entonces el cuerpo es un módem con pulmones. La Red, tu verdadero clima.
+
+Ahora buceas corrientes de datos locales y, cuando te da el valor o la deuda, te asomas a la vieja malla global que todavía une lo que queda de la humanidad conectada. Eres fantasma: programas ofensivos y defensivos al alcance de un pensamiento, demonios y vampiros digitales que abren fortalezas corporativas como latas. Has entrado donde los logos prometen invulnerabilidad. Has comprado, cambiado y vendido secretos que matarían carreras… o ciudades.
+
+A veces tropiezas con traiciones, experimentos y fosas comunes en formato archivo. No es lo que te mantiene dentro. Te mantiene el siguiente ICE, el siguiente satélite, la siguiente arquitectura que nadie mapeó todavía. Sabes que las IA anti-intruso mejoran cada ciclo y que un día un sistema más rápido te va a atrapar por los conectores y te va a apagar el corazón como quien cierra una sesión. Sigues igual. La carrera solo termina cuando el reloj biológico —o el cortafuegos— decide que ya corriste de más.
+
+En la Calle eres el especialista que todos quieren contratar y nadie quiere sentar a la mesa demasiado tiempo: demasiado poder, demasiado silencio, demasiada posibilidad de que estés leyendo sus implantes mientras sonríen. Cobras en estrellas, cromos y acceso. Pagas en humanidad diferida. Cada inmersión es un pacto: un poco más cerca del dios de la información, un poco más lejos del animal que sudaba frente a aquella primera pantalla. Tus amigos de carne aprenden a no preguntarte qué viste ahí dentro. Tú aprendes a no contarlo. Y aun así, cableas. Porque afuera solo hay asfalto. Adentro, todavía hay horizonte.
+
+---
+
+========================================================================
+ARCHIVO: 02-cyberware-reglas-y-economia.md
+========================================================================
+
+# Cyberware — reglas y economía
+
+## Cromos (cyberware implantado)
+
+Un cromo es cualquier implante que sustituye o mejora parte de tu cuerpo y queda integrado en ti. Modifica tiradas, habilita acciones y marca hasta dónde puedes llegar en Night City.
+
+A diferencia de la chapería (equipo que llevas encima), los cromos:
+
+- No te los quitas en mitad de una escena.
+
+- Cada uno cuenta para la carga de implantes.
+
+- Empujan la pérdida de humanidad y el riesgo de @Psique / cyberpsicosis.
+
+### Cómo leer este capítulo
+
+- Reglas (esta página): humanidad, mejoras, @Psique, Neurodata, Estrellas y Créditos.
+
+- Catálogo: [04-catalogo-cromos.md](04-catalogo-cromos.md) — implantes y módulos.
+
+Si es tu primera partida, lee las reglas antes del catálogo. En campaña, el catálogo es consulta rápida.
+
+---
+## Cromos, humanidad y cyberpsicosis
+
+Los cromos dan capacidades por encima del cuerpo natural: reflejos extremos, fuerza aumentada, sentidos amplificados, enlace directo con la tecnología.
+
+Cada implante tiene un coste: el cerebro integra señales digitales y mecánicas todo el tiempo. Con más cromos, la mente se desconecta de lo humano. En Night City eso se llama perder la humanidad.
+
+---
+### Mejoras de características
+
+Muchos cromos suben una o más características (EN, MC, RC, TM). Los puntos de mejora cuestan según esta escala:
+
+| Bonificación a la característica | Puntos de mejora |
+| --- | --- |
+| +1 | 1 |
+| +2 | 2 |
+| +3 | 4 |
+| +4 | 8 |
+| +5 | 16 |
+| +6 | 32 |
+
+Tope: la suma de bonos de cromos no puede dejar ninguna característica por encima de +3.
+
+Un mismo cromo puede repartir varios puntos de mejora entre distintas características. Cada implante cuenta como un solo cromo instalado, aunque dé varios beneficios.
+
+---
+### Degeneración neural
+
+Más implantes = más desgaste mental.
+
+- Por cada 3 cromos instalados, el personaje baja 1 punto en una característica a su elección (mínimo −3).
+
+- Cada vez que aplica esa penalización, marca 1 casilla de @Psique en la ficha.
+
+---
+### Episodios de cyberpsicosis
+
+Quien lleva cromos puede sufrir episodios de cyberpsicosis.
+
+- En una pifia con una característica mejorada por cromos: episodio de cyberpsicosis 1 turno + marca 1 casilla más de @Psique.
+
+Según el nivel de @Psique en la ficha:
+
+| Casillas @Psique | Efecto |
+| --- | --- |
+| **1 a 3** | Episodios breves |
+| **4 o 5** | Cyberpsicosis **mayor** durante **toda la escena** |
+| **Más de 5** | **Cyberpsicópata permanente** — el personaje pasa al control del Director |
+
+---
+### Recuperar la humanidad
+
+Hay dos formas de bajar @Psique:
+
+#### 1. Retirar un cromo
+
+El personaje puede quitarse un implante a propósito.
+
+- Pierde todas las capacidades de ese cromo.
+
+- Elimina 1 casilla de @Psique.
+
+- Volver a instalarlo sin tratamiento adecuado vuelve a subir @Psique.
+
+- Los cromos improvisados deben destruirse para retirarlos en pleno conflicto; después un biohacker puede repararlos.
+
+#### 2. Tratamiento psicológico digital
+
+Terapia y estabilización neuronal especializada.
+
+- 1 día de tratamiento → elimina 1 casilla de @Psique.
+
+- Recuperar el 4.º o 5.º nivel de @Psique → 1 semana de tratamiento avanzado y siempre un trastorno permanente (narrativa o Director).
+
+---
+## Progresión: Neurodata, Estrellas y Créditos
+
+En Night City las vivencias intensas se venden. Corporaciones, laboratorios y plataformas pagan por recuerdos con adrenalina, miedo y emoción real.
+
+Tras una misión o una escena muy fuerte, puedes descargar la experiencia en una terminal compatible. Ese archivo es Neurodata: recuerdos, sensaciones y percepción completa, listos para almacenar y comercializar.
+
+Un Tasador Virtual evalúa la Neurodata y paga en Estrellas. 1 Estrella = 1 Crédito para cromos, chapería y mejoras.
+
+> Vender experiencias te da poder; cada cromo nuevo también te acerca a perder humanidad. Economía y @Psique van ligadas.
+
+---
+### Cómo obtener Estrellas
+
+Al terminar una misión o sesión relevante, el Tasador puede dar 1 Estrella por cada criterio cumplido:
+
+- ★ El personaje sobrevive a la misión.
+
+- ★ El personaje aprende algo nuevo o relevante.
+
+- ★ El grupo cumple el objetivo principal.
+
+- ★ El personaje participa en la Escena Estrella de la sesión.
+
+La Escena Estrella la eligen los jugadores al final: el momento más memorable o impactante de la sesión.
+
+*(Las 5 estrellas de creación de personaje se gastan con las mismas reglas de Créditos que abajo.)*
+
+---
+### Créditos
+
+- Cada Estrella = 1 Crédito.
+
+- Los Créditos se ganan al vender Neurodata; son la moneda principal para cromos y chapería.
+
+- Puedes guardar Créditos hasta gastarlos.
+
+---
+### Cómo gastar Créditos
+
+#### Nuevo Cyberware (cromo o chapería)
+
+Incluye un subsistema básico de esa pieza.
+
+| Calidad | Coste en Créditos |
+| --- | --- |
+| Improvisado | 5 |
+| Corriente | 10 |
+| Hi-Tech | 15 |
+| Militar | 20 |
+
+#### Mejorar cyberware que ya tienes
+
+Entregas la versión anterior y pagas solo la diferencia en Créditos entre categorías. El reemplazo no añade deterioro ni penalizaciones extra.
+
+#### Subsistemas, accesorios y consumibles
+
+1 Crédito cada uno:
+
+- Un subsistema nuevo
+
+- Un accesorio
+
+- Un pack de 8 granadas
+
+- Un cargador de balística exótica
+
+El Director puede usar el mismo coste para consumibles o accesorios parecidos si encaja en la campaña.
+
+---
+En Night City importa sobrevivir y aprender. El recurso más cotizado sigue siendo la experiencia vivida: cada Neurodata vendida te acerca a mejores cromos… y un paso más hacia la pérdida de humanidad.
+
+---
+
+========================================================================
+ARCHIVO: 04-catalogo-cromos.md
+========================================================================
+
+# Cromos
+
+## Cómo leer las entradas
+
+- Cada entrada de implante es un cromo (cuenta para carga de implantes y @Psique, salvo donde diga lo contrario).
+
+- Las líneas con > son módulos u opciones que ocupan huecos del implante modular.
+
+- Improvisado / Corriente / Hi-Tech / Militar = calidad (coste de pieza nueva: 5 / 10 / 15 / 20 Créditos).
+
+---
+## Implantes cerebrales
+
+### Conexión de arma inteligente
+
+Terminales nerviosas artificiales entre cerebro y palma de la mano. Permite usar cualquier tecnología de arma inteligente (ver chapería).
+
+| Calidad | Efecto |
+| --- | --- |
+| Improvisado | Sin mejoras a características |
+| Corriente | +1 RC |
+| Hi-Tech | +2 RC |
+| Militar | +3 RC |
+
+---
+### Conexión neuronal
+
+Enlace del cerebro con redes y sistemas. Cableada + inalámbrica a la vez = un solo cromo.
+
+| Calidad | Mejora EN |
+| --- | --- |
+| Improvisado | Sin mejoras |
+| Corriente | +1 EN |
+| Hi-Tech | +2 EN |
+| Militar | +3 EN |
+
+Modalidad cableada
+
+- Acceso a la red por casi cualquier enlace en Night City.
+
+- Con acceso a neuroranura ajena: control de los cromos de ese personaje.
+
+| Calidad | Extra |
+| --- | --- |
+| Improvisado | Permite conexión |
+| Corriente | Permite combinar con otros cromos |
+| Hi-Tech | Permite combinar con chapería |
+| Militar | Protocolo de desconexión segura y anti-saturación de datos |
+
+Modalidad inalámbrica
+
+- Control remoto de cromos, cámaras, torretas, sensores, chapería, etc.
+
+| Calidad | Alcance / extra |
+| --- | --- |
+| Improvisado | Conexión a 10 m |
+| Corriente | Combina con otros cromos; 25 m |
+| Hi-Tech | Combina con chapería; 50 m |
+| Militar | Desconexión segura y anti-saturación; 100 m |
+
+---
+### Neurochip
+
+Chips en distintas zonas del cerebro. Cada chip = un cromo distinto (pueden coexistir).
+
+#### Adquisición de conocimiento
+
+Librerías y bases de datos sobre un tema.
+
+| Calidad | Nivel de conocimiento |
+| --- | --- |
+| Improvisado | General, por encima de la media |
+| Corriente | Específico y técnico |
+| Hi-Tech | Alto desarrollo / técnico doctoral |
+| Militar | Conocimiento secreto del área |
+
+#### Anulador de sistemas biológicos
+
+Activa o desactiva a voluntad: dolor, frío, sed, hambre, etc. Solo anula la sensación, no la causa. Elimina el penalizador por daño.
+
+#### Asistente de procesos en segundo plano
+
+Procesos en segundo plano que anticipan y reaccionan; bonifica EN, MC o RC.
+
+| Calidad | Mejoras (distribuibles en EN, MC o RC) |
+| --- | --- |
+| Improvisado | 1 punto de mejora |
+| Corriente | 2 |
+| Hi-Tech | 3 |
+| Militar | 4 |
+
+#### Receptor de data
+
+Una recepción configurada vía protocolo de velo (bolsa en tiempo real, sensores del refugio, etc.).
+
+| Calidad | Capacidad |
+| --- | --- |
+| Improvisado | Texto plano, información acotada |
+| Corriente | Varios datos a la vez |
+| Hi-Tech | Mejoras gráficas y sonoras |
+| Militar | Además: una señal de salida por el mismo canal (alarma, detonación, etc.) |
+
+#### Sistema de sensores de estado
+
+Signos vitales y estado de cromos/chapería; transmisión local o inalámbrica para monitoreo remoto.
+
+| Calidad | Informa |
+| --- | --- |
+| Improvisado | Constantes vitales |
+| Corriente | Estado de cromos |
+| Hi-Tech | Estado de chapería portada |
+| Militar | Protocolo de velo integrado; transmisión por la vieja red |
+
+---
+### Neuroranura
+
+Ranuras para contenido digital. No suma para @Psique (ver neurodata en chapería).
+
+| Calidad | Ranuras |
+| --- | --- |
+| Improvisado | 1 |
+| Corriente | 4 |
+| Hi-Tech | 8 |
+| Militar | 16 |
+
+---
+## Cyberópticas
+
+### Ojo biónico
+
+Glóbulo + músculos + chip de asistencia. Con el ojo apagado pero funcional, enciende pasivo el colorimétrico convencional.
+
+- Cada ojo = un cromo (puede haber más de dos, en cualquier parte del cuerpo).
+
+- Módulos del mismo ojo funcionan juntos; módulos de otros ojos son independientes.
+
+- Implante modular.
+
+| Calidad | Módulos disponibles |
+| --- | --- |
+| Improvisado | 1 |
+| Corriente | 2 |
+| Hi-Tech | 3 |
+| Militar | 4 |
+
+Módulos (cada uno ocupa 1 hueco salvo que diga lo contrario)
+
+| Módulo | Efecto |
+| --- | --- |
+| Colorimetría de banda ancha | Más colores; detecta láseres de seguridad. **+1 MC** |
+| Fotosensor | Evita ceguera por luz extrema; adaptación rápida a penumbra. **+1 RC** |
+| Filmadora | Vídeo en la cyberóptica |
+| Inalámbrico | Ojo desmontable a distancia; rango 10 m (mejora con conexión neuronal inalámbrica) |
+| Película protectora | Protege cavidad; vista digital en paralelo (una, otra o ambas). **+1 TM** |
+| Reconocimiento facial | Info de BD cargada + estadísticas al observar. **+1 MC** |
+| Captura 3D | Reconstrucción de escenas para holograma o PC. **+1 EN** |
+| Visión IR / térmica / EM / UV / rayos X | Sustituye colorimétrico; **un sensor = un módulo** (puedes llevar varios) |
+| Seguimiento de microexpresiones | Detección asistida de microexpresiones. **+1 MC**; redundancia: +1 módulo y +1 mejora MC por redundancia |
+| Zoom óptico | **×10 por módulo**; duplica alcance de disparos |
+
+---
+## Cyberoído
+
+### Oído biónico
+
+Reemplazo del sistema auditivo. Con todos los módulos apagados y el oído operativo, enciende pasivo el audiométrico convencional. Modular.
+
+| Calidad | Módulos |
+| --- | --- |
+| Improvisado | 1 |
+| Corriente | 2 |
+| Hi-Tech | 3 |
+| Militar | 4 |
+
+Módulos (varios reemplazan la audición convencional mientras estén activos)
+
+| Módulo | Efecto |
+| --- | --- |
+| Adecuador de dB | Protege oído del daño por volumen; sensibilidad manual a sonidos mínimos. **+1 RC** |
+| Detector de movimiento | Vibraciones del entorno en **10 m²**; +10 m² por módulo extra de cyberoído dedicado. **+1 RC** |
+| Grabadora | Audio integrado |
+| Inalámbrico | Oído remoto; 10 m (mejora con conexión neuronal inalámbrica) |
+| Micrófono láser | Conversaciones hasta **500 m**. **+1 EN** |
+| Radar | “Audición” tipo murciélago; movimiento normal en oscuridad total. **+1 RC** |
+| Receptor de banda ancha | Frecuencias sub y supersónicas. **+1 EN** |
+
+---
+## Cyberbucales
+
+### Aparato digestivo modular
+
+Órganos sintéticos modulares. Sin módulos: modo reposo = digestivo orgánico sin mejoras. Solo uno en todo el cuerpo.
+
+| Calidad | Módulos |
+| --- | --- |
+| Improvisado | 1 |
+| Corriente | 2 |
+| Hi-Tech | 3 |
+| Militar | 4 |
+
+| Módulo | Efecto |
+| --- | --- |
+| Amplificador de dB | Grito tipo megáfono. **+1 MC** |
+| Emisor de banda ancha | Voz: entonación, rango amplio, sub/supersónico. **+1 MC** |
+| Filtro de toxinas | Detecta tóxicos orales; los expulsa a recipiente removible. **+1 TM** |
+| Sintetizador de voz humana | Emula tono humano (oir la voz o neurodata con tonos). **+1 MC** |
+| Sintetizador No-one | Voz 100 % genérica e irreconocible |
+| Turbina de aliento | Cápsulas de gas; al activar, corte respiratorio hasta salir de la zona o acabar el gas. **Un uso por cápsula** |
+
+Gases (cápsulas)
+
+- Adormecedor: 1d6 turnos; quien respira el gas: desventaja en RC.
+
+- Cegador: 1d6 turnos; imposible ver con óptica orgánica o cyberóptica.
+
+- Tóxico: 1d6 de daño a quien respira; el gas permanece 1d6 turnos en el aire.
+
+---
+## Cybernasales
+
+### Aparato respiratorio modular
+
+Igual lógica que digestivo: sin módulos = respiratorio orgánico en reposo. Solo uno en el cuerpo.
+
+| Calidad | Módulos |
+| --- | --- |
+| Improvisado | 1 |
+| Corriente | 2 |
+| Hi-Tech | 3 |
+| Militar | 4 |
+
+| Módulo | Efecto |
+| --- | --- |
+| Amplificador olfativo | Olor con más precisión. **+1 EN** |
+| Capacidad pulmonar ampliada | Aguante de respiración **×10**. **+1 TM** |
+| Cyberbranquias | Respirar bajo el agua con normalidad. **+1 TM** |
+| Filtro de toxinas | Tóxicos por vía respiratoria; aire limpio. **+1 TM** |
+| Inyector de oxígeno | Tubos a alta presión; **10 min por tubo**; hasta **2 tubos** por módulo. **+1 TM** |
+
+---
+## Sintética superficial
+
+### Membrana acorazada
+
+Dermis de tejido de carbono; tono pálido; protección extra. Incompatible con piel perfecta.
+
+| Calidad | Protección / TM |
+| --- | --- |
+| Improvisado | 1 punto absorbido **o** +1 TM |
+| Corriente | 1 absorbido y +1 TM |
+| Hi-Tech | 2 absorbidos y +1 TM **o** 1 absorbido y +2 TM |
+| Militar | 3 absorbidos y +1 TM **o** 2 absorbidos y +2 TM |
+
+### Nanoplastía
+
+Nanobots faciales en red neuronal. Requiere ver el rostro a emular o neurodata con BD de rostros. Pigmentan piel cercana, no todo el cuerpo.
+
+| Calidad | Cambio de rostro |
+| --- | --- |
+| Improvisado | 1 minuto |
+| Corriente | 1 turno |
+| Hi-Tech | 1 turno y +1 MC |
+| Militar | 1 turno y +2 MC |
+
+### Piel perfecta
+
+Dermis sintética adaptable (color, poros, vello, marcas, tatuajes…). Estética, no camuflaje; sistemas de reconocimiento siguen identificándote. Puede ocultar cromos sutiles. Incompatible con membrana acorazada.
+
+| Calidad | MC |
+| --- | --- |
+| Improvisado | +1 |
+| Corriente | +2 |
+| Hi-Tech | +3 |
+| Militar | +4 |
+
+---
+## Cyberórganos
+
+### Cybervértebras
+
+Columna y nervios reemplazados por control corporal automatizado. Modular.
+
+| Calidad | Módulos |
+| --- | --- |
+| Improvisado | 1 |
+| Corriente | 2 |
+| Hi-Tech | 3 |
+| Militar | 4 |
+
+| Módulo | Efecto |
+| --- | --- |
+| Cyberextremidad adicional | Cada módulo añade una extremidad (antropomórfica o función específica) |
+| Reflejos servoasistidos | Ventaja en RC para **evitar daño**; redundantes: +1 RC por módulo extra |
+| Vuelo controlado | Jetpack/magnetopack: vuelo **6 turnos**; **2 h** de carga por turno de uso (**12 h** carga completa) |
+
+### Corazón biónico
+
+Multi-bomba de 4 cavidades; evita fallos cardíacos naturales o por estrés; conduce fluidos sintéticos inyectados. Hasta 2 corazones biónicos por personaje. Modular.
+
+| Calidad | Módulos |
+| --- | --- |
+| Improvisado | 1 |
+| Corriente | 2 |
+| Hi-Tech | 3 |
+| Militar | 4 |
+
+| Módulo | Efecto |
+| --- | --- |
+| Inyector de adrenalina | Activación por voz, botón, sensor, rutina, etc. Anula dolor temporalmente; **segunda acción en el mismo turno** durante **1d6 turnos**. Recarga del fluido ~**24 h**. Varios inyectores en un corazón. **+1 RC** |
+| Nanocirujanos | Reparación en flujo sanguíneo según calidad (ver tabla). |
+| Aparato circulatorio auxiliar | En lesión superficial: corta sangrado en la zona; bombea fluido por venas auxiliares. **1 módulo por tipo de fluido.** **+1 TM** |
+
+Nanocirujanos por calidad
+
+| Calidad | Curación |
+| --- | --- |
+| Improvisado | 1 punto/turno; al instalar eliges: solo cyberware **o** solo tejido orgánico |
+| Corriente | 1 punto/turno cyberware y orgánico |
+| Hi-Tech | 2 puntos/turno **o** 1 punto/turno + refuerzo corporal **+1 TM** |
+| Militar | 2 puntos/turno y **+1 TM** |
+
+Fluidos (aparato circulatorio auxiliar)
+
+- Ácido: 1d6 de daño por 1d6 turnos a metal y tejido; destrucción prolongada; hay que quitarse el ácido.
+
+- Criogénico: superficie congelada 1d6 turnos; resistencia del objeto reducida (ventaja al daño del oponente).
+
+- Combustible: duplica daño por fuego/explosión en objeto empapado.
+
+- Tinta: opaco; desventaja en la próxima tirada de RC del oponente; ciega ópticas orgánicas o cibernéticas hasta retirarla con cuidado.
+
+---
+## Cyberextremidades
+
+Adaptadores nerviosos, musculares y óseos desde la base del hombro (o equivalente).
+
+- Varios cyberbrazos o cyberpiernas: uno por extremidad biológica amputada.
+
+- Excepción: módulos de extremidad adicional en cybervértebras → hasta 4 extremidades extra (según implante).
+
+- Extremidad que reemplaza biológica = un cromo; montadas solo en cybervértebras → cuenta el cromo vertebral, no uno extra por brazo/pierna.
+
+### Cyberbrazo
+
+#### Aracnogarfio
+
+(Brazo o brazo extra.) Cuatro ganchos; escalar y agarrar. Escalar sin tirada; agarres/presas con ventaja. +1 TM.
+
+#### Brazo de combate
+
+Servomotores y placas. Despliega armamento.
+
+| Calidad | Accesorios |
+| --- | --- |
+| Improvisado | 1 |
+| Corriente | 2 |
+| Hi-Tech | 3 |
+| Militar | 4 |
+
+Accesorios
+
+| Accesorio | Reglas |
+| --- | --- |
+| **Sable Mantis** | Hojas hasta 1 m. Daño: Imp. 1d6 · Corr. 1d6 con ventaja · Hi-T 6 · Mil. 6+TM. **+1 TM** |
+| **Ranura para arma de fuego** | Arma oculta desplegable. Imp. oculta · Corr. enlace permanente a SAI · Hi-T armas auto/semia plegables · Mil. alto calibre o munición especial (p. ej. lanzamisiles). **+1 RC** |
+| **Descarga de fluidos circulatorios** | Requiere aparato circulatorio auxiliar. Alcance: Imp. 3 m personal · Corr. 6 m personal · Hi-T 6 m cono 90° · Mil. 12 m cono 90°. **+1 RC** |
+| **Magnetoescudo** | Imp./Corr.: escudo personal, bloquea 1d6 (Corr. con ventaja), tirada RC vs ataque. Hi-T: escudo zonal cuerpo entero, no te mueves, bloquea sin RC. Mil.: zona 3 m², protege otros/equipo; Hi-T/Mil.: modo baja energía = escudo personal. **+1 TM** |
+
+#### Extremidad balística
+
+Solo en módulo de cybervértebra. Arma inteligente integrada + enlace SAI automático (ver chapería). +1 RC.
+
+#### Tecnoherramienta
+
+Brazo para cyberimplantes y trabajo de netrunner.
+
+| Calidad | Accesorios |
+| --- | --- |
+| Improvisado | 1 |
+| Corriente | 2 |
+| Hi-Tech | 3 |
+| Militar | 4 |
+
+| Accesorio | Efecto |
+| --- | --- |
+| Kit de montaje | Reparación de emergencia en cyberware. **+1 EN** |
+| Kit de salud | Cauterizar/desinfectar heridas biológicas superficiales. **+1 EN** |
+| Multitáctil | Dedos multiplexados; escritura **×1000**. **+1 EN** |
+| Teclado injertado | Holoteclas/táctil en el brazo; interfaces urbanas y cyberware. **+1 EN** |
+
+### Cyberpiernas
+
+Siempre de a pares; un par = un módulo. Reemplazo no prótesis: siempre el par junto.
+
+#### Acorazado
+
+| Calidad | Efecto |
+| --- | --- |
+| Improvisado | Protege 1 de daño; nunca cansado; **+1 TM** |
+| Corriente | + golpe 1d6; **+2 TM** |
+| Hi-Tech | Golpe 1d6 con ventaja; **+3 TM** |
+| Militar | Golpe 1d6 con ventaja + TM; **+4 TM** |
+
+#### Cuadrúpedo
+
+Modo potencia 1d6 turnos; 12 h para recargar.
+
+| Calidad | Movimiento |
+| --- | --- |
+| Improvisado | +50 % velocidad (3 acciones cada 2 turnos); salto 3 m; **+1 RC** |
+| Corriente | +100 % (2 acciones/turno); salto 6 m; **+1 TM, +1 RC** |
+| Hi-Tech | +150 % (5 acciones cada 2 turnos); salto 12 m; **+1 TM, +2 RC** |
+| Militar | +200 % (3 acciones/turno); salto 20 m; **+2 TM, +2 RC** |
+
+#### Velocista
+
+Solo en módulo de cybervértebra (orugas plegables o cuadrúpedo equivalente). En reposo: tamaño mochila pequeña.
+
+| Calidad | Correr / RC |
+| --- | --- |
+| Improvisado | ×2 velocidad; **+1 RC** |
+| Corriente | ×3; **+2 RC** |
+| Hi-Tech | ×4; **+3 RC** |
+| Militar | ×5; **+4 RC** |
+
+---
+
+========================================================================
+ARCHIVO: 05-catalogo-chaperia.md
+========================================================================
+
+# Chapería
+
+## Qué es la chapería
+
+Chapería es el equipamiento que no va implantado: armas, armaduras, herramientas, drones, ropa táctica, datos en neuroranura, etc. En la jerga de la calle: si no está clavado en el cuerpo, es chapería.
+
+---
+## Cromos vs chapería
+
+| Aspecto | Cromos |
+| --- | --- |
+| Dónde va | Integrado al cuerpo |
+| ¿Afecta @Psique / humanidad? | **Sí** |
+| Variedad | Menos piezas; cada una pesa mucho |
+| Uso en juego | Capacidades «instintivas» del implante |
+
+| Aspecto | Chapería |
+| --- | --- |
+| Dónde va | Inventario, vehículo, bolsillos |
+| ¿Afecta @Psique / humanidad? | **No** |
+| Variedad | Mucha variedad; más accesible |
+| Uso en juego | Hay que saber manejar la pieza; llevar arsenal llama la atención |
+
+En resumen: Armas, herramientas, neurodata en ranura y vestimenta:
+
+Muchas piezas piden conocimiento técnico o integración con cromos (HUD + cyberópticas). Llevar arsenal letal o PEM a la vista puede ser contraproducente: se resuelve en ficción con el Director.
+
+---
+## Recordatorio rápido
+
+- La chapería no suma @Psique.
+
+- Pistola de munición estándar: legal en Night City; el resto exige permiso o ir ilegal (lo habitual).
+
+- SAI = sistema de arma inteligente (hace falta el cromo de conexión de arma inteligente, salvo que el arma diga otra cosa).
+
+- Accesorios y subsistemas: se añaden sin penalidad; solo pagan su coste en Créditos/Estrellas.
+
+### SAI (se repiten en varias armas)
+
+| SAI | Efecto |
+| --- | --- |
+| Acelerador iónico | Proyectiles/energía: **+1 daño** por impacto (rifle y lanzamisiles: **+3** donde el arma lo indique) |
+| Apuntado asistido | Con HUD visual: info del objetivo en tiempo real. **Ventaja en RC** |
+| Flujo balístico | Sin tiempos de recarga (munición movilizada por el SAI) |
+| Estabilizador | Arma usable a **una mano** (fusil; rifle usa «estabilizador y decompresor») |
+
+---
+## Armas
+
+### Pistola
+
+| Stat | Valor |
+| --- | --- |
+| Cargas | 15 (balas o celdas) |
+| Alcance | 60 m |
+| Manual | 1 tiro/acción, **1d6** daño |
+| Semi | Ráfaga 3 tiros, RC con **ventaja**, **1d6** daño |
+
+Tecnologías: pólvora/percutor, láser, plasma, proyectil o rayo (a elección de ficción).
+
+- Hasta 1 pistola por brazo (efectos multiplicados).
+
+- SAI por calidad: Improvisada: sin SAI · Corriente: 1 subsistema · Hi-Tech: 2 · Militar: 3
+
+Accesorios
+
+- Cargador ampliado: 21 cargas
+
+- Silenciador: disparos sin sonido
+
+SAI: acelerador iónico, apuntado asistido, flujo balístico (tabla arriba).
+
+---
+### Escopeta
+
+| Stat | Valor |
+| --- | --- |
+| Cargas | 6 |
+| Alcance | 10 m |
+| Área | Cono **45°**, **1d6** por enemigo impactado |
+| Quemarropa (≤3 m) | **3d6** a un solo objetivo |
+
+Requisito: 2 manos o 2 cyberextremidades, salvo SAI estabilizador.
+
+SAI por calidad: igual que pistola (Improvisada sin SAI · 1 / 2 / 3 subsistemas).
+
+Accesorios
+
+- Cañón largo: dispersión 23° (mitad); alcance ×2 (no integra con cyberópticas)
+
+- Cañón doble: 2 proyectiles a la vez → daño ×2
+
+- Cargador ampliado: 10 cargas
+
+- Estabilizador: una mano
+
+SAI: acelerador iónico, apuntado asistido, flujo balístico.
+
+---
+### Fusil
+
+| Stat | Valor |
+| --- | --- |
+| Cargas | 30 |
+| Alcance | 30 m |
+| Manual | 1 tiro/acción, **1d6** |
+| Semi | 3 tiros, RC con **ventaja**, **1d6** |
+| Auto | Vacía cargador; cono **45°**; RC para todos en el radio; **1d6 por cada éxito** |
+
+Requisito: 2 manos o 2 cyberextremidades, salvo SAI estabilizador.
+
+SAI por calidad: Improvisada sin SAI · Corriente 1 · Hi-Tech 2 · Militar 3 subsistemas.
+
+Accesorios
+
+- Mira telescópica: alcance ×2; con cyberóptica con zoom: ×3
+
+- Cargador ampliado: 45 cargas
+
+- Silenciador: sin sonido
+
+SAI: acelerador iónico (+1), apuntado asistido, estabilizador, flujo balístico.
+
+---
+### Rifle
+
+| Stat | Valor |
+| --- | --- |
+| Cargas | 4 |
+| Alcance | 100 m |
+| Daño | **3d6** |
+| Cadencia | 1 disparo; turno descarga + turno carga (**1 disparo cada 2 turnos**) |
+
+Requisito: 2 manos o 2 cyberextremidades.
+
+SAI por calidad: Improvisada sin SAI · 1 / 2 / 3 subsistemas.
+
+Accesorios
+
+- Mira telescópica: alcance ×3; con zoom óptico integrado: ×4
+
+- Cargador ampliado: 7 cargas
+
+- Silenciador: sin sonido; daño baja a 2d6; −50 m de alcance
+
+SAI
+
+- Acelerador iónico: +3 daño
+
+- Apuntado asistido: ventaja RC
+
+- Estabilizador y decompresor: estabilización + expulsar casquillo/celda → disparar todos los turnos
+
+- Flujo balístico
+
+---
+### Lanzadardos
+
+Lanza dardos cibernéticos o químicos.
+
+| Stat | Valor |
+| --- | --- |
+| Cargas | 1 |
+| Cadencia | Turno disparo + turno recarga |
+| Alcance | 15 m |
+| Daño | **1 punto** con **10+**; **7–9** sin daño |
+| Otro | Silenciosa |
+
+SAI por calidad: Improvisada sin SAI · 1 / 2 / 3 subsistemas.
+
+SAI
+
+- Acelerador iónico: alcance ×2, +1 daño
+
+- Apuntado asistido: ventaja RC
+
+- Flujo balístico: 1 dardo por turno sin tiempo de recarga
+
+---
+### Lanzamisiles
+
+| Stat | Valor |
+| --- | --- |
+| Cargas | 1 |
+| Alcance | 150 m |
+| Daño | **4d6** |
+| Cadencia | Disparo cada **2 turnos** (disparo + descarga + carga) |
+
+Requisito: 2 manos o 2 cyberextremidades, salvo accesorio Minimal.
+
+SAI por calidad: Improvisada sin SAI · 1 / 2 / 3 subsistemas.
+
+Accesorios
+
+- Minimal: versión reducida — 2d6, 50 m, una mano o una cyberextremidad
+
+- Lanzagranadas: lanza granadas en lugar de misiles, +1d6 daño; con Minimal, granadas sin esa bonificación
+
+- Recámara doble: 2 misiles al mismo objetivo en un disparo; efectos combinados
+
+SAI
+
+- Mira para proyectiles: con HUD, curvar trayectoria del misil; interfaz en arma o implante. Ventaja RC
+
+- Flujo balístico: sin tiempos de recarga
+
+- Acelerador iónico: +3 daño
+
+---
+### Granadas
+
+Se venden en cajas de 8 unidades.
+
+| Tipo | Efecto |
+| --- | --- |
+| **Ácida** | **1d6** corrosivo, radio **1 m**. Si el daño es **5+**, destruye un **segundo** cromo (automático **−2** a tiradas; marca daño en zona «*») o chapería a elección del lanzador |
+| **Aturdidora** | Anula oído orgánico, cyberoído y radar ultrasónico **1d6** turnos, radio **10 m**. Turno de detonación: quien no supere **TM** pierde la acción. Atenuador de dB anula |
+| **Criogénica** | **1d6** congelante, radio **3 m**; **1d6** turnos a mitad de movimiento; congela/destruye tejido vivo; paraliza temporalmente cromos y chapería |
+| **Fragmentación** | **3d6** explosivo, radio **5 m** |
+| **Gas** | Nube tóxica **5 m**, **1d6** turnos; **1d6** daño por turno dentro del radio |
+| **Humo y partículas** | Anula visión orgánica, cyberóptica y radar EM **1d6** turnos, radio **5 m**. Respirar: **6−** en TM pierde el primer turno. Filtro de toxinas anula lo respiratorio |
+| **PEM** | Anula cibernética y electrónica en **5 m** durante **1d6** turnos |
+
+---
+### Balística especial
+
+Todas las armas de fuego o energía incluyen munición estándar. Munición especial: 4 cargadores = 1 Estrella (1 Crédito).
+
+#### Proyectiles y celdas de energía
+
+| Tipo | Efecto |
+| --- | --- |
+| Balas de carbono | Pistola y fusil **+1** daño; escopeta y rifle **+3** |
+| Celdas entrelazado cuántico | Disparos atraviesan al primer objetivo (rifle: hasta **3** objetivos) |
+| Celdas sobrecargadas | Disparar **2 veces** al mismo objetivo en el turno (segundo disparo: RC con **−1**) |
+| Proyectiles de goma y descarga | Daño **no letal** a tejido biológico y cibernética |
+| Rastreador | Sin daño; **1** proyectil por cargador (resto del cargador = transmisor/receptor) |
+
+#### Misiles
+
+| Tipo | Efecto |
+| --- | --- |
+| Explosivo | **+1d6** daño, radio **3 m** |
+| Criogénico | Supervivientes congelados **1d6/2** turnos, radio **3 m**; mitad de acciones |
+| PEM | Anula cibernética/electrónica en **15 m** durante **2d6** turnos |
+| Teletaladro | Tras impacto, taladro a 90° + corrosión; en **1d6+1** turnos, agujero para que entre **una persona** |
+
+#### Dardos (lanzadardos)
+
+Cualquier dardo puede venderse como jeringa: impacto cuerpo a cuerpo, tirada TM en lugar de RC.
+
+| Dardo | Efecto |
+| --- | --- |
+| **@Psico** | Episodio de cyberpsicosis **1d6** turnos si el blanco tiene **algún cromo**. Sin cromos: inmune |
+| **Alucinógeno** | Desventaja en **todas** las tiradas **1d6** turnos |
+| **Nanocontrolador** | Nanobots controlan cyberware del afectado (y artefactos). Sin cromos: inmune |
+| **Veneno letal** | Muerte en **6** turnos si un biohacker no lo trata. No afecta cyberware |
+| **Paralizante** | Inmovilizado **1d6** turnos |
+
+---
+## Herramientas
+
+### Autointérprete
+
+Presentación variable (instrumento, caja de sonido, etc.). Colocado en un punto; control remoto. Al activar, reproduce voces o música creíble para atraer atención.
+
+### Drone
+
+- Movimiento: 5 m/turno
+
+- Vida: 5 puntos de daño
+
+| Calidad | Subsistemas |
+| --- | --- |
+| Improvisado | 1 |
+| Corriente | 2 |
+| Hi-Tech | 3 |
+| Militar | 4 |
+
+| Subsistema | Efecto |
+| --- | --- |
+| Centinela | Arma de celdas: **1d6**/turno |
+| Kamikaze | Autodestrucción: **3d6** fuego + PEM **1d6** turnos |
+| Ligero | Velocidad **×2** |
+| Protocolo | Transceptor para hackeo avanzado vía dron |
+| Robusto | **10** puntos de daño |
+| Silencioso | Casi inaudible; solo en silencio total |
+| Vigilante | Cámara/micrófono + almacenamiento; enlace a HUD de implantes si lo tienes |
+
+### Emulador biométrico
+
+Conecta a terminal de acceso; burla reconocimiento biométrico.
+
+### Kit de conectividad
+
+Usuario ↔ terminal; ventaja EN en la red. 12 h de recarga antes de reutilizar el kit.
+
+| Calidad | Conexión / usos |
+| --- | --- |
+| Improvisado | **3** turnos para conectar; **2** usos |
+| Corriente | **1** turno; **3** usos |
+| Hi-Tech | Extensión del cromo de conexión neuronal: sin turno extra de conexión; **4** usos |
+| Militar | Además herramientas inalámbricas en terminales no vivas; **6** usos |
+
+### Kit de primeros auxilios
+
+Ventaja EN para curar tejido biológico. Un uso puede quitar efectos de toxinas en lugar de curar.
+
+| Calidad | Curación / usos |
+| --- | --- |
+| Improvisado | **1d6**; **2** usos |
+| Corriente | **1d6+3**; **3** usos |
+| Hi-Tech | **2d6+3**; **4** usos |
+| Militar | **2d6+6**; **6** usos |
+
+### Kit de reparaciones
+
+Ventaja EN para reparar cyberware implantado, portado, vehículos, etc. Un uso puede quitar anulación de sistemas en lugar de reparar.
+
+El kit de calidad X puede reparar piezas hasta la categoría indicada (penalizador entre paréntesis = umbral máximo de pieza que repara bien; texto original del manual).
+
+| Calidad del kit | Repara hasta (Impro / Corr / Hi-T / Mil) | Usos |
+| --- | --- | --- |
+| Improvisado | +0 / −1 / −2 / −3 | 2 |
+| Corriente | +1 / +0 / −1 / −2 | 3 |
+| Hi-Tech | +2 / +1 / +0 / −1 | 4 |
+| Militar | +3 / +2 / +1 / +0 | 6 |
+
+### Pistola garfio
+
+Gancho por presión o imán; cable retrae (objetivo hacia ti o tú hacia el punto, según peso). Alcance 50 m. Puede capturar personas.
+
+### Torreta móvil
+
+Lista blanca precargada; dispara al enemigo más cercano: 1d6/turno. Tirada de actuación de la torreta: 2d6+0.
+
+### Trauma card
+
+Membresía Trauma Team en el bolsillo; monitoriza biológico y cibernético. Si caes, llega transporte aéreo con biohackers y escolta militar.
+
+- Pago mensual; cada activación gasta la tarjeta (hay que renovar membresía).
+
+| Nivel | Servicio |
+| --- | --- |
+| **Cliente** | Llega en **15 min**; te dejan en el domicilio de la suscripción tras estabilizar |
+| **Miembro** | **5 min** |
+| **Preferencial** | Tras **1 día** de terapia: curado y reparado al **50%** |
+| **VIP** | Cubren **100%** de gastos y tiempo de tratamiento necesario (salud y cibernética) |
+
+---
+## Neurodata (contenido de ranura)
+
+Se inserta en neuroranuras (cromo). Distinto de la Neurodata que vendes por Estrellas (experiencia de sesión).
+
+### Base de datos
+
+Contenido variable: código, redes, técnicas de combate para asistir cyberware, VIP, audio, etc. Ventaja en EN, MC, RC o TM cuando la tarea use esos datos (hackeo, emular voz/rostro, discurso, aguantar respiración, etc.).
+
+### Memoria en blanco
+
+Espacio para guardar datos que descargues en juego.
+
+### Neuroexperiencia
+
+Grabación tasada de una vivencia; moneda de intercambio (las propias valen más). Uso de aprendizaje o recreación.
+
+### Protocolo velo
+
+Anula la desventaja al entrar en la antigua red y enlaces remotos.
+
+- Implementarlo es muy difícil incluso para netrunners veteranos.
+
+- Si fallas al implementarlo, sigues expuesto a las IA de la red antigua.
+
+- Doble 1: el protocolo se desactiva; IA pueden minar/invasar el procesador cerebral → consecuencias catastróficas (Director).
+
+---
+## Vestimenta
+
+### Corposuit
+
+Traje de alta gama; oculta cyberware y armas pequeñas.
+
+| Calidad | Efecto |
+| --- | --- |
+| Improvisado | Solo ocultación |
+| Corriente | **Ventaja MC** |
+| Hi-Tech | Placas interiores: **+1 TM** solo para absorber daño físico |
+| Militar | Traje experimental: al activar **protocolo**, pierde capacidades anteriores y gana modo militar (variantes abajo) |
+
+Modos (solo Militar, tras activar protocolo)
+
+| Modo | Efecto |
+| --- | --- |
+| **Ghost** | Camuflaje fotoreflectivo; casi invisible **1 h** o hasta apagar. **3** usos; recarga **2 h** por uso |
+| **VIP box** | Armadura bloque macizo; cámaras/sensores miran fuera; **sin movimiento**; protege de **todo** daño. Recarga **6 h** tras uso |
+| **Rapaz** | Magnetopacks en manos/pies: vuelo controlado **1 h**. **3** usos; recarga **2 h** por uso |
+
+### Máscara fantasma
+
+Irreconocible para sistemas ópticos (físicos u holográficos). Ventaja MC vs reconocimiento facial. No engaña a quien tenga la misma capacidad.
+
+### Tecnoarmadura
+
+Servomotores y placas.
+
+| Calidad | Efecto |
+| --- | --- |
+| Improvisada | **Ventaja TM** para absorber cualquier daño (físico, químico, energético…) |
+| Corriente | Además **+1 TM** |
+| Hi-Tech | Además absorbe **1 nivel** de daño automáticamente |
+| Militar | Absorbe **2 niveles** de daño automáticamente |
+
+---
+
+========================================================================
+ARCHIVO: 06-glosario.md
+========================================================================
+
+# Glosario
+
+@Psique — Marcas en ficha que miden desgaste mental por cromos y episodios de cyberpsicosis. Umbrales: 1–3 breve; 4–5 mayor (escena); más de 5 = cyberpsicópata permanente (Director). Ver *Cyberware*.
+
+Arsenal inicial — El arma de partida de la profesión (1 arma corriente de su lista). Ver *Crear un Cyberpunk*.
+
+Atributos — Cuatro modificadores de tirada: EN, MC, RC, TM (ver abajo).
+
+Calle — La ciudad fuera del privilegio corporativo: barrio, mercado negro, gente sin badge. Tono, no regla.
+
+Calidades — Escala de pieza (cromo o chapería): Improvisado (5 Créditos), Corriente (10), Hi-Tech (15), Militar (20) al comprar nueva (incluye 1 subsistema básico). Ver *Cyberware → Créditos*.
+
+Chapería — Equipo no implantado (armas, armadura, herramientas, datos en ranura, etc.). No suma @Psique. Ver *Chapería* y catálogo.
+
+Cromo / Cyberware — Implante integrado al cuerpo. Cuenta para carga de implantes, humanidad y @Psique (salvo excepciones, p. ej. neuroranura). Ver *Cyberware* y catálogo de cromos.
+
+Crédito — Moneda de compra de cromos, chapería, accesorios y mejoras. 1 Estrella = 1 Crédito.
+
+Cyberpsicosis — Episodio (o estado) de pérdida de control ligado a cromos y @Psique. Ver *Cyberware*.
+
+Degeneración neural — Por cada 3 cromos instalados: −1 a una característica a elección (mín. −3) y 1 casilla @Psique. Ver *Cyberware*.
+
+Director — Quien conduce la mesa: presenta amenazas y aplica consecuencias (sobre todo en 7–9 y 6−). No compite contra los jugadores.
+
+EN (Enlaces Neuronales) — Atributo: lógica, técnica, redes, implantes, sistemas.
+
+Escena Estrella — Momento más memorable de la sesión, elegido por los jugadores; puede dar 1 Estrella si el personaje participó. Ver *Cyberware → Estrellas*.
+
+Estrella — Pago del Tasador Virtual por Neurodata (y recurso de creación: 5 al hacer el PJ). Misma moneda que el Crédito.
+
+Éxito completo / parcial / fallo — Resultados de tirada: 10+, 7–9, 6−. Ver *Sistema*.
+
+Humanidad — Idea de ficción: cuánto de humano queda bajo los cromos. En reglas se expresa sobre todo vía @Psique y degeneración neural.
+
+ICE — Jerga de Red: defensas anti-intruso. Color; el combate en Red se resuelve con las reglas de la mesa / cromos pertinentes.
+
+MC (Manipulación Cognitiva) — Atributo: leer gente, empatía, persuasión, presión social.
+
+Movimiento — Acción importante con riesgo, incertidumbre o consecuencias serias, resuelta con reglas (suele implicar tirada). Cualquiera puede intentarlo si la ficción lo permite; cambian las herramientas (cromos/chapería).
+
+Neurodata — Experiencia vivida volcada a terminal y vendible. El Tasador la paga en Estrellas. También hay neurodata como chapería (contenido en neuroranura): ver catálogo de chapería.
+
+Neuroranura — Cromo: ranuras para contenido digital. No suma para @Psique. Cantidad de ranuras según calidad (1 / 4 / 8 / 16).
+
+Night City — Ciudad-escenario por defecto del tono cyberpunk de este manual.
+
+PbtA — *Powered by the Apocalypse*: las reglas siguen a la ficción; se tira cuando hay riesgo o incertidumbre.
+
+Pifia — Fallo crítico en la mesa al usar una característica mejorada por cromos: episodio de cyberpsicosis 1 turno + 1 casilla @Psique. Ver *Cyberware*.
+
+Profesión — Arquetipo de creación (una sola). Fija rasgos iniciales y arsenal. Trasfondo = ficción, no reglas nuevas.
+
+RC (Reacción Cinética) — Atributo: reflejos, coordinación, actuar bajo fuego.
+
+SAI — Sistema de arma inteligente. Suele exigir el cromo de conexión de arma inteligente. Opciones recurrentes: acelerador iónico, apuntado asistido, flujo balístico, estabilizador. Ver catálogo de chapería.
+
+Tasador Virtual — Evalúa Neurodata y paga Estrellas según criterios de sesión. Ver *Cyberware*.
+
+Tirada — 2d6 + atributo cuando hay riesgo, incertidumbre o consecuencias serias.
+
+TM (Tejido Muscular) — Atributo: fuerza, aguante, daño físico, esfuerzo extremo.
+
+Tope de mejora (+3) — La suma de bonos de cromos no puede dejar ninguna característica por encima de +3.
+
+---
+## Profesiones
+
+| Profesión | En una frase |
+| --- | --- |
+| Arreglador | Intermediario de la Calle: contactos, favores, mercado. |
+| Artista | Voz pública / agitador cultural (Rockerboy). |
+| Biohacker | Tech de garaje y mercado negro; carne y cable. |
+| Comunicador | Media: investiga y expone bajo fuego corporativo. |
+| Corpo | Exec: guerra de pasillos y proyectos negros. |
+| Espía | Infiltración, identidades, secretos sin brillo. |
+| Forastero | Nomad: convoy, clan, ruta al margen de la ley. |
+| Mercenario | Solo: violencia de contrato, cuerpo como arma. |
+| Netrunner | Fantasma de la Red: datos, ICE, interface. |
+
+---

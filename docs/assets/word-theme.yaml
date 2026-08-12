@@ -1,0 +1,101 @@
+# Tema MS-DOS / pixel — cyberpunk-pbta.docx
+# Aplicado por docs/scripts/word_styles.py + build_pbta_docx.py
+
+font:
+  family: "VT323"
+  fallback: "Courier New"
+  source: "https://fonts.google.com/specimen/VT323"
+  install: "docs/assets/fonts/install.sh"
+  note: "Monoespaciada terminal DOS; cuerpo 8 pt / títulos 10 pt / portada 9 pt"
+
+palette:
+  background: "0A0A0A"
+  text: "55FF55"
+  text_bright: "00FF00"
+  heading: "FFFF55"
+  accent: "55FFFF"
+  table_header: "000000"
+  table_header_bg: "00AA00"
+
+layout:
+  page: "A4"                 # 210 × 297 mm (ISO 216)
+  page_width_mm: 210
+  page_height_mm: 297
+  ascii_width: 72
+  body_columns: 2
+  page_margin_cm: 0.5
+  column_gap_cm: 0.5
+
+cover:
+  source: "docs/assets/portada-ascii.txt"  # bytes literales (NBSP U+00A0 incluidos)
+  font: "Courier New"
+  size_pt: 7.5
+  bold: true
+  align: left
+  left_indent_cm: 5.752          # medido en pbta-original.docx (EMU 2070735)
+  preserve: "sin center(), sin rstrip(); xml:space=preserve en cada run"
+  line_width_chars: 57
+  subtitle_font: "VT323"
+  subtitle_size_pt: 9
+
+# Estilos Word nativos (UI ES: Título 1/2/3) — TOC automático
+word_styles:
+  h1: "Heading 1"          # Markdown #
+  h2: "Heading 2"          # ##
+  h3: "Heading 3"          # ###
+  h4: "Heading 4"          # ####
+  paragraph: "Normal"
+  list: "List Bullet"      # - item
+  sublist: "List Bullet 2" # indent + - item
+  table: "Table Grid"      # + fila tblHeader + cantSplit
+  quote: "PBTA Quote"
+  cover: "PBTA Cover Line"
+  part_deco: "PBTA Part Deco"  # barras ===; no TOC
+  mesa: "PBTA Mesa"
+
+orphan_control:
+  headings_keep_next: true
+  headings_keep_lines: true
+  widow_control_body: true
+  para_before_table_keep_next: true
+  table_row_cant_split: true
+  reference_docx: "docs/ref/formato.docx"
+
+sizes_pt:
+  cover_art: 9
+  cover_subtitle: 9
+  body: 8
+  h1: 10
+  h2: 10
+  h3: 8
+  h4: 8
+  table: 8
+  quote: 8
+
+spacing:
+  line_spacing: 1.0
+  after_h1: 10
+  after_h2: 6
+  after_h3: 4
+  after_body: 3
+
+indents:
+  bullet_char: "» "
+  bullet_hanging: 0.22
+  bullet_left: 0.22
+  quote_left: 0.35
+  h2_left: 0
+
+tabs:
+  col2: 1.75
+  col3: 3.5
+
+part_title:
+  char: "="
+  min_bar: 24
+  max_bar: 56
+
+macos_crisp:
+  - "Instalar: docs/assets/fonts/install.sh"
+  - "Word: desactivar kerning"
+  - "Opcional: CGFontRenderingFontSmoothingDisabled"
