@@ -9,6 +9,7 @@
 - Improvisado / Corriente / Hi-Tech / Militar = calidad (coste de pieza nueva: 5 / 10 / 15 / 20 Créditos).
 
 ---
+
 ## Implantes cerebrales
 
 ### Conexión de arma inteligente
@@ -23,6 +24,7 @@ Terminales nerviosas artificiales entre cerebro y palma de la mano. Permite usar
 | Militar | +3 RC |
 
 ---
+
 ### Conexión neuronal
 
 Enlace del cerebro con redes y sistemas. Cableada + inalámbrica a la vez = un solo cromo.
@@ -59,6 +61,7 @@ Modalidad inalámbrica
 | Militar | Desconexión segura y anti-saturación; 100 m |
 
 ---
+
 ### Neurochip
 
 Chips en distintas zonas del cerebro. Cada chip = un cromo distinto (pueden coexistir).
@@ -112,6 +115,7 @@ Signos vitales y estado de cromos/chapería; transmisión local o inalámbrica p
 | Militar | Protocolo de velo integrado; transmisión por la vieja red |
 
 ---
+
 ### Neuroranura
 
 Ranuras para contenido digital. No suma para @Psique (ver neurodata en chapería).
@@ -124,6 +128,7 @@ Ranuras para contenido digital. No suma para @Psique (ver neurodata en chapería
 | Militar | 16 |
 
 ---
+
 ## Cyberópticas
 
 ### Ojo biónico
@@ -159,6 +164,7 @@ Módulos (cada uno ocupa 1 hueco salvo que diga lo contrario)
 | Zoom óptico | **×10 por módulo**; duplica alcance de disparos |
 
 ---
+
 ## Cyberoído
 
 ### Oído biónico
@@ -185,6 +191,7 @@ Módulos (varios reemplazan la audición convencional mientras estén activos)
 | Receptor de banda ancha | Frecuencias sub y supersónicas. **+1 EN** |
 
 ---
+
 ## Cyberbucales
 
 ### Aparato digestivo modular
@@ -216,6 +223,7 @@ Gases (cápsulas)
 - Tóxico: 1d6 de daño a quien respira; el gas permanece 1d6 turnos en el aire.
 
 ---
+
 ## Cybernasales
 
 ### Aparato respiratorio modular
@@ -238,6 +246,7 @@ Igual lógica que digestivo: sin módulos = respiratorio orgánico en reposo. So
 | Inyector de oxígeno | Tubos a alta presión; **10 min por tubo**; hasta **2 tubos** por módulo. **+1 TM** |
 
 ---
+
 ## Sintética superficial
 
 ### Membrana acorazada
@@ -274,6 +283,7 @@ Dermis sintética adaptable (color, poros, vello, marcas, tatuajes…). Estétic
 | Militar | +4 |
 
 ---
+
 ## Cyberórganos
 
 ### Cybervértebras
@@ -330,6 +340,7 @@ Fluidos (aparato circulatorio auxiliar)
 - Tinta: opaco; desventaja en la próxima tirada de RC del oponente; ciega ópticas orgánicas o cibernéticas hasta retirarla con cuidado.
 
 ---
+
 ## Cyberextremidades
 
 Adaptadores nerviosos, musculares y óseos desde la base del hombro (o equivalente).

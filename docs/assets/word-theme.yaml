@@ -6,7 +6,7 @@ font:
   fallback: "Courier New"
   source: "https://fonts.google.com/specimen/VT323"
   install: "docs/assets/fonts/install.sh"
-  note: "Monoespaciada terminal DOS; cuerpo 8 pt / títulos 10 pt / portada 9 pt"
+  note: "Cuerpo 8 pt; T1 10 negrita; T2 12; T3 10; T4 9 (T2–T4 sin negrita)"
 
 palette:
   background: "0A0A0A"
@@ -35,6 +35,7 @@ cover:
   left_indent_cm: 5.752          # medido en pbta-original.docx (EMU 2070735)
   preserve: "sin center(), sin rstrip(); xml:space=preserve en cada run"
   line_width_chars: 57
+  subtitle: "MANUAL DE REGLAS"
   subtitle_font: "VT323"
   subtitle_size_pt: 9
 
@@ -60,15 +61,16 @@ orphan_control:
   para_before_table_keep_next: true
   table_row_cant_split: true
   reference_docx: "docs/ref/formato.docx"
+  heading_bold_only: "Heading 1 + PBTA Part Deco"
 
 sizes_pt:
   cover_art: 9
   cover_subtitle: 9
   body: 8
   h1: 10
-  h2: 10
-  h3: 8
-  h4: 8
+  h2: 12
+  h3: 10
+  h4: 9
   table: 8
   quote: 8
 
@@ -92,8 +94,9 @@ tabs:
 
 part_title:
   char: "="
-  min_bar: 24
-  max_bar: 56
+  bar_len: 35
+  centered: true
+  bold: true
 
 macos_crisp:
   - "Instalar: docs/assets/fonts/install.sh"

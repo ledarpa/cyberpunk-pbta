@@ -1,4 +1,9 @@
 .DS_Store
 **/.DS_Store
 *.tmp
+*.bak
 ~$*
+.vercel
+.env
+.env.*
+docs/.generated/

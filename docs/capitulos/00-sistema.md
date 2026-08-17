@@ -11,6 +11,7 @@ Este juego usa una variante de PbtA (*Powered by the Apocalypse*): las reglas si
 - El resultado cambia la escena; la historia sigue incluso con fallos.
 
 ---
+
 ## Los cuatro atributos
 
 Cada personaje tiene cuatro atributos. Se suman a la tirada cuando encajan con la acción.
@@ -23,6 +24,7 @@ Cada personaje tiene cuatro atributos. Se suman a la tirada cuando encajan con l
 | **TM** | Tejido Muscular | Fuerza, aguante, daño físico, condiciones extremas |
 
 ---
+
 ## Tiradas (2d6 + atributo)
 
 Cuando toca tirar, lanza 2d6 y suma el atributo que corresponda.
@@ -36,6 +38,7 @@ Cuando toca tirar, lanza 2d6 y suma el atributo que corresponda.
 Los fallos no paran la partida: abren conflicto, presión y nuevas jugadas.
 
 ---
+
 ## Movimientos
 
 Un movimiento es una acción importante que se resuelve con reglas (tirada, elecciones, efectos).
@@ -47,6 +50,7 @@ Un movimiento es una acción importante que se resuelve con reglas (tirada, elec
 - Lo que cambia entre personajes no es «qué pueden intentar», sino con qué herramientas lo resuelven.
 
 ---
+
 Dos tipos de herramientas definen el poder en Night City:
 
 ## Cromos
@@ -70,6 +74,7 @@ Muchas acciones avanzadas exigen el implante o la pieza adecuada, además de la 
 El personaje no progresa solo subiendo atributos. También consigue mejores cromos, mejor chapería y recursos (ver *Neurodata, Estrellas y Créditos*). Un infiltrador con camuflaje y un mercenario blindado resuelven los mismos movimientos de formas muy distintas.
 
 ---
+
 ## Rol del Director
 
 El Director no compite contra la mesa. Su trabajo:
@@ -81,6 +86,7 @@ El Director no compite contra la mesa. Su trabajo:
 - Aplicar consecuencias, sobre todo en 7–9 y 6− (amenazas, datos que duelen, seguridad que se activa, reloj en marcha, reacción enemiga).
 
 ---
+
 ## Tono de campaña
 
 El sistema busca historias de alto riesgo: corporaciones, cuerpo modificado, calle violenta. Las decisiones importan. Cada tirada construye una historia donde cuentan la supervivencia, la ambición y cuánto de humano te queda.

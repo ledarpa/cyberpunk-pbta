@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>pbta — Manual de reglas</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <button type="button" class="icon-btn" id="toc-toggle" aria-expanded="true" aria-controls="sidebar" title="Índice">
+        <span class="sr-only">Índice</span>
+        ☰
+      </button>
+      <div class="search-box" role="search">
+        <label class="cli-prompt" for="q"><span aria-hidden="true">pbta:\></span><span class="sr-only">Buscar en el manual</span></label>
+        <input id="q" type="search" placeholder="Buscar..." autocomplete="off" spellcheck="false">
+        <span id="search-meta" class="search-meta" hidden>0/0</span>
+        <button type="button" class="icon-btn" id="search-prev" title="Anterior" hidden>↑</button>
+        <button type="button" class="icon-btn" id="search-next" title="Siguiente" hidden>↓</button>
+      </div>
+    </header>
+
+    <aside id="sidebar" class="sidebar" aria-label="Índice del manual">
+      <nav id="toc" class="toc"></nav>
+    </aside>
+
+    <main id="reader" class="reader" tabindex="-1">
+      <section class="cover" id="portada" aria-label="Portada">
+        <div class="cover-page">
+          <div class="cover-cluster">
+            <div class="cover-art-frame">
+              <pre class="cover-art" id="cover-art"></pre>
+            </div>
+            <p class="cover-sub">MANUAL DE REGLAS</p>
+          </div>
+        </div>
+      </section>
+      <div id="book" class="book"></div>
+    </main>
+  </div>
+  <div id="scrim" class="scrim" hidden></div>
+  <script src="data/manual.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

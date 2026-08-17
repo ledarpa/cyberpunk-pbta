@@ -21,6 +21,7 @@ A diferencia de la chapería (equipo que llevas encima), los cromos:
 Si es tu primera partida, lee las reglas antes del catálogo. En campaña, el catálogo es consulta rápida.
 
 ---
+
 ## Cromos, humanidad y cyberpsicosis
 
 Los cromos dan capacidades por encima del cuerpo natural: reflejos extremos, fuerza aumentada, sentidos amplificados, enlace directo con la tecnología.
@@ -28,6 +29,7 @@ Los cromos dan capacidades por encima del cuerpo natural: reflejos extremos, fue
 Cada implante tiene un coste: el cerebro integra señales digitales y mecánicas todo el tiempo. Con más cromos, la mente se desconecta de lo humano. En Night City eso se llama perder la humanidad.
 
 ---
+
 ### Mejoras de características
 
 Muchos cromos suben una o más características (EN, MC, RC, TM). Los puntos de mejora cuestan según esta escala:
@@ -46,6 +48,7 @@ Tope: la suma de bonos de cromos no puede dejar ninguna característica por enci
 Un mismo cromo puede repartir varios puntos de mejora entre distintas características. Cada implante cuenta como un solo cromo instalado, aunque dé varios beneficios.
 
 ---
+
 ### Degeneración neural
 
 Más implantes = más desgaste mental.
@@ -55,6 +58,7 @@ Más implantes = más desgaste mental.
 - Cada vez que aplica esa penalización, marca 1 casilla de @Psique en la ficha.
 
 ---
+
 ### Episodios de cyberpsicosis
 
 Quien lleva cromos puede sufrir episodios de cyberpsicosis.
@@ -70,6 +74,7 @@ Según el nivel de @Psique en la ficha:
 | **Más de 5** | **Cyberpsicópata permanente** — el personaje pasa al control del Director |
 
 ---
+
 ### Recuperar la humanidad
 
 Hay dos formas de bajar @Psique:
@@ -95,6 +100,7 @@ Terapia y estabilización neuronal especializada.
 - Recuperar el 4.º o 5.º nivel de @Psique → 1 semana de tratamiento avanzado y siempre un trastorno permanente (narrativa o Director).
 
 ---
+
 ## Progresión: Neurodata, Estrellas y Créditos
 
 En Night City las vivencias intensas se venden. Corporaciones, laboratorios y plataformas pagan por recuerdos con adrenalina, miedo y emoción real.
@@ -106,6 +112,7 @@ Un Tasador Virtual evalúa la Neurodata y paga en Estrellas. 1 Estrella = 1 Cré
 > Vender experiencias te da poder; cada cromo nuevo también te acerca a perder humanidad. Economía y @Psique van ligadas.
 
 ---
+
 ### Cómo obtener Estrellas
 
 Al terminar una misión o sesión relevante, el Tasador puede dar 1 Estrella por cada criterio cumplido:
@@ -123,6 +130,7 @@ La Escena Estrella la eligen los jugadores al final: el momento más memorable o
 *(Las 5 estrellas de creación de personaje se gastan con las mismas reglas de Créditos que abajo.)*
 
 ---
+
 ### Créditos
 
 - Cada Estrella = 1 Crédito.
@@ -132,6 +140,7 @@ La Escena Estrella la eligen los jugadores al final: el momento más memorable o
 - Puedes guardar Créditos hasta gastarlos.
 
 ---
+
 ### Cómo gastar Créditos
 
 #### Nuevo Cyberware (cromo o chapería)
@@ -164,6 +173,7 @@ Entregas la versión anterior y pagas solo la diferencia en Créditos entre cate
 El Director puede usar el mismo coste para consumibles o accesorios parecidos si encaja en la campaña.
 
 ---
+
 En Night City importa sobrevivir y aprender. El recurso más cotizado sigue siendo la experiencia vivida: cada Neurodata vendida te acerca a mejores cromos… y un paso más hacia la pérdida de humanidad.
 
 ---

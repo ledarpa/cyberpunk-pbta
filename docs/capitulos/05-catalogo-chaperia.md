@@ -5,6 +5,7 @@
 Chapería es el equipamiento que no va implantado: armas, armaduras, herramientas, drones, ropa táctica, datos en neuroranura, etc. En la jerga de la calle: si no está clavado en el cuerpo, es chapería.
 
 ---
+
 ## Cromos vs chapería
 
 | Aspecto | Cromos |
@@ -26,6 +27,7 @@ En resumen: Armas, herramientas, neurodata en ranura y vestimenta:
 Muchas piezas piden conocimiento técnico o integración con cromos (HUD + cyberópticas). Llevar arsenal letal o PEM a la vista puede ser contraproducente: se resuelve en ficción con el Director.
 
 ---
+
 ## Recordatorio rápido
 
 - La chapería no suma @Psique.
@@ -46,6 +48,7 @@ Muchas piezas piden conocimiento técnico o integración con cromos (HUD + cyber
 | Estabilizador | Arma usable a **una mano** (fusil; rifle usa «estabilizador y decompresor») |
 
 ---
+
 ## Armas
 
 ### Pistola
@@ -72,6 +75,7 @@ Accesorios
 SAI: acelerador iónico, apuntado asistido, flujo balístico (tabla arriba).
 
 ---
+
 ### Escopeta
 
 | Stat | Valor |
@@ -98,6 +102,7 @@ Accesorios
 SAI: acelerador iónico, apuntado asistido, flujo balístico.
 
 ---
+
 ### Fusil
 
 | Stat | Valor |
@@ -123,6 +128,7 @@ Accesorios
 SAI: acelerador iónico (+1), apuntado asistido, estabilizador, flujo balístico.
 
 ---
+
 ### Rifle
 
 | Stat | Valor |
@@ -155,6 +161,7 @@ SAI
 - Flujo balístico
 
 ---
+
 ### Lanzadardos
 
 Lanza dardos cibernéticos o químicos.
@@ -178,6 +185,7 @@ SAI
 - Flujo balístico: 1 dardo por turno sin tiempo de recarga
 
 ---
+
 ### Lanzamisiles
 
 | Stat | Valor |
@@ -208,6 +216,7 @@ SAI
 - Acelerador iónico: +3 daño
 
 ---
+
 ### Granadas
 
 Se venden en cajas de 8 unidades.
@@ -223,6 +232,7 @@ Se venden en cajas de 8 unidades.
 | **PEM** | Anula cibernética y electrónica en **5 m** durante **1d6** turnos |
 
 ---
+
 ### Balística especial
 
 Todas las armas de fuego o energía incluyen munición estándar. Munición especial: 4 cargadores = 1 Estrella (1 Crédito).
@@ -259,6 +269,7 @@ Cualquier dardo puede venderse como jeringa: impacto cuerpo a cuerpo, tirada TM 
 | **Paralizante** | Inmovilizado **1d6** turnos |
 
 ---
+
 ## Herramientas
 
 ### Autointérprete
@@ -294,7 +305,7 @@ Conecta a terminal de acceso; burla reconocimiento biométrico.
 
 ### Kit de conectividad
 
-Usuario ↔ terminal; ventaja EN en la red. 12 h de recarga antes de reutilizar el kit.
+Usuario <-> terminal; ventaja EN en la red. 12 h de recarga antes de reutilizar el kit.
 
 | Calidad | Conexión / usos |
 | --- | --- |
@@ -349,6 +360,7 @@ Membresía Trauma Team en el bolsillo; monitoriza biológico y cibernético. Si 
 | **VIP** | Cubren **100%** de gastos y tiempo de tratamiento necesario (salud y cibernética) |
 
 ---
+
 ## Neurodata (contenido de ranura)
 
 Se inserta en neuroranuras (cromo). Distinto de la Neurodata que vendes por Estrellas (experiencia de sesión).
@@ -376,6 +388,7 @@ Anula la desventaja al entrar en la antigua red y enlaces remotos.
 - Doble 1: el protocolo se desactiva; IA pueden minar/invasar el procesador cerebral → consecuencias catastróficas (Director).
 
 ---
+
 ## Vestimenta
 
 ### Corposuit

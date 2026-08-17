@@ -27,7 +27,9 @@ BODY_COLUMNS = 2
 PAGE_W = Cm(21.0)                      # A4
 PAGE_H = Cm(29.7)                      # A4
 PAGE_MARGIN = Cm(0.5)                  # Márgenes exteriores
-COLUMN_GAP_TWIPS = int(PAGE_MARGIN.pt * 20)  # Espacio entre columnas (0,5 cm)
+COLUMN_GAP_TWIPS = 283                 # ~0,5 cm (formato.docx)
+PART_BAR_LEN = 35                      # barras ===== de Título 1 (snapshot Word)
+COVER_SUBTITLE = "MANUAL DE REGLAS"
 # Portada: sangría izquierda medida en pbta-original.docx (EMU 2070735)
 COVER_LEFT_INDENT = Cm(5.752)
 SZ_COVER_ART = Pt(7.5)                 # Courier New bold — exacto original
@@ -41,10 +43,10 @@ C_ACCENT = RGBColor(0x55, 0xFF, 0xFF)
 
 # Escala proporcional (base cuerpo 8 pt; antes 11 pt → ratio 8/11)
 SZ_BODY = Pt(8)
-SZ_H1 = Pt(10)                         # Título 1 = capítulos
-SZ_H2 = Pt(10)
-SZ_H3 = Pt(8)
-SZ_H4 = Pt(8)
+SZ_H1 = Pt(10)                         # Título 1 = capítulos con ===== (única negrita)
+SZ_H2 = Pt(12)
+SZ_H3 = Pt(10)
+SZ_H4 = Pt(9)
 SZ_TABLE = Pt(8)
 
 BULLET_CHAR = "»"
@@ -378,7 +380,7 @@ def setup_document_styles(doc: Document) -> DocTheme:
         doc,
         STYLE_H2,
         size=SZ_H2,
-        bold=True,
+        bold=False,
         color=C_HEADING,
         space_before=Pt(8),
         space_after=Pt(6),
@@ -390,7 +392,7 @@ def setup_document_styles(doc: Document) -> DocTheme:
         doc,
         STYLE_H3,
         size=SZ_H3,
-        bold=True,
+        bold=False,
         color=C_ACCENT,
         space_before=Pt(6),
         space_after=Pt(4),
@@ -402,10 +404,10 @@ def setup_document_styles(doc: Document) -> DocTheme:
         doc,
         STYLE_H4,
         size=SZ_H4,
-        bold=True,
+        bold=False,
         color=C_TEXT_BRIGHT,
         space_before=Pt(4),
-        space_after=Pt(3),
+        space_after=Pt(0),
         outline_level=3,
         keep_next=True,
         keep_lines=True,
@@ -437,12 +439,12 @@ def setup_document_styles(doc: Document) -> DocTheme:
         left_indent=Inches(0.35),
         space_after=Pt(4),
     )
-    # Líneas mecánicas de profesión — mismo celeste que Heading 3; no huérfanas
+    # Líneas mecánicas de profesión — celeste; sin negrita de título
     _style_paragraph(
         doc,
         STYLE_MESA,
         size=SZ_BODY,
-        bold=True,
+        bold=False,
         color=C_ACCENT,
         space_before=Pt(2),
         space_after=Pt(4),
@@ -490,11 +492,13 @@ def start_body_layout(doc: Document) -> None:
 def begin_full_width_block(doc: Document) -> None:
     """1 columna ancho completo (títulos de parte ASCII)."""
     section = doc.add_section(WD_SECTION_START.CONTINUOUS)
+    apply_section_margins(section)
     set_section_columns(section, 1)
 
 
 def resume_body_columns(doc: Document) -> None:
     section = doc.add_section(WD_SECTION_START.CONTINUOUS)
+    apply_section_margins(section)
     set_section_columns(section, BODY_COLUMNS)
 
 
@@ -541,21 +545,17 @@ def add_cover_art(doc: Document, lines: list[str], subtitle: str) -> None:
 
 
 def add_part_title_ascii(doc: Document, title: str) -> None:
-    """Capítulo (#): barras decorativas + Título 1 real (entra al TOC). Siempre centrado."""
-    inner = title.strip().upper()
-    bar_len = max(min(len(inner) + 6, 56), 24)
-    bar = "=" * bar_len
+    """Capítulo (#): 1 columna, barras ===== + Título 1 centrado en negrita."""
+    begin_full_width_block(doc)
+    bar = "=" * PART_BAR_LEN
 
-    for deco in (bar,):
-        p = doc.add_paragraph(style=STYLE_PART_DECO)
-        _set_paragraph_shading(p)
-        p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-        run = p.add_run(deco)
-        _apply_font(run, size=SZ_H1, bold=True, color=C_HEADING)
+    p = doc.add_paragraph(style=STYLE_PART_DECO)
+    _set_paragraph_shading(p)
+    p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+    run = p.add_run(bar)
+    _apply_font(run, size=SZ_H1, bold=True, color=C_HEADING)
 
-    # Heading 1 = título canónico para índice automático
     add_body_paragraph(doc, title.strip(), STYLE_H1, bold_parts=False)
-    # forzar centrado por si el estilo se redefine
     last = doc.paragraphs[-1]
     last.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
@@ -564,6 +564,8 @@ def add_part_title_ascii(doc: Document, title: str) -> None:
     p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
     run = p.add_run(bar)
     _apply_font(run, size=SZ_H1, bold=True, color=C_HEADING)
+
+    resume_body_columns(doc)
 
 
 def add_rule_separator(doc: Document) -> None:
@@ -595,7 +597,8 @@ def add_body_paragraph(doc: Document, text: str, style: str = STYLE_NORMAL, bold
     }
     size = size_map.get(style, SZ_BODY)
     default_color = color_map.get(style, C_TEXT)
-    heading_bold = style in (STYLE_H1, STYLE_H2, STYLE_H3, STYLE_H4, STYLE_MESA)
+    # Solo Título 1 (bloques =====) lleva negrita de título
+    heading_bold = style == STYLE_H1
 
     p = doc.add_paragraph(style=style)
     _set_paragraph_shading(p)

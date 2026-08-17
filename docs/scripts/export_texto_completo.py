@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Exporta el contenido editorial a modo texto (docs/contenido).
+"""Exporta dumps de texto a docs/.generated/ (gitignored).
 
-docs/ref/ es solo lectura: se puede leer el original, no se escribe ahí.
+docs/ref/ es solo lectura.
 """
 from __future__ import annotations
 
@@ -12,8 +12,8 @@ from docx import Document
 
 ROOT = Path(__file__).resolve().parents[2]
 CAPITULOS = ROOT / "docs" / "capitulos"
-CONTENIDO = ROOT / "docs" / "contenido"
-REF = ROOT / "docs" / "ref"  # solo lectura
+OUT = ROOT / "docs" / ".generated"
+REF = ROOT / "docs" / "ref"
 
 CHAPTER_FILES = [
     "00-sistema.md",
@@ -38,40 +38,33 @@ def extract_docx(path: Path) -> str:
 
 
 def build_manual_completo() -> str:
-    parts: list[str] = [
+    parts = [
         "pbta — MANUAL COMPLETO (texto)\n",
-        "Fuente: docs/capitulos/*.md (edición clara / reorganizada)\n",
-        "Referencia original (solo lectura): docs/ref/pbta-original.docx\n",
-        "Word generado: cyberpunk-pbta.docx (raíz del proyecto)\n",
+        "Fuente: docs/capitulos/*.md\n",
         "=" * 72 + "\n",
     ]
     for name in CHAPTER_FILES:
         path = CAPITULOS / name
         if not path.exists():
             raise FileNotFoundError(path)
-        text = path.read_text(encoding="utf-8")
-        text = re.sub(r"^> \*\*Borrador.*$\n?", "", text, flags=re.M).strip() + "\n"
-        parts.append("\n" + "=" * 72 + "\n")
-        parts.append(f"ARCHIVO: {name}\n")
-        parts.append("=" * 72 + "\n\n")
-        parts.append(text)
+        text = re.sub(r"^> \*\*Borrador.*$\n?", "", path.read_text(encoding="utf-8"), flags=re.M)
+        parts.append(f"\n{'=' * 72}\nARCHIVO: {name}\n{'=' * 72}\n\n")
+        parts.append(text.strip() + "\n")
     return "".join(parts)
 
 
 def main() -> None:
-    CONTENIDO.mkdir(parents=True, exist_ok=True)
-
+    OUT.mkdir(parents=True, exist_ok=True)
     completo = build_manual_completo()
-    (CONTENIDO / "MANUAL-completo.txt").write_text(completo, encoding="utf-8")
-    print(f"OK {CONTENIDO / 'MANUAL-completo.txt'} ({len(completo)} chars)")
+    (OUT / "MANUAL-completo.txt").write_text(completo, encoding="utf-8")
+    print(f"OK {OUT / 'MANUAL-completo.txt'} ({len(completo)} chars)")
 
-    # Leer original desde ref (no modificar ref)
     orig = REF / "pbta-original.docx"
     if orig.exists():
         txt = extract_docx(orig)
-        out = CONTENIDO / "pbta-original-extract.txt"
+        out = OUT / "pbta-original-extract.txt"
         out.write_text(txt, encoding="utf-8")
-        print(f"OK {out} (leído desde ref/, escrito en contenido/)")
+        print(f"OK {out}")
 
 
 if __name__ == "__main__":

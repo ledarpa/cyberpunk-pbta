@@ -19,11 +19,13 @@ No eliges bonos sueltos: eliges un personaje con historia, contactos y límites.
 Elige una profesión, anótala en la ficha y usa el trasfondo como guía (no añade reglas salvo acuerdo del Director).
 
 ---
+
 ## Profesión
 
 Elige el arquetipo que encaje con tu concepto.
 
 ---
+
 ## Equipamiento inicial
 
 Cyberware inicial: 2 cromos improvisados o 1 cromo corriente, más 2 piezas de chapería improvisada o 1 pieza de chapería corriente que no sea arma.
@@ -33,11 +35,13 @@ Arsenal inicial: 1 arma corriente de las asociadas a tu profesión (lista bajo c
 Recursos: 5 estrellas para accesorios, un cromo nuevo o mejorar un cromo ya adquirido.
 
 ---
+
 ## Profesiones
 
 Cada arquetipo: En la mesa = mecánica; el resto = trasfondo.
 
 ---
+
 ### Arreglador
 
 **En la mesa:** EN [+1] · MC [+1] · RC [-1] · TM [-1]. **Arsenal inicial:** pistola, escopeta o fusil.
@@ -51,6 +55,7 @@ Tu verdadero capital no cabe en una caja fuerte. Es una red: mercenarios que nec
 Hay días en que escondes a un fugitivo, metes comida en un bloqueo o le das techo a alguien que no puede pagar. No es caridad: es inversión. En una ciudad hecha de fragmentos, tú eres el cable que une lo que el sistema cortó. El proletariado no cruza ciertas puertas; tú sí. Y cada puerta abierta deja un débito. Cobrarás. Siempre cobras. Porque en Night City la única ética que sobrevive es la del precio justo… según quién lo define.
 
 ---
+
 ### Artista
 
 **En la mesa:** EN [-1] · MC [+1] · RC [+1] · TM [-1]. **Arsenal inicial:** pistola o rifle.
@@ -64,6 +69,7 @@ El poder que manejas no es el de un fusil, pero mueve fusiles. Una obra tuya pue
 Night City te ofrece contratos, sponsors y una jaula dorada con buen sonido. Aceptarás lo justo para no morir de hambre y rechazarás lo que te convierta en jingle. Sabes que te van a amenazar, a comprar, a clonar tu estilo. Que te van a amar en público y odiar en privado. Sigues igual: cada noche el mismo pacto con el público —decir algo verdadero antes de que apaguen las luces—. Si el sistema quiere artistas decorativos, que contrate maniquíes. Tú vienes a hacer ruido que duele.
 
 ---
+
 ### Biohacker
 
 **En la mesa:** EN [+1] · MC [-1] · RC [0] · TM [0]. **Arsenal inicial:** pistola o lanzadardos.
@@ -77,6 +83,7 @@ Tus clientes no siempre te quieren después. Hay gente que camina con tus mods y
 Tienes un primo —o un hermano de oficio— que corta carne y cable con la misma calma: el Tecnomédico. Mientras tú resucitas una tostadora, él abre pechos en sótanos y clava implantes que Trauma Team fingirá no haber visto. Ambos conocen el mismo secreto: aquí la medicina ya es mecánica, y la mecánica ya es política. Él espera que un contrato “limpio” lo salve. Tú esperas no necesitarlo demasiado pronto. Mentira piadosa. En esta ciudad, tarde o temprano todos vuelven al mismo banco de trabajo… o a la misma camilla.
 
 ---
+
 ### Comunicador
 
 **En la mesa:** EN [0] · MC [+1] · RC [-1] · TM [0]. **Arsenal inicial:** pistola.
@@ -90,6 +97,7 @@ La semana pasada: una farmacéutica vendiendo veneno en la Calle con envoltorio 
 Sabes que tu propia Corporación mediática te usa tanto como tú la usas a ella. Sponsors, ratings, límites “editoriales”. Juegas ese juego sin olvidar el otro: el de la Calle, donde la gente necesita nombres, pruebas y alguien que diga en voz alta lo que todos susurran. Si te callas, el silencio no es neutral: es cómplice. Así que cargas el equipo, avisas a tus apoyos y sales otra vez. Exponer bastardos no es un eslogan. Es tu forma de no convertirte en uno.
 
 ---
+
 ### Corpo
 
 **En la mesa:** EN [0] · MC [+1] · RC [0] · TM [-1]. **Arsenal inicial:** pistola.
@@ -103,6 +111,7 @@ Tus proyectos oscilan entre lo gris y lo monstruoso. Un plan de productividad pa
 Te repites que entraste para cambiar la Corporación desde adentro. Cada trimestre esa frase suena más hueca. La ética es un lujo de quien no tiene un informe en una hora y un colega de Ventas planeando congelarte la base de datos —y la carrera— para siempre. En el comedor ejecutivo se habla de sinergias; en los sótanos, de cuerpos. Tú ya no confundes el mapa con el territorio. Vas a mover primero. No porque seas el villano de la película. Porque en el piso treinta, la única narrativa que importa es la del que sigue respirando con badge activo… y con un equipo negro al otro lado de la línea, esperando tu OK.
 
 ---
+
 ### Espía
 
 **En la mesa:** EN [-1] · MC [0] · RC [+1] · TM [0]. **Arsenal inicial:** pistola o lanzadardos.
@@ -116,6 +125,7 @@ Tus empleadores cambian de máscara: agencias estatales que ya no controlan su p
 El cuerpo paga el precio que el informe no menciona. Implantes discretos, hábitos de paranoia, amistades que son leyendas de cobertura. Duermes en camas prestadas y despiertas repasando rutas de escape. Si fallas, no hay funeral con bandera: hay un hueco en una base de datos y un reemplazo con tu mismo corte de pelo. Aun así vuelves a entrar. Porque en Night City la información es munición, y alguien va a dispararla. Prefieres ser el dedo en el gatillo —o el que desvía el cañón— antes que el cartel en la pared. Silencioso. Preciso. Ya casi sin ideales… y por eso más peligroso.
 
 ---
+
 ### Forastero
 
 **En la mesa:** EN [0] · MC [-1] · RC [0] · TM [+1]. **Arsenal inicial:** pistola, escopeta, fusil o rifle.
@@ -129,6 +139,7 @@ Aceptas encargos porque el pack necesita combustible, comida y piezas: transport
 En Night City eres el olor a aceite y desierto que entra cuando alguien abre la puerta del garage equivocado. Te necesitan para mover lo que no debe verse y para recordar que el mundo no termina en el anillo de neón. Tu familia es tu nación. Tu vehículo, tu casa. Tu palabra, a veces, vale más que un contrato corpo… y a veces se rompe igual de feo. Sigues en la ruta porque la ruta no miente: o avanzas juntos, o la carretera se traga a los rezagados.
 
 ---
+
 ### Mercenario
 
 **En la mesa:** EN [-1] · MC [-1] · RC [+1] · TM [+1]. **Arsenal inicial:** pistola, escopeta, fusil o rifle + pistola impr.
@@ -142,6 +153,7 @@ El precio no es poesía. Es adicción, paranoia y un cuerpo que ya no reconoce d
 Sabes que la Calle te mira como arma andante… y no se equivoca del todo. También sabes que sin gente como tú, los Exec no salen del ascensor y los Media no llegan vivos a la emisión. No pides que te quieran. Pides que paguen por adelantado y que el contrato diga claro quién muere si alguien improvisa. En el fondo, todos compran lo mismo: la ilusión de control a través de tu gatillo. Ser el mejor no es gloria. Es sobrevivir una noche más siendo exactamente lo que Night City fabricó: una solución letal con nombre en la factura.
 
 ---
+
 ### Netrunner
 
 **En la mesa:** EN [+1] · MC [0] · RC [0] · TM [-1]. **Arsenal inicial:** pistola.

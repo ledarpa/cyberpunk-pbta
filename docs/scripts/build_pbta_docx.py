@@ -25,6 +25,7 @@ if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
 from word_styles import (  # noqa: E402
+    COVER_SUBTITLE,
     STYLE_H2,
     STYLE_H3,
     STYLE_H4,
@@ -244,7 +245,7 @@ def add_cover_page(doc: Document) -> None:
     art = PORTADA.read_text(encoding="utf-8").splitlines()
     while art and art[-1] == "":
         art.pop()
-    add_cover_art(doc, art, "Manual de reglas — edición clara")
+    add_cover_art(doc, art, COVER_SUBTITLE)
 
 
 def main() -> None:
@@ -253,15 +254,13 @@ def main() -> None:
     add_cover_page(doc)
     start_body_layout(doc)
 
-    for idx, name in enumerate(CHAPTER_FILES):
+    for name in CHAPTER_FILES:
         path = CAPITULOS / name
         if not path.exists():
             raise FileNotFoundError(path)
         text = path.read_text(encoding="utf-8")
         text = re.sub(r"^> \*\*Borrador.*?\n\n", "", text, flags=re.MULTILINE)
         process_markdown(doc, text)
-        if idx < len(CHAPTER_FILES) - 1:
-            add_rule_separator(doc)
 
     apply_all_section_margins(doc)
     doc.save(OUTPUT)
