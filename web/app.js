@@ -25,19 +25,48 @@
   bindChrome();
   openFromHash();
 
+  function normalizeAscii(text) {
+    return text.replace(/\u00a0/g, " ").replace(/\n+$/, "");
+  }
+
+  function fitAsciiArt(pre, boxW, boxH, baseSize) {
+    if (!pre || !pre.textContent || !boxW) return;
+    pre.style.transform = "none";
+    const pad = Math.max(8, Math.round(boxW * 0.04));
+    const maxW = Math.max(16, boxW - pad * 2);
+    const maxH = Math.max(16, boxH);
+    pre.style.fontSize = `${baseSize}px`;
+    const artW = pre.scrollWidth;
+    const artH = pre.scrollHeight;
+    if (!artW || !artH) return;
+    let px = Math.floor(baseSize * Math.min(maxW / artW, maxH / artH, 1));
+    px = Math.max(5, px);
+    pre.style.fontSize = `${px}px`;
+    while (px > 5 && (pre.scrollWidth > maxW || pre.scrollHeight > maxH)) {
+      px -= 1;
+      pre.style.fontSize = `${px}px`;
+    }
+  }
+
+  function fetchCoverAscii() {
+    if (fetchCoverAscii.cache) return Promise.resolve(fetchCoverAscii.cache);
+    return fetch("data/portada-ascii.txt")
+      .then((r) => (r.ok ? r.text() : Promise.reject()))
+      .then((t) => {
+        fetchCoverAscii.cache = normalizeAscii(t);
+        return fetchCoverAscii.cache;
+      });
+  }
+
   function loadCover() {
     const pre = document.getElementById("cover-art");
     if (!pre) return;
-    fetch("data/portada-ascii.txt")
-      .then((r) => (r.ok ? r.text() : Promise.reject()))
-      .then((t) => {
-        pre.textContent = t
-          .replace(/\n+$/, "")
-          .split("\n")
-          .map((line) => line.replace(/[ \u00a0]+$/g, ""))
-          .join("\n");
+    fetchCoverAscii()
+      .then((text) => {
+        pre.textContent = text;
         fitCoverArt();
         requestAnimationFrame(fitCoverArt);
+        fitTocCoverArt();
       })
       .catch(() => {
         pre.textContent = "pbta:\\>";
@@ -56,27 +85,21 @@
     const frame = pre?.closest(".cover-art-frame");
     const page = pre?.closest(".cover-page");
     if (!pre || !frame || !page || !pre.textContent) return;
-
-    pre.style.transform = "none";
-    pre.style.fontSize = "40px";
-
     const boxW = frame.clientWidth;
-    const boxH = Math.max(24, page.clientHeight * 0.16);
-    const artW = pre.scrollWidth;
-    const artH = pre.scrollHeight;
-    if (!artW || !artH || !boxW) return;
-
-    const px = 40 * Math.min(boxW / artW, boxH / artH, 1);
-    pre.style.fontSize = `${Math.max(5, px)}px`;
+    const boxH = Math.max(32, page.clientHeight * 0.2);
+    fitAsciiArt(pre, boxW, boxH, 40);
   }
 
   function renderToc(toc) {
     const frag = document.createDocumentFragment();
     const coverLink = document.createElement("a");
     coverLink.href = "#portada";
-    coverLink.className = "l1";
-    coverLink.textContent = "Portada";
+    coverLink.className = "l1 toc-cover";
     coverLink.dataset.id = "portada";
+    const pre = document.createElement("pre");
+    pre.className = "cover-art toc-cover-art";
+    pre.setAttribute("aria-label", "Cyberpunk");
+    coverLink.appendChild(pre);
     frag.appendChild(coverLink);
     for (const item of toc) {
       if (item.level > 3) continue;
@@ -88,6 +111,35 @@
       frag.appendChild(a);
     }
     tocEl.replaceChildren(frag);
+    loadTocCoverAscii();
+  }
+
+  function loadTocCoverAscii() {
+    const pre = tocEl.querySelector(".toc-cover-art");
+    if (!pre) return;
+    const paint = (text) => {
+      pre.textContent = text;
+      fitTocCoverArt();
+      requestAnimationFrame(fitTocCoverArt);
+    };
+    fetchCoverAscii()
+      .then(paint)
+      .catch(() => {
+        pre.textContent = "pbta:\\>";
+        fitTocCoverArt();
+      });
+    window.addEventListener("resize", fitTocCoverArt);
+    if (sidebar && "ResizeObserver" in window) {
+      new ResizeObserver(() => fitTocCoverArt()).observe(sidebar);
+    }
+  }
+
+  function fitTocCoverArt() {
+    const pre = tocEl.querySelector(".toc-cover-art");
+    if (!pre || !pre.textContent || !sidebar) return;
+    const boxW = Math.max(48, sidebar.clientWidth - 24);
+    const boxH = 36;
+    fitAsciiArt(pre, boxW, boxH, 10);
   }
 
   function bindNav() {
