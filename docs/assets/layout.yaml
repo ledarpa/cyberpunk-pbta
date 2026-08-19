@@ -1,4 +1,4 @@
-# Snapshot de layout tomado de cyberpunk-pbta.docx (2026-08-14)
+# Snapshot de layout tomado de cyberpunk-pbta.docx (2026-08-18)
 # Referencia binaria: docs/ref/formato.docx
 # El builder no reproduce márgenes superiores page-a-page (ajuste manual);
 # sí reproduce: A4, 0,5 cm L/R/B, 2 columnas, Título 1 a 1 columna con barras =====.
@@ -45,3 +45,4 @@ snapshot_sections:
   - { top_cm: 1.16, cols: 2 }
   - { top_cm: 1.21, cols: 1 }
   - { top_cm: 1.21, cols: 2 }
+  - { top_cm: 1.62, cols: 1 }

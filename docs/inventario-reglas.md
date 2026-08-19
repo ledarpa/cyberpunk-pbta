@@ -1,4 +1,4 @@
-# Inventario de reglas — pbta (F1)
+# Inventario de reglas — PbtA (F1)
 
 Documento de **control mecánico**. Cualquier edición de prosa debe dejar estos valores **idénticos**.  
 Catálogo detallado (cada cromo/arma): **referencia**; no resumir ni fusionar entradas al editar.

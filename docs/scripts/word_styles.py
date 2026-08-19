@@ -7,6 +7,7 @@ La estética VT323 + paleta DOS se aplica encima de esos estilos.
 """
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 
 from docx import Document
@@ -682,3 +683,49 @@ def _set_cell_shading(cell, fill: str) -> None:
     shd.set(qn("w:color"), "auto")
     shd.set(qn("w:fill"), fill)
     tcPr.append(shd)
+
+
+def _brand_pbta(text: str) -> str:
+    """pbta visible → PbtA. No toca nombres de archivo cyberpunk-pbta.*"""
+    if not text or "pbta" not in text.lower():
+        return text
+    parts = re.split(r"(cyberpunk-pbta\S*)", text, flags=re.I)
+    out = []
+    for i, part in enumerate(parts):
+        if i % 2 == 1:
+            out.append(part)
+        else:
+            out.append(re.sub(r"pbta", "PbtA", part, flags=re.I))
+    return "".join(out)
+
+
+def _iter_story_paragraphs(doc: Document):
+    yield from doc.paragraphs
+    for table in doc.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                yield from cell.paragraphs
+    for section in doc.sections:
+        for hf in (
+            section.header,
+            section.footer,
+            section.first_page_header,
+            section.first_page_footer,
+            section.even_page_header,
+            section.even_page_footer,
+        ):
+            yield from hf.paragraphs
+
+
+def replace_pbta_branding(doc: Document) -> int:
+    """Sustituye pbta → PbtA en cuerpo, tablas, encabezados y pies."""
+    n = 0
+    for p in _iter_story_paragraphs(doc):
+        for run in p.runs:
+            old = run.text
+            new = _brand_pbta(old)
+            if new != old:
+                run.text = new
+                _preserve_run_spaces(run)
+                n += 1
+    return n

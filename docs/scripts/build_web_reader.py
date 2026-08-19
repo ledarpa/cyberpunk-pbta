@@ -7,6 +7,13 @@ import re
 import shutil
 from html import escape
 from pathlib import Path
+import sys
+
+SCRIPTS = Path(__file__).resolve().parent
+if str(SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS))
+
+from chapters import CHAPTER_FILES  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 CAPITULOS = ROOT / "docs" / "capitulos"
@@ -14,15 +21,6 @@ WEB = ROOT / "web"
 DATA = WEB / "data"
 FONT_SRC = ROOT / "docs" / "assets" / "fonts" / "VT323-Regular.ttf"
 ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
-
-CHAPTER_FILES = [
-    "00-sistema.md",
-    "01-crear-un-cyberpunk.md",
-    "02-cyberware-reglas-y-economia.md",
-    "04-catalogo-cromos.md",
-    "05-catalogo-chaperia.md",
-    "06-glosario.md",
-]
 
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
@@ -197,7 +195,7 @@ def main() -> None:
     payload = {
         "html": body,
         "toc": toc,
-        "title": "pbta — Manual de reglas",
+        "title": "PbtA — Manual de reglas",
     }
     js = (
         "window.PBTA_MANUAL = "

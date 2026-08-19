@@ -38,24 +38,18 @@ from word_styles import (  # noqa: E402
     add_part_title_ascii,
     add_rule_separator,
     apply_all_section_margins,
+    replace_pbta_branding,
     set_paragraph_keep,
     setup_document_styles,
     start_body_layout,
     style_table,
 )
+from chapters import CHAPTER_FILES  # noqa: E402
+from build_ficha_docx import append_hoja_de_personaje  # noqa: E402
 
 CAPITULOS = ROOT / "docs" / "capitulos"
 PORTADA = ROOT / "docs" / "assets" / "portada-ascii.txt"
 OUTPUT = ROOT / "cyberpunk-pbta.docx"
-
-CHAPTER_FILES = [
-    "00-sistema.md",
-    "01-crear-un-cyberpunk.md",
-    "02-cyberware-reglas-y-economia.md",
-    "04-catalogo-cromos.md",
-    "05-catalogo-chaperia.md",
-    "06-glosario.md",
-]
 
 
 def parse_table_row(line: str) -> list[str]:
@@ -249,6 +243,27 @@ def add_cover_page(doc: Document) -> None:
 
 
 def main() -> None:
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Regenera cyberpunk-pbta.docx desde Markdown (pierde márgenes page-a-page)."
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Sobrescribe el Word de trabajo. Sin este flag no se toca el golden.",
+    )
+    args = parser.parse_args()
+    if OUTPUT.exists() and not args.force:
+        print(
+            f"ABORT: {OUTPUT.name} es el golden visual (incl. hoja de personaje).\n"
+            f"  No regenerar: perderías márgenes y maquetación.\n"
+            f"  Congelar el Word actual: python3 docs/scripts/build_ficha_docx.py --from-manual\n"
+            f"  Regenerar igual: python3 docs/scripts/build_pbta_docx.py --force",
+            file=sys.stderr,
+        )
+        raise SystemExit(2)
+
     doc = Document()
     setup_document_styles(doc)
     add_cover_page(doc)
@@ -263,6 +278,8 @@ def main() -> None:
         process_markdown(doc, text)
 
     apply_all_section_margins(doc)
+    replace_pbta_branding(doc)
+    append_hoja_de_personaje(doc)
     doc.save(OUTPUT)
     print(f"Generado: {OUTPUT}")
 
