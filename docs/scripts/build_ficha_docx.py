@@ -26,6 +26,9 @@ if str(SCRIPTS) not in sys.path:
 
 from word_styles import (  # noqa: E402
     COVER_LEFT_INDENT,
+    C_ACCENT,
+    C_HEADING,
+    C_TEXT_BRIGHT,
     FONT_COVER,
     FONT_FAMILY,
     SZ_COVER_ART,
@@ -292,9 +295,19 @@ def extract_ficha_from_manual(manual: Document) -> Document:
     return out
 
 
+def _rgb_hex(color: RGBColor) -> str:
+    return str(color).upper()
+
+
 def _write_layout_snapshot(manual: Document) -> None:
+    from datetime import date
+
+    today = date.today().isoformat()
+    h = _rgb_hex(C_HEADING)
+    a = _rgb_hex(C_ACCENT)
+    b = _rgb_hex(C_TEXT_BRIGHT)
     lines = [
-        "# Snapshot de layout tomado de cyberpunk-pbta.docx (2026-08-18)",
+        f"# Snapshot de layout tomado de cyberpunk-pbta.docx ({today})",
         "# Referencia binaria: docs/ref/formato.docx",
         "# El builder no reproduce márgenes superiores page-a-page (ajuste manual);",
         "# sí reproduce: A4, 0,5 cm L/R/B, 2 columnas, Título 1 a 1 columna con barras =====.",
@@ -318,11 +331,11 @@ def _write_layout_snapshot(manual: Document) -> None:
         'cover_subtitle: "MANUAL DE REGLAS"',
         "",
         "headings:",
-        '  h1: { size_pt: 10, bold: true,  color: "FFFF55", keep_next: true }',
-        '  h2: { size_pt: 12, bold: false, color: "FFFF55", keep_next: true }',
-        '  h3: { size_pt: 10, bold: false, color: "55FFFF", keep_next: true }',
-        '  h4: { size_pt: 9,  bold: false, color: "00FF00", keep_next: true }',
-        '  mesa: { size_pt: 8, bold: false, color: "55FFFF", keep_next: true }',
+        f'  h1: {{ size_pt: 10, bold: true,  color: "{h}", keep_next: true }}',
+        f'  h2: {{ size_pt: 12, bold: false, color: "{h}", keep_next: true }}',
+        f'  h3: {{ size_pt: 10, bold: false, color: "{a}", keep_next: true }}',
+        f'  h4: {{ size_pt: 9,  bold: false, color: "{b}", keep_next: true }}',
+        f'  mesa: {{ size_pt: 8, bold: false, color: "{a}", keep_next: true }}',
         "",
         "separator_dashes: 28",
         "",

@@ -8,7 +8,7 @@
     { at: 15, text: "-3" },
     { at: 20, text: "Falla", sub: "integral" },
   ];
-  const LEDGER_ROWS = 28;
+  const LEDGER_ROWS = 30;
 
   const form = document.getElementById("ficha-form");
   if (!form) return;
@@ -34,8 +34,16 @@
       }
       return boxBtn(`salud-${i}`, "salud");
     }).join("");
-    const ledger = (name, label) =>
-      `<div class="ficha-col"><div class="ficha-col-head">[${"·".repeat(8)}${label}${"·".repeat(8)}]</div><textarea class="ficha-ledger" name="${name}" rows="${LEDGER_ROWS}" aria-label="${label}"></textarea></div>`;
+    const ledger = (name, label) => {
+      const rows = Array.from({ length: LEDGER_ROWS }, (_, i) =>
+        `<div class="ficha-ledger-row">
+          <span class="ficha-pipe" aria-hidden="true">|</span>
+          <input type="text" class="ficha-ledger-line" name="${name}-${i}" data-ledger="${name}" autocomplete="off">
+          <span class="ficha-pipe" aria-hidden="true">|</span>
+        </div>`
+      ).join("");
+      return `<div class="ficha-col"><div class="ficha-col-head">[${"·".repeat(8)}${label}${"·".repeat(8)}]</div><div class="ficha-ledger-col" data-ledger="${name}">${rows}</div></div>`;
+    };
 
     return `
       <div class="ficha-block ficha-identity">
@@ -72,13 +80,13 @@
       <div class="ficha-block ficha-columns">${ledger("cromos", "Cromos")}${ledger("chaperia", "Chapería")}</div>
 
       <label class="ficha-block ficha-exp">
-        <span class="ficha-label">Experiencia:</span>
-        <input class="ficha-input ficha-input-line" type="text" name="experiencia" autocomplete="off">
+        <span class="ficha-label">Experiencia:\\></span>
+        <input class="ficha-input ficha-input-underscore" type="text" name="experiencia" autocomplete="off">
       </label>`;
   }
 
   function field(name, label) {
-    return `<label class="ficha-line">${tagLabel(label)}<input class="ficha-input" type="text" name="${name}" autocomplete="off"></label>`;
+    return `<label class="ficha-line">${tagLabel(label)}<input class="ficha-input ficha-input-underscore" type="text" name="${name}" autocomplete="off"></label>`;
   }
 
   function stat(name, label) {
@@ -107,8 +115,11 @@
   function collect() {
     const data = {};
     for (const el of form.elements) {
-      if (!el.name || el.classList.contains("ficha-box")) continue;
+      if (!el.name || el.classList.contains("ficha-box") || el.dataset.ledger) continue;
       data[el.name] = el.value;
+    }
+    for (const col of ["cromos", "chaperia"]) {
+      data[col] = [...form.querySelectorAll(`input[data-ledger="${col}"]`)].map((i) => i.value).join("\n");
     }
     data.psique = [...form.querySelectorAll('.ficha-box[data-group="psique"]')].map(
       (b) => b.getAttribute("aria-pressed") === "true"
@@ -136,8 +147,15 @@
     }
     if (!data) return;
     for (const el of form.elements) {
-      if (!el.name || el.classList.contains("ficha-box")) continue;
+      if (!el.name || el.classList.contains("ficha-box") || el.dataset.ledger) continue;
       if (data[el.name] != null) el.value = data[el.name];
+    }
+    for (const col of ["cromos", "chaperia"]) {
+      if (data[col] == null) continue;
+      const lines = String(data[col]).split("\n");
+      form.querySelectorAll(`input[data-ledger="${col}"]`).forEach((el, i) => {
+        el.value = lines[i] || "";
+      });
     }
     applyBoxes("psique", data.psique);
     applyBoxes("salud", data.salud);

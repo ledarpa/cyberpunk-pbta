@@ -1,9 +1,8 @@
-"""Estilos MS-DOS / pixel para cyberpunk-pbta.docx.
+"""Estilos VT323 para cyberpunk-pbta.docx (impresión: fondo blanco, texto gris/negro).
 
 Usa estilos nativos de Word (Heading 1–4, Normal, List Bullet) para que
 el índice automático (TOC) funcione. En Word en español se ven como
 Título 1 / Título 2 / Título 3 / Normal / Lista con viñetas.
-La estética VT323 + paleta DOS se aplica encima de esos estilos.
 """
 from __future__ import annotations
 
@@ -36,11 +35,13 @@ COVER_LEFT_INDENT = Cm(5.752)
 SZ_COVER_ART = Pt(7.5)                 # Courier New bold — exacto original
 SZ_COVER_SUB = Pt(9)                   # Subtítulo bajo el ASCII
 
-C_BG = RGBColor(0x0A, 0x0A, 0x0A)
-C_TEXT = RGBColor(0x55, 0xFF, 0x55)
-C_TEXT_BRIGHT = RGBColor(0x00, 0xFF, 0x00)
-C_HEADING = RGBColor(0xFF, 0xFF, 0x55)
-C_ACCENT = RGBColor(0x55, 0xFF, 0xFF)
+C_BG = RGBColor(0xFF, 0xFF, 0xFF)
+C_TEXT = RGBColor(0x66, 0x66, 0x66)
+C_TEXT_BRIGHT = RGBColor(0x00, 0x00, 0x00)
+C_HEADING = RGBColor(0x00, 0x00, 0x00)
+C_ACCENT = RGBColor(0x66, 0x66, 0x66)
+H_FILL = "FFFFFF"
+H_TABLE_HEAD = "E8E8E8"
 
 # Escala proporcional (base cuerpo 8 pt; antes 11 pt → ratio 8/11)
 SZ_BODY = Pt(8)
@@ -113,7 +114,7 @@ def _preserve_run_spaces(run) -> None:
         t.set("{http://www.w3.org/XML/1998/namespace}space", "preserve")
 
 
-def _set_paragraph_shading(paragraph, fill: str = "0A0A0A") -> None:
+def _set_paragraph_shading(paragraph, fill: str = H_FILL) -> None:
     pPr = paragraph._p.get_or_add_pPr()
     shd = OxmlElement("w:shd")
     shd.set(qn("w:val"), "clear")
@@ -195,7 +196,7 @@ def set_section_columns(section, count: int) -> None:
         cols.set(qn("w:space"), str(COLUMN_GAP_TWIPS))
 
 
-def set_document_page_background(doc: Document, hex_color: str = "0A0A0A") -> None:
+def set_document_page_background(doc: Document, hex_color: str = H_FILL) -> None:
     background = doc.element.find(qn("w:background"))
     if background is None:
         background = OxmlElement("w:background")
@@ -308,7 +309,7 @@ def _ensure_bullet_numbering(doc: Document) -> None:
         rFonts.set(qn("w:hint"), "default")
         rPr.append(rFonts)
         color = OxmlElement("w:color")
-        color.set(qn("w:val"), "00FF00")
+        color.set(qn("w:val"), "666666")
         rPr.append(color)
         sz = OxmlElement("w:sz")
         sz.set(qn("w:val"), "16")  # 8 pt half-points
@@ -659,19 +660,19 @@ def style_table(doc: Document, table) -> None:
         if tr_pr.find(qn("w:cantSplit")) is None:
             tr_pr.append(OxmlElement("w:cantSplit"))
         for cell in row.cells:
-            _set_cell_shading(cell, "0A0A0A" if i else "00AA00")
+            _set_cell_shading(cell, H_FILL if i else H_TABLE_HEAD)
             for p in cell.paragraphs:
                 try:
                     p.style = doc.styles[STYLE_NORMAL]
                 except KeyError:
                     pass
-                _set_paragraph_shading(p, "0A0A0A" if i else "00AA00")
+                _set_paragraph_shading(p, H_FILL if i else H_TABLE_HEAD)
                 for run in p.runs:
                     _apply_font(
                         run,
                         size=SZ_TABLE,
                         bold=(i == 0),
-                        color=RGBColor(0, 0, 0) if i == 0 else C_TEXT,
+                        color=C_TEXT_BRIGHT if i == 0 else C_TEXT,
                     )
 
 

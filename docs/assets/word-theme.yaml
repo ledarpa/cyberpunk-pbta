@@ -1,4 +1,4 @@
-# Tema MS-DOS / pixel — cyberpunk-pbta.docx
+# Tema impresión — alineado con ficha.docx (fondo blanco, texto gris/negro)
 # Aplicado por docs/scripts/word_styles.py + build_pbta_docx.py
 
 font:
@@ -9,13 +9,13 @@ font:
   note: "Cuerpo 8 pt; T1 10 negrita; T2 12; T3 10; T4 9 (T2–T4 sin negrita)"
 
 palette:
-  background: "0A0A0A"
-  text: "55FF55"
-  text_bright: "00FF00"
-  heading: "FFFF55"
-  accent: "55FFFF"
+  background: "FFFFFF"
+  text: "666666"
+  text_bright: "000000"
+  heading: "000000"
+  accent: "666666"
   table_header: "000000"
-  table_header_bg: "00AA00"
+  table_header_bg: "E8E8E8"
 
 layout:
   page: "A4"                 # 210 × 297 mm (ISO 216)

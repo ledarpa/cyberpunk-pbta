@@ -1,4 +1,4 @@
-# Snapshot de layout tomado de cyberpunk-pbta.docx (2026-08-18)
+# Snapshot de layout tomado de cyberpunk-pbta.docx (2026-08-19)
 # Referencia binaria: docs/ref/formato.docx
 # El builder no reproduce márgenes superiores page-a-page (ajuste manual);
 # sí reproduce: A4, 0,5 cm L/R/B, 2 columnas, Título 1 a 1 columna con barras =====.
@@ -22,11 +22,11 @@ chapter_title:
 cover_subtitle: "MANUAL DE REGLAS"
 
 headings:
-  h1: { size_pt: 10, bold: true,  color: "FFFF55", keep_next: true }
-  h2: { size_pt: 12, bold: false, color: "FFFF55", keep_next: true }
-  h3: { size_pt: 10, bold: false, color: "55FFFF", keep_next: true }
-  h4: { size_pt: 9,  bold: false, color: "00FF00", keep_next: true }
-  mesa: { size_pt: 8, bold: false, color: "55FFFF", keep_next: true }
+  h1: { size_pt: 10, bold: true,  color: "000000", keep_next: true }
+  h2: { size_pt: 12, bold: false, color: "000000", keep_next: true }
+  h3: { size_pt: 10, bold: false, color: "666666", keep_next: true }
+  h4: { size_pt: 9,  bold: false, color: "000000", keep_next: true }
+  mesa: { size_pt: 8, bold: false, color: "666666", keep_next: true }
 
 separator_dashes: 28
 

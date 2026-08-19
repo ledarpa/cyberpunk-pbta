@@ -604,6 +604,8 @@ body {
   font-size: round(nearest, clamp(9px, 2.1cqmin, 17px), 1px);
   line-height: 1.05;
   overflow: hidden;
+  background: var(--bg);
+  color: var(--green);
 }
 
 .ficha-block {
@@ -627,24 +629,24 @@ body {
 .ficha-input {
   flex: 1 1 auto;
   min-width: 0;
+  width: 100%;
   background: transparent;
   border: none;
-  border-bottom: 1px solid #3a6a3a;
   color: var(--green);
   font: inherit;
   line-height: inherit;
-  padding: 0 0 0.05em;
+  padding: 0;
   border-radius: 0;
   outline: none;
 }
 
 .ficha-input:focus-visible {
-  border-bottom-color: var(--cyan);
   color: var(--bright);
+  border-bottom-color: var(--cyan);
 }
 
-.ficha-input-line {
-  border-bottom: 1px solid #3a6a3a;
+.ficha-input-underscore {
+  border-bottom: 1px dashed var(--green);
 }
 
 .ficha-identity {
@@ -681,6 +683,7 @@ body {
   border-left: 1px solid var(--green);
   border-right: 1px solid var(--green);
   min-height: 0;
+  background: var(--bg);
 }
 
 .ficha-psique-line .ficha-boxes {
@@ -716,11 +719,12 @@ body {
 }
 
 .ficha-stat-dots {
-  color: #3a6a3a;
+  color: var(--muted);
   overflow: hidden;
   flex: 1 1 auto;
   min-width: 0;
   white-space: nowrap;
+  opacity: 0.85;
 }
 
 .ficha-stat-box {
@@ -816,33 +820,51 @@ body {
   margin-bottom: 0.15em;
 }
 
-.ficha-ledger {
+.ficha-ledger-col {
   flex: 1 1 auto;
   min-height: 0;
-  width: 100%;
-  resize: none;
-  background: transparent;
-  border: 1px solid #3a6a3a;
-  border-top: none;
-  color: var(--green);
-  font: inherit;
-  line-height: 1.15;
-  padding: 0.2em 0.35em;
-  outline: none;
-  field-sizing: content;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent calc(1.15em - 1px),
-    #1a4a1a calc(1.15em - 1px),
-    #1a4a1a 1.15em
-  );
 }
 
-.ficha-ledger:focus-visible {
-  border-color: var(--cyan);
+.ficha-ledger-row {
+  display: flex;
+  align-items: flex-end;
+  flex: 1 1 0;
+  min-height: 0;
+  line-height: 1;
+}
+
+.ficha-pipe {
+  color: var(--green);
+  flex: 0 0 auto;
+  user-select: none;
+}
+
+.ficha-ledger-line {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  border-bottom: 1px dashed var(--green);
+  background: transparent;
+  color: var(--green);
+  font: inherit;
+  line-height: 1;
+  padding: 0;
+  margin: 0 0 0.05em;
+  border-radius: 0;
+  outline: none;
+}
+
+.ficha-ledger-line:focus-visible {
   color: var(--bright);
+  border-bottom-color: var(--cyan);
+}
+
+.ficha-ledger-line:focus-visible + .ficha-pipe,
+.ficha-ledger-row:focus-within .ficha-pipe {
+  color: var(--cyan);
 }
 
 .ficha-exp {
