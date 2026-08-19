@@ -69,7 +69,7 @@
         fitTocCoverArt();
       })
       .catch(() => {
-        pre.textContent = "pbta:\\>";
+        pre.textContent = "PbtA:\\>";
         fitCoverArt();
       });
 
@@ -110,6 +110,12 @@
       a.dataset.id = item.id;
       frag.appendChild(a);
     }
+    const fichaLink = document.createElement("a");
+    fichaLink.href = "#hoja-personaje";
+    fichaLink.className = "l1 toc-ficha";
+    fichaLink.textContent = "Hoja de personaje";
+    fichaLink.dataset.id = "hoja-personaje";
+    frag.appendChild(fichaLink);
     tocEl.replaceChildren(frag);
     loadTocCoverAscii();
   }
@@ -125,7 +131,7 @@
     fetchCoverAscii()
       .then(paint)
       .catch(() => {
-        pre.textContent = "pbta:\\>";
+        pre.textContent = "PbtA:\\>";
         fitTocCoverArt();
       });
     window.addEventListener("resize", fitTocCoverArt);
@@ -168,7 +174,9 @@
   function observeHeadings() {
     const heads = [...book.querySelectorAll("h1, h2, h3")];
     const cover = document.getElementById("portada");
+    const ficha = document.getElementById("hoja-personaje");
     if (cover) heads.unshift(cover);
+    if (ficha) heads.push(ficha);
     if (!heads.length || !("IntersectionObserver" in window)) return;
     const map = new Map([...tocEl.querySelectorAll("a")].map((a) => [a.dataset.id, a]));
     let current = null;

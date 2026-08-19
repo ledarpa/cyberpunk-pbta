@@ -538,3 +538,349 @@ body {
     transition: none;
   }
 }
+
+/* --- Hoja de personaje (digital) --- */
+
+.ficha {
+  min-height: 100%;
+  min-height: 100cqh;
+  scroll-margin-top: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  color: var(--green);
+}
+
+.ficha-page {
+  width: min(100cqw, calc(100cqh * 1.35));
+  height: min(100cqh, calc(100cqw / 1.35));
+  max-width: 100%;
+  container-type: size;
+  display: grid;
+  place-items: center;
+}
+
+.ficha-sheet {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: clamp(0.35rem, 1.2cqmin, 0.75rem);
+  display: grid;
+  grid-template-rows: minmax(0, 2.15fr) minmax(0, 0.75fr) minmax(0, 2.85fr) minmax(0, 0.45fr);
+  gap: clamp(0.2rem, 0.9cqmin, 0.55rem);
+  font-size: round(nearest, clamp(9px, 2.1cqmin, 17px), 1px);
+  line-height: 1.05;
+  overflow: hidden;
+}
+
+.ficha-block {
+  min-width: 0;
+  min-height: 0;
+}
+
+.ficha-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35ch;
+  min-width: 0;
+}
+
+.ficha-label {
+  color: var(--green);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.ficha-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #3a6a3a;
+  color: var(--green);
+  font: inherit;
+  line-height: inherit;
+  padding: 0 0 0.05em;
+  border-radius: 0;
+  outline: none;
+}
+
+.ficha-input:focus-visible {
+  border-bottom-color: var(--cyan);
+  color: var(--bright);
+}
+
+.ficha-input-line {
+  border-bottom: 1px solid #3a6a3a;
+}
+
+.ficha-identity {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 0;
+}
+
+.ficha-portrait-cap {
+  text-align: center;
+  color: var(--green);
+  white-space: pre;
+  font-size: 0.95em;
+  line-height: 1;
+}
+
+.ficha-identity-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(3.5em, 5.5em) minmax(0, 1fr);
+  gap: 0.35em 0.5em;
+  align-items: stretch;
+  min-height: 0;
+}
+
+.ficha-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.15em;
+  min-width: 0;
+}
+
+.ficha-portrait {
+  border-left: 1px solid var(--green);
+  border-right: 1px solid var(--green);
+  min-height: 0;
+}
+
+.ficha-psique-line .ficha-boxes {
+  display: inline-flex;
+  gap: 0.35ch;
+  flex-wrap: wrap;
+}
+
+.ficha-box {
+  background: transparent;
+  border: none;
+  color: var(--green);
+  font: inherit;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+}
+
+.ficha-box:hover,
+.ficha-box:focus-visible {
+  color: var(--cyan);
+  outline: none;
+}
+
+.ficha-box-mark {
+  display: inline-block;
+  min-width: 0.6ch;
+  text-align: center;
+}
+
+.ficha-stat-line {
+  justify-content: flex-end;
+}
+
+.ficha-stat-dots {
+  color: #3a6a3a;
+  overflow: hidden;
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.ficha-stat-box {
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.ficha-stat-input {
+  width: 1.4ch;
+  background: transparent;
+  border: none;
+  color: var(--green);
+  font: inherit;
+  text-align: center;
+  padding: 0;
+  outline: none;
+}
+
+.ficha-stat-input:focus-visible {
+  color: var(--bright);
+}
+
+.ficha-salud-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.1em;
+}
+
+.ficha-salud-labels {
+  position: relative;
+  height: 1.1em;
+  margin-left: calc(7.5ch + 0.35ch);
+  margin-right: 0;
+}
+
+.ficha-salud-label {
+  position: absolute;
+  top: 0;
+  left: calc((var(--at) + 0.5) * 3.05ch);
+  transform: translateX(-50%);
+  text-align: center;
+  color: var(--green);
+  font-size: 0.82em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.ficha-salud-label.is-falla {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 0.95;
+  font-size: 0.72em;
+}
+
+.ficha-salud-line {
+  align-items: center;
+}
+
+.ficha-salud-track {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  gap: 0.2ch;
+  align-items: center;
+}
+
+.ficha-mark {
+  color: var(--green);
+  white-space: nowrap;
+}
+
+.ficha-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.5em;
+  min-height: 0;
+}
+
+.ficha-col {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+.ficha-col-head {
+  text-align: center;
+  color: var(--green);
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 0.92em;
+  margin-bottom: 0.15em;
+}
+
+.ficha-ledger {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  resize: none;
+  background: transparent;
+  border: 1px solid #3a6a3a;
+  border-top: none;
+  color: var(--green);
+  font: inherit;
+  line-height: 1.15;
+  padding: 0.2em 0.35em;
+  outline: none;
+  field-sizing: content;
+  overflow: auto;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(1.15em - 1px),
+    #1a4a1a calc(1.15em - 1px),
+    #1a4a1a 1.15em
+  );
+}
+
+.ficha-ledger:focus-visible {
+  border-color: var(--cyan);
+  color: var(--bright);
+}
+
+.ficha-exp {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35ch;
+}
+
+.toc .toc-ficha {
+  margin-top: 0.55rem;
+  border-top: 1px solid var(--line);
+  padding-top: 0.45rem;
+}
+
+/* Vertical: apilar bloques cuando pantalla estrecha o proporción alta */
+@media (max-aspect-ratio: 6/5), (max-width: 760px) {
+  .ficha-page {
+    width: 100%;
+    height: auto;
+    max-height: none;
+  }
+
+  .ficha-sheet {
+    height: auto;
+    min-height: min(100cqh, 100%);
+    overflow: visible;
+    grid-template-rows: auto auto auto auto;
+    font-size: round(nearest, clamp(14px, 3.8vw, 20px), 1px);
+    gap: 1rem;
+  }
+
+  .ficha-identity-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .ficha-portrait-cap:first-child {
+    display: none;
+  }
+
+  .ficha-portrait {
+    border: 1px solid var(--green);
+    min-height: 6rem;
+    order: -1;
+  }
+
+  .ficha-side-left {
+    order: 0;
+  }
+
+  .ficha-side-right {
+    order: 1;
+  }
+
+  .ficha-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .ficha-ledger {
+    min-height: 8rem;
+    field-sizing: fixed;
+  }
+
+  .ficha-salud-track {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 760px) {
+  .ficha {
+    padding-block: var(--pad);
+  }
+}

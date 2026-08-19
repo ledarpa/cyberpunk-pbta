@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>pbta — Manual de reglas</title>
+  <title>PbtA — Manual de reglas</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="favicon-192.png">
@@ -17,7 +17,7 @@
         ☰
       </button>
       <div class="search-box" role="search">
-        <label class="cli-prompt" for="q"><span aria-hidden="true">pbta:\></span><span class="sr-only">Buscar en el manual</span></label>
+        <label class="cli-prompt" for="q"><span aria-hidden="true">PbtA:\></span><span class="sr-only">Buscar en el manual</span></label>
         <input id="q" type="search" placeholder="Buscar..." autocomplete="off" spellcheck="false">
         <span id="search-meta" class="search-meta" hidden>0/0</span>
         <button type="button" class="icon-btn" id="search-prev" title="Anterior" hidden>↑</button>
@@ -41,10 +41,17 @@
         </div>
       </section>
       <div id="book" class="book"></div>
+      <section class="ficha" id="hoja-personaje" aria-labelledby="hoja-personaje-title">
+        <h1 class="sr-only" id="hoja-personaje-title">Hoja de personaje</h1>
+        <div class="ficha-page">
+          <form class="ficha-sheet" id="ficha-form" autocomplete="off" spellcheck="false"></form>
+        </div>
+      </section>
     </main>
   </div>
   <div id="scrim" class="scrim" hidden></div>
   <script src="data/manual.js"></script>
+  <script src="ficha.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
