@@ -44,6 +44,8 @@ html,
 body {
   margin: 0;
   height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
@@ -71,6 +73,7 @@ body {
   grid-template-rows: auto minmax(0, 1fr);
   height: 100dvh;
   height: 100svh;
+  overflow: hidden;
 }
 
 .topbar {
@@ -131,6 +134,14 @@ body {
   -webkit-appearance: none;
 }
 
+.search-box.is-disabled {
+  opacity: 0.45;
+}
+
+.search-box.is-disabled input {
+  cursor: not-allowed;
+}
+
 .search-meta {
   color: var(--cyan);
   font-size: 20px;
@@ -164,6 +175,7 @@ body {
 .sidebar {
   grid-row: 2;
   overflow: auto;
+  overscroll-behavior-y: contain;
   border-right: 1px solid var(--line);
   background: var(--bg-panel);
   padding: 0.6rem 0.7rem calc(1rem + var(--safe-b));
@@ -232,22 +244,32 @@ body {
   color: var(--muted);
 }
 
-.reader {
+.stage {
   grid-row: 2;
+  min-height: 0;
+  min-width: 0;
+  display: grid;
+  grid-template: 1fr / 1fr;
+  overflow: hidden;
+}
+
+.reader {
+  grid-area: 1 / 1;
   min-height: 0;
   min-width: 0;
   overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior-y: contain;
   padding: var(--pad);
   padding-bottom: calc(var(--pad) + var(--safe-b));
   scroll-behavior: smooth;
   background: var(--bg);
-  container-type: size;
+  --reader-vh: 100%;
+  --reader-vw: 100%;
 }
 
 .cover {
-  min-height: 100%;
-  min-height: 100cqh;
+  min-height: var(--reader-vh);
   display: grid;
   place-items: center;
   margin: 0;
@@ -257,9 +279,9 @@ body {
 
 .cover-page {
   aspect-ratio: 210 / 297;
-  width: min(100cqw, calc(100cqh * 210 / 297));
+  width: min(var(--reader-vw), calc(var(--reader-vh) * 210 / 297));
   height: auto;
-  max-height: 100cqh;
+  max-height: var(--reader-vh);
   background: #0a0a0a;
   display: flex;
   flex-direction: column;
@@ -539,23 +561,33 @@ body {
   }
 }
 
-/* --- Hoja de personaje (digital) --- */
+/* --- Hoja de personaje (pantalla independiente) --- */
 
-.ficha {
-  min-height: 100%;
-  min-height: 100cqh;
-  scroll-margin-top: 0;
+.ficha-panel {
+  grid-area: 1 / 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
   display: grid;
   place-items: center;
-  margin: 0;
-  padding: 0;
+  padding: var(--pad);
+  padding-bottom: calc(var(--pad) + var(--safe-b));
+  background: var(--bg);
   color: var(--green);
+  --ficha-vh: 100%;
+  --ficha-vw: 100%;
+}
+
+.ficha-panel[hidden] {
+  display: none !important;
 }
 
 .ficha-page {
-  width: min(100cqw, calc(100cqh * 1.35));
-  height: min(100cqh, calc(100cqw / 1.35));
+  width: min(var(--ficha-vw), calc(var(--ficha-vh) * 1.35));
+  height: min(var(--ficha-vh), calc(var(--ficha-vw) / 1.35));
   max-width: 100%;
+  max-height: 100%;
   container-type: size;
   display: grid;
   place-items: center;
@@ -798,7 +830,7 @@ body {
   padding: 0.2em 0.35em;
   outline: none;
   field-sizing: content;
-  overflow: auto;
+  overflow: hidden;
   background-image: repeating-linear-gradient(
     to bottom,
     transparent 0,
@@ -823,64 +855,4 @@ body {
   margin-top: 0.55rem;
   border-top: 1px solid var(--line);
   padding-top: 0.45rem;
-}
-
-/* Vertical: apilar bloques cuando pantalla estrecha o proporción alta */
-@media (max-aspect-ratio: 6/5), (max-width: 760px) {
-  .ficha-page {
-    width: 100%;
-    height: auto;
-    max-height: none;
-  }
-
-  .ficha-sheet {
-    height: auto;
-    min-height: min(100cqh, 100%);
-    overflow: visible;
-    grid-template-rows: auto auto auto auto;
-    font-size: round(nearest, clamp(14px, 3.8vw, 20px), 1px);
-    gap: 1rem;
-  }
-
-  .ficha-identity-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-  }
-
-  .ficha-portrait-cap:first-child {
-    display: none;
-  }
-
-  .ficha-portrait {
-    border: 1px solid var(--green);
-    min-height: 6rem;
-    order: -1;
-  }
-
-  .ficha-side-left {
-    order: 0;
-  }
-
-  .ficha-side-right {
-    order: 1;
-  }
-
-  .ficha-columns {
-    grid-template-columns: 1fr;
-  }
-
-  .ficha-ledger {
-    min-height: 8rem;
-    field-sizing: fixed;
-  }
-
-  .ficha-salud-track {
-    flex-wrap: wrap;
-  }
-}
-
-@media (max-width: 760px) {
-  .ficha {
-    padding-block: var(--pad);
-  }
 }

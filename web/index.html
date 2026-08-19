@@ -9,7 +9,7 @@
   <link rel="apple-touch-icon" href="favicon-192.png">
   <link rel="stylesheet" href="app.css">
 </head>
-<body>
+<body class="view-manual">
   <div class="shell">
     <header class="topbar">
       <button type="button" class="icon-btn" id="toc-toggle" aria-expanded="true" aria-controls="sidebar" title="Índice">
@@ -29,25 +29,28 @@
       <nav id="toc" class="toc"></nav>
     </aside>
 
-    <main id="reader" class="reader" tabindex="-1">
-      <section class="cover" id="portada" aria-label="Portada">
-        <div class="cover-page">
-          <div class="cover-cluster">
-            <div class="cover-art-frame">
-              <pre class="cover-art" id="cover-art"></pre>
+    <div class="stage" id="stage">
+      <main id="reader" class="reader" tabindex="-1">
+        <section class="cover" id="portada" aria-label="Portada">
+          <div class="cover-page">
+            <div class="cover-cluster">
+              <div class="cover-art-frame">
+                <pre class="cover-art" id="cover-art"></pre>
+              </div>
+              <p class="cover-sub">MANUAL DE REGLAS</p>
             </div>
-            <p class="cover-sub">MANUAL DE REGLAS</p>
           </div>
-        </div>
-      </section>
-      <div id="book" class="book"></div>
-      <section class="ficha" id="hoja-personaje" aria-labelledby="hoja-personaje-title">
+        </section>
+        <div id="book" class="book"></div>
+      </main>
+
+      <section id="ficha-panel" class="ficha-panel" hidden tabindex="-1" aria-labelledby="hoja-personaje-title">
         <h1 class="sr-only" id="hoja-personaje-title">Hoja de personaje</h1>
         <div class="ficha-page">
           <form class="ficha-sheet" id="ficha-form" autocomplete="off" spellcheck="false"></form>
         </div>
       </section>
-    </main>
+    </div>
   </div>
   <div id="scrim" class="scrim" hidden></div>
   <script src="data/manual.js"></script>

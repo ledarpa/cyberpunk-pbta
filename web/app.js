@@ -3,6 +3,7 @@
   const book = document.getElementById("book");
   const tocEl = document.getElementById("toc");
   const reader = document.getElementById("reader");
+  const fichaPanel = document.getElementById("ficha-panel");
   const q = document.getElementById("q");
   const meta = document.getElementById("search-meta");
   const prevBtn = document.getElementById("search-prev");
@@ -10,6 +11,10 @@
   const toggle = document.getElementById("toc-toggle");
   const scrim = document.getElementById("scrim");
   const sidebar = document.getElementById("sidebar");
+
+  const FICHA_ID = "hoja-personaje";
+  let manualScrollTop = 0;
+  let headingObserver = null;
 
   if (!data || !book) {
     document.body.innerHTML = "<p style='padding:2rem'>Falta data/manual.js. Ejecutá docs/scripts/build_web_reader.py</p>";
@@ -19,11 +24,14 @@
   book.innerHTML = data.html;
   loadCover();
   renderToc(data.toc || []);
-  observeHeadings();
   bindNav();
   bindSearch();
   bindChrome();
+  bindReaderScroll();
+  syncReaderViewport();
+  syncFichaViewport();
   openFromHash();
+  window.addEventListener("hashchange", openFromHash);
 
   function normalizeAscii(text) {
     return text.replace(/\u00a0/g, " ").replace(/\n+$/, "");
@@ -111,10 +119,10 @@
       frag.appendChild(a);
     }
     const fichaLink = document.createElement("a");
-    fichaLink.href = "#hoja-personaje";
+    fichaLink.href = `#${FICHA_ID}`;
     fichaLink.className = "l1 toc-ficha";
     fichaLink.textContent = "Hoja de personaje";
-    fichaLink.dataset.id = "hoja-personaje";
+    fichaLink.dataset.id = FICHA_ID;
     frag.appendChild(fichaLink);
     tocEl.replaceChildren(frag);
     loadTocCoverAscii();
@@ -158,42 +166,176 @@
     });
   }
 
+  function isFichaView() {
+    return document.body.classList.contains("view-ficha");
+  }
+
+  function setActiveToc(id) {
+    for (const a of tocEl.querySelectorAll("a")) {
+      a.classList.toggle("is-active", a.dataset.id === id);
+    }
+    tocEl.querySelector(`a[data-id="${id}"]`)?.scrollIntoView({ block: "nearest" });
+  }
+
+  function setSearchEnabled(on) {
+    q.disabled = !on;
+    q.closest(".search-box")?.classList.toggle("is-disabled", !on);
+    if (!on) {
+      q.value = "";
+      clearMarks();
+      meta.hidden = true;
+      prevBtn.hidden = true;
+      nextBtn.hidden = true;
+    }
+  }
+
+  function showFichaView() {
+    manualScrollTop = reader.scrollTop;
+    if (headingObserver) headingObserver.disconnect();
+    document.body.classList.remove("view-manual");
+    document.body.classList.add("view-ficha");
+    reader.hidden = true;
+    fichaPanel.hidden = false;
+    setSearchEnabled(false);
+    setActiveToc(FICHA_ID);
+    history.replaceState(null, "", `#${FICHA_ID}`);
+    syncFichaViewport();
+    fichaPanel.focus({ preventScroll: true });
+  }
+
+  function showManualView(id) {
+    document.body.classList.remove("view-ficha");
+    document.body.classList.add("view-manual");
+    fichaPanel.hidden = true;
+    reader.hidden = false;
+    setSearchEnabled(true);
+    observeHeadings();
+    const targetId = document.getElementById(id) ? id : "portada";
+    history.replaceState(null, "", `#${targetId}`);
+    setActiveToc(targetId);
+    const el = document.getElementById(targetId);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      reader.scrollTop = manualScrollTop;
+    }
+    requestAnimationFrame(clampReaderScroll);
+  }
+
   function goToId(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-    history.replaceState(null, "", `#${id}`);
+    if (!id) return;
+    if (id === FICHA_ID) {
+      showFichaView();
+      return;
+    }
+    showManualView(id);
+  }
+
+  function clampReaderScroll() {
+    const max = Math.max(0, reader.scrollHeight - reader.clientHeight);
+    if (reader.scrollTop > max) reader.scrollTop = max;
+    if (reader.scrollTop < 0) reader.scrollTop = 0;
+  }
+
+  function clampSidebarScroll() {
+    const max = Math.max(0, sidebar.scrollHeight - sidebar.clientHeight);
+    if (sidebar.scrollTop > max) sidebar.scrollTop = max;
+    if (sidebar.scrollTop < 0) sidebar.scrollTop = 0;
+  }
+
+  function blockWheelPastEdge(el, clamp) {
+    el.addEventListener(
+      "wheel",
+      (ev) => {
+        const nested = ev.target.closest("textarea, .table-wrap");
+        if (nested instanceof HTMLElement && nested.scrollHeight > nested.clientHeight + 1) {
+          const atTop = nested.scrollTop <= 0;
+          const atBottom = nested.scrollTop + nested.clientHeight >= nested.scrollHeight - 1;
+          if ((ev.deltaY < 0 && !atTop) || (ev.deltaY > 0 && !atBottom)) return;
+        }
+        clamp();
+        const max = Math.max(0, el.scrollHeight - el.clientHeight);
+        const atTop = el.scrollTop <= 0;
+        const atBottom = el.scrollTop >= max - 1;
+        if ((ev.deltaY < 0 && atTop) || (ev.deltaY > 0 && atBottom)) {
+          ev.preventDefault();
+        }
+      },
+      { passive: false }
+    );
+  }
+
+  function syncReaderViewport() {
+    reader.style.setProperty("--reader-vh", `${reader.clientHeight}px`);
+    reader.style.setProperty("--reader-vw", `${reader.clientWidth}px`);
+    clampReaderScroll();
+  }
+
+  function syncFichaViewport() {
+    if (!fichaPanel || fichaPanel.hidden) return;
+    fichaPanel.style.setProperty("--ficha-vh", `${fichaPanel.clientHeight}px`);
+    fichaPanel.style.setProperty("--ficha-vw", `${fichaPanel.clientWidth}px`);
+  }
+
+  function bindReaderScroll() {
+    reader.addEventListener("scroll", clampReaderScroll, { passive: true });
+    sidebar.addEventListener("scroll", clampSidebarScroll, { passive: true });
+    blockWheelPastEdge(reader, clampReaderScroll);
+    blockWheelPastEdge(sidebar, clampSidebarScroll);
+    fichaPanel.addEventListener(
+      "wheel",
+      (ev) => {
+        ev.preventDefault();
+      },
+      { passive: false }
+    );
+    window.addEventListener("resize", () => {
+      syncReaderViewport();
+      syncFichaViewport();
+      clampSidebarScroll();
+    });
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(() => {
+        syncReaderViewport();
+        syncFichaViewport();
+      }).observe(reader);
+      new ResizeObserver(syncFichaViewport).observe(fichaPanel);
+    }
   }
 
   function openFromHash() {
     const id = decodeURIComponent(location.hash.replace(/^#/, ""));
-    if (!id) return;
+    if (!id) {
+      observeHeadings();
+      return;
+    }
     requestAnimationFrame(() => goToId(id));
   }
 
   function observeHeadings() {
+    if (headingObserver) headingObserver.disconnect();
+    if (isFichaView()) return;
     const heads = [...book.querySelectorAll("h1, h2, h3")];
     const cover = document.getElementById("portada");
-    const ficha = document.getElementById("hoja-personaje");
     if (cover) heads.unshift(cover);
-    if (ficha) heads.push(ficha);
     if (!heads.length || !("IntersectionObserver" in window)) return;
     const map = new Map([...tocEl.querySelectorAll("a")].map((a) => [a.dataset.id, a]));
     let current = null;
-    const io = new IntersectionObserver(
+    headingObserver = new IntersectionObserver(
       (entries) => {
+        if (isFichaView()) return;
         const vis = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
         const id = vis[0]?.target?.id || current;
-        if (!id || id === current) return;
+        if (!id || id === current || id === FICHA_ID) return;
         current = id;
         for (const a of map.values()) a.classList.toggle("is-active", a.dataset.id === id);
         map.get(id)?.scrollIntoView({ block: "nearest" });
       },
       { root: reader, rootMargin: "0px 0px -72% 0px", threshold: [0, 1] }
     );
-    heads.forEach((h) => io.observe(h));
+    heads.forEach((h) => headingObserver.observe(h));
   }
 
   function bindChrome() {
@@ -234,6 +376,7 @@
     let raw = "";
 
     const run = () => {
+      if (isFichaView()) return;
       const term = q.value.trim();
       if (term === raw) return;
       raw = term;
@@ -260,6 +403,7 @@
 
     q.addEventListener("input", run);
     q.addEventListener("keydown", (ev) => {
+      if (isFichaView()) return;
       if (ev.key === "Enter") {
         ev.preventDefault();
         if (ev.shiftKey) step(-1);
@@ -270,7 +414,7 @@
     nextBtn.addEventListener("click", () => step(1));
 
     function step(dir) {
-      if (!hits.length) return;
+      if (!hits.length || isFichaView()) return;
       idx = (idx + dir + hits.length) % hits.length;
       focusHit();
     }
