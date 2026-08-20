@@ -1,88 +1,105 @@
-/** Hoja de personaje digital — editable, estética manual. */
+/** Hoja de personaje digital — 3 columnas, réplica DOS (verde sobre negro). */
 (() => {
   const STORAGE_KEY = "pbta-ficha-v1";
-  const SALUD_MARKERS = new Set([5, 10, 15, 20]); // 0-based; etiquetas -1 -2 -3 Falla
-  const SALUD_LABELS = [
-    { at: 5, text: "-1" },
-    { at: 10, text: "-2" },
-    { at: 15, text: "-3" },
-    { at: 20, text: "Falla", sub: "integral" },
-  ];
   const LEDGER_ROWS = 30;
+  const SALUD_ROWS = [
+    { label: "Normal", boxes: 5, ghostFirst: false },
+    { label: "-1", boxes: 4, ghostFirst: true },
+    { label: "-2", boxes: 4, ghostFirst: true },
+    { label: "-3", boxes: 4, ghostFirst: true },
+    { label: "Falla Integral", boxes: 2, ghostFirst: true, falla: true },
+  ];
 
   const form = document.getElementById("ficha-form");
   if (!form) return;
 
   form.innerHTML = buildSheetHtml();
+  loadTitleArt();
   bindSheet();
   loadSheet();
   form.addEventListener("input", saveSheet);
   form.addEventListener("change", saveSheet);
 
   function buildSheetHtml() {
-    const psique = Array.from({ length: 5 }, (_, i) => boxBtn(`psique-${i}`, "psique")).join("");
-    const saludLabels = SALUD_LABELS.map(({ at, text, sub }) => {
-      const cls = sub ? "ficha-salud-label is-falla" : "ficha-salud-label";
-      const inner = sub
-        ? `<span>${text}</span><span>${sub}</span>`
-        : `<span>${text}</span>`;
-      return `<div class="${cls}" style="--at:${at}">${inner}</div>`;
-    }).join("");
-    const salud = Array.from({ length: 23 }, (_, i) => {
-      if (SALUD_MARKERS.has(i)) {
-        return `<span class="ficha-mark" aria-hidden="true">[*]</span>`;
-      }
-      return boxBtn(`salud-${i}`, "salud");
-    }).join("");
-    const ledger = (name, label) => {
-      const rows = Array.from({ length: LEDGER_ROWS }, (_, i) =>
-        `<div class="ficha-ledger-row">
-          <span class="ficha-pipe" aria-hidden="true">|</span>
-          <input type="text" class="ficha-ledger-line" name="${name}-${i}" data-ledger="${name}" autocomplete="off">
-          <span class="ficha-pipe" aria-hidden="true">|</span>
-        </div>`
-      ).join("");
-      return `<div class="ficha-col"><div class="ficha-col-head">[${"·".repeat(8)}${label}${"·".repeat(8)}]</div><div class="ficha-ledger-col" data-ledger="${name}">${rows}</div></div>`;
-    };
-
     return `
-      <div class="ficha-block ficha-identity">
-        <div class="ficha-portrait-cap" aria-hidden="true">┌${" ".repeat(14)}┐</div>
-        <div class="ficha-identity-grid">
-          <div class="ficha-side ficha-side-left">
-            ${field("nombre", "Nombre:\\>")}
-            ${field("jugador", "Jugador:\\>")}
-            ${field("profesion", "Profesión:\\>")}
-            <label class="ficha-line ficha-psique-line">
-              <span class="ficha-label">@Psique:\\></span>
-              <span class="ficha-boxes">${psique}</span>
-            </label>
+      <div class="ficha-layout">
+        <div class="ficha-col ficha-col-main">
+          <header class="ficha-title-block" aria-label="Cyberpunk pbta">
+            <pre class="ficha-title-art" id="ficha-title-art"></pre>
+          </header>
+
+          ${field("nombre", "Nombre:\\>")}
+          ${field("jugador", "Jugador:\\>")}
+          ${field("profesion", "Profesión:\\>")}
+          <label class="ficha-line ficha-psique-line">
+            <span class="ficha-label">@Psique:\\></span>
+            <span class="ficha-psique-fill" aria-hidden="true">${"_".repeat(64)}</span>
+            <span class="ficha-boxes">
+              ${Array.from({ length: 3 }, (_, i) => boxBtn(`psique-${i}`, "psique")).join("")}
+              ${ghostAsteriskBox()}${ghostAsteriskBox()}
+            </span>
+          </label>
+
+          <div class="ficha-portrait-wrap" aria-label="Foto de personaje">
+            <div class="ficha-portrait-cap" aria-hidden="true">┌${" ".repeat(14)}┐</div>
+            <div class="ficha-portrait"></div>
+            <div class="ficha-portrait-cap" aria-hidden="true">└${" ".repeat(14)}┘</div>
           </div>
-          <div class="ficha-portrait" aria-label="Retrato"></div>
-          <div class="ficha-side ficha-side-right">
+
+          <div class="ficha-section">
+            <div class="ficha-line"><span class="ficha-label">Atributos:\\></span></div>
             ${stat("en", "Enlaces Neuronales")}
             ${stat("mc", "Manipulación Cognitiva")}
             ${stat("rc", "Reacción Cinética")}
             ${stat("tm", "Tejido Muscular")}
           </div>
+
+          <div class="ficha-section ficha-salud-section">
+            <div class="ficha-line"><span class="ficha-label">Salud:\\></span></div>
+            <div class="ficha-salud-rows">${saludRowsHtml()}</div>
+          </div>
+
+          <label class="ficha-line ficha-exp-line">
+            <span class="ficha-label">Experiencia:\\></span>
+            <input class="ficha-input ficha-input-underscore" type="text" name="experiencia" autocomplete="off">
+          </label>
         </div>
-        <div class="ficha-portrait-cap" aria-hidden="true">└${" ".repeat(14)}┘</div>
-      </div>
 
-      <div class="ficha-block ficha-salud-block">
-        <div class="ficha-salud-labels" aria-hidden="true">${saludLabels}</div>
-        <label class="ficha-line ficha-salud-line">
-          <span class="ficha-label">Salud:\\>_</span>
-          <span class="ficha-salud-track">${salud}</span>
-        </label>
-      </div>
+        ${ledgerColumn("cromos", "Cromos")}
+        ${ledgerColumn("chaperia", "Chapería")}
+      </div>`;
+  }
 
-      <div class="ficha-block ficha-columns">${ledger("cromos", "Cromos")}${ledger("chaperia", "Chapería")}</div>
+  function saludRowsHtml() {
+    let index = 0;
+    return SALUD_ROWS.map((row) => {
+      const parts = [];
+      if (row.ghostFirst) parts.push(ghostAsteriskBox());
+      for (let i = 0; i < row.boxes; i += 1) {
+        parts.push(boxBtn(`salud-${index}`, "salud"));
+        index += 1;
+      }
+      const cls = row.falla ? " ficha-salud-row is-falla" : " ficha-salud-row";
+      return `<div class="${cls.trim()}">
+        <span class="ficha-salud-row-label">${row.label}</span>
+        <span class="ficha-salud-arrow" aria-hidden="true">-&gt;</span>
+        <span class="ficha-salud-boxes">${parts.join("")}</span>
+      </div>`;
+    }).join("");
+  }
 
-      <label class="ficha-block ficha-exp">
-        <span class="ficha-label">Experiencia:\\></span>
-        <input class="ficha-input ficha-input-underscore" type="text" name="experiencia" autocomplete="off">
-      </label>`;
+  function ledgerColumn(name, label) {
+    const rows = Array.from({ length: LEDGER_ROWS }, (_, i) =>
+      `<div class="ficha-ledger-row">
+        <span class="ficha-pipe" aria-hidden="true">|</span>
+        <input type="text" class="ficha-ledger-line" name="${name}-${i}" data-ledger="${name}" autocomplete="off">
+        <span class="ficha-pipe" aria-hidden="true">|</span>
+      </div>`
+    ).join("");
+    return `<div class="ficha-col ficha-col-ledger">
+      <div class="ficha-col-head">[${"·".repeat(8)}${label}${"·".repeat(8)}]</div>
+      <div class="ficha-ledger-col" data-ledger="${name}">${rows}</div>
+    </div>`;
   }
 
   function field(name, label) {
@@ -90,7 +107,11 @@
   }
 
   function stat(name, label) {
-    return `<label class="ficha-line ficha-stat-line"><span class="ficha-label">${label}</span><span class="ficha-stat-dots" aria-hidden="true">${".".repeat(6)}</span><span class="ficha-stat-box">[ <input class="ficha-stat-input" type="text" name="${name}" inputmode="numeric" maxlength="2" aria-label="${label}"> ]</span></label>`;
+    return `<label class="ficha-line ficha-stat-line">
+      <span class="ficha-label">${label}</span>
+      <span class="ficha-stat-fill" aria-hidden="true">${"_".repeat(24)}</span>
+      <span class="ficha-stat-box">[<input class="ficha-stat-input" type="text" name="${name}" inputmode="numeric" maxlength="2" aria-label="${label}">]</span>
+    </label>`;
   }
 
   function tagLabel(text) {
@@ -98,18 +119,36 @@
   }
 
   function boxBtn(name, group) {
-    return `<button type="button" class="ficha-box" name="${name}" data-group="${group}" aria-pressed="false" aria-label="Casilla">[ <span class="ficha-box-mark" hidden>×</span> ]</button>`;
+    return `<button type="button" class="ficha-box" name="${name}" data-group="${group}" aria-pressed="false" aria-label="Casilla">[<span class="ficha-box-inner">&nbsp;&nbsp;&nbsp;</span>]</button>`;
+  }
+
+  function ghostAsteriskBox() {
+    return `<span class="ficha-box ficha-box-static" aria-hidden="true">[<span class="ficha-ghost"> * </span>]</span>`;
   }
 
   function bindSheet() {
-    form.querySelectorAll(".ficha-box").forEach((btn) => {
+    form.querySelectorAll(".ficha-box[data-group]").forEach((btn) => {
       btn.addEventListener("click", () => {
         const on = btn.getAttribute("aria-pressed") !== "true";
         btn.setAttribute("aria-pressed", String(on));
-        btn.querySelector(".ficha-box-mark").hidden = !on;
+        const inner = btn.querySelector(".ficha-box-inner");
+        if (inner) inner.innerHTML = on ? "&nbsp;×&nbsp;" : "&nbsp;&nbsp;&nbsp;";
         saveSheet();
       });
     });
+  }
+
+  function loadTitleArt() {
+    const pre = document.getElementById("ficha-title-art");
+    if (!pre) return;
+    fetch("data/portada-ascii.txt")
+      .then((r) => r.text())
+      .then((text) => {
+        pre.textContent = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+      })
+      .catch(() => {
+        pre.textContent = "Cyberpunk\nPbtA:\\>/";
+      });
   }
 
   function collect() {
@@ -166,7 +205,8 @@
     form.querySelectorAll(`.ficha-box[data-group="${group}"]`).forEach((btn, i) => {
       const on = !!states[i];
       btn.setAttribute("aria-pressed", String(on));
-      btn.querySelector(".ficha-box-mark").hidden = !on;
+      const inner = btn.querySelector(".ficha-box-inner");
+      if (inner) inner.innerHTML = on ? "&nbsp;×&nbsp;" : "&nbsp;&nbsp;&nbsp;";
     });
   }
 })();

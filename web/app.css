@@ -570,13 +570,14 @@ body {
   overflow: hidden;
   overscroll-behavior: none;
   display: grid;
-  place-items: center;
+  place-items: start center;
   padding: var(--pad);
   padding-bottom: calc(var(--pad) + var(--safe-b));
   background: var(--bg);
   color: var(--green);
   --ficha-vh: 100%;
   --ficha-vw: 100%;
+  --ficha-ghost: #143014;
 }
 
 .ficha-panel[hidden] {
@@ -584,13 +585,14 @@ body {
 }
 
 .ficha-page {
-  width: min(var(--ficha-vw), calc(var(--ficha-vh) * 1.35));
-  height: min(var(--ficha-vh), calc(var(--ficha-vw) / 1.35));
+  width: min(var(--ficha-vw), calc(var(--ficha-vh) * 1.65));
+  height: min(var(--ficha-vh), calc(var(--ficha-vw) / 1.65));
   max-width: 100%;
   max-height: 100%;
   container-type: size;
   display: grid;
-  place-items: center;
+  place-items: start stretch;
+  align-self: start;
 }
 
 .ficha-sheet {
@@ -598,14 +600,116 @@ body {
   height: 100%;
   margin: 0;
   padding: clamp(0.35rem, 1.2cqmin, 0.75rem);
-  display: grid;
-  grid-template-rows: minmax(0, 2.15fr) minmax(0, 0.75fr) minmax(0, 2.85fr) minmax(0, 0.45fr);
-  gap: clamp(0.2rem, 0.9cqmin, 0.55rem);
-  font-size: round(nearest, clamp(9px, 2.1cqmin, 17px), 1px);
-  line-height: 1.05;
+  font-size: round(nearest, clamp(13px, 2.75cqmin, 24px), 1px);
+  line-height: 1.08;
   overflow: hidden;
   background: var(--bg);
   color: var(--green);
+}
+
+.ficha-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(0.35rem, 1.1cqmin, 0.7rem);
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.ficha-col {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ficha-col-main {
+  gap: clamp(0.12rem, 0.4cqmin, 0.32rem);
+  overflow: hidden;
+  align-items: stretch;
+  container-type: inline-size;
+}
+
+.ficha-title-block {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 0 clamp(0.45rem, 1.4cqmin, 0.85rem);
+  padding: 0;
+  overflow: hidden;
+}
+
+.ficha-title-art {
+  margin: 0;
+  padding: 0;
+  font-family: "Courier New", monospace;
+  font-size: round(nearest, clamp(7px, 2.65cqi, 13px), 1px);
+  line-height: 0.92;
+  font-weight: 700;
+  color: var(--green);
+  white-space: pre;
+  overflow: hidden;
+  max-width: 100%;
+  display: inline-block;
+  text-align: left;
+}
+
+.ficha-ghost {
+  color: var(--ficha-ghost);
+}
+
+.ficha-ghost-underscores {
+  color: var(--ficha-ghost);
+  letter-spacing: 0.05em;
+  flex: 0 0 auto;
+}
+
+.ficha-psique-line {
+  width: 100%;
+}
+
+.ficha-psique-fill {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ficha-ghost);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.ficha-psique-line .ficha-boxes {
+  display: inline-flex;
+  gap: 0;
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  align-items: baseline;
+}
+
+.ficha-col-ledger {
+  gap: 0.15em;
+  flex: 1 1 0;
+}
+
+.ficha-ledger-col {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ficha-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12em;
+  min-height: 0;
+}
+
+.ficha-section-title {
+  color: var(--green);
+  font-weight: 400;
+  letter-spacing: 0.02em;
 }
 
 .ficha-block {
@@ -616,8 +720,9 @@ body {
 .ficha-line {
   display: flex;
   align-items: baseline;
-  gap: 0.35ch;
+  gap: 0;
   min-width: 0;
+  flex-wrap: nowrap;
 }
 
 .ficha-label {
@@ -646,13 +751,23 @@ body {
 }
 
 .ficha-input-underscore {
-  border-bottom: 1px dashed var(--green);
+  color: var(--green);
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--ficha-ghost) 0 0.52ch,
+    transparent 0.52ch 0.58ch
+  );
+  background-position: left bottom;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
 }
 
-.ficha-identity {
+.ficha-portrait-wrap {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  gap: 0;
+  flex: 1 1 auto;
+  min-height: 3.5em;
+  max-height: 32%;
 }
 
 .ficha-portrait-cap {
@@ -663,33 +778,11 @@ body {
   line-height: 1;
 }
 
-.ficha-identity-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(3.5em, 5.5em) minmax(0, 1fr);
-  gap: 0.35em 0.5em;
-  align-items: stretch;
-  min-height: 0;
-}
-
-.ficha-side {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 0.15em;
-  min-width: 0;
-}
-
 .ficha-portrait {
   border-left: 1px solid var(--green);
   border-right: 1px solid var(--green);
   min-height: 0;
   background: var(--bg);
-}
-
-.ficha-psique-line .ficha-boxes {
-  display: inline-flex;
-  gap: 0.35ch;
-  flex-wrap: wrap;
 }
 
 .ficha-box {
@@ -700,40 +793,41 @@ body {
   line-height: 1;
   padding: 0;
   cursor: pointer;
+  white-space: pre;
 }
 
-.ficha-box:hover,
-.ficha-box:focus-visible {
-  color: var(--cyan);
-  outline: none;
+.ficha-box-static {
+  cursor: default;
+  pointer-events: none;
 }
 
-.ficha-box-mark {
+.ficha-box-inner {
   display: inline-block;
-  min-width: 0.6ch;
+  min-width: 3ch;
   text-align: center;
 }
 
 .ficha-stat-line {
-  justify-content: flex-end;
+  align-items: baseline;
 }
 
-.ficha-stat-dots {
-  color: var(--muted);
+.ficha-stat-fill {
+  color: var(--ficha-ghost);
   overflow: hidden;
   flex: 1 1 auto;
-  min-width: 0;
+  min-width: 0.5ch;
   white-space: nowrap;
-  opacity: 0.85;
+  letter-spacing: 0.02em;
 }
 
 .ficha-stat-box {
-  white-space: nowrap;
+  white-space: pre;
   flex: 0 0 auto;
+  color: var(--green);
 }
 
 .ficha-stat-input {
-  width: 1.4ch;
+  width: 3ch;
   background: transparent;
   border: none;
   color: var(--green);
@@ -747,68 +841,56 @@ body {
   color: var(--bright);
 }
 
-.ficha-salud-block {
+.ficha-salud-section {
+  flex: 0 0 auto;
+}
+
+.ficha-salud-rows {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  gap: 0.1em;
+  gap: 0.06em;
+  padding-left: 0.25em;
 }
 
-.ficha-salud-labels {
-  position: relative;
-  height: 1.1em;
-  margin-left: calc(7.5ch + 0.35ch);
-  margin-right: 0;
+.ficha-salud-row {
+  display: grid;
+  grid-template-columns: 6.8em auto 1fr;
+  align-items: baseline;
+  column-gap: 0.35ch;
 }
 
-.ficha-salud-label {
-  position: absolute;
-  top: 0;
-  left: calc((var(--at) + 0.5) * 3.05ch);
-  transform: translateX(-50%);
-  text-align: center;
+.ficha-salud-row-label {
   color: var(--green);
-  font-size: 0.82em;
-  line-height: 1;
+  flex: 0 0 6.5em;
+  text-align: left;
   white-space: nowrap;
 }
 
-.ficha-salud-label.is-falla {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 0.95;
-  font-size: 0.72em;
+.ficha-salud-row.is-falla .ficha-salud-row-label {
+  flex-basis: 6.5em;
 }
 
-.ficha-salud-line {
-  align-items: center;
+.ficha-salud-arrow {
+  color: var(--green);
+  flex: 0 0 auto;
 }
 
-.ficha-salud-track {
+.ficha-salud-boxes {
   display: inline-flex;
   flex-wrap: nowrap;
-  gap: 0.2ch;
-  align-items: center;
+  gap: 0;
+  align-items: baseline;
 }
 
-.ficha-mark {
-  color: var(--green);
-  white-space: nowrap;
+.ficha-box:hover:not(.ficha-box-static),
+.ficha-box:focus-visible:not(.ficha-box-static) {
+  color: var(--cyan);
+  outline: none;
 }
 
-.ficha-columns {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 0.5em;
-  min-height: 0;
-}
-
-.ficha-col {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  min-width: 0;
+.ficha-exp-line {
+  flex: 0 0 auto;
+  margin-top: auto;
 }
 
 .ficha-col-head {
@@ -817,15 +899,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   font-size: 0.92em;
-  margin-bottom: 0.15em;
-}
-
-.ficha-ledger-col {
-  flex: 1 1 auto;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  flex: 0 0 auto;
 }
 
 .ficha-ledger-row {
@@ -846,7 +920,7 @@ body {
   flex: 1 1 auto;
   min-width: 0;
   border: none;
-  border-bottom: 1px dashed var(--green);
+  border-bottom: 1px dashed var(--ficha-ghost);
   background: transparent;
   color: var(--green);
   font: inherit;
@@ -865,12 +939,6 @@ body {
 .ficha-ledger-line:focus-visible + .ficha-pipe,
 .ficha-ledger-row:focus-within .ficha-pipe {
   color: var(--cyan);
-}
-
-.ficha-exp {
-  display: flex;
-  align-items: baseline;
-  gap: 0.35ch;
 }
 
 .toc .toc-ficha {
