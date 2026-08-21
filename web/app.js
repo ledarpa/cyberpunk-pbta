@@ -34,7 +34,7 @@
   window.addEventListener("hashchange", openFromHash);
 
   function normalizeAscii(text) {
-    return text.replace(/\u00a0/g, " ").replace(/\n+$/, "");
+    return (window.PBTA_LOGO ? window.PBTA_LOGO.normalize(text) : text.replace(/\u00a0/g, " ")).replace(/\n+$/, "");
   }
 
   function fitAsciiArt(pre, boxW, boxH, baseSize) {
@@ -54,6 +54,7 @@
       px -= 1;
       pre.style.fontSize = `${px}px`;
     }
+    if (window.PBTA_LOGO) window.PBTA_LOGO.fitPrompt(pre);
   }
 
   function fetchCoverAscii() {
@@ -71,13 +72,16 @@
     if (!pre) return;
     fetchCoverAscii()
       .then((text) => {
-        pre.textContent = text;
+        if (window.PBTA_LOGO) window.PBTA_LOGO.paint(pre, text);
+        else pre.textContent = text;
         fitCoverArt();
         requestAnimationFrame(fitCoverArt);
         fitTocCoverArt();
       })
       .catch(() => {
-        pre.textContent = "PbtA:\\>";
+        const fallback = "PbtA:\\>";
+        if (window.PBTA_LOGO) window.PBTA_LOGO.paint(pre, fallback);
+        else pre.textContent = fallback;
         fitCoverArt();
       });
 
@@ -132,15 +136,15 @@
     const pre = tocEl.querySelector(".toc-cover-art");
     if (!pre) return;
     const paint = (text) => {
-      pre.textContent = text;
+      if (window.PBTA_LOGO) window.PBTA_LOGO.paint(pre, text);
+      else pre.textContent = text;
       fitTocCoverArt();
       requestAnimationFrame(fitTocCoverArt);
     };
     fetchCoverAscii()
       .then(paint)
       .catch(() => {
-        pre.textContent = "PbtA:\\>";
-        fitTocCoverArt();
+        paint("PbtA:\\>");
       });
     window.addEventListener("resize", fitTocCoverArt);
     if (sidebar && "ResizeObserver" in window) {
@@ -247,7 +251,9 @@
     el.addEventListener(
       "wheel",
       (ev) => {
-        const nested = ev.target.closest("textarea, .table-wrap");
+        const nested = ev.target.closest(
+          "textarea, .table-wrap, .ficha-inv-menu, .ficha-arsenal-menu, .ficha-stat-menu, .ficha-prof-menu"
+        );
         if (nested instanceof HTMLElement && nested.scrollHeight > nested.clientHeight + 1) {
           const atTop = nested.scrollTop <= 0;
           const atBottom = nested.scrollTop + nested.clientHeight >= nested.scrollHeight - 1;
@@ -282,13 +288,11 @@
     sidebar.addEventListener("scroll", clampSidebarScroll, { passive: true });
     blockWheelPastEdge(reader, clampReaderScroll);
     blockWheelPastEdge(sidebar, clampSidebarScroll);
-    fichaPanel.addEventListener(
-      "wheel",
-      (ev) => {
-        ev.preventDefault();
-      },
-      { passive: false }
-    );
+    blockWheelPastEdge(fichaPanel, () => {
+      const max = Math.max(0, fichaPanel.scrollHeight - fichaPanel.clientHeight);
+      if (fichaPanel.scrollTop > max) fichaPanel.scrollTop = max;
+      if (fichaPanel.scrollTop < 0) fichaPanel.scrollTop = 0;
+    });
     window.addEventListener("resize", () => {
       syncReaderViewport();
       syncFichaViewport();
