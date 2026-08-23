@@ -204,6 +204,7 @@
     setActiveToc(FICHA_ID);
     history.replaceState(null, "", `#${FICHA_ID}`);
     syncFichaViewport();
+    window.dispatchEvent(new Event("pbta-ficha-show"));
     fichaPanel.focus({ preventScroll: true });
   }
 

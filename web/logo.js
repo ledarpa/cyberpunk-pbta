@@ -14,6 +14,9 @@
       .replace(/\r\n/g, "\n")
       .replace(/\r/g, "\n")
       .replace(/\u00a0/g, " ")
+      .split("\n")
+      .map((line) => line.replace(/[ \t]+$/g, ""))
+      .join("\n")
       .replace(/\s+$/g, "");
   }
 
@@ -104,11 +107,35 @@
     }
   }
 
+  /**
+   * Escala como el título de portada: Courier 700, line-height 1.05.
+   * Solo limita por ancho; nunca recorta alto ni lados.
+   */
+  function fitToWidth(el, maxW, baseSize = 40) {
+    if (!el || !String(el.textContent || "").trim() || !maxW) return;
+    el.style.transform = "none";
+    const pad = Math.max(4, Math.round(maxW * 0.02));
+    const limitW = Math.max(16, maxW - pad);
+    el.style.fontSize = `${baseSize}px`;
+    fitPrompt(el);
+    const artW = el.scrollWidth;
+    if (!artW) return;
+    let px = Math.floor(baseSize * Math.min(limitW / artW, 1));
+    px = Math.max(5, px);
+    el.style.fontSize = `${px}px`;
+    fitPrompt(el);
+    while (px > 5 && el.scrollWidth > limitW) {
+      px -= 1;
+      el.style.fontSize = `${px}px`;
+      fitPrompt(el);
+    }
+  }
+
   function paint(pre, text) {
     if (!pre) return;
     pre.innerHTML = format(text);
     fitPrompt(pre);
   }
 
-  window.PBTA_LOGO = { format, fitPrompt, paint, normalize, escapeHtml };
+  window.PBTA_LOGO = { format, fitPrompt, fitToWidth, paint, normalize, escapeHtml };
 })();

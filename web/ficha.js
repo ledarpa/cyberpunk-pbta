@@ -1,7 +1,14 @@
 /** Hoja de personaje — réplica de ficha horizontal.docx (3 cols apaisadas). */
 (() => {
   const STORAGE_KEY = "pbta-ficha-v2";
-  const LEDGER_ROWS = 30; // +1 título de columna = 31 líneas
+  const LEDGER_ROWS = 31;
+  /** Cols 2/3: título + 2 blancos + filas. Cuerpo col 1 (sin logo Cyberpunk). */
+  const COL_LINES = LEDGER_ROWS + 3;
+  const COL1_CH = 42; // ancho fijo columna identidad (ch) — mismo span que |…| Cromos (40+2)
+  const PORTRAIT_W = 34; // ancho exterior (borde en col 34)
+  const PORTRAIT_H = 13; // alto exterior (borde en fila 13)
+  const PORTRAIT_INNER_W = 32;
+  const PORTRAIT_INNER_H = PORTRAIT_H - 2; // interior 32×11
   const GHOST = "ficha-g";
   const LOGO_FALLBACK = [
     "  _____          __                  __  ",
@@ -31,48 +38,119 @@
   function buildSheetHtml() {
     return `
       <div class="ficha-layout">
-        <pre class="ficha-pre ficha-pre-main" aria-label="Identidad">${colMainHtml()}</pre>
+        <div class="ficha-col1">
+          <pre class="ficha-logo" id="ficha-logo" aria-label="Cyberpunk"></pre>
+          <pre class="ficha-pre ficha-pre-main" aria-label="Identidad">${colMainHtml()}</pre>
+        </div>
         <pre class="ficha-pre ficha-pre-ledger" aria-label="Cromos">${ledgerHtml("cromos", "Cromos", 40)}</pre>
         <pre class="ficha-pre ficha-pre-ledger" aria-label="Chapería">${ledgerHtml("chaperia", "Chapería", 39)}</pre>
       </div>`;
   }
 
+  /** Fila de col 1 con la misma altura que .ficha-inv-row (ledgers). */
+  function col1Row(html = "", portrait = false) {
+    const cls = portrait ? " ficha-row-portrait" : "";
+    return `<span class="ficha-row${cls}">${html}</span>`;
+  }
+
+  /**
+   * PJ: Nombre → @Psique = filas 1–4 del inventario Cromos.
+   * Cromos: blanco + título + blanco = 3 .ficha-row antes del PJ.
+   * Sin \\n entre bloques: en <pre> cada \\n suma otra línea además del display:block.
+   */
   function colMainHtml() {
-    const portraitMid = Array.from({ length: 5 }, () =>
-      `│${" ".repeat(35)}│`
-    ).join("\n");
-    const portrait = [
-      `┌${" ".repeat(35)}┐`,
-      portraitMid,
-      `└${" ".repeat(35)}┘`,
-    ].join("\n");
-    // Sin \\n entre fill-lines: en <pre> el salto + display:flex duplica la línea.
     const identity = [
       fillField("nombre", "Nombre:\\>"),
       fillField("jugador", "Jugador:\\>"),
       professionField(),
-      `<span class="ficha-id-line">@Psique:\\><span class="${GHOST}">__</span>${psiqueBoxes()}</span>`,
+      `<span class="ficha-id-line">@Psique:\\><span class="${GHOST}">_______</span>${psiqueBoxes()}</span>`,
     ].join("");
+    const headPad = Array.from({ length: 3 }, () => col1Row()).join("");
+    return `${headPad}${identity}${col1Row()}${portraitGridHtml()}${col1Row()}${atributoLines().join("")}${col1Row()}${saludLines().join("")}${col1Row()}${fillField("experiencia", "Experiencia:\\>")}${col1Row()}`;
+  }
+
+  /** Marco foto 34×11 ch: solo esquinas; Img. centrado en el interior. */
+  function portraitLine(left, right) {
+    const innerW = " ".repeat(PORTRAIT_INNER_W);
+    return (
+      `<span class="ficha-boxdraw-line" aria-hidden="true">` +
+      `<span class="ficha-portrait-ch">${left}</span>` +
+      `<span class="ficha-portrait-mid">${innerW}</span>` +
+      `<span class="ficha-portrait-ch">${right}</span>` +
+      `</span>`
+    );
+  }
+
+  function portraitInnerLine(text = "") {
+    const padL = Math.floor((PORTRAIT_INNER_W - text.length) / 2);
+    const padR = PORTRAIT_INNER_W - text.length - padL;
+    const inner = `${" ".repeat(padL)}${text}${" ".repeat(padR)}`;
+    return (
+      `<span class="ficha-boxdraw-line">` +
+      `<span class="ficha-portrait-ch" aria-hidden="true"></span>` +
+      `<span class="ficha-portrait-mid ficha-portrait-label">${inner}</span>` +
+      `<span class="ficha-portrait-ch" aria-hidden="true"></span>` +
+      `</span>`
+    );
+  }
+
+  function portraitGridHtml() {
+    const midIdx = Math.floor(PORTRAIT_INNER_H / 2);
+    const inners = Array.from({ length: PORTRAIT_INNER_H }, (_, i) =>
+      portraitInnerLine(i === midIdx ? "Img." : "")
+    );
+    return [portraitLine("┌", "┐"), ...inners, portraitLine("└", "┘")]
+      .map((line) => col1Row(line, true))
+      .join("");
+  }
+
+  /**
+   * Atributos:\> en la 1ª fila junto a Enlaces; el resto alineado bajo Enlaces.
+   * Guiones bajos fijos (Manipulación Cognitiva → un solo _).
+   */
+  function atributoLines() {
+    const head = "Atributos:\\>";
+    const gap = "  ";
+    const contPad = " ".repeat(head.length + gap.length);
+    const rows = [
+      ["Enlaces Neuronales", "en", 5],
+      ["Manipulación Cognitiva", "mc", 1],
+      ["Reacción Cinética", "rc", 6],
+      ["Tejido Muscular", "tm", 8],
+    ];
+    return rows.map(([label, name, under], i) => {
+      const prefix = i === 0 ? `${head}${gap}` : contPad;
+      return col1Row(
+        `${prefix}${label}<span class="${GHOST}">${"_".repeat(under)}</span>${statInput(name)}`
+      );
+    });
+  }
+
+  /** Salud:\> a la izquierda; todos los bloques de cuadros arrancan en la misma columna. */
+  function saludLines() {
+    const head = "Salud:\\>";
+    const headPad = " ".repeat(head.length);
+    const arrow = " -> ";
+    // Referencia: fila Normal (5 cuadros) cerrando a COL1_CH → columna de inicio de cuadros
+    const refLabel = "Normal";
+    const refBoxesCh = 5 * 3;
+    const refPad = Math.max(
+      0,
+      COL1_CH - head.length - [...refLabel].length - arrow.length - refBoxesCh
+    );
+    const boxStart = head.length + refPad + [...refLabel].length + arrow.length;
+
+    const mk = (prefix, label, boxesHtml) => {
+      const pad = Math.max(0, boxStart - prefix.length - [...label].length - arrow.length);
+      return `${prefix}${" ".repeat(pad)}${label}${arrow}${boxesHtml}`;
+    };
     return [
-      `<span class="ficha-logo" id="ficha-logo"></span>${identity}`,
-      "",
-      `<span class="ficha-boxdraw">${portrait}</span>`,
-      "",
-      "Atributos:\\>",
-      `        Enlaces Neuronales<span class="${GHOST}">_____</span>${statInput("en")}`,
-      `        Manipulación Cognitiva<span class="${GHOST}">_</span>${statInput("mc")}`,
-      `        Reacción Cinética<span class="${GHOST}">______</span>${statInput("rc")}`,
-      `        Tejido Muscular<span class="${GHOST}">________</span>${statInput("tm")}`,
-      "",
-      `Salud:\\>    Normal -&gt; ${tightBoxes("salud", 0, 5, false)}`,
-      `                -1 -&gt; ${tightBoxes("salud", 5, 4, true)}`,
-      `                -2 -&gt; ${tightBoxes("salud", 10, 4, true)}`,
-      `                -3 -&gt; ${tightBoxes("salud", 15, 4, true)}`,
-      `    Falla Integral -&gt; ${tightBoxes("salud", 20, 2, true)}`,
-      "",
-      "Experiencia:\\>",
-      fillField("experiencia", ""),
-    ].join("\n");
+      mk(head, "Normal", tightBoxes("salud", 0, 5, false)),
+      mk(headPad, "-1", tightBoxes("salud", 5, 4, true)),
+      mk(headPad, "-2", tightBoxes("salud", 10, 4, true)),
+      mk(headPad, "-3", tightBoxes("salud", 15, 4, true)),
+      mk(headPad, "Falla Integral", tightBoxes("salud", 20, 2, true)),
+    ].map((line) => col1Row(line));
   }
 
   function colTitle(label, width) {
@@ -89,7 +167,8 @@
     const rows = Array.from({ length: LEDGER_ROWS }, (_, i) => invRowHtml(name, i, underscores)).join(
       "\n"
     );
-    return `${head}\n\n\n${rows}`;
+    // Dos \\n iniciales: HTML ignora el primero tras <pre>; el segundo es la línea en blanco.
+    return `\n\n${head}\n\n${rows}`;
   }
 
   function invRowHtml(ledger, idx, underscores) {
@@ -113,7 +192,8 @@
     const paint = (text) => {
       if (window.PBTA_LOGO) window.PBTA_LOGO.paint(el, text);
       else el.textContent = text;
-      fitSheet();
+      fitFichaLogo();
+      requestFitSheet();
     };
     fetch("data/portada-ascii.txt")
       .then((r) => (r.ok ? r.text() : Promise.reject()))
@@ -345,9 +425,11 @@
       item.accessories = [...(prev.accessories || [])];
       item.sai = [...(prev.sai || [])];
       item.modules = [...(prev.modules || [])];
+      item.ballistics = [...(prev.ballistics || [])];
     }
     input.value = INV.serializeSlot(item);
     refreshInvRow(input.closest(".ficha-inv-row"));
+    INV.packLedgers?.(form, LEDGER_ROWS, refreshInvRow);
   }
 
   function applyProfessionArsenal(professionName) {
@@ -656,28 +738,62 @@
     inner.innerHTML = boxInnerHtml(!!on, btn.dataset.size === "wide", btn.dataset.star === "true");
   }
 
+  /** Última fila de ledger / Experiencia fuera del borde inferior de la página. */
+  function contentPastPageBottom(page) {
+    const limit = page.getBoundingClientRect().bottom - 1;
+    const past = (el) => !!el && el.getBoundingClientRect().bottom > limit;
+    for (const label of ["Cromos", "Chapería"]) {
+      const pre = form.querySelector(`.ficha-pre-ledger[aria-label="${label}"]`);
+      const wraps = pre?.querySelectorAll(".ficha-ledger-wrap");
+      if (past(wraps?.[wraps.length - 1])) return true;
+    }
+    const exp = form.querySelector('input[name="experiencia"]')?.closest(".ficha-fill-line");
+    return past(exp);
+  }
+
+  function ledgersOverflow() {
+    const ledgers = form.querySelectorAll(".ficha-pre-ledger");
+    for (const el of ledgers) {
+      if (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 2) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function applySheetSize(size) {
+    form.style.fontSize = `${size}px`;
+    form.style.lineHeight = "1.03125";
+    form.style.setProperty("--ficha-lh", "1.03125");
+    fitFichaLogo();
+    alignMainColumnBottom();
+  }
+
   function fitSheet() {
     const page = form.closest(".ficha-page");
     const panel = document.getElementById("ficha-panel");
     if (!page || !panel || panel.hidden) return;
+    if (panel.clientWidth < 40 || panel.clientHeight < 40) return;
 
-    const pad = 8;
+    const pad = 4;
     const availW = Math.max(200, panel.clientWidth - pad);
     const availH = Math.max(200, panel.clientHeight - pad);
     page.style.width = `${Math.floor(availW)}px`;
     page.style.height = `${Math.floor(availH)}px`;
 
-    const marginPx = Math.max(8, Math.min(18, Math.min(availW, availH) * 0.018));
-    form.style.padding = `${marginPx}px`;
-    const gap = Math.max(6, Math.min(14, availW * 0.012));
+    const marginPx = Math.max(4, Math.min(12, Math.min(availW, availH) * 0.012));
+    const marginBottom = Math.max(2, Math.floor(marginPx * 0.35));
+    form.style.padding = `${marginPx}px ${marginPx}px ${marginBottom}px`;
+    const gap = Math.max(4, Math.min(10, availW * 0.008));
     form.style.setProperty("--ficha-gap", `${gap}px`);
 
-    const innerH = availH - marginPx * 2;
+    const innerH = availH - marginPx - marginBottom;
     const innerW = availW - marginPx * 2;
     const colW = (innerW - gap * 2) / 3;
 
     form.style.fontSize = "100px";
     form.style.lineHeight = "1.03125";
+    form.style.setProperty("--ficha-lh", "1.03125");
     const probe = document.createElement("span");
     probe.setAttribute("aria-hidden", "true");
     probe.style.cssText =
@@ -687,35 +803,66 @@
     const chPerEm = probe.getBoundingClientRect().width / 10 / 100;
     form.removeChild(probe);
 
-    // título + 2 líneas en blanco + 30 filas ledger
+    // título + blancos + filas; el freno fino es contentPastPageBottom
     const sizeByWidth = colW / (42 * Math.max(0.45, chPerEm));
     const sizeByHeight = innerH / ((LEDGER_ROWS + 3) * 1.03125);
     let size = Math.min(sizeByWidth, sizeByHeight);
     size = Math.max(12, Math.min(28, size));
-    size = Math.round(size * 2) / 2; // evita subpíxeles que deforman la raya
-    form.style.fontSize = `${size}px`;
-    form.style.lineHeight = "1.03125";
+    size = Math.round(size * 2) / 2;
+    applySheetSize(size);
 
-    const ledgers = form.querySelectorAll(".ficha-pre-ledger");
-    for (let i = 0; i < 8; i += 1) {
-      let overflow = false;
-      ledgers.forEach((el) => {
-        if (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 2) {
-          overflow = true;
-        }
-      });
-      if (!overflow) break;
-      size = Math.round(size * 0.98 * 2) / 2;
-      form.style.fontSize = `${size}px`;
+    const overflows = () => ledgersOverflow() || contentPastPageBottom(page);
+
+    for (let i = 0; i < 12; i += 1) {
+      if (!overflows()) break;
+      size = Math.round((size - 0.5) * 2) / 2;
+      if (size < 12) break;
+      applySheetSize(size);
     }
 
-    fitLogoPrompt();
+    // Subir de a 0.5px solo si sigue cabiendo tras alinear Experiencia
+    for (let i = 0; i < 24; i += 1) {
+      const next = Math.round((size + 0.5) * 2) / 2;
+      if (next > 28) break;
+      applySheetSize(next);
+      if (overflows()) {
+        applySheetSize(size);
+        break;
+      }
+      size = next;
+    }
+
+    // Segunda pasada: alinear de nuevo y encoger si el margen del logo empujó de más
     alignMainColumnBottom();
+    for (let i = 0; i < 16; i += 1) {
+      if (!overflows()) break;
+      size = Math.round((size - 0.5) * 2) / 2;
+      if (size < 12) break;
+      applySheetSize(size);
+    }
+  }
+
+  /** Refit tras fuentes/layout (evita última línea cortada al recargar). */
+  function requestFitSheet() {
+    const run = () => {
+      const panel = document.getElementById("ficha-panel");
+      if (!panel || panel.hidden) return;
+      fitSheet();
+    };
     requestAnimationFrame(() => {
-      alignMainColumnBottom();
-      requestAnimationFrame(alignMainColumnBottom);
+      run();
+      requestAnimationFrame(() => {
+        run();
+        const ready = document.fonts?.ready;
+        if (ready) ready.then(run).catch(() => {});
+        setTimeout(run, 40);
+        setTimeout(run, 160);
+        setTimeout(run, 400);
+      });
     });
   }
+
+  window.PBTA_FICHA = { fit: requestFitSheet };
 
   function fitLogoPrompt() {
     const logoEl = document.getElementById("ficha-logo");
@@ -723,28 +870,23 @@
   }
 
   /**
-   * Alinea la raya de Experiencia con la última fila real de Cromos
-   * (no el alto del <pre>, que está estirado al 100%).
+   * Logo Cyberpunk: misma tipografía/espaciado que el título del manual.
+   * Escala solo por ancho de columna; overflow visible (no se recorta).
    */
-  function alignMainColumnBottom() {
+  function fitFichaLogo() {
     const logo = document.getElementById("ficha-logo");
-    const expLine = form.querySelector('input[name="experiencia"]')?.closest(".ficha-fill-line");
-    const cromos = form.querySelector('.ficha-pre-ledger[aria-label="Cromos"]');
-    const wraps = cromos?.querySelectorAll(".ficha-ledger-wrap");
-    const lastLedger = wraps?.[wraps.length - 1];
-    if (!logo || !expLine || !lastLedger) return;
-
-    logo.style.marginBottom = "0px";
-    void logo.offsetHeight;
-
-    const ledgerBottom = lastLedger.getBoundingClientRect().bottom;
-    const expBottom = expLine.getBoundingClientRect().bottom;
-    const delta = ledgerBottom - expBottom;
-
-    // delta > 0 → Experiencia más arriba → agrandar aire bajo Cyberpunk
-    // delta < 0 → Experiencia más abajo → reducir aire (mín. 0)
-    logo.style.marginBottom = `${Math.max(0, delta)}px`;
+    const col = logo?.closest(".ficha-col1");
+    if (!logo || !col) return;
+    const maxW = Math.max(48, col.clientWidth || 0);
+    if (window.PBTA_LOGO?.fitToWidth) {
+      window.PBTA_LOGO.fitToWidth(logo, maxW, 40);
+    } else {
+      fitLogoPrompt();
+    }
   }
+
+  /** Placeholder: el logo ya no participa del alineado del cuerpo. */
+  function alignMainColumnBottom() {}
 
   function bindSheet() {
     form.querySelectorAll(".ficha-box[data-group]").forEach((btn) => {
@@ -901,13 +1043,29 @@
     const ghost = wrap?.querySelector(".ficha-ledger-ghost");
     const maxCh = Number.parseInt(String(input?.style.getPropertyValue("--ch") || "40"), 10) || 40;
     const item = INV?.parseSlot(input?.value);
+    const isSub = item?.kind === "sub" || row.classList.contains("is-sub");
+    row.classList.toggle("is-sub", !!isSub);
+    if (isSub) {
+      if (item?.parentId) row.dataset.parentId = item.parentId;
+      if (item?.subKind) row.dataset.subKind = item.subKind;
+      else if (!row.dataset.subKind) row.dataset.subKind = "";
+    } else {
+      delete row.dataset.parentId;
+      delete row.dataset.subKind;
+    }
+
+    // Subítems: label con espacios iniciales ("  + nombre"); white-space:pre en CSS
     const label =
-      item && (item.catalogId || (item.label || "").trim())
-        ? item.catalogId
-          ? INV.formatItem(item, maxCh)
-          : String(item.label || "").slice(0, maxCh)
+      item && (item.catalogId || item.kind === "sub" || (item.label || "").trim())
+        ? INV.formatItem(item, maxCh)
         : "";
-    if (trigger) trigger.textContent = label;
+    if (trigger) {
+      trigger.textContent = label;
+      // NBSP de respaldo si el motor colapsa espacios normales
+      if (isSub && label.startsWith(" ")) {
+        trigger.textContent = label.replace(/^ +/, (m) => "\u00A0".repeat(m.length));
+      }
+    }
     if (ghost) {
       ghost.dataset.fullLen = String(maxCh);
       ghost.textContent = "_".repeat(maxCh);
@@ -920,7 +1078,9 @@
   }
 
   function refreshAllInvRows() {
-    form.querySelectorAll(".ficha-inv-row").forEach((row) => refreshInvRow(row));
+    const INV = window.PBTA_INV;
+    if (INV?.packLedgers) INV.packLedgers(form, LEDGER_ROWS, refreshInvRow);
+    else form.querySelectorAll(".ficha-inv-row").forEach((row) => refreshInvRow(row));
   }
 
   function sumInventoryStats() {
@@ -929,7 +1089,7 @@
     if (!INV) return sum;
     form.querySelectorAll('input[data-inv="1"]').forEach((el) => {
       const item = INV.parseSlot(el.value);
-      if (!item?.catalogId) return;
+      if (!item?.catalogId || item.kind === "sub") return;
       const st = INV.statsFor(item);
       for (const k of STAT_NAMES) sum[k] += Number(st[k] || 0);
     });
@@ -986,11 +1146,18 @@
       saveSheet();
     });
     form.addEventListener("change", saveSheet);
-    requestAnimationFrame(fitSheet);
+    requestFitSheet();
     window.addEventListener("resize", fitSheet);
+    window.addEventListener("pbta-ficha-show", () => requestFitSheet());
     if ("ResizeObserver" in window) {
       const panel = document.getElementById("ficha-panel");
-      if (panel) new ResizeObserver(fitSheet).observe(panel);
+      if (panel) {
+        let roTimer = 0;
+        new ResizeObserver(() => {
+          clearTimeout(roTimer);
+          roTimer = setTimeout(fitSheet, 16);
+        }).observe(panel);
+      }
     }
   }
 

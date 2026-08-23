@@ -1,20 +1,140 @@
 /** Catálogo de ficha: Cromos + Chapería (armas, herramientas, etc.). */
 window.PBTA_CATALOGO = (() => {
   const Q = ["impro", "corr", "hitech", "mil"];
-  const Q_LABEL = { impro: "Imp", corr: "Corr", hitech: "Hi-T", mil: "Mil" };
+  const Q_LABEL = {
+    impro: "Improvisada",
+    corr: "Corriente",
+    hitech: "Hi-Tech",
+    mil: "Militar",
+  };
+  /** Solo cuando el texto completo no entra en la línea del ledger. */
+  const Q_SHORT = { impro: "Imp", corr: "Corr", hitech: "Hi-T", mil: "Mil" };
   const SAI_SLOTS = { impro: 0, corr: 1, hitech: 2, mil: 3 };
 
-  const sai = (id, name, shortName) => ({ id, name, short: shortName || name });
-  const acc = (id, name, shortName) => ({ id, name, short: shortName || name });
+  const sai = (id, name, shortName, detail) => ({
+    id,
+    name,
+    short: shortName || name,
+    detail: detail || "",
+  });
+  const acc = (id, name, shortName, detail) => ({
+    id,
+    name,
+    short: shortName || name,
+    detail: detail || "",
+  });
+  const bal = (id, name, shortName, detail) => ({
+    id,
+    name,
+    short: shortName || name,
+    detail: detail || "",
+  });
 
   const SAI_COMMON = [
-    sai("acelerador", "Acelerador iónico", "Acel"),
-    sai("apuntado", "Apuntado asistido", "Apunt"),
-    sai("flujo", "Flujo balístico", "Flujo"),
+    sai(
+      "acelerador",
+      "Acelerador iónico",
+      "Acel",
+      "Proyectiles/energía: +1 daño por impacto (rifle y lanzamisiles: +3 donde el arma lo indique)."
+    ),
+    sai(
+      "apuntado",
+      "Apuntado asistido",
+      "Apunt",
+      "Con HUD visual: info del objetivo en tiempo real. Ventaja en RC."
+    ),
+    sai(
+      "flujo",
+      "Flujo balístico",
+      "Flujo",
+      "Sin tiempos de recarga (munición movilizada por el SAI)."
+    ),
   ];
-  const SAI_ESTAB = sai("estabilizador", "Estabilizador", "Estab");
-  const SAI_ESTAB_DEC = sai("estab-decomp", "Estabilizador y decompresor", "Est+Dec");
-  const SAI_MIRA_MISIL = sai("mira-proyectil", "Mira para proyectiles", "Mira");
+  const SAI_ESTAB = sai(
+    "estabilizador",
+    "Estabilizador",
+    "Estab",
+    "Arma usable a una mano (fusil; rifle usa estabilizador y decompresor)."
+  );
+  const SAI_ESTAB_DEC = sai(
+    "estab-decomp",
+    "Estabilizador y decompresor",
+    "Est+Dec",
+    "Estabilización + expulsar casquillo/celda → disparar todos los turnos."
+  );
+  const SAI_MIRA_MISIL = sai(
+    "mira-proyectil",
+    "Mira para proyectiles",
+    "Mira",
+    "Con HUD, curvar trayectoria del misil. Ventaja RC."
+  );
+
+  /** Munición especial — proyectiles / celdas (armas de fuego o energía). */
+  const BAL_PROYECTILES = [
+    bal("carbono", "Balas de carbono", "Carb", "Pistola y fusil +1 daño; escopeta y rifle +3."),
+    bal(
+      "entrelazado",
+      "Celdas entrelazado cuántico",
+      "Entrel",
+      "Disparos atraviesan al primer objetivo (rifle: hasta 3 objetivos)."
+    ),
+    bal(
+      "sobrecargadas",
+      "Celdas sobrecargadas",
+      "Sobrec",
+      "Disparar 2 veces al mismo objetivo en el turno (segundo disparo: RC con −1)."
+    ),
+    bal(
+      "goma",
+      "Proyectiles de goma y descarga",
+      "Goma",
+      "Daño no letal a tejido biológico y cibernética."
+    ),
+    bal(
+      "rastreador",
+      "Rastreador",
+      "Rast",
+      "Sin daño; 1 proyectil por cargador (resto = transmisor/receptor)."
+    ),
+  ];
+  const BAL_MISILES = [
+    bal("misil-explosivo", "Explosivo", "Expl", "+1d6 daño, radio 3 m."),
+    bal(
+      "misil-criogenico",
+      "Criogénico",
+      "Crio",
+      "Supervivientes congelados 1d6/2 turnos, radio 3 m; mitad de acciones."
+    ),
+    bal("misil-pem", "PEM", "PEM", "Anula cibernética/electrónica en 15 m durante 2d6 turnos."),
+    bal(
+      "misil-teletaladro",
+      "Teletaladro",
+      "Taladro",
+      "Tras impacto, taladro a 90° + corrosión; en 1d6+1 turnos, agujero para una persona."
+    ),
+  ];
+  const BAL_DARDOS = [
+    bal(
+      "dardo-psico",
+      "@Psico",
+      "Psico",
+      "Episodio de cyberpsicosis 1d6 turnos si el blanco tiene algún cromo. Sin cromos: inmune."
+    ),
+    bal("dardo-alucinogeno", "Alucinógeno", "Aluc", "Desventaja en todas las tiradas 1d6 turnos."),
+    bal(
+      "dardo-nanocontrolador",
+      "Nanocontrolador",
+      "Nano",
+      "Nanobots controlan cyberware del afectado (y artefactos). Sin cromos: inmune."
+    ),
+    bal(
+      "dardo-veneno",
+      "Veneno letal",
+      "Veneno",
+      "Muerte en 6 turnos si un biohacker no lo trata. No afecta cyberware."
+    ),
+    bal("dardo-paralizante", "Paralizante", "Paral", "Inmovilizado 1d6 turnos."),
+  ];
 
   function arma(def) {
     return {
@@ -26,6 +146,7 @@ window.PBTA_CATALOGO = (() => {
       saiSlots: SAI_SLOTS,
       accessories: [],
       sai: [],
+      ballistics: [],
       countsAsCromo: false,
       ...def,
     };
@@ -98,11 +219,14 @@ window.PBTA_CATALOGO = (() => {
     arma({
       id: "pistola",
       name: "Pistola",
+      detail:
+        "Cargas 15 · Alcance 60 m · Manual 1d6 · Semi ráfaga 3 (ventaja RC) 1d6. Hasta 1 por brazo. SAI: Imp 0 / Corr 1 / Hi-T 2 / Mil 3.",
       accessories: [
-        acc("cargador-amp", "Cargador ampliado", "Carg+"),
-        acc("silenciador", "Silenciador", "Sil"),
+        acc("cargador-amp", "Cargador ampliado", "Carg+", "21 cargas."),
+        acc("silenciador", "Silenciador", "Sil", "Disparos sin sonido."),
       ],
       sai: [...SAI_COMMON],
+      ballistics: [...BAL_PROYECTILES],
     }),
     arma({
       id: "pistola-improvisada",
@@ -110,70 +234,92 @@ window.PBTA_CATALOGO = (() => {
       lockedQuality: "impro",
       hasQuality: true,
       saiSlots: { impro: 0, corr: 0, hitech: 0, mil: 0 },
+      detail: "Variante improvisada de pistola. Sin SAI. Misma ficha básica de combate que pistola.",
       accessories: [],
       sai: [],
+      ballistics: [...BAL_PROYECTILES],
     }),
     arma({
       id: "escopeta",
       name: "Escopeta",
+      detail:
+        "Cargas 6 · Alcance 10 m · Cono 45° 1d6/enemigo · Quemarropa ≤3 m: 3d6 a un objetivo. 2 manos (salvo estabilizador). SAI: 0/1/2/3.",
       accessories: [
-        acc("canon-largo", "Cañón largo", "CañónL"),
-        acc("canon-doble", "Cañón doble", "Cañón2"),
-        acc("cargador-amp", "Cargador ampliado", "Carg+"),
-        acc("estab-acc", "Estabilizador (accesorio)", "Estab"),
+        acc("canon-largo", "Cañón largo", "CañónL", "Dispersión 23° (mitad); alcance ×2."),
+        acc("canon-doble", "Cañón doble", "Cañón2", "2 proyectiles a la vez → daño ×2."),
+        acc("cargador-amp", "Cargador ampliado", "Carg+", "10 cargas."),
+        acc("estab-acc", "Estabilizador (accesorio)", "Estab", "Usable a una mano."),
       ],
       sai: [...SAI_COMMON],
+      ballistics: [...BAL_PROYECTILES],
     }),
     arma({
       id: "fusil",
       name: "Fusil",
+      detail:
+        "Cargas 30 · Alcance 30 m · Manual 1d6 · Semi 3 (ventaja) 1d6 · Auto: vacía cargador, cono 45°, 1d6 por éxito. 2 manos salvo estabilizador.",
       accessories: [
-        acc("mira", "Mira telescópica", "Mira"),
-        acc("cargador-amp", "Cargador ampliado", "Carg+"),
-        acc("silenciador", "Silenciador", "Sil"),
+        acc("mira", "Mira telescópica", "Mira", "Alcance ×2; con cyberóptica zoom: ×3."),
+        acc("cargador-amp", "Cargador ampliado", "Carg+", "45 cargas."),
+        acc("silenciador", "Silenciador", "Sil", "Sin sonido."),
       ],
       sai: [...SAI_COMMON, SAI_ESTAB],
+      ballistics: [...BAL_PROYECTILES],
     }),
     arma({
       id: "rifle",
       name: "Rifle",
+      detail:
+        "Cargas 4 · Alcance 100 m · Daño 3d6 · 1 disparo cada 2 turnos (descarga+carga). 2 manos o 2 cyberextremidades.",
       accessories: [
-        acc("mira", "Mira telescópica", "Mira"),
-        acc("cargador-amp", "Cargador ampliado", "Carg+"),
-        acc("silenciador", "Silenciador", "Sil"),
+        acc("mira", "Mira telescópica", "Mira", "Alcance ×3; con zoom óptico: ×4."),
+        acc("cargador-amp", "Cargador ampliado", "Carg+", "7 cargas."),
+        acc("silenciador", "Silenciador", "Sil", "Sin sonido; daño baja a 2d6; −50 m de alcance."),
       ],
       sai: [
-        sai("acelerador", "Acelerador iónico", "Acel"),
-        sai("apuntado", "Apuntado asistido", "Apunt"),
+        sai("acelerador", "Acelerador iónico", "Acel", "Proyectiles/energía: +3 daño (rifle)."),
+        sai("apuntado", "Apuntado asistido", "Apunt", "Con HUD visual: info del objetivo. Ventaja en RC."),
         SAI_ESTAB_DEC,
-        sai("flujo", "Flujo balístico", "Flujo"),
+        sai("flujo", "Flujo balístico", "Flujo", "Sin tiempos de recarga (munición movilizada por el SAI)."),
       ],
+      ballistics: [...BAL_PROYECTILES],
     }),
     arma({
       id: "lanzadardos",
       name: "Lanzadardos",
+      detail:
+        "Cargas 1 · Alcance 15 m · Daño 1 pt con 10+ (7–9 sin daño) · Silenciosa · Turno disparo + turno recarga. SAI: 0/1/2/3.",
       accessories: [],
       sai: [
-        sai("acelerador", "Acelerador iónico", "Acel"),
-        sai("apuntado", "Apuntado asistido", "Apunt"),
-        sai("flujo", "Flujo balístico", "Flujo"),
+        sai("acelerador", "Acelerador iónico", "Acel", "Alcance ×2, +1 daño."),
+        sai("apuntado", "Apuntado asistido", "Apunt", "Con HUD visual: info del objetivo. Ventaja en RC."),
+        sai("flujo", "Flujo balístico", "Flujo", "1 dardo por turno sin tiempo de recarga."),
       ],
+      ballistics: [...BAL_DARDOS],
     }),
     arma({
       id: "lanzamisiles",
       name: "Lanzamisiles",
+      detail:
+        "Cargas 1 · Alcance 150 m · Daño 4d6 · Disparo cada 2 turnos. 2 manos salvo Minimal. SAI: 0/1/2/3.",
       accessories: [
-        acc("minimal", "Minimal", "Min"),
-        acc("lanzagranadas", "Lanzagranadas", "LG"),
-        acc("recamara-doble", "Recámara doble", "Rec2"),
+        acc("minimal", "Minimal", "Min", "Versión reducida: 2d6, 50 m, una mano o una cyberextremidad."),
+        acc("lanzagranadas", "Lanzagranadas", "LG", "Lanza granadas en lugar de misiles, +1d6 daño; con Minimal, sin esa bonificación."),
+        acc("recamara-doble", "Recámara doble", "Rec2", "2 misiles al mismo objetivo en un disparo; efectos combinados."),
       ],
-      sai: [SAI_MIRA_MISIL, sai("flujo", "Flujo balístico", "Flujo"), sai("acelerador", "Acelerador iónico", "Acel")],
+      sai: [
+        SAI_MIRA_MISIL,
+        sai("flujo", "Flujo balístico", "Flujo", "Sin tiempos de recarga."),
+        sai("acelerador", "Acelerador iónico", "Acel", "+3 daño."),
+      ],
+      ballistics: [...BAL_MISILES],
     }),
     arma({
       id: "granada-acida",
       name: "Granada ácida",
       hasQuality: false,
       saiSlots: null,
+      detail: "Caja de 8. 1d6 corrosivo, radio 1 m. Si daño 5+: destruye un segundo cromo o chapería.",
       accessories: [],
       sai: [],
     }),
@@ -182,6 +328,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Granada aturdidora",
       hasQuality: false,
       saiSlots: null,
+      detail: "Caja de 8. Anula oído/radar ultrasónico 1d6 turnos, radio 10 m. Sin TM: pierde la acción al detonar.",
       accessories: [],
       sai: [],
     }),
@@ -190,6 +337,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Granada criogénica",
       hasQuality: false,
       saiSlots: null,
+      detail: "Caja de 8. 1d6 congelante, radio 3 m; 1d6 turnos a mitad de movimiento; afecta tejido y cromos.",
       accessories: [],
       sai: [],
     }),
@@ -198,6 +346,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Granada fragmentación",
       hasQuality: false,
       saiSlots: null,
+      detail: "Caja de 8. 3d6 explosivo, radio 5 m.",
       accessories: [],
       sai: [],
     }),
@@ -206,6 +355,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Granada gas",
       hasQuality: false,
       saiSlots: null,
+      detail: "Caja de 8. Nube tóxica 5 m, 1d6 turnos; 1d6 daño/turno dentro del radio.",
       accessories: [],
       sai: [],
     }),
@@ -214,6 +364,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Granada humo y partículas",
       hasQuality: false,
       saiSlots: null,
+      detail: "Caja de 8. Anula visión orgánica, cyberóptica y radar EM 1d6 turnos, radio 5 m.",
       accessories: [],
       sai: [],
     }),
@@ -222,6 +373,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Granada PEM",
       hasQuality: false,
       saiSlots: null,
+      detail: "Caja de 8. Anula cibernética y electrónica en 5 m durante 1d6 turnos.",
       accessories: [],
       sai: [],
     }),
@@ -230,6 +382,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Balas de carbono",
       hasQuality: false,
       saiSlots: null,
+      detail: "Munición especial. Pistola y fusil +1 daño; escopeta y rifle +3. 4 cargadores = 1 Estrella.",
       accessories: [],
       sai: [],
     }),
@@ -238,6 +391,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Celdas entrelazado cuántico",
       hasQuality: false,
       saiSlots: null,
+      detail: "Munición especial. Disparos atraviesan al primer objetivo (rifle: hasta 3). 4 cargadores = 1 Estrella.",
       accessories: [],
       sai: [],
     }),
@@ -246,6 +400,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Celdas sobrecargadas",
       hasQuality: false,
       saiSlots: null,
+      detail: "Munición especial. 2 disparos al mismo objetivo (2.º con RC −1). 4 cargadores = 1 Estrella.",
       accessories: [],
       sai: [],
     }),
@@ -254,6 +409,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Proyectiles de goma y descarga",
       hasQuality: false,
       saiSlots: null,
+      detail: "Munición especial. Daño no letal a tejido biológico y cibernética. 4 cargadores = 1 Estrella.",
       accessories: [],
       sai: [],
     }),
@@ -262,6 +418,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Rastreador",
       hasQuality: false,
       saiSlots: null,
+      detail: "Munición especial. Sin daño; 1 proyectil/cargador (resto transmisor/receptor). 4 cargadores = 1 Estrella.",
       accessories: [],
       sai: [],
     }),
@@ -270,6 +427,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Misil explosivo",
       hasQuality: false,
       saiSlots: null,
+      detail: "Misil especial. +1d6 daño, radio 3 m.",
       accessories: [],
       sai: [],
     }),
@@ -278,6 +436,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Misil criogénico",
       hasQuality: false,
       saiSlots: null,
+      detail: "Misil especial. Congela supervivientes 1d6/2 turnos, radio 3 m; mitad de acciones.",
       accessories: [],
       sai: [],
     }),
@@ -286,6 +445,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Misil PEM",
       hasQuality: false,
       saiSlots: null,
+      detail: "Misil especial. Anula cibernética/electrónica en 15 m durante 2d6 turnos.",
       accessories: [],
       sai: [],
     }),
@@ -294,6 +454,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Misil teletaladro",
       hasQuality: false,
       saiSlots: null,
+      detail: "Misil especial. Tras impacto, taladro + corrosión; en 1d6+1 turnos, agujero para una persona.",
       accessories: [],
       sai: [],
     }),
@@ -302,6 +463,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Dardo @Psico",
       hasQuality: false,
       saiSlots: null,
+      detail: "Dardo especial. Cyberpsicosis 1d6 turnos si el blanco tiene cromo. Sin cromos: inmune.",
       accessories: [],
       sai: [],
     }),
@@ -310,6 +472,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Dardo alucinógeno",
       hasQuality: false,
       saiSlots: null,
+      detail: "Dardo especial. Desventaja en todas las tiradas 1d6 turnos.",
       accessories: [],
       sai: [],
     }),
@@ -318,6 +481,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Dardo nanocontrolador",
       hasQuality: false,
       saiSlots: null,
+      detail: "Dardo especial. Nanobots controlan cyberware (y artefactos). Sin cromos: inmune.",
       accessories: [],
       sai: [],
     }),
@@ -326,6 +490,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Dardo veneno letal",
       hasQuality: false,
       saiSlots: null,
+      detail: "Dardo especial. Muerte en 6 turnos si un biohacker no lo trata. No afecta cyberware.",
       accessories: [],
       sai: [],
     }),
@@ -334,6 +499,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Dardo paralizante",
       hasQuality: false,
       saiSlots: null,
+      detail: "Dardo especial. Inmovilizado 1d6 turnos.",
       accessories: [],
       sai: [],
     }),
@@ -703,6 +869,7 @@ window.PBTA_CATALOGO = (() => {
   return {
     Q,
     Q_LABEL,
+    Q_SHORT,
     SAI_SLOTS,
     sections,
     byId,
