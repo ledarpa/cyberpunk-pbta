@@ -168,11 +168,35 @@ window.PBTA_INV = (() => {
     return n ? `${base} ${n}` : base;
   }
 
+  const GRENADE_CHARGES = 8;
+
+  function isGrenadeDef(def) {
+    return !!(def && /^granada-/.test(def.id || ""));
+  }
+
+  function isGrenadeItem(item) {
+    return isGrenadeDef(defOf(item));
+  }
+
+  function defaultCharges() {
+    return Array.from({ length: GRENADE_CHARGES }, () => true);
+  }
+
+  function ensureCharges(item) {
+    if (!isGrenadeItem(item)) return null;
+    if (!Array.isArray(item.charges) || item.charges.length !== GRENADE_CHARGES) {
+      item.charges = defaultCharges();
+    } else {
+      item.charges = item.charges.map((c) => !!c);
+    }
+    return item.charges;
+  }
+
   function createItem(catalogId, quality) {
     const def = CAT()?.get(catalogId);
     if (!def) return null;
     const q = def.lockedQuality || quality || (def.hasQuality === false ? null : "impro");
-    return {
+    const item = {
       id: uid(),
       catalogId,
       quality: q,
@@ -187,6 +211,8 @@ window.PBTA_INV = (() => {
       cromoFixed: false,
       arsenalChoice: false,
     };
+    if (isGrenadeDef(def)) item.charges = defaultCharges();
+    return item;
   }
 
   function neurochipSubtypeName(name) {
@@ -222,6 +248,10 @@ window.PBTA_INV = (() => {
       return `${label.slice(0, Math.max(1, lim - 1))}…`;
     }
 
+    if (item?.subKind === "charges") {
+      return "";
+    }
+
     if (item?.kind === "sub") {
       let label = String(item.label || "");
       if (label.length > lim) label = `${label.slice(0, lim - 1)}…`;
@@ -238,9 +268,6 @@ window.PBTA_INV = (() => {
 
     const decorate = (core) => {
       let s = core;
-      if (/^granada-/.test(def.id || "") || /^granada\b/i.test(def.name || "")) {
-        s = `% ${s}`;
-      }
       if (def.attachable && item.attached === false) s = `${s} ·OFF`;
       return s;
     };
@@ -272,7 +299,7 @@ window.PBTA_INV = (() => {
 
   /**
    * Prefijos de subítem — glifos seguros en VT323 (ASCII + Latin-1).
-   * ¤ SAI · + accesorio/módulo/subsistema · » balística · % granada
+   * ¤ SAI · + accesorio/módulo/neurodata · » balística
    */
   const SUB_MARK = {
     sai: "¤ ",
@@ -320,6 +347,15 @@ window.PBTA_INV = (() => {
         subKind: "ndata",
         subId: entry.id,
         label: `  ${mark}${neurodataDisplayName(o, entry.note)}`,
+      });
+    }
+    if (isGrenadeItem(item)) {
+      ensureCharges(item);
+      out.push({
+        kind: "sub",
+        parentId: item.id,
+        subKind: "charges",
+        label: "",
       });
     }
     return out;
@@ -441,23 +477,27 @@ window.PBTA_INV = (() => {
       const line = lines[i];
       if (!line) {
         input.value = "";
-        row.classList.remove("is-sub", "is-psique-load");
+        row.classList.remove("is-sub", "is-psique-load", "is-grenade", "is-charges");
         delete row.dataset.parentId;
         delete row.dataset.subKind;
       } else if (line.type === "parent") {
+        if (isGrenadeItem(line.item)) ensureCharges(line.item);
         input.value = serializeSlot(line.item);
-        row.classList.remove("is-sub", "is-psique-load");
+        row.classList.remove("is-sub", "is-psique-load", "is-charges");
+        row.classList.toggle("is-grenade", isGrenadeItem(line.item));
         delete row.dataset.parentId;
         delete row.dataset.subKind;
       } else if (line.type === "psique-load") {
         input.value = serializeSlot(line.item);
         row.classList.add("is-sub", "is-psique-load");
+        row.classList.remove("is-grenade", "is-charges");
         delete row.dataset.parentId;
         row.dataset.subKind = "psique";
       } else {
         input.value = serializeSlot(line.item);
         row.classList.add("is-sub");
-        row.classList.remove("is-psique-load");
+        row.classList.remove("is-psique-load", "is-grenade");
+        row.classList.toggle("is-charges", line.item.subKind === "charges");
         row.dataset.parentId = line.item.parentId || "";
         row.dataset.subKind = line.item.subKind || "";
       }
@@ -509,6 +549,58 @@ window.PBTA_INV = (() => {
 
   function wouldFitNewParent(form, ledger, maxRows) {
     return linesForLedger(form, ledger) + 1 <= maxRows;
+  }
+
+  function paintChargeButtons(row, item) {
+    if (!row) return;
+    const wrap = row.querySelector(".ficha-inv-wrap");
+    const trigger = row.querySelector(".ficha-inv-trigger");
+    if (!wrap || !trigger) return;
+    let host = wrap.querySelector(".ficha-inv-charges");
+    const show = !!(item && isGrenadeItem(item));
+    if (!show) {
+      if (host) host.hidden = true;
+      trigger.hidden = false;
+      trigger.removeAttribute("aria-hidden");
+      trigger.tabIndex = 0;
+      return;
+    }
+    ensureCharges(item);
+    if (!host) {
+      host = document.createElement("span");
+      host.className = "ficha-inv-charges";
+      wrap.appendChild(host);
+    }
+    const charges = item.charges || defaultCharges();
+    host.innerHTML = charges
+      .map(
+        (on, i) =>
+          `<button type="button" class="ficha-inv-charge${on ? " is-on" : ""}" data-charge-idx="${i}" ` +
+          `aria-pressed="${on}" aria-label="Carga ${i + 1}">[${on ? "×" : "\u00A0"}]</button>`
+      )
+      .join("");
+    host.hidden = false;
+    trigger.hidden = false;
+    trigger.removeAttribute("aria-hidden");
+    trigger.textContent = "\u00A0";
+    trigger.tabIndex = -1;
+    trigger.setAttribute("aria-hidden", "true");
+  }
+
+  function toggleGrenadeCharge(form, chargesRow, idx, maxRows, refreshInvRow) {
+    if (!chargesRow) return false;
+    const parentId = chargesRow.dataset.parentId;
+    const parentRow = findParentRow(form, chargesRow.dataset.ledger || "chaperia", parentId);
+    if (!parentRow) return false;
+    const input = parentRow.querySelector('input[data-inv="1"]');
+    const item = parseSlot(input?.value);
+    if (!item || !isGrenadeItem(item)) return false;
+    ensureCharges(item);
+    if (!Number.isInteger(idx) || idx < 0 || idx >= GRENADE_CHARGES) return false;
+    item.charges[idx] = !item.charges[idx];
+    input.value = serializeSlot(item);
+    packLedger(form, chargesRow.dataset.ledger || "chaperia", maxRows || 30, refreshInvRow);
+    return true;
   }
 
   function statsFor(item) {
@@ -760,7 +852,7 @@ window.PBTA_INV = (() => {
     if (item.cromoFixed) {
       html += tipLine("Neuroranura inicial", "Cyberware de creación · no suma @Psique");
     }
-    html += `<div class="ficha-inv-tip-foot">Solo lectura · clic para editar</div>`;
+    html += `<div class="ficha-inv-tip-foot">Clic para editar</div>`;
     return html;
   }
 
@@ -1255,6 +1347,19 @@ window.PBTA_INV = (() => {
       const t = ev.target;
       if (!(t instanceof Element)) return;
 
+      const chargeBtn = t.closest("[data-charge-idx]");
+      if (chargeBtn && form.contains(chargeBtn)) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const row = chargeBtn.closest(".ficha-inv-row");
+        const idx = Number(chargeBtn.dataset.chargeIdx);
+        if (row && Number.isInteger(idx)) {
+          toggleGrenadeCharge(form, row, idx, LEDGER_ROWS || 30, refreshInvRow);
+          saveSheet();
+        }
+        return;
+      }
+
       if (t.closest(".ficha-inv-menu")) {
         handleMenuClick(ev, { ...ctx, repack });
         return;
@@ -1262,7 +1367,7 @@ window.PBTA_INV = (() => {
 
       const trigger = t.closest(".ficha-inv-trigger");
       if (!trigger || !form.contains(trigger)) return;
-      if (trigger.disabled) return;
+      if (trigger.disabled || trigger.hidden) return;
       ev.preventDefault();
       ev.stopPropagation();
 
@@ -1288,8 +1393,9 @@ window.PBTA_INV = (() => {
         return;
       }
 
-      // Subítem → menú del padre
+      // Subítem → menú del padre (cargas: no abrir menú)
       if (row.classList.contains("is-sub") && !row.classList.contains("is-psique-load")) {
+        if (row.classList.contains("is-charges") || row.dataset.subKind === "charges") return;
         const sub = parseSlot(row.querySelector('input[data-inv="1"]')?.value);
         const parentRow = findParentRow(form, row.dataset.ledger, sub?.parentId || row.dataset.parentId);
         if (!parentRow) return;
@@ -1741,5 +1847,9 @@ window.PBTA_INV = (() => {
     packLedger,
     listItemSubs,
     buildLedgerLines,
+    paintChargeButtons,
+    findParentRow,
+    isGrenadeItem,
+    ensureCharges,
   };
 })();

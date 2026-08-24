@@ -16,6 +16,7 @@
   --yellow: #d8d448;
   --cyan: #48d4d4;
   --red: #d44848;
+  --magenta: #c878d8;
   --bright: #3ccc3c;
   --table-head: #2a942a;
   --hit: #000000;
@@ -1138,14 +1139,22 @@ body {
   color: var(--bright, var(--yellow));
 }
 
-/* + objetos (accesorio / módulo / subsistema) */
+/* + accesorios / módulos / neurodata / hardware */
 .ficha-inv-row.is-sub[data-sub-kind="acc"] .ficha-inv-trigger,
 .ficha-inv-row.is-sub[data-sub-kind="mod"] .ficha-inv-trigger,
+.ficha-inv-row.is-sub[data-sub-kind="ndata"] .ficha-inv-trigger,
 .ficha-inv-row.is-sub[data-sub-kind="sub"] .ficha-inv-trigger {
   color: var(--yellow);
 }
 
-/* ¤ SAI — sistemas tecnológicos */
+.ficha-inv-row.is-sub[data-sub-kind="acc"] .ficha-inv-trigger:focus-visible,
+.ficha-inv-row.is-sub[data-sub-kind="mod"] .ficha-inv-trigger:focus-visible,
+.ficha-inv-row.is-sub[data-sub-kind="ndata"] .ficha-inv-trigger:focus-visible,
+.ficha-inv-row.is-sub[data-sub-kind="sub"] .ficha-inv-trigger:focus-visible {
+  color: #e8e070;
+}
+
+/* ¤ SAI */
 .ficha-inv-row.is-sub[data-sub-kind="sai"] .ficha-inv-trigger {
   color: var(--green);
 }
@@ -1154,20 +1163,114 @@ body {
   color: var(--bright);
 }
 
-/* » balística — rojo DOS */
+/* » balística / munición — magenta (rojo = solo estados negativos) */
 .ficha-inv-row.is-sub[data-sub-kind="bal"] .ficha-inv-trigger {
-  color: var(--red);
+  color: var(--magenta);
 }
 
 .ficha-inv-row.is-sub[data-sub-kind="bal"] .ficha-inv-trigger:focus-visible {
-  color: #e07070;
+  color: #e0a0e8;
 }
 
-.ficha-inv-row.is-psique-load .ficha-inv-trigger {
+.ficha-inv-charges {
+  position: absolute;
+  right: 0;
+  left: auto;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0;
+  height: var(--ficha-row-h);
+  max-height: var(--ficha-row-h);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  white-space: pre;
+  line-height: var(--ficha-lh);
+  pointer-events: auto;
+}
+
+.ficha-inv-row.is-charges {
+  height: var(--ficha-row-h);
+  max-height: var(--ficha-row-h);
+  overflow: hidden;
+  vertical-align: top;
+  line-height: var(--ficha-lh);
+}
+
+.ficha-inv-row.is-charges .ficha-inv-wrap {
+  display: inline-block;
+  height: var(--ficha-row-h);
+  max-height: var(--ficha-row-h);
+  overflow: hidden;
+  line-height: var(--ficha-lh);
+  vertical-align: top;
+}
+
+/* Mantener strut de línea (mismo alto que el resto); el trigger no se ve ni captura clic */
+.ficha-inv-row.is-charges .ficha-inv-trigger {
+  visibility: hidden;
+  pointer-events: none;
+  color: transparent;
+}
+
+.ficha-inv-row.is-charges .ficha-ledger-ghost,
+.ficha-inv-row.is-charges .ficha-typed-cover {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.ficha-inv-charges[hidden] {
+  display: none !important;
+}
+
+.ficha-inv-charge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--ficha-row-h);
+  max-height: var(--ficha-row-h);
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--magenta);
+  font: inherit;
+  font-size: inherit;
+  line-height: var(--ficha-lh);
+  letter-spacing: inherit;
+  cursor: pointer;
+  white-space: pre;
+  box-sizing: border-box;
+  vertical-align: top;
+}
+
+.ficha-inv-charge.is-on {
+  color: var(--magenta);
+}
+
+.ficha-inv-charge:not(.is-on) {
+  color: var(--ficha-ghost, #3a703a);
+}
+
+.ficha-inv-charge:hover,
+.ficha-inv-charge:focus-visible {
+  outline: none;
+  color: #e0a0e8;
+}
+
+/* Degeneración neural / estados negativos */
+.ficha-inv-row.is-psique-load .ficha-inv-trigger,
+.ficha-inv-row.is-detached .ficha-inv-trigger {
   color: var(--red);
 }
 
-.ficha-inv-row.is-psique-load .ficha-inv-trigger:focus-visible {
+.ficha-inv-row.is-psique-load .ficha-inv-trigger:focus-visible,
+.ficha-inv-row.is-detached .ficha-inv-trigger:focus-visible {
   color: #e07070;
 }
 

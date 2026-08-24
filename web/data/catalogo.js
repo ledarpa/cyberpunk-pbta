@@ -328,6 +328,7 @@ window.PBTA_CATALOGO = (() => {
     arma({
       id: "granada-acida",
       name: "Granada ácida",
+      short: "Gr. ácida",
       hasQuality: false,
       saiSlots: null,
       detail: "Caja de 8. 1d6 corrosivo, radio 1 m. Si daño 5+: destruye un segundo cromo o chapería.",
@@ -337,6 +338,7 @@ window.PBTA_CATALOGO = (() => {
     arma({
       id: "granada-aturdidora",
       name: "Granada aturdidora",
+      short: "Gr. aturdidora",
       hasQuality: false,
       saiSlots: null,
       detail: "Caja de 8. Anula oído/radar ultrasónico 1d6 turnos, radio 10 m. Sin TM: pierde la acción al detonar.",
@@ -346,6 +348,7 @@ window.PBTA_CATALOGO = (() => {
     arma({
       id: "granada-criogenica",
       name: "Granada criogénica",
+      short: "Gr. criogénica",
       hasQuality: false,
       saiSlots: null,
       detail: "Caja de 8. 1d6 congelante, radio 3 m; 1d6 turnos a mitad de movimiento; afecta tejido y cromos.",
@@ -355,6 +358,7 @@ window.PBTA_CATALOGO = (() => {
     arma({
       id: "granada-fragmentacion",
       name: "Granada fragmentación",
+      short: "Gr. fragmentación",
       hasQuality: false,
       saiSlots: null,
       detail: "Caja de 8. 3d6 explosivo, radio 5 m.",
@@ -364,6 +368,7 @@ window.PBTA_CATALOGO = (() => {
     arma({
       id: "granada-gas",
       name: "Granada gas",
+      short: "Gr. gas",
       hasQuality: false,
       saiSlots: null,
       detail: "Caja de 8. Nube tóxica 5 m, 1d6 turnos; 1d6 daño/turno dentro del radio.",
@@ -373,6 +378,7 @@ window.PBTA_CATALOGO = (() => {
     arma({
       id: "granada-humo",
       name: "Granada humo y partículas",
+      short: "Gr. humo y partículas",
       hasQuality: false,
       saiSlots: null,
       detail: "Caja de 8. Anula visión orgánica, cyberóptica y radar EM 1d6 turnos, radio 5 m.",
@@ -382,6 +388,7 @@ window.PBTA_CATALOGO = (() => {
     arma({
       id: "granada-pem",
       name: "Granada PEM",
+      short: "Gr. PEM",
       hasQuality: false,
       saiSlots: null,
       detail: "Caja de 8. Anula cibernética y electrónica en 5 m durante 1d6 turnos.",

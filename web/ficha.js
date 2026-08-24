@@ -65,7 +65,7 @@
       `<span class="ficha-id-line">@Psique:\\><span class="${GHOST}">_______</span>${psiqueBoxes()}</span>`,
     ].join("");
     const headPad = Array.from({ length: 3 }, () => col1Row()).join("");
-    return `${headPad}${identity}${col1Row()}${portraitGridHtml()}${col1Row()}${atributoLines().join("")}${col1Row()}${saludLines().join("")}${col1Row()}${fillField("experiencia", "Experiencia:\\>")}${col1Row()}`;
+    return `${headPad}${identity}${col1Row()}${portraitGridHtml()}${col1Row()}${atributoLines().join("")}${col1Row()}${saludLines().join("")}${col1Row()}${fillField("experiencia", "Experiencia:\\>", "", { stars: true })}${col1Row()}`;
   }
 
   /** Marco foto: esquinas verdes + zona clic/drag para imagen (object-fit: cover). */
@@ -188,17 +188,43 @@
       .catch(() => paint(LOGO_FALLBACK));
   }
 
-  function fillField(name, label, lineClass = "") {
+  function fillField(name, label, lineClass = "", opts = {}) {
     const lineCls = lineClass ? `ficha-fill-line ${lineClass}` : "ficha-fill-line";
+    const starAttr = opts.stars ? ` data-exp-stars="1"` : "";
     return (
       `<span class="${lineCls}">` +
       `<span class="ficha-fill-label">${label}</span>` +
       `<span class="ficha-fill-track">` +
       `<span class="${GHOST} ficha-fill-ghost" aria-hidden="true">${"_".repeat(96)}</span>` +
       `<span class="ficha-typed-cover" aria-hidden="true"></span>` +
-      `<input class="ficha-inline ficha-fill-input" type="text" name="${name}" autocomplete="off" spellcheck="false">` +
+      `<input class="ficha-inline ficha-fill-input" type="text" name="${name}" autocomplete="off" spellcheck="false"${starAttr}>` +
       `</span></span>`
     );
+  }
+
+  function countExpStars(raw) {
+    return String(raw ?? "").replace(/\s/g, "").length;
+  }
+
+  function normalizeExpStars(raw) {
+    const n = countExpStars(raw);
+    if (n <= 0) return "";
+    const stars = "*".repeat(n);
+    const parts = [];
+    for (let i = 0; i < stars.length; i += 5) parts.push(stars.slice(i, i + 5));
+    return parts.join(" ");
+  }
+
+  function caretAfterExpStars(formatted, starCount) {
+    if (starCount <= 0) return 0;
+    let seen = 0;
+    for (let i = 0; i < formatted.length; i += 1) {
+      if (formatted[i] === "*") {
+        seen += 1;
+        if (seen === starCount) return i + 1;
+      }
+    }
+    return formatted.length;
   }
 
   function escHtml(s) {
@@ -1308,6 +1334,8 @@
       if (!el.name || el.classList.contains("ficha-box") || el.dataset.ledger) continue;
       if (data[el.name] != null) el.value = data[el.name];
     }
+    const expEl = form.querySelector('input[name="experiencia"][data-exp-stars="1"]');
+    if (expEl) expEl.value = normalizeExpStars(expEl.value);
     for (const col of ["cromos", "chaperia"]) {
       if (data[col] == null) continue;
       const lines = String(data[col]).split("\n");
@@ -1377,6 +1405,16 @@
       item?.kind === "sub" || item?.kind === "psique-load" || row.classList.contains("is-sub");
     row.classList.toggle("is-sub", !!isSub);
     row.classList.toggle("is-psique-load", item?.kind === "psique-load");
+    const isCharges = item?.subKind === "charges";
+    row.classList.toggle("is-charges", !!isCharges);
+    const isGrenade = !!(item && INV?.isGrenadeItem?.(item));
+    row.classList.toggle("is-grenade", isGrenade && !isSub);
+    const detached =
+      !isSub &&
+      item?.catalogId &&
+      INV?.defOf(item)?.attachable &&
+      item.attached === false;
+    row.classList.toggle("is-detached", !!detached);
     if (isSub) {
       if (item?.parentId) row.dataset.parentId = item.parentId;
       if (item?.subKind) row.dataset.subKind = item.subKind;
@@ -1386,7 +1424,6 @@
       delete row.dataset.subKind;
     }
 
-    // Subítems: label con espacios iniciales ("  + nombre"); white-space:pre en CSS
     const label =
       item &&
       (item.catalogId ||
@@ -1395,10 +1432,29 @@
         (item.label || "").trim())
         ? INV.formatItem(item, maxCh)
         : "";
+
+    if (isCharges) {
+      const parentRow = INV.findParentRow?.(form, row.dataset.ledger, item.parentId || row.dataset.parentId);
+      const parent = INV.parseSlot(parentRow?.querySelector('input[data-inv="1"]')?.value);
+      INV.paintChargeButtons?.(row, parent && INV.isGrenadeItem?.(parent) ? parent : null);
+      if (ghost) {
+        ghost.textContent = "";
+        ghost.style.marginLeft = "0";
+        ghost.style.maxWidth = "";
+      }
+      if (wrap) {
+        wrap.style.minWidth = `${maxCh}ch`;
+        setTypedCover(wrap, 0);
+      }
+      return;
+    }
+
+    INV.paintChargeButtons?.(row, null);
     if (trigger) {
+      trigger.hidden = false;
+      trigger.removeAttribute("aria-hidden");
       trigger.disabled = !!(item?.arsenalFixed);
       trigger.textContent = label;
-      // NBSP de respaldo si el motor colapsa espacios normales
       if (isSub && label.startsWith(" ")) {
         trigger.textContent = label.replace(/^ +/, (m) => "\u00A0".repeat(m.length));
       }
@@ -1407,6 +1463,7 @@
       ghost.dataset.fullLen = String(maxCh);
       ghost.textContent = "_".repeat(maxCh);
       ghost.style.marginLeft = "0";
+      ghost.style.maxWidth = "";
     }
     if (wrap) {
       wrap.style.minWidth = `${maxCh}ch`;
@@ -1519,7 +1576,21 @@
       applyInventoryStats();
     }
     form.addEventListener("input", (ev) => {
-      if (ev.target instanceof HTMLInputElement) syncTypedMask(ev.target);
+      const el = ev.target;
+      if (el instanceof HTMLInputElement) {
+        if (el.dataset.expStars === "1") {
+          const pos = el.selectionStart ?? el.value.length;
+          const starsBefore = countExpStars(el.value.slice(0, pos));
+          el.value = normalizeExpStars(el.value);
+          const next = caretAfterExpStars(el.value, starsBefore);
+          try {
+            el.setSelectionRange(next, next);
+          } catch {
+            /* ignore */
+          }
+        }
+        syncTypedMask(el);
+      }
       saveSheet();
     });
     form.addEventListener("change", saveSheet);
