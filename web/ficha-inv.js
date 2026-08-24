@@ -3,12 +3,7 @@ window.PBTA_INV = (() => {
   const CAT = () => window.PBTA_CATALOGO;
   const STATS = ["en", "mc", "rc", "tm"];
 
-  function esc(s) {
-    return String(s)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/"/g, "&quot;");
-  }
+  const esc = (s) => window.PBTA_LOGO.esc(s);
 
   function uid() {
     return `i${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
@@ -1834,7 +1829,6 @@ window.PBTA_INV = (() => {
     collectParents,
     collectPsiqueLoads,
     sumPsiqueLoadPenalties,
-    countsForPsique,
     formatItem,
     parseSlot,
     serializeSlot,
@@ -1842,14 +1836,10 @@ window.PBTA_INV = (() => {
     defOf,
     bindInventory,
     closeMenus,
-    qualityLabel,
     packLedgers,
-    packLedger,
     listItemSubs,
-    buildLedgerLines,
     paintChargeButtons,
     findParentRow,
     isGrenadeItem,
-    ensureCharges,
   };
 })();

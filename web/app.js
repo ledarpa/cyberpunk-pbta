@@ -253,7 +253,7 @@
       "wheel",
       (ev) => {
         const nested = ev.target.closest(
-          "textarea, .table-wrap, .ficha-inv-menu, .ficha-arsenal-menu, .ficha-stat-menu, .ficha-prof-menu"
+          "textarea, .table-wrap, .ficha-inv-menu, .ficha-stat-menu, .ficha-prof-menu"
         );
         if (nested instanceof HTMLElement && nested.scrollHeight > nested.clientHeight + 1) {
           const atTop = nested.scrollTop <= 0;

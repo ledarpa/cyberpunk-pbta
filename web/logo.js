@@ -2,11 +2,13 @@
 (() => {
   const PROMPT_RE = /^(.*?)(PbtA:\\>|pbta:\\>)(.*)$/i;
 
-  function escapeHtml(value) {
-    return String(value)
+  /** Escape HTML text/attrs — API compartida (logo, ficha, inventario). */
+  function esc(value) {
+    return String(value ?? "")
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
   }
 
   function normalize(text) {
@@ -25,10 +27,10 @@
       .split("\n")
       .map((line) => {
         const m = PROMPT_RE.exec(line);
-        if (!m) return escapeHtml(line);
-        const before = m[1] ? escapeHtml(m[1]) : "";
-        const prompt = escapeHtml(m[2]);
-        const after = m[3] ? escapeHtml(m[3]) : "";
+        if (!m) return esc(line);
+        const before = m[1] ? esc(m[1]) : "";
+        const prompt = esc(m[2]);
+        const after = m[3] ? esc(m[3]) : "";
         return (
           before +
           `<span class="pbta-logo-prompt-slot" data-prompt-len="${m[2].length}">` +
@@ -137,5 +139,5 @@
     fitPrompt(pre);
   }
 
-  window.PBTA_LOGO = { format, fitPrompt, fitToWidth, paint, normalize, escapeHtml };
+  window.PBTA_LOGO = { format, fitPrompt, fitToWidth, paint, normalize, esc };
 })();

@@ -985,109 +985,6 @@ body {
   color: var(--cyan);
 }
 
-.ficha-arsenal-row {
-  position: relative;
-  display: inline-block;
-  vertical-align: baseline;
-}
-
-.ficha-arsenal-text {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 2;
-  display: block;
-  width: 100%;
-  max-width: none;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  color: var(--cyan);
-  font: inherit;
-  line-height: inherit;
-  letter-spacing: inherit;
-  text-align: left;
-}
-
-.ficha-arsenal-fixed {
-  display: inline;
-  color: var(--cyan);
-  pointer-events: none;
-  user-select: none;
-}
-
-.ficha-arsenal-trigger {
-  position: static;
-  display: inline;
-  width: auto;
-  max-width: none;
-  min-width: 0;
-  height: auto;
-  margin: 0;
-  padding: 0;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  color: var(--cyan);
-  font: inherit;
-  line-height: inherit;
-  letter-spacing: inherit;
-  text-align: left;
-  cursor: pointer;
-  overflow: visible;
-  white-space: nowrap;
-  vertical-align: baseline;
-}
-
-.ficha-arsenal-trigger-solo {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-.ficha-arsenal-trigger:disabled {
-  cursor: default;
-  color: var(--cyan);
-}
-
-.ficha-arsenal-trigger:focus-visible:not(:disabled) {
-  outline: none;
-  color: var(--bright);
-}
-
-.ficha-arsenal-menu {
-  position: absolute;
-  left: 0;
-  top: calc(100% + 0.15em);
-  z-index: 40;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin: 0;
-  padding: 0.15em 0;
-  width: calc(var(--ch, 39) * 1ch);
-  max-width: calc(var(--ch, 39) * 1ch);
-  max-height: min(12em, 40vh);
-  overflow-x: hidden;
-  overflow-y: auto;
-  box-sizing: border-box;
-  background: var(--bg);
-  border: 1px solid var(--green);
-  box-shadow: 0 0 0 1px var(--bg);
-  white-space: normal;
-  font-family: "VT323", "Courier New", monospace;
-  font-size: 16px;
-  line-height: 1.25;
-  letter-spacing: 0;
-}
-
-.ficha-arsenal-menu[hidden] {
-  display: none !important;
-}
-
 /* Inventario Cromos / Chapería */
 .ficha-inv-row {
   position: relative;
@@ -1666,37 +1563,6 @@ body {
   cursor: default;
 }
 
-.ficha-arsenal-opt {
-  display: block;
-  width: 100%;
-  margin: 0;
-  padding: 0 0.6ch;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  font: inherit;
-  line-height: inherit;
-  letter-spacing: inherit;
-  text-align: left;
-  cursor: pointer;
-  color: var(--cyan);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.ficha-arsenal-opt:hover,
-.ficha-arsenal-opt:focus-visible {
-  outline: none;
-  background: var(--green);
-  color: var(--bg);
-}
-
-.ficha-arsenal-opt[aria-selected="true"] {
-  background: var(--line);
-  color: var(--cyan);
-}
-
 /* Una fila de hoja — misma altura en col 1 y ledgers 2/3 */
 .ficha-row {
   display: block;
@@ -1919,19 +1785,14 @@ body {
   vertical-align: baseline;
 }
 
-.ficha-box-static {
-  cursor: default;
-  pointer-events: none;
-}
-
-.ficha-box:hover:not(.ficha-box-static),
-.ficha-box:focus-visible:not(.ficha-box-static) {
+.ficha-box:hover,
+.ficha-box:focus-visible {
   color: var(--green);
   outline: none;
 }
 
-.ficha-box:hover:not(.ficha-box-static) .ficha-box-inner,
-.ficha-box:focus-visible:not(.ficha-box-static) .ficha-box-inner {
+.ficha-box:hover .ficha-box-inner,
+.ficha-box:focus-visible .ficha-box-inner {
   color: var(--cyan);
 }
 
@@ -1948,15 +1809,15 @@ body {
   color: var(--yellow);
 }
 
-.ficha-box[aria-pressed="true"]:hover:not(.ficha-box-static) .ficha-box-inner,
-.ficha-box[aria-pressed="true"]:focus-visible:not(.ficha-box-static) .ficha-box-inner {
+.ficha-box[aria-pressed="true"]:hover .ficha-box-inner,
+.ficha-box[aria-pressed="true"]:focus-visible .ficha-box-inner {
   color: #e07070;
 }
 
-.ficha-box[data-star="true"][aria-pressed="true"]:hover:not(.ficha-box-static) .ficha-box-inner,
-.ficha-box[data-star="true"][aria-pressed="true"]:focus-visible:not(.ficha-box-static) .ficha-box-inner,
-.ficha-box[data-star="true"]:hover:not(.ficha-box-static):not([aria-pressed="true"]) .ficha-box-inner,
-.ficha-box[data-star="true"]:focus-visible:not(.ficha-box-static):not([aria-pressed="true"]) .ficha-box-inner {
+.ficha-box[data-star="true"][aria-pressed="true"]:hover .ficha-box-inner,
+.ficha-box[data-star="true"][aria-pressed="true"]:focus-visible .ficha-box-inner,
+.ficha-box[data-star="true"]:hover:not([aria-pressed="true"]) .ficha-box-inner,
+.ficha-box[data-star="true"]:focus-visible:not([aria-pressed="true"]) .ficha-box-inner {
   color: var(--yellow);
 }
 

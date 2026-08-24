@@ -7,7 +7,7 @@ Dos salidas, una sola prosa:
 | **Fuente** | `docs/capitulos/` |
 | **Imprimir (Word)** | `cyberpunk-pbta.docx` (**golden visual**, incl. hoja de personaje) |
 | **Ficha (imprimir)** | `ficha.docx` (extraída del Word) |
-| **Web** | [cyberpunk-pbta.vercel.app](https://cyberpunk-pbta.vercel.app) · [Hoja de personaje](https://cyberpunk-pbta.vercel.app/#hoja-personaje) |
+| **Web** | [cyberpunk-pbta.vercel.app](https://cyberpunk-pbta.vercel.app) · [Hoja de personaje](https://cyberpunk-pbta.vercel.app/#hoja-personaje) · fuente en `web/` (`vercel.json`) |
 
 Capítulos: `00` Sistema → `01` Crear un Cyberpunk → `02` Cyberware → `04` Cromos → `05` Chapería → `06` Glosario.
 

@@ -910,9 +910,7 @@ window.PBTA_CATALOGO = (() => {
     Q_LABEL,
     Q_TAG,
     Q_SHORT,
-    SAI_SLOTS,
     sections,
-    byId,
     get(id) {
       return byId.get(id) || null;
     },

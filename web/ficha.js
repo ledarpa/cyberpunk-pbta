@@ -33,8 +33,6 @@
   const form = document.getElementById("ficha-form");
   if (!form) return;
 
-  // Init al final del IIFE (tras consts como WEAPON_LABELS) — ver bootSheet().
-
   function buildSheetHtml() {
     return `
       <div class="ficha-layout">
@@ -227,12 +225,7 @@
     return formatted.length;
   }
 
-  function escHtml(s) {
-    return String(s)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/"/g, "&quot;");
-  }
+  const esc = (s) => window.PBTA_LOGO.esc(s);
 
   /** Profesiones del manual: h3 bajo el primer «Profesiones» del TOC. */
   function listProfessionsFromManual() {
@@ -256,7 +249,7 @@
     const opts = professions
       .map(
         (p) =>
-          `<button type="button" class="ficha-prof-opt" role="option" data-value="${escHtml(p)}">${escHtml(p)}</button>`
+          `<button type="button" class="ficha-prof-opt" role="option" data-value="${esc(p)}">${esc(p)}</button>`
       )
       .join("");
     return (
@@ -728,8 +721,8 @@
         .map((it) => {
           const label = INV?.formatItem(it, 28) || INV?.defOf(it)?.name || "Cromo";
           return (
-            `<button type="button" class="ficha-salud-detach-opt" role="option" data-detach-id="${escHtml(it.id)}">` +
-            `${escHtml(label)}</button>`
+            `<button type="button" class="ficha-salud-detach-opt" role="option" data-detach-id="${esc(it.id)}">` +
+            `${esc(label)}</button>`
           );
         })
         .join("");
@@ -1111,8 +1104,6 @@
       });
     });
   }
-
-  window.PBTA_FICHA = { fit: requestFitSheet };
 
   function fitLogoPrompt() {
     const logoEl = document.getElementById("ficha-logo");
