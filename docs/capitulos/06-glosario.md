@@ -40,7 +40,7 @@
 
 - Neurodata — Experiencia vivida volcada a terminal y vendible. El Tasador la paga en Estrellas. También hay neurodata como chapería (contenido en neuroranura): ver catálogo de chapería.
 
-- Neuroranura — Cromo: ranuras para contenido digital. No suma para @Psique. Cantidad de ranuras según calidad (1 / 4 / 8 / 16).
+- Neuroranura — Cromo: ranuras para contenido digital. No suma para @Psique. Cantidad de ranuras según calidad (1 / 4 / 8 / 16). Parte del cyberware inicial (1 improvisada al crear el personaje).
 
 - Night City — Ciudad-escenario por defecto del tono cyberpunk de este manual.
 

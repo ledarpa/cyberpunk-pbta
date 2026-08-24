@@ -2,8 +2,6 @@
 (() => {
   const STORAGE_KEY = "pbta-ficha-v2";
   const LEDGER_ROWS = 31;
-  /** Cols 2/3: título + 2 blancos + filas. Cuerpo col 1 (sin logo Cyberpunk). */
-  const COL_LINES = LEDGER_ROWS + 3;
   const COL1_CH = 42; // ancho fijo columna identidad (ch) — mismo span que |…| Cromos (40+2)
   const PORTRAIT_W = 34; // ancho exterior (borde en col 34)
   const PORTRAIT_H = 13; // alto exterior (borde en fila 13)
@@ -18,7 +16,9 @@
     "PbtA:\\>/___/              /_/            ",
   ].join("\n");
 
-  const STAT_VALUES = ["+5", "+4", "+3", "+2", "+1", "0", "-1", "-2", "-3", "-4", "-5"];
+  const STAT_VALUES = ["+3", "+2", "+1", "0", "-1", "-2", "-3"];
+  const STAT_MIN = -3;
+  const STAT_MAX = 3;
   const STAT_NAMES = ["en", "mc", "rc", "tm"];
   const WEAPON_LABELS = {
     pistola: "Pistola",
@@ -48,9 +48,8 @@
   }
 
   /** Fila de col 1 con la misma altura que .ficha-inv-row (ledgers). */
-  function col1Row(html = "", portrait = false) {
-    const cls = portrait ? " ficha-row-portrait" : "";
-    return `<span class="ficha-row${cls}">${html}</span>`;
+  function col1Row(html = "") {
+    return `<span class="ficha-row">${html}</span>`;
   }
 
   /**
@@ -60,7 +59,7 @@
    */
   function colMainHtml() {
     const identity = [
-      fillField("nombre", "Nombre:\\>"),
+      fillField("nombre", "Nombre:\\>", "ficha-fill-nombre"),
       fillField("jugador", "Jugador:\\>"),
       professionField(),
       `<span class="ficha-id-line">@Psique:\\><span class="${GHOST}">_______</span>${psiqueBoxes()}</span>`,
@@ -69,39 +68,28 @@
     return `${headPad}${identity}${col1Row()}${portraitGridHtml()}${col1Row()}${atributoLines().join("")}${col1Row()}${saludLines().join("")}${col1Row()}${fillField("experiencia", "Experiencia:\\>")}${col1Row()}`;
   }
 
-  /** Marco foto 34×11 ch: solo esquinas; Img. centrado en el interior. */
-  function portraitLine(left, right) {
-    const innerW = " ".repeat(PORTRAIT_INNER_W);
-    return (
-      `<span class="ficha-boxdraw-line" aria-hidden="true">` +
-      `<span class="ficha-portrait-ch">${left}</span>` +
-      `<span class="ficha-portrait-mid">${innerW}</span>` +
-      `<span class="ficha-portrait-ch">${right}</span>` +
-      `</span>`
-    );
-  }
-
-  function portraitInnerLine(text = "") {
-    const padL = Math.floor((PORTRAIT_INNER_W - text.length) / 2);
-    const padR = PORTRAIT_INNER_W - text.length - padL;
-    const inner = `${" ".repeat(padL)}${text}${" ".repeat(padR)}`;
-    return (
-      `<span class="ficha-boxdraw-line">` +
-      `<span class="ficha-portrait-ch" aria-hidden="true"></span>` +
-      `<span class="ficha-portrait-mid ficha-portrait-label">${inner}</span>` +
-      `<span class="ficha-portrait-ch" aria-hidden="true"></span>` +
-      `</span>`
-    );
-  }
-
+  /** Marco foto: esquinas verdes + zona clic/drag para imagen (object-fit: cover). */
   function portraitGridHtml() {
-    const midIdx = Math.floor(PORTRAIT_INNER_H / 2);
-    const inners = Array.from({ length: PORTRAIT_INNER_H }, (_, i) =>
-      portraitInnerLine(i === midIdx ? "Img." : "")
+    return (
+      `<span class="ficha-row ficha-portrait-host">` +
+      `<span class="ficha-portrait" id="ficha-portrait" tabindex="0" aria-label="Foto del personaje">` +
+      `<input class="ficha-portrait-file" type="file" accept="image/*" hidden>` +
+      `<span class="ficha-portrait-media">` +
+      `<img class="ficha-portrait-img" alt="">` +
+      `<span class="ficha-portrait-placeholder" aria-hidden="true">Img.</span>` +
+      `<button type="button" class="ficha-portrait-remove" aria-label="Eliminar foto" title="Eliminar foto">` +
+      `<svg class="ficha-portrait-remove-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">` +
+      `<path d="M5.5 2h5l.5 1H14v1H2V3h2.5l.5-1zM3 6h10l-.9 8H3.9L3 6zm3 1v6h1V7H6zm3 0v6h1V7H9z"/>` +
+      `</svg></button>` +
+      `</span>` +
+      `<span class="ficha-portrait-corners" aria-hidden="true">` +
+      `<span class="ficha-portrait-corner ficha-portrait-corner-tl">┌</span>` +
+      `<span class="ficha-portrait-corner ficha-portrait-corner-tr">┐</span>` +
+      `<span class="ficha-portrait-corner ficha-portrait-corner-bl">└</span>` +
+      `<span class="ficha-portrait-corner ficha-portrait-corner-br">┘</span>` +
+      `</span>` +
+      `</span></span>`
     );
-    return [portraitLine("┌", "┐"), ...inners, portraitLine("└", "┘")]
-      .map((line) => col1Row(line, true))
-      .join("");
   }
 
   /**
@@ -172,9 +160,8 @@
   }
 
   function invRowHtml(ledger, idx, underscores) {
-    const arsenalAttr = ledger === "chaperia" && idx === 0 ? ' data-arsenal-slot="1"' : "";
     return (
-      `|<span class="ficha-inv-row" data-ledger="${ledger}" data-idx="${idx}"${arsenalAttr} style="--ch:${underscores}">` +
+      `|<span class="ficha-inv-row" data-ledger="${ledger}" data-idx="${idx}" style="--ch:${underscores}">` +
       `<span class="ficha-ledger-wrap ficha-inv-wrap" style="--ch:${underscores}">` +
       `<span class="${GHOST} ficha-ledger-ghost" aria-hidden="true">${"_".repeat(underscores)}</span>` +
       `<span class="ficha-typed-cover" aria-hidden="true"></span>` +
@@ -201,9 +188,10 @@
       .catch(() => paint(LOGO_FALLBACK));
   }
 
-  function fillField(name, label) {
+  function fillField(name, label, lineClass = "") {
+    const lineCls = lineClass ? `ficha-fill-line ${lineClass}` : "ficha-fill-line";
     return (
-      `<span class="ficha-fill-line">` +
+      `<span class="${lineCls}">` +
       `<span class="ficha-fill-label">${label}</span>` +
       `<span class="ficha-fill-track">` +
       `<span class="${GHOST} ficha-fill-ghost" aria-hidden="true">${"_".repeat(96)}</span>` +
@@ -384,21 +372,119 @@
     return map[key] || "";
   }
 
-  function arsenalSlotInput() {
-    return form.querySelector('.ficha-inv-row[data-arsenal-slot="1"] input[data-inv="1"]');
+  function isMercenario(professionName) {
+    return String(professionName || "").trim().toLowerCase() === "mercenario";
   }
 
-  function clearLegacyArsenalFixedRows() {
+  function markFixedLedgerRows() {
+    form.querySelectorAll('.ficha-inv-row[data-ledger="chaperia"]').forEach((row) => {
+      delete row.dataset.arsenalSlot;
+      delete row.dataset.arsenalFixedSlot;
+      const item = window.PBTA_INV?.parseSlot(row.querySelector('input[data-inv="1"]')?.value);
+      if (item?.arsenalFixed) row.dataset.arsenalFixedSlot = "1";
+      else if (item?.arsenalInitial) row.dataset.arsenalSlot = "1";
+    });
+    form.querySelectorAll('.ficha-inv-row[data-ledger="cromos"]').forEach((row) => {
+      delete row.dataset.cromoFixedSlot;
+      const item = window.PBTA_INV?.parseSlot(row.querySelector('input[data-inv="1"]')?.value);
+      if (item?.cromoFixed) row.dataset.cromoFixedSlot = "1";
+    });
+  }
+
+  function applyStarterNeuroranura() {
+    const INV = window.PBTA_INV;
+    const prof = normalizeProfession(form.querySelector('input[data-profesion="1"]')?.value || "");
+    if (!INV || !prof) return;
+    const all = INV.collectParents(form, "cromos");
+    const others = all.filter((p) => !p.cromoFixed);
+    const prev = all.find((p) => p.cromoFixed && p.catalogId === "neuroranura");
+    let fixed = prev ? { ...prev } : INV.createItem("neuroranura", "impro");
+    if (!fixed) return;
+    fixed.cromoFixed = true;
+    fixed.catalogId = "neuroranura";
+    if (!prev) fixed.quality = "impro";
+    fixed.attached = true;
+    writeLedgerParents("cromos", [fixed, ...others]);
+    applyInventoryStats();
+  }
+
+  function syncNeuroranuraField() {
+    const prof = normalizeProfession(form.querySelector('input[data-profesion="1"]')?.value || "");
+    if (!prof) return;
     const INV = window.PBTA_INV;
     if (!INV) return;
-    form.querySelectorAll('input[data-inv="1"][data-ledger="chaperia"]').forEach((el) => {
-      if (el.closest('[data-arsenal-slot="1"]')) return;
-      const item = INV.parseSlot(el.value);
-      if (item?.arsenalFixed) {
-        el.value = "";
-        refreshInvRow(el.closest(".ficha-inv-row"));
+    const has = INV.collectParents(form, "cromos").some(
+      (p) => p.cromoFixed && p.catalogId === "neuroranura"
+    );
+    if (!has) applyStarterNeuroranura();
+    else markFixedLedgerRows();
+  }
+
+  function writeLedgerParents(ledger, parents) {
+    const INV = window.PBTA_INV;
+    if (!INV) return;
+    const lines = [];
+    for (const p of parents) {
+      lines.push({ type: "parent", item: p });
+      for (const s of INV.listItemSubs(p)) lines.push({ type: "sub", item: s });
+    }
+    const rows = [...form.querySelectorAll(`.ficha-inv-row[data-ledger="${ledger}"]`)];
+    for (let i = 0; i < rows.length; i += 1) {
+      const input = rows[i].querySelector('input[data-inv="1"]');
+      if (!input) continue;
+      const line = lines[i];
+      if (!line) {
+        input.value = "";
+        continue;
       }
-    });
+      input.value = INV.serializeSlot(line.item);
+    }
+    INV.packLedgers(form, LEDGER_ROWS, refreshInvRow);
+    markFixedLedgerRows();
+  }
+
+  function applyProfessionArsenal(professionName) {
+    const INV = window.PBTA_INV;
+    if (!INV) return;
+    const all = INV.collectParents(form, "chaperia");
+    const others = all.filter((p) => !p.arsenalInitial && !p.arsenalFixed);
+    const prevArsenal = all.find((p) => p.arsenalInitial);
+    const arsenal = [];
+
+    if (isMercenario(professionName)) {
+      const fixed = INV.createItem("pistola-improvisada", "impro");
+      if (fixed) {
+        fixed.arsenalFixed = true;
+        arsenal.push(fixed);
+      }
+    }
+
+    const { choices } = arsenalSpecForProfession(professionName);
+    if (choices.length) {
+      let weapon = null;
+      if (prevArsenal?.catalogId) {
+        const def = window.PBTA_CATALOGO?.get(prevArsenal.catalogId);
+        const ok = def && choices.some((c) => c.toLowerCase() === def.name.toLowerCase());
+        if (ok) weapon = { ...prevArsenal };
+      }
+      if (!weapon) {
+        const pick = choices.find((w) => w.toLowerCase() === "pistola") || choices[0];
+        const catalogId = weaponNameToCatalogId(pick);
+        weapon = catalogId ? INV.createItem(catalogId, prevArsenal?.quality || "corr") : null;
+      }
+      if (weapon) {
+        weapon.arsenalInitial = true;
+        delete weapon.arsenalFixed;
+        arsenal.push(weapon);
+      }
+    }
+
+    writeLedgerParents("chaperia", [...arsenal, ...others]);
+    applyInventoryStats();
+  }
+
+  function arsenalSlotInput() {
+    return form.querySelector('.ficha-inv-row[data-arsenal-slot="1"] input[data-inv="1"]');
   }
 
   function writeArsenalInitialItem(choiceName) {
@@ -406,21 +492,16 @@
     if (!INV) return;
     const input = arsenalSlotInput();
     if (!input) return;
-    const { choices, fixed } = currentArsenalSpec();
+    const { choices } = currentArsenalSpec();
     const picked = normalizeArsenalChoice(choiceName, choices);
     const catalogId = weaponNameToCatalogId(picked);
-    if (!catalogId) {
-      input.value = "";
-      refreshInvRow(input.closest(".ficha-inv-row"));
-      return;
-    }
+    if (!catalogId) return;
     const prev = INV.parseSlot(input.value);
     const quality =
-      prev?.catalogId === catalogId && prev.quality ? prev.quality : "corr";
+      prev?.catalogId === catalogId && prev.quality ? prev.quality : prev?.quality || "corr";
     const item = INV.createItem(catalogId, quality);
     if (!item) return;
     item.arsenalInitial = true;
-    item.arsenalFixedLabels = fixed.slice();
     if (prev?.catalogId === catalogId) {
       item.accessories = [...(prev.accessories || [])];
       item.sai = [...(prev.sai || [])];
@@ -428,27 +509,22 @@
       item.ballistics = [...(prev.ballistics || [])];
     }
     input.value = INV.serializeSlot(item);
+    INV.packLedgers(form, LEDGER_ROWS, refreshInvRow);
+    markFixedLedgerRows();
     refreshInvRow(input.closest(".ficha-inv-row"));
-    INV.packLedgers?.(form, LEDGER_ROWS, refreshInvRow);
-  }
-
-  function applyProfessionArsenal(professionName) {
-    const { choices } = arsenalSpecForProfession(professionName);
-    clearLegacyArsenalFixedRows();
-    const pick = choices.find((w) => w.toLowerCase() === "pistola") || choices[0] || "";
-    writeArsenalInitialItem(pick);
   }
 
   function syncArsenalField() {
     const INV = window.PBTA_INV;
     const input = arsenalSlotInput();
     if (!input || !INV) return;
-    const { choices, fixed } = currentArsenalSpec();
+    const { choices } = currentArsenalSpec();
     if (!choices.length) {
       const cur = INV.parseSlot(input.value);
       if (cur?.arsenalInitial) {
         input.value = "";
         refreshInvRow(input.closest(".ficha-inv-row"));
+        markFixedLedgerRows();
       }
       return;
     }
@@ -458,13 +534,16 @@
       const name = def?.name || "";
       const ok = choices.some((c) => c.toLowerCase() === name.toLowerCase());
       if (ok) {
-        cur.arsenalFixedLabels = fixed.slice();
-        input.value = INV.serializeSlot(cur);
         refreshInvRow(input.closest(".ficha-inv-row"));
         return;
       }
     }
     writeArsenalInitialItem(choices.find((w) => w.toLowerCase() === "pistola") || choices[0]);
+  }
+
+  function applyProfessionGear(professionName) {
+    applyStarterNeuroranura();
+    applyProfessionArsenal(professionName);
   }
 
   function normalizeProfession(raw) {
@@ -507,7 +586,153 @@
       if (menu) menu.hidden = true;
       if (trigger) trigger.setAttribute("aria-expanded", "false");
     });
+    hideSaludDetachMenu();
     window.PBTA_INV?.closeMenus(form);
+  }
+
+  function listDetachableCromos() {
+    const INV = window.PBTA_INV;
+    if (!INV) return [];
+    return INV.collectParents(form, "cromos").filter((p) => {
+      const def = INV.defOf(p);
+      if (!def || def.column !== "cromos") return false;
+      if (def.attachable === false) return false;
+      return p.attached !== false;
+    });
+  }
+
+  function detachCromoById(itemId) {
+    const INV = window.PBTA_INV;
+    if (!INV || !itemId) return false;
+    for (const row of form.querySelectorAll('.ficha-inv-row[data-ledger="cromos"]')) {
+      if (row.classList.contains("is-sub") || row.classList.contains("is-psique-load")) continue;
+      const input = row.querySelector('input[data-inv="1"]');
+      const item = INV.parseSlot(input?.value);
+      if (!item || item.id !== itemId) continue;
+      item.attached = false;
+      input.value = INV.serializeSlot(item);
+      INV.packLedgers(form, LEDGER_ROWS, refreshInvRow);
+      applyInventoryStats();
+      saveSheet();
+      return true;
+    }
+    return false;
+  }
+
+  let saludDetachAnchor = null;
+  let saludDetachHideTimer = 0;
+
+  function ensureSaludDetachMenu() {
+    let menu = form.querySelector(".ficha-salud-detach-menu");
+    if (menu) return menu;
+    menu = document.createElement("span");
+    menu.className = "ficha-salud-detach-menu";
+    menu.setAttribute("role", "listbox");
+    menu.hidden = true;
+    form.appendChild(menu);
+    menu.addEventListener("pointerenter", () => {
+      clearTimeout(saludDetachHideTimer);
+    });
+    menu.addEventListener("pointerleave", () => {
+      scheduleHideSaludDetachMenu();
+    });
+    menu.addEventListener("click", (ev) => {
+      const btn = ev.target.closest("[data-detach-id]");
+      if (!btn || !menu.contains(btn)) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      const id = btn.dataset.detachId;
+      if (id) detachCromoById(id);
+      hideSaludDetachMenu();
+    });
+    return menu;
+  }
+
+  function hideSaludDetachMenu() {
+    clearTimeout(saludDetachHideTimer);
+    saludDetachAnchor = null;
+    const menu = form.querySelector(".ficha-salud-detach-menu");
+    if (menu) menu.hidden = true;
+  }
+
+  function scheduleHideSaludDetachMenu(ms = 180) {
+    clearTimeout(saludDetachHideTimer);
+    saludDetachHideTimer = setTimeout(() => {
+      hideSaludDetachMenu();
+    }, ms);
+  }
+
+  function placeSaludDetachMenu(menu, anchor) {
+    const rect = anchor.getBoundingClientRect();
+    const width = Math.min(260, window.innerWidth - 16);
+    let left = Math.round(rect.left);
+    if (left + width > window.innerWidth - 8) left = Math.max(8, window.innerWidth - width - 8);
+    const spaceBelow = window.innerHeight - rect.bottom - 8;
+    const openUp = spaceBelow < 120 && rect.top > spaceBelow;
+    menu.style.position = "fixed";
+    menu.style.left = `${left}px`;
+    menu.style.width = `${width}px`;
+    menu.style.zIndex = "130";
+    if (openUp) {
+      menu.style.top = "auto";
+      menu.style.bottom = `${Math.round(window.innerHeight - rect.top + 4)}px`;
+    } else {
+      menu.style.bottom = "auto";
+      menu.style.top = `${Math.round(rect.bottom + 4)}px`;
+    }
+  }
+
+  function showSaludDetachMenu(anchor) {
+    if (!(anchor instanceof Element)) return;
+    if (anchor.dataset.group !== "salud" || anchor.dataset.star !== "true") return;
+    if (anchor.getAttribute("aria-pressed") !== "true") return;
+
+    const INV = window.PBTA_INV;
+    const menu = ensureSaludDetachMenu();
+    clearTimeout(saludDetachHideTimer);
+    saludDetachAnchor = anchor;
+
+    const items = listDetachableCromos();
+    const head = `<div class="ficha-salud-detach-sec">Desacoplar cromo</div>`;
+    let body = "";
+    if (!items.length) {
+      body = `<div class="ficha-salud-detach-empty">No hay cromos acoplados</div>`;
+    } else {
+      body = items
+        .map((it) => {
+          const label = INV?.formatItem(it, 28) || INV?.defOf(it)?.name || "Cromo";
+          return (
+            `<button type="button" class="ficha-salud-detach-opt" role="option" data-detach-id="${escHtml(it.id)}">` +
+            `${escHtml(label)}</button>`
+          );
+        })
+        .join("");
+    }
+    menu.innerHTML = head + body;
+    placeSaludDetachMenu(menu, anchor);
+    menu.hidden = false;
+  }
+
+  function bindSaludDetachMenu() {
+    ensureSaludDetachMenu();
+    form.addEventListener("pointerover", (ev) => {
+      const t = ev.target;
+      if (!(t instanceof Element)) return;
+      const box = t.closest('.ficha-box[data-group="salud"][data-star="true"]');
+      if (!box || !form.contains(box)) return;
+      if (box.getAttribute("aria-pressed") !== "true") return;
+      showSaludDetachMenu(box);
+    });
+    form.addEventListener("pointerout", (ev) => {
+      const t = ev.target;
+      if (!(t instanceof Element)) return;
+      const box = t.closest('.ficha-box[data-group="salud"][data-star="true"]');
+      if (!box) return;
+      const to = ev.relatedTarget;
+      const menu = form.querySelector(".ficha-salud-detach-menu");
+      if (to instanceof Node && (box.contains(to) || menu?.contains(to))) return;
+      scheduleHideSaludDetachMenu();
+    });
   }
 
   function bindProfessionPicker() {
@@ -537,7 +762,7 @@
         input.value = opt.dataset.value || "";
         syncProfessionField();
         applyProfessionStats(input.value);
-        applyProfessionArsenal(input.value);
+        applyProfessionGear(input.value);
         closeAllFichaMenus();
         saveSheet();
       });
@@ -574,25 +799,14 @@
     if (input.type === "hidden" || input.dataset.arsenal || input.dataset.stat || input.dataset.profesion || input.dataset.inv) {
       return;
     }
-    if (
-      !input.classList.contains("ficha-fill-input") &&
-      !input.classList.contains("ficha-ledger-inline")
-    ) {
-      return;
-    }
-    const track = input.closest(".ficha-fill-track, .ficha-ledger-wrap");
+    if (!input.classList.contains("ficha-fill-input")) return;
+    const track = input.closest(".ficha-fill-track");
     if (!track) return;
     setTypedCover(track, [...input.value].length);
   }
 
   function syncAllTypedMasks() {
-    form
-      .querySelectorAll("input.ficha-fill-input, input.ficha-ledger-inline")
-      .forEach((el) => syncTypedMask(el));
-  }
-
-  function fieldInput(name, ch, extraClass = "") {
-    return `<input class="ficha-inline ${extraClass}" type="text" name="${name}" size="${ch}" style="--ch:${ch}" autocomplete="off" spellcheck="false">`;
+    form.querySelectorAll("input.ficha-fill-input").forEach((el) => syncTypedMask(el));
   }
 
   function statInput(name) {
@@ -615,8 +829,15 @@
     const s = String(raw ?? "").trim();
     if (STAT_VALUES.includes(s)) return s;
     const n = Number.parseInt(s.replace(/^\+/, ""), 10);
-    if (Number.isFinite(n) && n >= -5 && n <= 5) return n > 0 ? `+${n}` : String(n);
-    return "0";
+    if (!Number.isFinite(n)) return "0";
+    const clamped = Math.max(STAT_MIN, Math.min(STAT_MAX, n));
+    return clamped > 0 ? `+${clamped}` : String(clamped);
+  }
+
+  function clampStatN(n) {
+    const v = Number(n);
+    if (!Number.isFinite(v)) return 0;
+    return Math.max(STAT_MIN, Math.min(STAT_MAX, v));
   }
 
   function syncStatColor(el) {
@@ -669,8 +890,11 @@
           ev.stopPropagation();
           const picked = normalizeStat(opt.dataset.value || "0");
           const bonus = sumInventoryStats();
+          const INV = window.PBTA_INV;
+          const penalty = INV?.sumPsiqueLoadPenalties(form) || { en: 0, mc: 0, rc: 0, tm: 0 };
           const pickedN = Number.parseInt(picked.replace(/^\+/, ""), 10) || 0;
-          const baseN = Math.max(-5, Math.min(5, pickedN - (bonus[input.name] || 0)));
+          const cappedBonus = Math.min(Number(bonus[input.name] || 0), STAT_MAX);
+          const baseN = clampStatN(pickedN - cappedBonus - Number(penalty[input.name] || 0));
           statsBaseline[input.name] = normalizeStat(baseN);
           applyInventoryStats();
           closeAllFichaMenus();
@@ -685,7 +909,9 @@
         form.contains(ev.target) &&
         (ev.target.closest(".ficha-stat-wrap") ||
           ev.target.closest(".ficha-prof-line") ||
-          ev.target.closest(".ficha-inv-row"))
+          ev.target.closest(".ficha-inv-row") ||
+          ev.target.closest('.ficha-box[data-group="salud"]') ||
+          ev.target.closest(".ficha-salud-detach-menu"))
       ) {
         return;
       }
@@ -766,7 +992,6 @@
     form.style.lineHeight = "1.03125";
     form.style.setProperty("--ficha-lh", "1.03125");
     fitFichaLogo();
-    alignMainColumnBottom();
   }
 
   function fitSheet() {
@@ -832,8 +1057,7 @@
       size = next;
     }
 
-    // Segunda pasada: alinear de nuevo y encoger si el margen del logo empujó de más
-    alignMainColumnBottom();
+    // Encoger si sigue desbordando
     for (let i = 0; i < 16; i += 1) {
       if (!overflows()) break;
       size = Math.round((size - 0.5) * 2) / 2;
@@ -885,17 +1109,102 @@
     }
   }
 
-  /** Placeholder: el logo ya no participa del alineado del cuerpo. */
-  function alignMainColumnBottom() {}
+  function bindPortrait() {
+    const host = form.querySelector(".ficha-portrait");
+    const fileInput = form.querySelector(".ficha-portrait-file");
+    if (!host || !fileInput) return;
+
+    const applyFile = (file) => {
+      if (!file || !file.type.startsWith("image/")) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          setPortraitImage(reader.result);
+          saveSheet();
+        }
+      };
+      reader.readAsDataURL(file);
+    };
+
+    const removeBtn = form.querySelector(".ficha-portrait-remove");
+
+    host.addEventListener("click", (ev) => {
+      if (ev.target.closest(".ficha-portrait-remove")) return;
+      fileInput.click();
+    });
+    host.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter" || ev.key === " ") {
+        ev.preventDefault();
+        fileInput.click();
+      }
+    });
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files?.[0];
+      if (file) applyFile(file);
+      fileInput.value = "";
+    });
+
+    host.addEventListener("dragenter", (ev) => {
+      ev.preventDefault();
+      host.classList.add("ficha-portrait--dragover");
+    });
+    host.addEventListener("dragover", (ev) => {
+      ev.preventDefault();
+      host.classList.add("ficha-portrait--dragover");
+    });
+    host.addEventListener("dragleave", (ev) => {
+      ev.preventDefault();
+      if (!host.contains(ev.relatedTarget)) host.classList.remove("ficha-portrait--dragover");
+    });
+    host.addEventListener("drop", (ev) => {
+      ev.preventDefault();
+      host.classList.remove("ficha-portrait--dragover");
+      const file = ev.dataTransfer?.files?.[0];
+      if (file) applyFile(file);
+    });
+
+    removeBtn?.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      setPortraitImage("");
+      saveSheet();
+    });
+  }
+
+  function setPortraitImage(dataUrl) {
+    const host = form.querySelector(".ficha-portrait");
+    const img = form.querySelector(".ficha-portrait-img");
+    if (!host || !img) return;
+    if (dataUrl) {
+      img.src = dataUrl;
+      host.classList.add("ficha-portrait--has-image");
+    } else {
+      img.removeAttribute("src");
+      host.classList.remove("ficha-portrait--has-image");
+    }
+  }
 
   function bindSheet() {
     form.querySelectorAll(".ficha-box[data-group]").forEach((btn) => {
       btn.addEventListener("click", () => {
         const group = btn.dataset.group;
+        const wasOff = btn.getAttribute("aria-pressed") !== "true";
         if (group === "psique" || group === "salud") {
           toggleSequentialBox(group, btn);
+          if (group === "psique") ensurePsiqueMinimum(countPsiqueLoads());
         } else {
           paintBox(btn, btn.getAttribute("aria-pressed") !== "true");
+        }
+        // Al marcar una X amarilla de Salud → menú para desacoplar cromo
+        if (
+          group === "salud" &&
+          wasOff &&
+          btn.dataset.star === "true" &&
+          btn.getAttribute("aria-pressed") === "true"
+        ) {
+          showSaludDetachMenu(btn);
+        } else if (group === "salud" && btn.getAttribute("aria-pressed") !== "true") {
+          hideSaludDetachMenu();
         }
         saveSheet();
       });
@@ -915,9 +1224,12 @@
     const on = boxes.map((b) => b.getAttribute("aria-pressed") === "true");
     const filled = on.lastIndexOf(true);
     const next = filled + 1;
+    const psiqueMin = group === "psique" ? countPsiqueLoads() : 0;
 
     if (on[idx]) {
       if (idx !== filled) return;
+      // No se puede liberar una casilla exigida por sobrecarga activa
+      if (group === "psique" && filled + 1 <= psiqueMin) return;
       paintBox(btn, false);
       return;
     }
@@ -941,6 +1253,20 @@
     });
   }
 
+  /** Primeras N casillas @Psique marcadas sí o sí (N = sobrecargas activas). */
+  function ensurePsiqueMinimum(minCount) {
+    const boxes = [...form.querySelectorAll('.ficha-box[data-group="psique"]')];
+    const need = Math.max(0, Math.min(Number(minCount) || 0, boxes.length));
+    boxes.forEach((btn, i) => {
+      if (i < need) paintBox(btn, true);
+    });
+    normalizeSequential("psique");
+    // Tras normalizar, reasegurar el prefijo (por si había huecos previos)
+    boxes.forEach((btn, i) => {
+      if (i < need) paintBox(btn, true);
+    });
+  }
+
   function collect() {
     const data = {};
     for (const el of form.elements) {
@@ -957,6 +1283,8 @@
     data.salud = [...form.querySelectorAll('.ficha-box[data-group="salud"]')].map(
       (b) => b.getAttribute("aria-pressed") === "true"
     );
+    const portraitImg = form.querySelector(".ficha-portrait-img");
+    if (portraitImg?.getAttribute("src")) data.portrait = portraitImg.getAttribute("src");
     return data;
   }
 
@@ -991,6 +1319,7 @@
     applyBoxes("salud", data.salud);
     normalizeSequential("psique");
     normalizeSequential("salud");
+    if (data.portrait) setPortraitImage(data.portrait);
     if (data.statsBaseline && typeof data.statsBaseline === "object") {
       statsBaseline = {
         en: normalizeStat(data.statsBaseline.en),
@@ -1010,6 +1339,7 @@
     syncAllTypedMasks();
     syncProfessionField();
     syncArsenalField();
+    syncNeuroranuraField();
     refreshAllInvRows();
     applyInventoryStats();
     return true;
@@ -1043,8 +1373,10 @@
     const ghost = wrap?.querySelector(".ficha-ledger-ghost");
     const maxCh = Number.parseInt(String(input?.style.getPropertyValue("--ch") || "40"), 10) || 40;
     const item = INV?.parseSlot(input?.value);
-    const isSub = item?.kind === "sub" || row.classList.contains("is-sub");
+    const isSub =
+      item?.kind === "sub" || item?.kind === "psique-load" || row.classList.contains("is-sub");
     row.classList.toggle("is-sub", !!isSub);
+    row.classList.toggle("is-psique-load", item?.kind === "psique-load");
     if (isSub) {
       if (item?.parentId) row.dataset.parentId = item.parentId;
       if (item?.subKind) row.dataset.subKind = item.subKind;
@@ -1056,10 +1388,15 @@
 
     // Subítems: label con espacios iniciales ("  + nombre"); white-space:pre en CSS
     const label =
-      item && (item.catalogId || item.kind === "sub" || (item.label || "").trim())
+      item &&
+      (item.catalogId ||
+        item.kind === "sub" ||
+        item.kind === "psique-load" ||
+        (item.label || "").trim())
         ? INV.formatItem(item, maxCh)
         : "";
     if (trigger) {
+      trigger.disabled = !!(item?.arsenalFixed);
       trigger.textContent = label;
       // NBSP de respaldo si el motor colapsa espacios normales
       if (isSub && label.startsWith(" ")) {
@@ -1089,29 +1426,66 @@
     if (!INV) return sum;
     form.querySelectorAll('input[data-inv="1"]').forEach((el) => {
       const item = INV.parseSlot(el.value);
-      if (!item?.catalogId || item.kind === "sub") return;
+      if (!item?.catalogId || item.kind === "sub" || item.kind === "psique-load") return;
       const st = INV.statsFor(item);
       for (const k of STAT_NAMES) sum[k] += Number(st[k] || 0);
     });
     return sum;
   }
 
-  function applyInventoryStats() {
+  function countPsiqueLoads() {
+    const INV = window.PBTA_INV;
+    if (!INV) return 0;
+    return INV.collectPsiqueLoads(form).length;
+  }
+
+  function canAssignPsiqueStat(formRef, item, statKey) {
+    const INV = window.PBTA_INV;
+    if (!INV || !STAT_NAMES.includes(statKey)) return false;
+    const loads = INV.collectPsiqueLoads(formRef).filter((l) => l.loadIndex !== item.loadIndex);
+    const pen = { en: 0, mc: 0, rc: 0, tm: 0 };
+    for (const l of loads) {
+      if (STAT_NAMES.includes(l.stat)) pen[l.stat] -= 1;
+    }
+    pen[statKey] -= 1;
     const bonus = sumInventoryStats();
+    const base =
+      Number.parseInt(String(statsBaseline[statKey] || "0").replace(/^\+/, ""), 10) || 0;
+    const cappedBonus = Math.min(Number(bonus[statKey] || 0), STAT_MAX);
+    return base + cappedBonus + pen[statKey] >= STAT_MIN;
+  }
+
+  function applyInventoryStats() {
+    const INV = window.PBTA_INV;
+    const bonus = sumInventoryStats();
+    const penalty = INV?.sumPsiqueLoadPenalties(form) || { en: 0, mc: 0, rc: 0, tm: 0 };
+    ensurePsiqueMinimum(countPsiqueLoads());
+
     for (const name of STAT_NAMES) {
       const el = form.elements.namedItem(name);
       if (!(el instanceof HTMLInputElement)) continue;
       const base = Number.parseInt(String(statsBaseline[name] || "0").replace(/^\+/, ""), 10) || 0;
-      const total = Math.max(-5, Math.min(5, base + bonus[name]));
+      const cappedBonus = Math.min(Number(bonus[name] || 0), STAT_MAX);
+      const total = clampStatN(base + cappedBonus + Number(penalty[name] || 0));
       el.value = normalizeStat(total);
       syncStatColor(el);
     }
   }
 
+  function setPortraitMetrics() {
+    form.style.setProperty("--portrait-w", String(PORTRAIT_W));
+    form.style.setProperty("--portrait-h", String(PORTRAIT_H));
+    form.style.setProperty("--portrait-inner-w", String(PORTRAIT_INNER_W));
+    form.style.setProperty("--portrait-inner-h", String(PORTRAIT_INNER_H));
+  }
+
   function bootSheet() {
     form.innerHTML = buildSheetHtml();
+    setPortraitMetrics();
     loadLogo();
     bindSheet();
+    bindSaludDetachMenu();
+    bindPortrait();
     bindStatPickers();
     bindProfessionPicker();
     window.PBTA_INV?.bindInventory({
@@ -1130,13 +1504,16 @@
         window.confirm(
           `¿Eliminar «${label}»?\n\nAdvertencia: se quitarán bonos EN/MC/RC/TM y efectos de ficha ligados a este elemento.`
         ),
+      canAssignPsiqueStat,
     });
     const loaded = loadSheet();
     syncAllTypedMasks();
     syncAllStatColors();
     syncProfessionField();
     syncArsenalField();
+    syncNeuroranuraField();
     refreshAllInvRows();
+    markFixedLedgerRows();
     if (!loaded) {
       captureStatsBaseline();
       applyInventoryStats();

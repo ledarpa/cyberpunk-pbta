@@ -28,7 +28,7 @@ Elige el arquetipo que encaje con tu concepto.
 
 ## Equipamiento inicial
 
-Cyberware inicial: 2 cromos improvisados o 1 cromo corriente, más 2 piezas de chapería improvisada o 1 pieza de chapería corriente que no sea arma.
+Cyberware inicial: 1 Neuroranura improvisada, 2 cromos improvisados o 1 cromo corriente, más 2 piezas de chapería improvisada o 1 pieza de chapería corriente que no sea arma.
 
 Arsenal inicial: 1 arma corriente de las asociadas a tu profesión (lista bajo cada una).
 

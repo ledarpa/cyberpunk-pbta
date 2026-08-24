@@ -34,7 +34,7 @@ Catálogo detallado (cada cromo/arma): **referencia**; no resumir ni fusionar en
 |----|--------|
 | CRE-01 | Elegir **una profesión** (arquetipo). |
 | CRE-02 | **Rasgos iniciales**: aplicar los modificadores EN/MC/RC/TM indicados en la profesión (valores fijos por profesión, ver tabla CRE-T). |
-| CRE-03 | **Cyberware inicial**: elegir **2 cromos improvisados** **O** **1 cromo corriente**. |
+| CRE-03 | **Cyberware inicial**: **1 neuroranura improvisada** (no suma para @Psique), más **2 cromos improvisados** **O** **1 cromo corriente** adicional. |
 | CRE-04 | **Chapería inicial**: elegir **2 piezas improvisadas** **O** **1 pieza corriente** que **no** sea de categoría armas. |
 | CRE-05 | **Arsenal inicial**: **1 arma corriente** de las asociadas a la profesión (elección dentro de la lista de esa profesión). |
 | CRE-06 | **Recursos de creación**: **5 estrellas** para comprar accesorios, un nuevo cromo o mejorar un cromo ya adquirido (misma moneda que Estrellas de campaña; gasto según reglas ECO-*). |

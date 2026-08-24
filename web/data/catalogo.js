@@ -7,6 +7,13 @@ window.PBTA_CATALOGO = (() => {
     hitech: "Hi-Tech",
     mil: "Militar",
   };
+  /** Texto en corchetes del ledger (minúsculas). */
+  const Q_TAG = {
+    impro: "improvisada",
+    corr: "corriente",
+    hitech: "hi-tech",
+    mil: "militar",
+  };
   /** Solo cuando el texto completo no entra en la línea del ledger. */
   const Q_SHORT = { impro: "Imp", corr: "Corr", hitech: "Hi-T", mil: "Mil" };
   const SAI_SLOTS = { impro: 0, corr: 1, hitech: 2, mil: 3 };
@@ -164,8 +171,12 @@ window.PBTA_CATALOGO = (() => {
       sai: [],
       modules: [],
       moduleSlots: null,
+      neurodataOpts: [],
+      neurodataSlots: null,
       countsAsCromo: true,
       statsByQuality: null,
+      statPoolByQuality: null,
+      statPoolKeys: null,
       ...def,
     };
   }
@@ -230,7 +241,7 @@ window.PBTA_CATALOGO = (() => {
     }),
     arma({
       id: "pistola-improvisada",
-      name: "Pistola Improvisada",
+      name: "Pistola",
       lockedQuality: "impro",
       hasQuality: true,
       saiSlots: { impro: 0, corr: 0, hitech: 0, mil: 0 },
@@ -505,6 +516,27 @@ window.PBTA_CATALOGO = (() => {
     }),
   ];
 
+  const neurodatas = [
+    neurodata({
+      id: "base-datos",
+      name: "Base de datos",
+      ndataPrompt: "Descripción breve:",
+    }),
+    neurodata({
+      id: "memoria-blanco",
+      name: "Memoria en blanco",
+    }),
+    neurodata({
+      id: "neuroexperiencia",
+      name: "Neuroexperiencia",
+      ndataPrompt: "Descripción breve:",
+    }),
+    neurodata({
+      id: "protocolo-velo",
+      name: "Protocolo velo",
+    }),
+  ];
+
   const cromos = [
     cromo({
       id: "conexion-arma-inteligente",
@@ -533,7 +565,8 @@ window.PBTA_CATALOGO = (() => {
       id: "neurochip-asistente",
       name: "Neurochip — Asistente de procesos",
       short: "Nchip·Asist",
-      // puntos de mejora a repartir: se anotan; efecto base vacío hasta elegir
+      statPoolByQuality: { impro: 1, corr: 2, hitech: 3, mil: 4 },
+      statPoolKeys: ["en", "mc", "rc"],
     }),
     cromo({
       id: "neurochip-receptor",
@@ -550,6 +583,14 @@ window.PBTA_CATALOGO = (() => {
       name: "Neuroranura",
       short: "Ranura",
       countsAsCromo: false, // no suma @Psique
+      neurodataSlots: { impro: 1, corr: 4, hitech: 8, mil: 16 },
+      neurodataOpts: neurodatas.map((n) => ({
+        id: n.id,
+        name: n.name,
+        short: n.short,
+        detail: n.detail,
+        ndataPrompt: n.ndataPrompt,
+      })),
     }),
     cromo({
       id: "ojo-bionico",
@@ -754,13 +795,6 @@ window.PBTA_CATALOGO = (() => {
     herramienta({ id: "trauma-card", name: "Trauma card", hasQuality: false }),
   ];
 
-  const neurodatas = [
-    neurodata({ id: "base-datos", name: "Base de datos" }),
-    neurodata({ id: "memoria-blanco", name: "Memoria en blanco" }),
-    neurodata({ id: "neuroexperiencia", name: "Neuroexperiencia" }),
-    neurodata({ id: "protocolo-velo", name: "Protocolo velo" }),
-  ];
-
   const vestimentas = [
     vestimenta({
       id: "corposuit",
@@ -789,7 +823,6 @@ window.PBTA_CATALOGO = (() => {
     chaperia: [
       { id: "armas", title: "Armas", items: armas },
       { id: "herramientas", title: "Herramientas", items: herramientas },
-      { id: "neurodata", title: "Neurodata", items: neurodatas },
       { id: "vestimenta", title: "Vestimenta", items: vestimentas },
     ],
     cromos: [
@@ -797,17 +830,15 @@ window.PBTA_CATALOGO = (() => {
         id: "implantes-cerebrales",
         title: "Implantes cerebrales",
         items: cromos.filter((c) =>
-          [
-            "conexion-arma-inteligente",
-            "conexion-neuronal",
-            "neurochip-conocimiento",
-            "neurochip-anulador",
-            "neurochip-asistente",
-            "neurochip-receptor",
-            "neurochip-sensores",
-            "neuroranura",
-          ].includes(c.id)
+          ["conexion-arma-inteligente", "conexion-neuronal", "neuroranura"].includes(c.id)
         ),
+      },
+      {
+        id: "neurochip",
+        title: "Neurochip",
+        optClass: "is-neurochip",
+        stripNeurochipPrefix: true,
+        items: cromos.filter((c) => c.id.startsWith("neurochip-")),
       },
       {
         id: "cyberopticas",
@@ -865,10 +896,12 @@ window.PBTA_CATALOGO = (() => {
       for (const item of sec.items) byId.set(item.id, item);
     }
   }
+  for (const item of neurodatas) byId.set(item.id, item);
 
   return {
     Q,
     Q_LABEL,
+    Q_TAG,
     Q_SHORT,
     SAI_SLOTS,
     sections,

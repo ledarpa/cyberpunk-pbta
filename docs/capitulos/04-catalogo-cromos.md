@@ -118,7 +118,7 @@ Signos vitales y estado de cromos/chapería; transmisión local o inalámbrica p
 
 ### Neuroranura
 
-Ranuras para contenido digital. No suma para @Psique (ver neurodata en chapería).
+Ranuras para contenido digital. No suma para @Psique (ver neurodata en chapería). Incluida en el cyberware inicial de creación (*Crear un Cyberpunk → Equipamiento inicial*).
 
 | Calidad | Ranuras |
 | --- | --- |
