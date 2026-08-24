@@ -1625,17 +1625,6 @@ body {
   display: block;
 }
 
-.ficha-portrait--has-image .ficha-portrait-placeholder {
-  display: none;
-}
-
-.ficha-portrait-placeholder {
-  color: var(--muted);
-  font-weight: inherit;
-  pointer-events: none;
-  user-select: none;
-}
-
 .ficha-portrait-remove {
   position: absolute;
   top: 0;
@@ -1666,8 +1655,8 @@ body {
   fill: currentColor;
 }
 
-.ficha-portrait--has-image:hover .ficha-portrait-remove,
-.ficha-portrait-remove:focus-visible {
+.ficha-portrait--custom:hover .ficha-portrait-remove,
+.ficha-portrait--custom .ficha-portrait-remove:focus-visible {
   opacity: 1;
   pointer-events: auto;
 }

@@ -7,6 +7,19 @@
   const PORTRAIT_H = 13; // alto exterior (borde en fila 13)
   const PORTRAIT_INNER_W = 32;
   const PORTRAIT_INNER_H = PORTRAIT_H - 2; // interior 32×11
+  const PORTRAIT_MAX_BYTES = 100 * 1024;
+  const PROFESSION_PORTRAITS = {
+    arreglador: "assets/professions/arreglador.png",
+    artista: "assets/professions/artista.png",
+    biohacker: "assets/professions/biohacker.png",
+    comunicador: "assets/professions/comunicador.png",
+    corpo: "assets/professions/corpo.png",
+    espia: "assets/professions/espia.png",
+    forastero: "assets/professions/forastero.png",
+    mercenario: "assets/professions/mercenario.png",
+    netrunner: "assets/professions/netrunner.png",
+  };
+  let portraitCustom = false;
   const GHOST = "ficha-g";
   const LOGO_FALLBACK = [
     "  _____          __                  __  ",
@@ -74,7 +87,6 @@
       `<input class="ficha-portrait-file" type="file" accept="image/*" hidden>` +
       `<span class="ficha-portrait-media">` +
       `<img class="ficha-portrait-img" alt="">` +
-      `<span class="ficha-portrait-placeholder" aria-hidden="true">Img.</span>` +
       `<button type="button" class="ficha-portrait-remove" aria-label="Eliminar foto" title="Eliminar foto">` +
       `<svg class="ficha-portrait-remove-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">` +
       `<path d="M5.5 2h5l.5 1H14v1H2V3h2.5l.5-1zM3 6h10l-.9 8H3.9L3 6zm3 1v6h1V7H6zm3 0v6h1V7H9z"/>` +
@@ -590,6 +602,38 @@
       ghost.style.marginLeft = "0";
     }
     if (wrap) setTypedCover(wrap, [...v].length);
+    if (!portraitCustom) syncPortraitField();
+  }
+
+  function professionPortraitKey(professionName) {
+    return String(professionName || "")
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/\p{M}/gu, "");
+  }
+
+  function professionPortraitUrl(professionName) {
+    const key = professionPortraitKey(professionName);
+    return key && PROFESSION_PORTRAITS[key] ? PROFESSION_PORTRAITS[key] : "";
+  }
+
+  function syncPortraitField() {
+    const host = form.querySelector(".ficha-portrait");
+    const img = form.querySelector(".ficha-portrait-img");
+    if (!host || !img) return;
+    if (portraitCustom) return;
+
+    const prof = normalizeProfession(form.querySelector('input[data-profesion="1"]')?.value || "");
+    const url = professionPortraitUrl(prof);
+    if (url) {
+      img.src = url;
+      host.classList.add("ficha-portrait--has-image");
+    } else {
+      img.removeAttribute("src");
+      host.classList.remove("ficha-portrait--has-image");
+    }
+    host.classList.remove("ficha-portrait--custom");
   }
 
   function closeAllFichaMenus() {
@@ -782,6 +826,7 @@
         syncProfessionField();
         applyProfessionStats(input.value);
         applyProfessionGear(input.value);
+        if (!portraitCustom) syncPortraitField();
         closeAllFichaMenus();
         saveSheet();
       });
@@ -1131,16 +1176,15 @@
     const fileInput = form.querySelector(".ficha-portrait-file");
     if (!host || !fileInput) return;
 
-    const applyFile = (file) => {
+    const applyFile = async (file) => {
       if (!file || !file.type.startsWith("image/")) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (typeof reader.result === "string") {
-          setPortraitImage(reader.result);
-          saveSheet();
-        }
-      };
-      reader.readAsDataURL(file);
+      try {
+        const dataUrl = await compressPortraitFile(file);
+        setPortraitImage(dataUrl, { custom: true });
+        saveSheet();
+      } catch {
+        window.alert("No se pudo procesar la imagen.");
+      }
     };
 
     const removeBtn = form.querySelector(".ficha-portrait-remove");
@@ -1188,17 +1232,112 @@
     });
   }
 
-  function setPortraitImage(dataUrl) {
+  function setPortraitImage(dataUrl, { custom = false } = {}) {
     const host = form.querySelector(".ficha-portrait");
     const img = form.querySelector(".ficha-portrait-img");
     if (!host || !img) return;
     if (dataUrl) {
       img.src = dataUrl;
       host.classList.add("ficha-portrait--has-image");
+      portraitCustom = !!custom;
+      host.classList.toggle("ficha-portrait--custom", portraitCustom);
     } else {
-      img.removeAttribute("src");
-      host.classList.remove("ficha-portrait--has-image");
+      portraitCustom = false;
+      host.classList.remove("ficha-portrait--custom");
+      syncPortraitField();
     }
+  }
+
+  function portraitDataUrlBytes(dataUrl) {
+    const comma = String(dataUrl).indexOf(",");
+    if (comma < 0) return 0;
+    return Math.floor((dataUrl.length - comma - 1) * 0.75);
+  }
+
+  function loadPortraitImage(file) {
+    return new Promise((resolve, reject) => {
+      if (typeof createImageBitmap === "function") {
+        createImageBitmap(file).then(resolve, reject);
+        return;
+      }
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        resolve(img);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("decode"));
+      };
+      img.src = url;
+    });
+  }
+
+  function loadPortraitFromDataUrl(dataUrl) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error("decode"));
+      img.src = dataUrl;
+    });
+  }
+
+  function portraitFitSize(width, height, maxSide) {
+    const scale = Math.min(1, maxSide / width, maxSide / height);
+    return {
+      w: Math.max(1, Math.round(width * scale)),
+      h: Math.max(1, Math.round(height * scale)),
+    };
+  }
+
+  function releasePortraitSource(source) {
+    if (source && typeof source.close === "function") source.close();
+  }
+
+  async function compressPortraitSource(source) {
+    const srcW = source.width;
+    const srcH = source.height;
+    if (!srcW || !srcH) throw new Error("empty");
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("canvas");
+
+    let maxSide = Math.max(PORTRAIT_INNER_W * 20, 512);
+    let best = "";
+
+    try {
+      for (let pass = 0; pass < 10; pass += 1) {
+        const { w, h } = portraitFitSize(srcW, srcH, maxSide);
+        canvas.width = w;
+        canvas.height = h;
+        ctx.clearRect(0, 0, w, h);
+        ctx.drawImage(source, 0, 0, w, h);
+
+        for (let quality = 0.9; quality >= 0.35; quality -= 0.07) {
+          const dataUrl = canvas.toDataURL("image/jpeg", quality);
+          best = dataUrl;
+          if (portraitDataUrlBytes(dataUrl) <= PORTRAIT_MAX_BYTES) return dataUrl;
+        }
+        maxSide = Math.round(maxSide * 0.82);
+        if (maxSide < 96) break;
+      }
+      return best;
+    } finally {
+      releasePortraitSource(source);
+    }
+  }
+
+  function compressPortraitFile(file) {
+    return loadPortraitImage(file).then(compressPortraitSource);
+  }
+
+  function compressPortraitDataUrl(dataUrl) {
+    if (!dataUrl || portraitDataUrlBytes(dataUrl) <= PORTRAIT_MAX_BYTES) {
+      return Promise.resolve(dataUrl);
+    }
+    return loadPortraitFromDataUrl(dataUrl).then(compressPortraitSource);
   }
 
   function bindSheet() {
@@ -1301,7 +1440,8 @@
       (b) => b.getAttribute("aria-pressed") === "true"
     );
     const portraitImg = form.querySelector(".ficha-portrait-img");
-    if (portraitImg?.getAttribute("src")) data.portrait = portraitImg.getAttribute("src");
+    const portraitSrc = portraitImg?.getAttribute("src");
+    if (portraitCustom && portraitSrc?.startsWith("data:")) data.portrait = portraitSrc;
     return data;
   }
 
@@ -1338,7 +1478,22 @@
     applyBoxes("salud", data.salud);
     normalizeSequential("psique");
     normalizeSequential("salud");
-    if (data.portrait) setPortraitImage(data.portrait);
+    if (data.portrait && String(data.portrait).startsWith("data:")) {
+      portraitCustom = true;
+      setPortraitImage(data.portrait, { custom: true });
+      if (portraitDataUrlBytes(data.portrait) > PORTRAIT_MAX_BYTES) {
+        compressPortraitDataUrl(data.portrait)
+          .then((url) => {
+            if (url && url !== data.portrait) {
+              setPortraitImage(url, { custom: true });
+              saveSheet();
+            }
+          })
+          .catch(() => {});
+      }
+    } else {
+      portraitCustom = false;
+    }
     if (data.statsBaseline && typeof data.statsBaseline === "object") {
       statsBaseline = {
         en: normalizeStat(data.statsBaseline.en),
@@ -1357,6 +1512,7 @@
     if (prof) prof.value = normalizeProfession(prof.value);
     syncAllTypedMasks();
     syncProfessionField();
+    syncPortraitField();
     syncArsenalField();
     syncNeuroranuraField();
     refreshAllInvRows();
@@ -1558,6 +1714,7 @@
     syncAllTypedMasks();
     syncAllStatColors();
     syncProfessionField();
+    syncPortraitField();
     syncArsenalField();
     syncNeuroranuraField();
     refreshAllInvRows();
