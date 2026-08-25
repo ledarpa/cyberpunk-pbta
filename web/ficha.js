@@ -14,7 +14,7 @@
     biohacker: "assets/professions/biohacker.png",
     comunicador: "assets/professions/comunicador.png",
     corpo: "assets/professions/corpo.png",
-    espia: "assets/professions/espia.png",
+    espia: "assets/professions/espia.png?v=20260825a",
     forastero: "assets/professions/forastero.png",
     mercenario: "assets/professions/mercenario.png",
     netrunner: "assets/professions/netrunner.png",
@@ -29,9 +29,9 @@
     "PbtA:\\>/___/              /_/            ",
   ].join("\n");
 
-  const STAT_VALUES = ["+3", "+2", "+1", "0", "-1", "-2", "-3"];
-  const STAT_MIN = -3;
-  const STAT_MAX = 3;
+  const STAT_VALUES = ["+4", "+3", "+2", "+1", "0", "-1", "-2", "-3", "-4"];
+  const STAT_MIN = -4;
+  const STAT_MAX = 4;
   const STAT_NAMES = ["en", "mc", "rc", "tm"];
   const WEAPON_LABELS = {
     pistola: "Pistola",
@@ -1585,7 +1585,7 @@
       const parent = INV.parseSlot(parentRow?.querySelector('input[data-inv="1"]')?.value);
       INV.paintChargeButtons?.(row, parent && INV.isGrenadeItem?.(parent) ? parent : null);
       if (ghost) {
-        ghost.textContent = "";
+        ghost.textContent = "_".repeat(maxCh);
         ghost.style.marginLeft = "0";
         ghost.style.maxWidth = "";
       }

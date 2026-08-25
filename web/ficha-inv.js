@@ -13,16 +13,16 @@ window.PBTA_INV = (() => {
     return item?.catalogId ? CAT()?.get(item.catalogId) : null;
   }
 
-  function qualityLabel(q) {
-    return CAT()?.Q_LABEL?.[q] || q || "";
+  function qualityLabel(q, def) {
+    return def?.qualityLabels?.[q] || CAT()?.Q_LABEL?.[q] || q || "";
   }
 
-  function qualityShort(q) {
-    return CAT()?.Q_SHORT?.[q] || qualityLabel(q);
+  function qualityShort(q, def) {
+    return def?.qualityShort?.[q] || CAT()?.Q_SHORT?.[q] || qualityLabel(q, def);
   }
 
-  function qualityTag(q) {
-    return CAT()?.Q_TAG?.[q] || String(q || "").toLowerCase();
+  function qualityTag(q, def) {
+    return def?.qualityTags?.[q] || CAT()?.Q_TAG?.[q] || String(q || "").toLowerCase();
   }
 
   function saiCap(def, quality) {
@@ -52,6 +52,20 @@ window.PBTA_INV = (() => {
   function fixedStatsFor(item, def) {
     const q = item?.quality || "impro";
     return { ...(def?.statsByQuality?.[q] || {}) };
+  }
+
+  function moduleStatsFor(item, def) {
+    const out = {};
+    for (const id of item?.modules || []) {
+      const mod = (def?.modules || []).find((m) => m.id === id);
+      const st = mod?.stats;
+      if (!st || typeof st !== "object") continue;
+      for (const [k, v] of Object.entries(st)) {
+        const n = Number(v) || 0;
+        if (n) out[k] = (Number(out[k]) || 0) + n;
+      }
+    }
+    return out;
   }
 
   function ensureAppliedStats(item, def) {
@@ -105,17 +119,20 @@ window.PBTA_INV = (() => {
     if (!def || def.column !== "cromos") return "";
     const q = item.quality || "impro";
     const fixed = fixedStatsFor(item, def);
+    const modSt = moduleStatsFor(item, def);
     const poolCap = statPoolCap(def, q);
     const poolKeys = statPoolKeys(def);
 
-    const fixedHtml = STATS.filter((k) => Number(fixed[k]))
-      .map(
-        (k) =>
+    const fixedHtml = STATS.filter((k) => Number(fixed[k]) || Number(modSt[k]))
+      .map((k) => {
+        const n = (Number(fixed[k]) || 0) + (Number(modSt[k]) || 0);
+        return (
           `<div class="ficha-inv-stat-fixed">` +
           `<span class="ficha-inv-stat-tag">[${k.toUpperCase()}]</span>` +
-          `<span class="ficha-inv-stat-val">${esc(formatStatDelta(fixed[k]))}</span>` +
+          `<span class="ficha-inv-stat-val">${esc(formatStatDelta(n))}</span>` +
           `</div>`
-      )
+        );
+      })
       .join("");
 
     let poolHtml = "";
@@ -258,8 +275,8 @@ window.PBTA_INV = (() => {
 
     const coreNames = itemCoreNames(def);
     const hasQ = def.hasQuality !== false && item.quality;
-    const qTag = hasQ ? qualityTag(item.quality) : "";
-    const qAbr = hasQ ? qualityShort(item.quality) : "";
+    const qTag = hasQ ? qualityTag(item.quality, def) : "";
+    const qAbr = hasQ ? qualityShort(item.quality, def) : "";
 
     const decorate = (core) => {
       let s = core;
@@ -602,7 +619,10 @@ window.PBTA_INV = (() => {
     if (item?.kind === "sub") return {};
     const def = defOf(item);
     if (!def || !item?.attached) return {};
-    const out = fixedStatsFor(item, def);
+    const out = { ...fixedStatsFor(item, def) };
+    for (const [k, v] of Object.entries(moduleStatsFor(item, def))) {
+      out[k] = (Number(out[k]) || 0) + Number(v);
+    }
     if (def.statPoolByQuality) {
       const keys = statPoolKeys(def);
       const applied = item.appliedStats || {};
@@ -733,13 +753,27 @@ window.PBTA_INV = (() => {
   function tipBlock(title, body) {
     return (
       `<div class="ficha-inv-tip-sec">${esc(title)}</div>` +
-      (body ? `<div class="ficha-inv-tip-body">${esc(body)}</div>` : "")
+      (body ? `<div class="ficha-inv-tip-body">${tipRich(body)}</div>` : "")
     );
   }
 
   function tipLine(label, value) {
     if (!value) return "";
-    return `<div class="ficha-inv-tip-line"><span class="ficha-inv-tip-k">${esc(label)}</span> ${esc(value)}</div>`;
+    return `<div class="ficha-inv-tip-line"><span class="ficha-inv-tip-k">${esc(label)}</span> ${tipRich(value)}</div>`;
+  }
+
+  /** Resalta ventaja/desventaja (+ EN/MC/RC/TM) y bonos +N STAT en textos de tip. */
+  function tipRich(text) {
+    // Sin flag `i` en atributos: "en" (prep.) ≠ "EN" (stat).
+    let s = esc(text).replace(
+      /(Desventaja|desventaja|Ventaja|ventaja)((?:\s+en)?(?:\s+(?:EN|MC|RC|TM)(?:,\s*(?:EN|MC|RC|TM))*(?:\s+o\s+(?:EN|MC|RC|TM))?)?)/g,
+      (match, word, rest) => {
+        const cls = /^[Dd]es/.test(word) ? "ficha-inv-tip-dis" : "ficha-inv-tip-adv";
+        return `<span class="${cls}">${word}${rest || ""}</span>`;
+      }
+    );
+    s = s.replace(/(\+\d+\s*(?:EN|MC|RC|TM))/g, '<span class="ficha-inv-tip-adv">$1</span>');
+    return s;
   }
 
   function formatStatMap(st) {
@@ -750,38 +784,58 @@ window.PBTA_INV = (() => {
       .join(", ");
   }
 
-  function statsByQualityText(sq) {
-    if (!sq) return "";
-    const Q = CAT()?.Q || [];
-    return Q.map((q) => {
-      const line = formatStatMap(sq[q]);
-      return line ? `${qualityLabel(q)}: ${line}` : "";
-    })
-      .filter(Boolean)
-      .join("\n");
-  }
-
-  function buildDefTipHtml(def) {
-    if (!def) return tipBlock("—", "Sin datos en catálogo.");
-    const kind = KIND_LABEL[def.kind] || def.kind || "Ítem";
-    let html = tipBlock(def.name || "Ítem", kind);
-    if (def.detail) html += `<div class="ficha-inv-tip-body">${esc(def.detail)}</div>`;
-    const sq = statsByQualityText(def.statsByQuality);
-    if (sq) html += tipBlock("Bonos por calidad", sq);
-    if (def.moduleSlots) {
-      const slots = (CAT()?.Q || [])
-        .map((q) => `${qualityLabel(q)}:${def.moduleSlots[q] ?? 0}`)
-        .join(" · ");
-      html += tipLine("Módulos", slots);
-    }
-    if (def.attachable) html += tipLine("Acoplable", "Sí (cromo)");
-    if (def.countsAsCromo === false && def.kind === "cromo") {
-      html += tipLine("@Psique", "No cuenta como cromo");
+  function buildQualityTipSections(def, onlyQuality) {
+    const byQ = def?.detailByQuality;
+    if (!byQ || typeof byQ !== "object") return "";
+    const qualities = onlyQuality ? [onlyQuality] : CAT()?.Q || [];
+    let html = "";
+    for (const q of qualities) {
+      const text = byQ[q];
+      if (!text) continue;
+      html += tipLine(def.qualitySection ? `${def.qualitySection} actual` : "Calidad actual", qualityLabel(q, def));
+      html += `<div class="ficha-inv-tip-body">${tipRich(text)}</div>`;
     }
     return html;
   }
 
-  function buildOptionTipHtml(kind, opt) {
+  function buildDefTipHtml(def, opts = {}) {
+    if (!def) return tipBlock("—", "Sin datos en catálogo.");
+    const kind = KIND_LABEL[def.kind] || def.kind || "Ítem";
+    let html = tipBlock(def.name || "Ítem", kind);
+    if (def.detail) html += `<div class="ficha-inv-tip-body">${tipRich(def.detail)}</div>`;
+    if (def.detailByQuality && opts.quality) {
+      html += buildQualityTipSections(def, opts.quality);
+    }
+    if (def.moduleSlots && !def.saiSlots) {
+      if (opts.quality) {
+        html += tipLine("Cupo módulos", String(moduleCap(def, opts.quality)));
+      } else {
+        const slots = (CAT()?.Q || [])
+          .map((q) => `${qualityShort(q)}:${def.moduleSlots[q] ?? 0}`)
+          .join(" · ");
+        html += tipLine("Cupo módulos", slots);
+      }
+    }
+    // Bono de la calidad actual (o fijo si no hay calidades)
+    if (def.statsByQuality) {
+      if (def.hasQuality === false) {
+        const flat =
+          formatStatMap(def.statsByQuality.impro) ||
+          formatStatMap(Object.values(def.statsByQuality).find((v) => v && Object.keys(v).length));
+        if (flat) html += tipLine("Bono", flat);
+      } else if (opts.quality) {
+        const cur = formatStatMap(def.statsByQuality[opts.quality]);
+        if (cur) html += tipLine("Bono", cur);
+      }
+    }
+    if (def.attachable) html += tipLine("Acoplable", "Sí (cromo)");
+    if (def.countsAsCromo === false && def.kind === "cromo") {
+      html += tipLine("@Psique", "sin degeneración neural");
+    }
+    return html;
+  }
+
+  function buildOptionTipHtml(kind, opt, parentItem) {
     if (!opt) return tipBlock("—", "");
     const title =
       kind === "acc"
@@ -794,8 +848,30 @@ window.PBTA_INV = (() => {
               ? "Neurodata"
               : "Opción";
     let html = tipBlock(opt.name || "—", title);
-    if (opt.detail) html += `<div class="ficha-inv-tip-body">${esc(opt.detail)}</div>`;
-    else html += `<div class="ficha-inv-tip-body muted">Sin ficha ampliada.</div>`;
+    if (opt.detail) html += `<div class="ficha-inv-tip-body">${tipRich(opt.detail)}</div>`;
+    const parentQ = parentItem?.quality;
+    if (opt.detailByQuality && parentQ && opt.detailByQuality[parentQ]) {
+      const parentDef = defOf(parentItem);
+      html += tipLine(
+        parentDef?.qualitySection ? `${parentDef.qualitySection} actual` : "Calidad actual",
+        qualityLabel(parentQ, parentDef)
+      );
+      html += `<div class="ficha-inv-tip-body">${tipRich(opt.detailByQuality[parentQ])}</div>`;
+    } else if (opt.detailByQuality && !parentQ) {
+      // Sin calidad de padre aún: ficha completa compacta
+      const full = (CAT()?.Q || [])
+        .map((q) => {
+          const t = opt.detailByQuality[q];
+          return t ? `${qualityShort(q)}: ${t}` : "";
+        })
+        .filter(Boolean)
+        .join("\n");
+      if (full) html += `<div class="ficha-inv-tip-body">${tipRich(full)}</div>`;
+    } else if (!opt.detail && !opt.detailByQuality) {
+      html += `<div class="ficha-inv-tip-body muted">Sin ficha ampliada.</div>`;
+    }
+    const bonus = formatStatMap(opt.stats);
+    if (bonus) html += tipLine("Bono", bonus);
     return html;
   }
 
@@ -805,9 +881,12 @@ window.PBTA_INV = (() => {
       const label = String(item?.label || "").trim();
       return tipBlock(label || "Nota", "Texto libre en inventario.");
     }
-    let html = buildDefTipHtml(def);
-    if (def.hasQuality !== false && item.quality) {
-      html += tipLine("Calidad actual", qualityLabel(item.quality));
+    let html = buildDefTipHtml(def, { quality: item.quality });
+    if (def.hasQuality !== false && item.quality && !def.detailByQuality) {
+      html += tipLine("Calidad actual", qualityLabel(item.quality, def));
+    }
+    if (def.saiSlots && item.quality) {
+      html += tipLine("SAI", String(saiCap(def, item.quality)));
     }
     const st = statsFor({ ...item, attached: true });
     const stLine = formatStatMap(st);
@@ -843,9 +922,6 @@ window.PBTA_INV = (() => {
       html += tipLine("Arsenal fijo", "No se puede cambiar ni eliminar");
     } else if (item.arsenalInitial) {
       html += tipLine("Arsenal inicial", "Arma de profesión");
-    }
-    if (item.cromoFixed) {
-      html += tipLine("Neuroranura inicial", "Cyberware de creación · no suma @Psique");
     }
     html += `<div class="ficha-inv-tip-foot">Clic para editar</div>`;
     return html;
@@ -898,25 +974,33 @@ window.PBTA_INV = (() => {
     const def = defOf(item);
     if (btn.dataset.acc) {
       const opt = (def?.accessories || []).find((x) => x.id === btn.dataset.acc);
-      return buildOptionTipHtml("acc", opt || { name: btn.textContent.trim() });
+      return buildOptionTipHtml("acc", opt || { name: btn.textContent.trim() }, item);
     }
     if (btn.dataset.sai) {
       return "";
     }
     if (btn.dataset.bal) {
       const opt = (def?.ballistics || []).find((x) => x.id === btn.dataset.bal);
-      return buildOptionTipHtml("bal", opt || { name: btn.textContent.trim() });
+      return buildOptionTipHtml("bal", opt || { name: btn.textContent.trim() }, item);
     }
     if (btn.dataset.mod) {
       const opt = (def?.modules || []).find((x) => x.id === btn.dataset.mod);
-      return buildOptionTipHtml("mod", opt || { name: btn.textContent.trim() });
+      return buildOptionTipHtml("mod", opt || { name: btn.textContent.trim() }, item);
     }
     if (btn.dataset.ndata) {
       const opt = (def?.neurodataOpts || []).find((x) => x.id === btn.dataset.ndata);
-      return buildOptionTipHtml("ndata", opt || { name: btn.textContent.trim() });
+      return buildOptionTipHtml("ndata", opt || { name: btn.textContent.trim() }, item);
     }
     if (btn.dataset.quality) {
-      return tipBlock(`Calidad ${qualityLabel(btn.dataset.quality)}`, def?.detail || "");
+      const q = btn.dataset.quality;
+      let html = buildDefTipHtml(def, { quality: q });
+      if (!def?.detailByQuality) {
+        html += tipLine("Calidad actual", qualityLabel(q, def));
+      }
+      if (def?.saiSlots) {
+        html += tipLine("SAI", String(saiCap(def, q)));
+      }
+      return html;
     }
     return "";
   }
@@ -1000,7 +1084,7 @@ window.PBTA_INV = (() => {
         if (kind === "mod") opt = (def?.modules || []).find((x) => x.id === item.subId);
         if (kind === "ndata") opt = (def?.neurodataOpts || []).find((x) => x.id === item.subId);
         return (
-          buildOptionTipHtml(kind || "acc", opt || { name: item.label || "Subítem" }) +
+          buildOptionTipHtml(kind || "acc", opt || { name: item.label || "Subítem" }, parent) +
           tipLine("De", def?.name || "ítem padre") +
           `<div class="ficha-inv-tip-foot">Clic para editar el ítem padre</div>`
         );
@@ -1164,8 +1248,8 @@ window.PBTA_INV = (() => {
     const qRow =
       def.hasQuality === false
         ? ""
-        : `<div class="ficha-inv-sec">Calidad</div>` +
-          `<div class="ficha-inv-quality" role="group" aria-label="Calidad">` +
+        : `<div class="ficha-inv-sec">${esc(def.qualitySection || "Calidad")}</div>` +
+          `<div class="ficha-inv-quality" role="group" aria-label="${esc(def.qualitySection || "Calidad")}">` +
           (CAT()?.Q || [])
             .map((q) => {
               const on = item.quality === q;
@@ -1173,7 +1257,7 @@ window.PBTA_INV = (() => {
               return (
                 `<button type="button" class="ficha-inv-q${on ? " is-on" : ""}" data-quality="${q}"${dis} aria-pressed="${on}">` +
                 `<span class="ficha-inv-q-box">[${on ? "×" : " "}]</span>` +
-                `<span class="ficha-inv-q-lab">${qualityShort(q)}</span>` +
+                `<span class="ficha-inv-q-lab">${esc(qualityShort(q, def))}</span>` +
                 `</button>`
               );
             })
@@ -1532,7 +1616,7 @@ window.PBTA_INV = (() => {
       if (btn.dataset.psiqueStat) {
         const stat = btn.dataset.psiqueStat;
         if (typeof ctx.canAssignPsiqueStat === "function" && !ctx.canAssignPsiqueStat(form, item, stat)) {
-          window.alert("Esa característica no puede bajar de −3 por degeneración neural.");
+          window.alert("Esa característica no puede bajar de −4 por degeneración neural.");
           return;
         }
         item.stat = stat;

@@ -411,6 +411,7 @@ body {
   color: var(--yellow);
   margin: 0.9rem 0 0.35rem;
   break-after: avoid;
+  clear: both;
 }
 
 .book h3 {
@@ -418,6 +419,7 @@ body {
   color: var(--cyan);
   margin: 0.75rem 0 0.3rem;
   break-after: avoid;
+  clear: both;
 }
 
 .book h4 {
@@ -425,6 +427,7 @@ body {
   color: var(--bright);
   margin: 0.55rem 0 0.25rem;
   break-after: avoid;
+  clear: both;
 }
 
 .book p {
@@ -433,6 +436,7 @@ body {
 
 .book .mesa {
   color: var(--cyan);
+  clear: both;
 }
 
 .book ul,
@@ -454,6 +458,132 @@ body {
   border: 0;
   margin: 0.7rem 0;
   height: auto;
+  clear: both;
+}
+
+/* Retrato de profesión: float sin marco */
+.book-prof-portrait {
+  float: right;
+  width: min(26rem, 100%);
+  margin: 0.15rem 0 0.7rem 1rem;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.book-prof-portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 720px) {
+  .book-prof-portrait {
+    float: none;
+    display: block;
+    width: min(26rem, 100%);
+    margin: 0.35rem auto 0.75rem;
+  }
+}
+
+/* Arte de catálogo: float derecha; texto a la izquierda. Tablas/hr con clear. */
+.book-item-art {
+  float: right;
+  width: min(14rem, 44%);
+  max-width: 100%;
+  margin: 0.1rem 0 0.75rem 1rem;
+  padding: 0;
+  box-sizing: border-box;
+  clear: right;
+}
+
+.book-item-art img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 22rem;
+  object-fit: contain;
+  object-position: right top;
+  background: transparent;
+}
+
+.book-item-art-row {
+  float: right;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 0.45rem;
+  width: min(28rem, 62%);
+  max-width: 100%;
+  margin: 0.1rem 0 0.75rem 1rem;
+  clear: right;
+}
+
+/* Cyberpiernas (3 dibujos): ~3/4 del ancho de columna */
+.book-item-art-row:has(> .book-item-art:nth-child(3)) {
+  width: min(48rem, 75%);
+  gap: 0.5rem;
+}
+
+.book-item-art-row:has(> .book-item-art:nth-child(3)) .book-item-art img {
+  max-height: 18rem;
+}
+
+.book-item-art-row .book-item-art {
+  float: none;
+  clear: none;
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
+  margin: 0;
+}
+
+.book-item-art-row .book-item-art img {
+  max-height: 16rem;
+}
+
+/* El prosa/listas fluyen al lado; tablas y títulos no se estrechan */
+.book p,
+.book ul,
+.book ol {
+  max-width: 100%;
+}
+
+@media (max-width: 720px) {
+  .book-item-art,
+  .book-item-art-row {
+    float: none;
+    display: block;
+    width: min(16rem, 78%);
+    margin: 0.35rem auto 0.75rem;
+  }
+
+  .book-item-art-row {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    width: min(28rem, 96%);
+  }
+
+  .book-item-art-row:has(> .book-item-art:nth-child(3)) {
+    width: min(48rem, 96%);
+  }
+
+  .book-item-art-row .book-item-art {
+    width: auto;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .book-item-art + p + .table-wrap,
+  .book-item-art-row + p + .table-wrap,
+  .table-wrap--rail {
+    clear: both;
+    max-width: none;
+  }
 }
 
 .book hr::before {
@@ -486,6 +616,19 @@ body {
   overflow-x: auto;
   margin: 0.45rem 0 0.7rem;
   break-inside: avoid;
+  clear: both;
+}
+
+/* Tablas compactas Calidad/* al lado del dibujo (no Tipo/Efecto, Stat, etc.) */
+.table-wrap--rail {
+  clear: none;
+  width: auto;
+  max-width: calc(100% - 15rem);
+  margin-top: 0.2rem;
+}
+
+.book-item-art-row + p + .table-wrap--rail {
+  max-width: calc(100% - 29rem);
 }
 
 .book table {
@@ -1087,6 +1230,7 @@ body {
   white-space: pre;
   line-height: var(--ficha-lh);
   pointer-events: auto;
+  background: var(--bg);
 }
 
 .ficha-inv-row.is-charges {
@@ -1113,7 +1257,11 @@ body {
   color: transparent;
 }
 
-.ficha-inv-row.is-charges .ficha-ledger-ghost,
+.ficha-inv-row.is-charges .ficha-ledger-ghost {
+  visibility: visible;
+  pointer-events: none;
+}
+
 .ficha-inv-row.is-charges .ficha-typed-cover {
   visibility: hidden;
   pointer-events: none;
@@ -1485,6 +1633,16 @@ body {
   margin: 0.15em 0 0.25em;
   color: var(--cyan);
   white-space: pre-wrap;
+}
+
+.ficha-inv-tip-adv {
+  color: var(--yellow);
+  font-weight: inherit;
+}
+
+.ficha-inv-tip-dis {
+  color: var(--red);
+  font-weight: inherit;
 }
 
 .ficha-inv-tip-body.muted {

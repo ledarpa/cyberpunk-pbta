@@ -136,9 +136,7 @@ Ranuras para contenido digital. No suma para @Psique (ver neurodata en chapería
 Glóbulo + músculos + chip de asistencia. Con el ojo apagado pero funcional, enciende pasivo el colorimétrico convencional.
 
 - Cada ojo = un cromo (puede haber más de dos, en cualquier parte del cuerpo).
-
 - Módulos del mismo ojo funcionan juntos; módulos de otros ojos son independientes.
-
 - Implante modular.
 
 | Calidad | Módulos disponibles |

@@ -43,7 +43,7 @@ Muchos cromos suben una o más características (EN, MC, RC, TM). Los puntos de 
 | +5 | 16 |
 | +6 | 32 |
 
-Tope: la suma de bonos de cromos no puede dejar ninguna característica por encima de +3.
+Tope: la suma de bonos de cromos no puede dejar ninguna característica por encima de +4.
 
 Un mismo cromo puede repartir varios puntos de mejora entre distintas características. Cada implante cuenta como un solo cromo instalado, aunque dé varios beneficios.
 
@@ -53,7 +53,7 @@ Un mismo cromo puede repartir varios puntos de mejora entre distintas caracterí
 
 Más implantes = más desgaste mental.
 
-- Por cada 3 cromos instalados, el personaje baja 1 punto en una característica a su elección (mínimo −3).
+- Por cada 3 cromos instalados, el personaje baja 1 punto en una característica a su elección (mínimo −4).
 
 - Cada vez que aplica esa penalización, marca 1 casilla de @Psique en la ficha.
 

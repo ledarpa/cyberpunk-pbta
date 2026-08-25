@@ -63,8 +63,8 @@ Catálogo detallado (cada cromo/arma): **referencia**; no resumir ni fusionar en
 |----|--------|
 | CRO-01 | **Cromo** = implante que reemplaza o mejora el cuerpo; cada implante cuenta como **un** cromo instalado (aunque dé varios bonos). |
 | CRO-02 | Escala de **puntos de mejora** a características: +1→1 pt, +2→2 pt, +3→4 pt, +4→8 pt, +5→16 pt, +6→32 pt. |
-| CRO-03 | Suma de bonos de cromos por característica: **tope +3** (ninguna característica por encima de +3 por cromos). |
-| CRO-04 | **Degeneración neural**: por cada **3 cromos** instalados → reducir **1 punto** en una característica a elección (mínimo **−3**). |
+| CRO-03 | Suma de bonos de cromos por característica: **tope +4** (ninguna característica por encima de +4 por cromos). |
+| CRO-04 | **Degeneración neural**: por cada **3 cromos** instalados → reducir **1 punto** en una característica a elección (mínimo **−4**). |
 | CRO-05 | Cada penalización por degeneración → marcar **1 casilla @Psique**. |
 | CRO-06 | **Pifia** usando característica **mejorada por cromos** → episodio cyberpsicosis **1 turno** + **1 casilla @Psique**. |
 | CRO-07 | @Psique **1–3** casillas: episodios breves. **4–5**: cyberpsicosis mayor toda la escena. **>5**: cyberpsicópata permanente, control del Director. |

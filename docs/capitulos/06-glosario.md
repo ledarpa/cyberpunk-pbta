@@ -18,7 +18,7 @@
 
 - Cyberpsicosis — Episodio (o estado) de pérdida de control ligado a cromos y @Psique. Ver *Cyberware*.
 
-- Degeneración neural — Por cada 3 cromos instalados: −1 a una característica a elección (mín. −3) y 1 casilla @Psique. Ver *Cyberware*.
+- Degeneración neural — Por cada 3 cromos instalados: −1 a una característica a elección (mín. −4) y 1 casilla @Psique. Ver *Cyberware*.
 
 - Director — Quien conduce la mesa: presenta amenazas y aplica consecuencias (sobre todo en 7–9 y 6−). No compite contra los jugadores.
 
@@ -60,7 +60,7 @@
 
 - TM (Tejido Muscular) — Atributo: fuerza, aguante, daño físico, esfuerzo extremo.
 
-- Tope de mejora (+3) — La suma de bonos de cromos no puede dejar ninguna característica por encima de +3.
+- Tope de mejora (+4) — La suma de bonos de cromos no puede dejar ninguna característica por encima de +4.
 
 ---
 

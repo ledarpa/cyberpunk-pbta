@@ -24,12 +24,23 @@ window.PBTA_CATALOGO = (() => {
     short: shortName || name,
     detail: detail || "",
   });
-  const acc = (id, name, shortName, detail) => ({
-    id,
-    name,
-    short: shortName || name,
-    detail: detail || "",
-  });
+  const acc = (id, name, shortName, detailOrOpts) => {
+    if (detailOrOpts && typeof detailOrOpts === "object") {
+      return {
+        id,
+        name,
+        short: shortName || name,
+        detail: "",
+        ...detailOrOpts,
+      };
+    }
+    return {
+      id,
+      name,
+      short: shortName || name,
+      detail: detailOrOpts || "",
+    };
+  };
   const bal = (id, name, shortName, detail) => ({
     id,
     name,
@@ -231,7 +242,7 @@ window.PBTA_CATALOGO = (() => {
       id: "pistola",
       name: "Pistola",
       detail:
-        "Cargas 15 · Alcance 60 m · Manual 1d6 · Semi ráfaga 3 (ventaja RC) 1d6. Hasta 1 por brazo. SAI: Imp 0 / Corr 1 / Hi-T 2 / Mil 3.",
+        "Cargas 15 · Alcance 60 m · Manual 1d6 · Semi ráfaga 3 (ventaja RC) 1d6. Hasta 1 por brazo.",
       accessories: [
         acc("cargador-amp", "Cargador ampliado", "Carg+", "21 cargas."),
         acc("silenciador", "Silenciador", "Sil", "Disparos sin sonido."),
@@ -254,7 +265,7 @@ window.PBTA_CATALOGO = (() => {
       id: "escopeta",
       name: "Escopeta",
       detail:
-        "Cargas 6 · Alcance 10 m · Cono 45° 1d6/enemigo · Quemarropa ≤3 m: 3d6 a un objetivo. 2 manos (salvo estabilizador). SAI: 0/1/2/3.",
+        "Cargas 6 · Alcance 10 m · Cono 45° 1d6/enemigo · Quemarropa ≤3 m: 3d6 a un objetivo. 2 manos (salvo estabilizador).",
       accessories: [
         acc("canon-largo", "Cañón largo", "CañónL", "Dispersión 23° (mitad); alcance ×2."),
         acc("canon-doble", "Cañón doble", "Cañón2", "2 proyectiles a la vez → daño ×2."),
@@ -299,7 +310,7 @@ window.PBTA_CATALOGO = (() => {
       id: "lanzadardos",
       name: "Lanzadardos",
       detail:
-        "Cargas 1 · Alcance 15 m · Daño 1 pt con 10+ (7–9 sin daño) · Silenciosa · Turno disparo + turno recarga. SAI: 0/1/2/3.",
+        "Cargas 1 · Alcance 15 m · Daño 1 pt con 10+ (7–9 sin daño) · Silenciosa · Turno disparo + turno recarga.",
       accessories: [],
       sai: [
         sai("acelerador", "Acelerador iónico", "Acel", "Alcance ×2, +1 daño."),
@@ -312,7 +323,7 @@ window.PBTA_CATALOGO = (() => {
       id: "lanzamisiles",
       name: "Lanzamisiles",
       detail:
-        "Cargas 1 · Alcance 150 m · Daño 4d6 · Disparo cada 2 turnos. 2 manos salvo Minimal. SAI: 0/1/2/3.",
+        "Cargas 1 · Alcance 150 m · Daño 4d6 · Disparo cada 2 turnos. 2 manos salvo Minimal.",
       accessories: [
         acc("minimal", "Minimal", "Min", "Versión reducida: 2d6, 50 m, una mano o una cyberextremidad."),
         acc("lanzagranadas", "Lanzagranadas", "LG", "Lanza granadas en lugar de misiles, +1d6 daño; con Minimal, sin esa bonificación."),
@@ -395,132 +406,6 @@ window.PBTA_CATALOGO = (() => {
       accessories: [],
       sai: [],
     }),
-    arma({
-      id: "balas-carbono",
-      name: "Balas de carbono",
-      hasQuality: false,
-      saiSlots: null,
-      detail: "Munición especial. Pistola y fusil +1 daño; escopeta y rifle +3. 4 cargadores = 1 Estrella.",
-      accessories: [],
-      sai: [],
-    }),
-    arma({
-      id: "celdas-cuantico",
-      name: "Celdas entrelazado cuántico",
-      hasQuality: false,
-      saiSlots: null,
-      detail: "Munición especial. Disparos atraviesan al primer objetivo (rifle: hasta 3). 4 cargadores = 1 Estrella.",
-      accessories: [],
-      sai: [],
-    }),
-    arma({
-      id: "celdas-sobrecarga",
-      name: "Celdas sobrecargadas",
-      hasQuality: false,
-      saiSlots: null,
-      detail: "Munición especial. 2 disparos al mismo objetivo (2.º con RC −1). 4 cargadores = 1 Estrella.",
-      accessories: [],
-      sai: [],
-    }),
-    arma({
-      id: "proyectiles-goma",
-      name: "Proyectiles de goma y descarga",
-      hasQuality: false,
-      saiSlots: null,
-      detail: "Munición especial. Daño no letal a tejido biológico y cibernética. 4 cargadores = 1 Estrella.",
-      accessories: [],
-      sai: [],
-    }),
-    arma({
-      id: "rastreador",
-      name: "Rastreador",
-      hasQuality: false,
-      saiSlots: null,
-      detail: "Munición especial. Sin daño; 1 proyectil/cargador (resto transmisor/receptor). 4 cargadores = 1 Estrella.",
-      accessories: [],
-      sai: [],
-    }),
-    arma({
-      id: "misil-explosivo",
-      name: "Misil explosivo",
-      hasQuality: false,
-      saiSlots: null,
-      detail: "Misil especial. +1d6 daño, radio 3 m.",
-      accessories: [],
-      sai: [],
-    }),
-    arma({
-      id: "misil-criogenico",
-      name: "Misil criogénico",
-      hasQuality: false,
-      saiSlots: null,
-      detail: "Misil especial. Congela supervivientes 1d6/2 turnos, radio 3 m; mitad de acciones.",
-      accessories: [],
-      sai: [],
-    }),
-    arma({
-      id: "misil-pem",
-      name: "Misil PEM",
-      hasQuality: false,
-      saiSlots: null,
-      detail: "Misil especial. Anula cibernética/electrónica en 15 m durante 2d6 turnos.",
-      accessories: [],
-      sai: [],
-    }),
-    arma({
-      id: "misil-teletaladro",
-      name: "Misil teletaladro",
-      hasQuality: false,
-      saiSlots: null,
-      detail: "Misil especial. Tras impacto, taladro + corrosión; en 1d6+1 turnos, agujero para una persona.",
-      accessories: [],
-      sai: [],
-    }),
-    arma({
-      id: "dardo-psico",
-      name: "Dardo @Psico",
-      hasQuality: false,
-      saiSlots: null,
-      detail: "Dardo especial. Cyberpsicosis 1d6 turnos si el blanco tiene cromo. Sin cromos: inmune.",
-      accessories: [],
-      sai: [],
-    }),
-    arma({
-      id: "dardo-alucinogeno",
-      name: "Dardo alucinógeno",
-      hasQuality: false,
-      saiSlots: null,
-      detail: "Dardo especial. Desventaja en todas las tiradas 1d6 turnos.",
-      accessories: [],
-      sai: [],
-    }),
-    arma({
-      id: "dardo-nanocontrol",
-      name: "Dardo nanocontrolador",
-      hasQuality: false,
-      saiSlots: null,
-      detail: "Dardo especial. Nanobots controlan cyberware (y artefactos). Sin cromos: inmune.",
-      accessories: [],
-      sai: [],
-    }),
-    arma({
-      id: "dardo-veneno",
-      name: "Dardo veneno letal",
-      hasQuality: false,
-      saiSlots: null,
-      detail: "Dardo especial. Muerte en 6 turnos si un biohacker no lo trata. No afecta cyberware.",
-      accessories: [],
-      sai: [],
-    }),
-    arma({
-      id: "dardo-paralizante",
-      name: "Dardo paralizante",
-      hasQuality: false,
-      saiSlots: null,
-      detail: "Dardo especial. Inmovilizado 1d6 turnos.",
-      accessories: [],
-      sai: [],
-    }),
   ];
 
   const neurodatas = [
@@ -528,19 +413,26 @@ window.PBTA_CATALOGO = (() => {
       id: "base-datos",
       name: "Base de datos",
       ndataPrompt: "Descripción breve:",
+      detail:
+        "Contenido variable: código, redes, técnicas de combate para asistir cyberware, VIP, audio, etc. Ventaja en EN, MC, RC o TM cuando la tarea use esos datos (hackeo, emular voz/rostro, discurso, aguantar respiración, etc.).",
     }),
     neurodata({
       id: "memoria-blanco",
       name: "Memoria en blanco",
+      detail: "Espacio para guardar datos que descargues en juego.",
     }),
     neurodata({
       id: "neuroexperiencia",
       name: "Neuroexperiencia",
       ndataPrompt: "Descripción breve:",
+      detail:
+        "Grabación tasada de una vivencia; moneda de intercambio (las propias valen más). Uso de aprendizaje o recreación.",
     }),
     neurodata({
       id: "protocolo-velo",
       name: "Protocolo velo",
+      detail:
+        "Anula la desventaja al entrar en la antigua red y enlaces remotos.\nImplementarlo es muy difícil incluso para netrunners veteranos.\nSi fallas al implementarlo, sigues expuesto a las IA de la red antigua.\nDoble 1: el protocolo se desactiva; IA pueden minar/invasar el procesador cerebral → consecuencias catastróficas (Director).",
     }),
   ];
 
@@ -549,47 +441,92 @@ window.PBTA_CATALOGO = (() => {
       id: "conexion-arma-inteligente",
       name: "Conexión de arma inteligente",
       short: "SAI-link",
+      detail: "Terminales nerviosas artificiales entre cerebro y palma. Permite usar cualquier tecnología de arma inteligente.",
       statsByQuality: { impro: {}, corr: { rc: 1 }, hitech: { rc: 2 }, mil: { rc: 3 } },
+      detailByQuality: {
+        impro: "Sin mejoras a características.",
+        corr: "Enlace SAI operativo.",
+        hitech: "Enlace SAI operativo.",
+        mil: "Enlace SAI operativo.",
+      },
     }),
     cromo({
       id: "conexion-neuronal",
       name: "Conexión neuronal",
       short: "Conex.neur",
+      detail: "Enlace del cerebro con redes y sistemas. Cableada + inalámbrica a la vez = un solo cromo.",
       statsByQuality: { impro: {}, corr: { en: 1 }, hitech: { en: 2 }, mil: { en: 3 } },
+      detailByQuality: {
+        impro: "Cableada: acceso a la red. Inalámbrica: control remoto a 10 m.",
+        corr: "Cableada: combina con otros cromos. Inalámbrica: combina con cromos; 25 m.",
+        hitech: "Cableada: combina con chapería. Inalámbrica: combina con chapería; 50 m.",
+        mil: "Cableada e inalámbrica: desconexión segura y anti-saturación; alcance inalámbrico 100 m.",
+      },
     }),
     cromo({
       id: "neurochip-conocimiento",
       name: "Neurochip — Adquisición de conocimiento",
       short: "Nchip·Know",
+      detail: "Librerías y bases de datos sobre un tema.",
+      detailByQuality: {
+        impro: "Conocimiento general, por encima de la media.",
+        corr: "Conocimiento específico y técnico.",
+        hitech: "Alto desarrollo / técnico doctoral.",
+        mil: "Conocimiento secreto del área.",
+      },
     }),
     cromo({
       id: "neurochip-anulador",
       name: "Neurochip — Anulador de sistemas biológicos",
       short: "Nchip·Anul",
       hasQuality: false,
+      detail:
+        "Activa o desactiva a voluntad: dolor, frío, sed, hambre, etc. Solo anula la sensación, no la causa. Elimina el penalizador por daño.",
     }),
     cromo({
       id: "neurochip-asistente",
       name: "Neurochip — Asistente de procesos",
       short: "Nchip·Asist",
+      detail: "Procesos en segundo plano que anticipan y reaccionan; bonifica EN, MC o RC (repartibles).",
       statPoolByQuality: { impro: 1, corr: 2, hitech: 3, mil: 4 },
       statPoolKeys: ["en", "mc", "rc"],
+      detailByQuality: {
+        impro: "1 punto de mejora repartible.",
+        corr: "2 puntos de mejora repartibles.",
+        hitech: "3 puntos de mejora repartibles.",
+        mil: "4 puntos de mejora repartibles.",
+      },
     }),
     cromo({
       id: "neurochip-receptor",
       name: "Neurochip — Receptor de data",
       short: "Nchip·Rx",
+      detail: "Una recepción configurada vía protocolo de velo (bolsa en tiempo real, sensores del refugio, etc.).",
+      detailByQuality: {
+        impro: "Texto plano, información acotada.",
+        corr: "Varios datos a la vez.",
+        hitech: "Mejoras gráficas y sonoras.",
+        mil: "Además: una señal de salida por el mismo canal (alarma, detonación, etc.).",
+      },
     }),
     cromo({
       id: "neurochip-sensores",
       name: "Neurochip — Sensores de estado",
       short: "Nchip·Sens",
+      detail: "Signos vitales y estado de cromos/chapería; transmisión local o inalámbrica para monitoreo remoto.",
+      detailByQuality: {
+        impro: "Constantes vitales.",
+        corr: "Estado de cromos.",
+        hitech: "Estado de chapería portada.",
+        mil: "Protocolo de velo integrado; transmisión por la vieja red.",
+      },
     }),
     cromo({
       id: "neuroranura",
       name: "Neuroranura",
       short: "Ranura",
-      countsAsCromo: false, // no suma @Psique
+      countsAsCromo: false,
+      detail: "Ranuras para contenido digital (neurodata). No suma para @Psique. Incluida en el cyberware inicial (1 improvisada).",
       neurodataSlots: { impro: 1, corr: 4, hitech: 8, mil: 16 },
       neurodataOpts: neurodatas.map((n) => ({
         id: n.id,
@@ -598,110 +535,249 @@ window.PBTA_CATALOGO = (() => {
         detail: n.detail,
         ndataPrompt: n.ndataPrompt,
       })),
+      detailByQuality: {
+        impro: "1 ranura.",
+        corr: "4 ranuras.",
+        hitech: "8 ranuras.",
+        mil: "16 ranuras.",
+      },
     }),
     cromo({
       id: "ojo-bionico",
       name: "Ojo biónico",
       short: "Ojo",
+      detail:
+        "Glóbulo + músculos + chip de asistencia. Con el ojo apagado pero funcional, enciende pasivo el colorimétrico convencional. Cada ojo = un cromo. Módulos del mismo ojo funcionan juntos.",
       moduleSlots: SAI_SLOTS,
       modules: [
-        acc("colorimetria", "Colorimetría de banda ancha", "Color+MC"),
-        acc("fotosensor", "Fotosensor", "Foto+RC"),
-        acc("filmadora", "Filmadora", "Film"),
-        acc("inalambrico", "Inalámbrico", "WiFi"),
-        acc("pelicula", "Película protectora", "Film+TM"),
-        acc("reconocimiento", "Reconocimiento facial", "Face+MC"),
-        acc("captura3d", "Captura 3D", "3D+EN"),
-        acc("vision-ir", "Visión IR/térmica/EM/UV/X", "Visión"),
-        acc("microexp", "Seguimiento de microexpresiones", "Micro+MC"),
-        acc("zoom", "Zoom óptico", "Zoom"),
+        acc("colorimetria", "Colorimetría de banda ancha", "Color+MC", {
+          detail: "Más colores; detecta láseres de seguridad.",
+          stats: { mc: 1 },
+        }),
+        acc("fotosensor", "Fotosensor", "Foto+RC", {
+          detail: "Evita ceguera por luz extrema; adaptación rápida a penumbra.",
+          stats: { rc: 1 },
+        }),
+        acc("filmadora", "Filmadora", "Film", {
+          detail: "Vídeo en la cyberóptica.",
+        }),
+        acc("inalambrico", "Inalámbrico", "WiFi", {
+          detail: "Ojo desmontable a distancia; rango 10 m (mejora con conexión neuronal inalámbrica).",
+        }),
+        acc("pelicula", "Película protectora", "Film+TM", {
+          detail: "Protege cavidad; vista digital en paralelo (una, otra o ambas).",
+          stats: { tm: 1 },
+        }),
+        acc("reconocimiento", "Reconocimiento facial", "Face+MC", {
+          detail: "Info de BD cargada + estadísticas al observar.",
+          stats: { mc: 1 },
+        }),
+        acc("captura3d", "Captura 3D", "3D+EN", {
+          detail: "Reconstrucción de escenas para holograma o PC.",
+          stats: { en: 1 },
+        }),
+        acc("vision-ir", "Visión IR/térmica/EM/UV/X", "Visión", {
+          detail: "Sustituye colorimétrico; un sensor = un módulo (puedes llevar varios).",
+        }),
+        acc("microexp", "Seguimiento de microexpresiones", "Micro+MC", {
+          detail: "Detección asistida de microexpresiones. Redundancia: +1 módulo y +1 mejora MC por redundancia.",
+          stats: { mc: 1 },
+        }),
+        acc("zoom", "Zoom óptico", "Zoom", {
+          detail: "×10 por módulo; duplica alcance de disparos.",
+        }),
       ],
     }),
     cromo({
       id: "oido-bionico",
       name: "Oído biónico",
       short: "Oído",
+      detail:
+        "Reemplazo del sistema auditivo. Con todos los módulos apagados y el oído operativo, enciende pasivo el audiométrico convencional.",
       moduleSlots: SAI_SLOTS,
       modules: [
-        acc("db", "Adecuador de dB", "dB+RC"),
-        acc("movimiento", "Detector de movimiento", "Mov+RC"),
-        acc("grabadora", "Grabadora", "Rec"),
-        acc("inalambrico", "Inalámbrico", "WiFi"),
-        acc("micro-laser", "Micrófono láser", "Láser+EN"),
-        acc("radar", "Radar", "Radar+RC"),
-        acc("banda", "Receptor de banda ancha", "Banda+EN"),
+        acc("db", "Adecuador de dB", "dB+RC", {
+          detail: "Protege oído del daño por volumen; sensibilidad manual a sonidos mínimos.",
+          stats: { rc: 1 },
+        }),
+        acc("movimiento", "Detector de movimiento", "Mov+RC", {
+          detail: "Vibraciones del entorno en 10 m²; +10 m² por módulo extra de cyberoído dedicado.",
+          stats: { rc: 1 },
+        }),
+        acc("grabadora", "Grabadora", "Rec", {
+          detail: "Audio integrado.",
+        }),
+        acc("inalambrico", "Inalámbrico", "WiFi", {
+          detail: "Oído remoto; 10 m (mejora con conexión neuronal inalámbrica).",
+        }),
+        acc("micro-laser", "Micrófono láser", "Láser+EN", {
+          detail: "Conversaciones hasta 500 m.",
+          stats: { en: 1 },
+        }),
+        acc("radar", "Radar", "Radar+RC", {
+          detail: "«Audición» tipo murciélago; movimiento normal en oscuridad total.",
+          stats: { rc: 1 },
+        }),
+        acc("banda", "Receptor de banda ancha", "Banda+EN", {
+          detail: "Frecuencias sub y supersónicas.",
+          stats: { en: 1 },
+        }),
       ],
     }),
     cromo({
       id: "digestivo-modular",
       name: "Aparato digestivo modular",
       short: "Digest",
+      detail:
+        "Órganos sintéticos modulares. Sin módulos: modo reposo = digestivo orgánico sin mejoras. Solo uno en todo el cuerpo.",
       moduleSlots: SAI_SLOTS,
       modules: [
-        acc("amp-db", "Amplificador de dB", "Amp+MC"),
-        acc("emisor", "Emisor de banda ancha", "Emis+MC"),
-        acc("filtro", "Filtro de toxinas", "Filt+TM"),
-        acc("voz-humana", "Sintetizador de voz humana", "Voz+MC"),
-        acc("voz-noone", "Sintetizador No-one", "No-one"),
-        acc("turbina", "Turbina de aliento", "Turbina"),
+        acc("amp-db", "Amplificador de dB", "Amp+MC", {
+          detail: "Grito tipo megáfono.",
+          stats: { mc: 1 },
+        }),
+        acc("emisor", "Emisor de banda ancha", "Emis+MC", {
+          detail: "Voz: entonación, rango amplio, sub/supersónico.",
+          stats: { mc: 1 },
+        }),
+        acc("filtro", "Filtro de toxinas", "Filt+TM", {
+          detail: "Detecta tóxicos orales; los expulsa a recipiente removible.",
+          stats: { tm: 1 },
+        }),
+        acc("voz-humana", "Sintetizador de voz humana", "Voz+MC", {
+          detail: "Emula tono humano (oír la voz o neurodata con tonos).",
+          stats: { mc: 1 },
+        }),
+        acc("voz-noone", "Sintetizador No-one", "No-one", {
+          detail: "Voz 100 % genérica e irreconocible.",
+        }),
+        acc("turbina", "Turbina de aliento", "Turbina", {
+          detail:
+            "Cápsulas de gas; al activar, corte respiratorio hasta salir de la zona o acabar el gas. Un uso por cápsula.\nGases: adormecedor (1d6 turnos, desventaja RC), cegador (1d6 turnos), tóxico (1d6 daño; gas 1d6 turnos en el aire).",
+        }),
       ],
     }),
     cromo({
       id: "respiratorio-modular",
       name: "Aparato respiratorio modular",
       short: "Resp",
+      detail: "Sin módulos = respiratorio orgánico en reposo. Solo uno en el cuerpo.",
       moduleSlots: SAI_SLOTS,
       modules: [
-        acc("olfato", "Amplificador olfativo", "Olf+EN"),
-        acc("pulmon", "Capacidad pulmonar ampliada", "Pulm+TM"),
-        acc("branquias", "Cyberbranquias", "Branq+TM"),
-        acc("filtro", "Filtro de toxinas", "Filt+TM"),
-        acc("oxigeno", "Inyector de oxígeno", "O2+TM"),
+        acc("olfato", "Amplificador olfativo", "Olf+EN", {
+          detail: "Olor con más precisión.",
+          stats: { en: 1 },
+        }),
+        acc("pulmon", "Capacidad pulmonar ampliada", "Pulm+TM", {
+          detail: "Aguante de respiración ×10.",
+          stats: { tm: 1 },
+        }),
+        acc("branquias", "Cyberbranquias", "Branq+TM", {
+          detail: "Respirar bajo el agua con normalidad.",
+          stats: { tm: 1 },
+        }),
+        acc("filtro", "Filtro de toxinas", "Filt+TM", {
+          detail: "Tóxicos por vía respiratoria; aire limpio.",
+          stats: { tm: 1 },
+        }),
+        acc("oxigeno", "Inyector de oxígeno", "O2+TM", {
+          detail: "Tubos a alta presión; 10 min por tubo; hasta 2 tubos por módulo.",
+          stats: { tm: 1 },
+        }),
       ],
     }),
     cromo({
       id: "membrana-acorazada",
       name: "Membrana acorazada",
       short: "Membrana",
+      detail: "Dermis de tejido de carbono; tono pálido; protección extra. Incompatible con piel perfecta.",
       statsByQuality: {
         impro: { tm: 1 },
         corr: { tm: 1 },
         hitech: { tm: 1 },
         mil: { tm: 1 },
       },
+      detailByQuality: {
+        impro: "1 punto absorbido o +1 TM (elige).",
+        corr: "1 punto absorbido.",
+        hitech: "2 puntos absorbidos y +1 TM, o 1 absorbido y +2 TM (elige).",
+        mil: "3 puntos absorbidos y +1 TM, o 2 absorbidos y +2 TM (elige).",
+      },
     }),
     cromo({
       id: "nanoplastia",
       name: "Nanoplastía",
       short: "Nanoplast",
+      detail:
+        "Nanobots faciales en red neuronal. Requiere ver el rostro a emular o neurodata con BD de rostros. Pigmentan piel cercana, no todo el cuerpo.",
       statsByQuality: { impro: {}, corr: {}, hitech: { mc: 1 }, mil: { mc: 2 } },
+      detailByQuality: {
+        impro: "Cambio de rostro: 1 minuto.",
+        corr: "Cambio de rostro: 1 turno.",
+        hitech: "Cambio de rostro: 1 turno.",
+        mil: "Cambio de rostro: 1 turno.",
+      },
     }),
     cromo({
       id: "piel-perfecta",
       name: "Piel perfecta",
       short: "Piel",
+      detail:
+        "Dermis sintética adaptable (color, poros, vello, marcas, tatuajes…). Estética, no camuflaje; el reconocimiento sigue identificándote. Puede ocultar cromos sutiles. Incompatible con membrana acorazada.",
       statsByQuality: { impro: { mc: 1 }, corr: { mc: 2 }, hitech: { mc: 3 }, mil: { mc: 4 } },
+      detailByQuality: {
+        impro: "Estética adaptable.",
+        corr: "Estética adaptable.",
+        hitech: "Estética adaptable.",
+        mil: "Estética adaptable.",
+      },
     }),
     cromo({
       id: "cybervertebras",
       name: "Cybervértebras",
       short: "Vértebras",
+      detail: "Columna y nervios reemplazados por control corporal automatizado. Modular.",
       moduleSlots: SAI_SLOTS,
       modules: [
-        acc("extremidad-extra", "Cyberextremidad adicional", "Extra"),
-        acc("reflejos", "Reflejos servoasistidos", "Refl+RC"),
-        acc("vuelo", "Vuelo controlado", "Vuelo"),
+        acc("extremidad-extra", "Cyberextremidad adicional", "Extra", {
+          detail: "Cada módulo añade una extremidad (antropomórfica o función específica).",
+        }),
+        acc("reflejos", "Reflejos servoasistidos", "Refl+RC", {
+          detail: "Ventaja en RC para evitar daño. Redundantes: +1 RC por módulo extra.",
+          stats: { rc: 1 },
+        }),
+        acc("vuelo", "Vuelo controlado", "Vuelo", {
+          detail: "Jetpack/magnetopack: vuelo 6 turnos; 2 h de carga por turno de uso (12 h carga completa).",
+        }),
       ],
     }),
     cromo({
       id: "corazon-bionico",
       name: "Corazón biónico",
       short: "Corazón",
+      detail:
+        "Multi-bomba de 4 cavidades; evita fallos cardíacos naturales o por estrés; conduce fluidos sintéticos. Hasta 2 corazones biónicos por personaje.",
       moduleSlots: SAI_SLOTS,
       modules: [
-        acc("adrenalina", "Inyector de adrenalina", "Adren+RC"),
-        acc("nanocirujanos", "Nanocirujanos", "Nano"),
-        acc("circulatorio", "Aparato circulatorio auxiliar", "Circ+TM"),
+        acc("adrenalina", "Inyector de adrenalina", "Adren+RC", {
+          detail:
+            "Activación por voz, botón, sensor, rutina, etc. Anula dolor temporalmente; segunda acción en el mismo turno durante 1d6 turnos. Recarga del fluido ~24 h. Varios inyectores en un corazón.",
+          stats: { rc: 1 },
+        }),
+        acc("nanocirujanos", "Nanocirujanos", "Nano", {
+          detail: "Reparación en flujo sanguíneo según calidad del corazón.",
+          detailByQuality: {
+            impro: "1 punto/turno; al instalar elegís: solo cyberware o solo tejido orgánico.",
+            corr: "1 punto/turno cyberware y orgánico.",
+            hitech: "2 puntos/turno, o 1 punto/turno + refuerzo corporal (+1 TM).",
+            mil: "2 puntos/turno y refuerzo corporal (+1 TM).",
+          },
+        }),
+        acc("circulatorio", "Aparato circulatorio auxiliar", "Circ+TM", {
+          detail:
+            "En lesión superficial: corta sangrado; bombea fluido por venas auxiliares. 1 módulo por tipo de fluido.\nFluidos: ácido (1d6 daño 1d6 turnos), criogénico (superficie congelada 1d6 turnos), combustible (duplica daño por fuego/explosión).",
+          stats: { tm: 1 },
+        }),
       ],
     }),
     cromo({
@@ -709,18 +785,57 @@ window.PBTA_CATALOGO = (() => {
       name: "Aracnogarfio",
       short: "Garfio",
       hasQuality: false,
+      detail: "Cuatro ganchos; escalar y agarrar. Escalar sin tirada; agarres/presas con ventaja.",
       statsByQuality: { impro: { tm: 1 }, corr: { tm: 1 }, hitech: { tm: 1 }, mil: { tm: 1 } },
     }),
     cromo({
       id: "brazo-combate",
       name: "Brazo de combate",
       short: "BrazoC",
+      detail: "Brazo de combate modular. Los módulos heredan la calidad del brazo.",
       moduleSlots: SAI_SLOTS,
       modules: [
-        acc("sable-mantis", "Sable Mantis", "Mantis+TM"),
-        acc("ranura-arma", "Ranura para arma de fuego", "Ranura+RC"),
-        acc("descarga", "Descarga de fluidos", "Fluid+RC"),
-        acc("magnetoescudo", "Magnetoescudo", "Escudo+TM"),
+        acc("sable-mantis", "Sable Mantis", "Mantis+TM", {
+          detail: "Hojas hasta 1 m.",
+          stats: { tm: 1 },
+          detailByQuality: {
+            impro: "Daño: 1d6.",
+            corr: "Daño: 1d6 con ventaja.",
+            hitech: "Daño: 6.",
+            mil: "Daño: 6+TM.",
+          },
+        }),
+        acc("ranura-arma", "Ranura para arma de fuego", "Ranura+RC", {
+          detail: "Arma oculta desplegable.",
+          stats: { rc: 1 },
+          detailByQuality: {
+            impro: "Oculta.",
+            corr: "Enlace permanente a SAI.",
+            hitech: "Armas auto/semiautomáticas plegables.",
+            mil: "Alto calibre o munición especial (p. ej. lanzamisiles).",
+          },
+        }),
+        acc("descarga", "Descarga de fluidos circulatorios", "Fluid+RC", {
+          detail: "Requiere aparato circulatorio auxiliar.",
+          stats: { rc: 1 },
+          detailByQuality: {
+            impro: "Alcance: 3 m personal.",
+            corr: "Alcance: 6 m personal.",
+            hitech: "Alcance: 6 m cono 90°.",
+            mil: "Alcance: 12 m cono 90°.",
+          },
+        }),
+        acc("magnetoescudo", "Magnetoescudo", "Escudo+TM", {
+          detail: "Escudo magnético desplegable.",
+          stats: { tm: 1 },
+          detailByQuality: {
+            impro: "Escudo personal; bloquea 1d6; tirada RC vs ataque.",
+            corr: "Escudo personal; bloquea 1d6 con ventaja; tirada RC vs ataque.",
+            hitech:
+              "Escudo zonal cuerpo entero; no te mueves; bloquea sin RC. Modo baja energía = escudo personal.",
+            mil: "Zona 3 m²; protege otros/equipo. Modo baja energía = escudo personal.",
+          },
+        }),
       ],
     }),
     cromo({
@@ -728,100 +843,256 @@ window.PBTA_CATALOGO = (() => {
       name: "Extremidad balística",
       short: "Ext.bal",
       hasQuality: false,
+      detail: "Solo en módulo de cybervértebra. Arma inteligente integrada + enlace SAI automático.",
       statsByQuality: { impro: { rc: 1 }, corr: { rc: 1 }, hitech: { rc: 1 }, mil: { rc: 1 } },
     }),
     cromo({
       id: "tecnoherramienta",
       name: "Tecnoherramienta",
       short: "TecnoH",
+      detail: "Brazo para cyberimplantes y trabajo de netrunner.",
       moduleSlots: SAI_SLOTS,
       modules: [
-        acc("kit-montaje", "Kit de montaje", "Mont+EN"),
-        acc("kit-salud", "Kit de salud", "Salud+EN"),
-        acc("multitactil", "Multitáctil", "Multi+EN"),
-        acc("teclado", "Teclado injertado", "Tecl+EN"),
+        acc("kit-montaje", "Kit de montaje", "Mont+EN", {
+          detail: "Reparación de emergencia en cyberware.",
+          stats: { en: 1 },
+        }),
+        acc("kit-salud", "Kit de salud", "Salud+EN", {
+          detail: "Cauterizar/desinfectar heridas biológicas superficiales.",
+          stats: { en: 1 },
+        }),
+        acc("multitactil", "Multitáctil", "Multi+EN", {
+          detail: "Dedos multiplexados; escritura ×1000.",
+          stats: { en: 1 },
+        }),
+        acc("teclado", "Teclado injertado", "Tecl+EN", {
+          detail: "Holoteclas/táctil en el brazo; interfaces urbanas y cyberware.",
+          stats: { en: 1 },
+        }),
       ],
     }),
     cromo({
       id: "piernas-acorazado",
-      name: "Cyberpiernas — Acorazado",
-      short: "Piernas·Acor",
+      name: "Acorazado",
+      short: "Acorazado",
       statsByQuality: {
         impro: { tm: 1 },
         corr: { tm: 2 },
         hitech: { tm: 3 },
         mil: { tm: 4 },
       },
+      detailByQuality: {
+        impro: "Protege 1 de daño; nunca cansado.",
+        corr: "+ golpe 1d6.",
+        hitech: "Golpe 1d6 con ventaja.",
+        mil: "Golpe 1d6 con ventaja + TM.",
+      },
     }),
     cromo({
       id: "piernas-cuadrupedo",
-      name: "Cyberpiernas — Cuadrúpedo",
-      short: "Piernas·4",
+      name: "Cuadrúpedo",
+      short: "Cuadrúpedo",
+      detail: "Modo potencia 1d6 turnos; 12 h para recargar.",
       statsByQuality: {
         impro: { rc: 1 },
         corr: { tm: 1, rc: 1 },
         hitech: { tm: 1, rc: 2 },
         mil: { tm: 2, rc: 2 },
       },
+      detailByQuality: {
+        impro: "+50 % velocidad (3 acciones cada 2 turnos); salto 3 m.",
+        corr: "+100 % (2 acciones/turno); salto 6 m.",
+        hitech: "+150 % (5 acciones cada 2 turnos); salto 12 m.",
+        mil: "+200 % (3 acciones/turno); salto 20 m.",
+      },
     }),
     cromo({
       id: "piernas-velocista",
-      name: "Cyberpiernas — Velocista",
-      short: "Piernas·Vel",
+      name: "Velocista",
+      short: "Velocista",
+      detail:
+        "Solo en módulo de cybervértebra (orugas plegables o cuadrúpedo equivalente). En reposo: tamaño mochila pequeña.",
       statsByQuality: {
         impro: { rc: 1 },
         corr: { rc: 2 },
         hitech: { rc: 3 },
         mil: { rc: 4 },
       },
+      detailByQuality: {
+        impro: "×2 velocidad.",
+        corr: "×3 velocidad.",
+        hitech: "×4 velocidad.",
+        mil: "×5 velocidad.",
+      },
     }),
   ];
 
   const herramientas = [
-    herramienta({ id: "autointerprete", name: "Autointérprete", hasQuality: false }),
+    herramienta({
+      id: "autointerprete",
+      name: "Autointérprete",
+      hasQuality: false,
+      detail:
+        "Presentación variable (instrumento, caja de sonido, etc.). Colocado en un punto; control remoto. Al activar, reproduce voces o música creíble para atraer atención.",
+    }),
     herramienta({
       id: "drone",
       name: "Drone",
-      moduleSlots: SAI_SLOTS,
+      detail: "Movimiento: 5 m/turno. Vida: 5 puntos de daño.",
+      moduleSlots: { impro: 1, corr: 2, hitech: 3, mil: 4 },
       modules: [
-        acc("centinela", "Centinela", "Cent"),
-        acc("kamikaze", "Kamikaze", "Kami"),
-        acc("ligero", "Ligero", "Lig"),
-        acc("protocolo", "Protocolo", "Prot"),
-        acc("robusto", "Robusto", "Rob"),
-        acc("silencioso", "Silencioso", "Sil"),
-        acc("vigilante", "Vigilante", "Vig"),
+        acc("centinela", "Centinela", "Cent", "Arma de celdas: 1d6/turno."),
+        acc("kamikaze", "Kamikaze", "Kami", "Autodestrucción: 3d6 fuego + PEM 1d6 turnos."),
+        acc("ligero", "Ligero", "Lig", "Velocidad ×2."),
+        acc("protocolo", "Protocolo", "Prot", "Transceptor para hackeo avanzado vía dron."),
+        acc("robusto", "Robusto", "Rob", "10 puntos de daño."),
+        acc("silencioso", "Silencioso", "Sil", "Casi inaudible; solo en silencio total."),
+        acc(
+          "vigilante",
+          "Vigilante",
+          "Vig",
+          "Cámara/micrófono + almacenamiento; enlace a HUD de implantes si lo tienes."
+        ),
       ],
+      detailByQuality: {
+        impro: "1 subsistema.",
+        corr: "2 subsistemas.",
+        hitech: "3 subsistemas.",
+        mil: "4 subsistemas.",
+      },
     }),
-    herramienta({ id: "emulador-biometrico", name: "Emulador biométrico", hasQuality: false }),
-    herramienta({ id: "kit-conectividad", name: "Kit de conectividad" }),
-    herramienta({ id: "kit-primeros-auxilios", name: "Kit de primeros auxilios" }),
-    herramienta({ id: "kit-reparaciones", name: "Kit de reparaciones" }),
-    herramienta({ id: "pistola-garfio", name: "Pistola garfio", hasQuality: false }),
-    herramienta({ id: "torreta-movil", name: "Torreta móvil", hasQuality: false }),
-    herramienta({ id: "trauma-card", name: "Trauma card", hasQuality: false }),
+    herramienta({
+      id: "emulador-biometrico",
+      name: "Emulador biométrico",
+      hasQuality: false,
+      detail: "Conecta a terminal de acceso; burla reconocimiento biométrico.",
+    }),
+    herramienta({
+      id: "kit-conectividad",
+      name: "Kit de conectividad",
+      detail: "Usuario <-> terminal\nventaja EN en la red.\n12 h de recarga antes de reutilizar el kit.",
+      detailByQuality: {
+        impro: "3 turnos para conectar; 2 usos",
+        corr: "1 turno para conectar; 3 usos",
+        hitech:
+          "Extensión del cromo de conexión neuronal: conexión instantánea; 4 usos",
+        mil:
+          "Extensión del cromo de conexión neuronal: conexión instantánea; 4 usos.\nherramientas inalámbricas en terminales no vivas; 6 usos",
+      },
+    }),
+    herramienta({
+      id: "kit-primeros-auxilios",
+      name: "Kit de primeros auxilios",
+      detail:
+        "Ventaja EN para curar tejido biológico. Un uso puede quitar efectos de toxinas en lugar de curar.",
+      detailByQuality: {
+        impro: "1d6; 2 usos",
+        corr: "1d6+3; 3 usos",
+        hitech: "2d6+3; 4 usos",
+        mil: "2d6+6; 6 usos",
+      },
+    }),
+    herramienta({
+      id: "kit-reparaciones",
+      name: "Kit de reparaciones",
+      detail:
+        "Ventaja EN para reparar cyberware implantado, portado, vehículos, etc. Un uso puede quitar anulación de sistemas en lugar de reparar.\nRepara hasta (Impro / Corr / Hi-T / Mil); el penalizador es el umbral máximo de pieza que repara bien.",
+      detailByQuality: {
+        impro: "Repara hasta +0 / −1 / −2 / −3; 2 usos",
+        corr: "Repara hasta +1 / +0 / −1 / −2; 3 usos",
+        hitech: "Repara hasta +2 / +1 / +0 / −1; 4 usos",
+        mil: "Repara hasta +3 / +2 / +1 / +0; 6 usos",
+      },
+    }),
+    herramienta({
+      id: "pistola-garfio",
+      name: "Pistola garfio",
+      hasQuality: false,
+      detail:
+        "Gancho por presión o imán; cable retrae (objetivo hacia ti o tú hacia el punto, según peso). Alcance 50 m. Puede capturar personas.",
+    }),
+    herramienta({
+      id: "torreta-movil",
+      name: "Torreta móvil",
+      hasQuality: false,
+      detail:
+        "Lista blanca precargada; dispara al enemigo más cercano: 1d6/turno. Tirada de actuación de la torreta: 2d6+0.",
+    }),
+    herramienta({
+      id: "trauma-card",
+      name: "Trauma card",
+      qualitySection: "Nivel",
+      qualityLabels: {
+        impro: "Cliente",
+        corr: "Miembro",
+        hitech: "Preferencial",
+        mil: "VIP",
+      },
+      qualityShort: {
+        impro: "Cli",
+        corr: "Mie",
+        hitech: "Pref",
+        mil: "VIP",
+      },
+      qualityTags: {
+        impro: "cliente",
+        corr: "miembro",
+        hitech: "preferencial",
+        mil: "vip",
+      },
+      detail:
+        "Membresía Trauma Team en el bolsillo; monitoriza biológico y cibernético. Si caes, llega transporte aéreo con biohackers y escolta militar.\nPago mensual; cada activación gasta la tarjeta (hay que renovar membresía).",
+      detailByQuality: {
+        impro: "Llega en 15 min; te dejan en el domicilio de la suscripción tras estabilizar",
+        corr: "Llega en 5 min; te dejan en el domicilio de la suscripción tras estabilizar",
+        hitech:
+          "Llega en 5 min; te dejan en el domicilio de la suscripción tras estabilizar + 1 día de terapia: curado y reparado al 50%",
+        mil: "Llega en 5 min; Cubren 100% de gastos y tiempo de tratamiento necesario (salud y cibernética)",
+      },
+    }),
   ];
 
   const vestimentas = [
     vestimenta({
       id: "corposuit",
       name: "Corposuit",
+      detail: "Traje de alta gama; oculta cyberware y armas pequeñas.",
       statsByQuality: {
         impro: {},
         corr: {},
         hitech: { tm: 1 },
         mil: {},
       },
+      detailByQuality: {
+        impro: "Solo ocultación.",
+        corr: "Ventaja MC.",
+        hitech: "Placas interiores: solo para absorber daño físico.",
+        mil:
+          "Traje experimental: al activar protocolo, pierde capacidades anteriores y gana modo militar.\nGhost: camuflaje fotoreflectivo; casi invisible 1 h o hasta apagar. 3 usos; recarga 2 h por uso.\nVIP box: armadura bloque macizo; cámaras/sensores miran fuera; sin movimiento; protege de todo daño. Recarga 6 h tras uso.\nRapaz: magnetopacks en manos/pies: vuelo controlado 1 h. 3 usos; recarga 2 h por uso.",
+      },
     }),
-    vestimenta({ id: "mascara-fantasma", name: "Máscara fantasma", hasQuality: false }),
+    vestimenta({
+      id: "mascara-fantasma",
+      name: "Máscara fantasma",
+      hasQuality: false,
+      detail:
+        "Irreconocible para sistemas ópticos (físicos u holográficos). Ventaja MC vs reconocimiento facial. No engaña a quien tenga la misma capacidad.",
+    }),
     vestimenta({
       id: "tecnoarmadura",
       name: "Tecnoarmadura",
+      detail: "Servomotores y placas.",
       statsByQuality: {
         impro: {},
         corr: { tm: 1 },
         hitech: { tm: 1 },
         mil: { tm: 1 },
+      },
+      detailByQuality: {
+        impro: "Ventaja TM para absorber cualquier daño (físico, químico, energético…).",
+        corr: "Ventaja TM para absorber cualquier daño.",
+        hitech: "Absorbe 1 nivel de daño automáticamente.",
+        mil: "Absorbe 2 niveles de daño automáticamente.",
       },
     }),
   ];
@@ -880,18 +1151,17 @@ window.PBTA_CATALOGO = (() => {
         items: cromos.filter((c) => ["cybervertebras", "corazon-bionico"].includes(c.id)),
       },
       {
-        id: "cyberextremidades",
-        title: "Cyberextremidades",
+        id: "cyberbrazos",
+        title: "Cyberbrazos",
         items: cromos.filter((c) =>
-          [
-            "aracnogarfio",
-            "brazo-combate",
-            "extremidad-balistica",
-            "tecnoherramienta",
-            "piernas-acorazado",
-            "piernas-cuadrupedo",
-            "piernas-velocista",
-          ].includes(c.id)
+          ["aracnogarfio", "brazo-combate", "extremidad-balistica", "tecnoherramienta"].includes(c.id)
+        ),
+      },
+      {
+        id: "cyberpiernas",
+        title: "Cyberpiernas",
+        items: cromos.filter((c) =>
+          ["piernas-acorazado", "piernas-cuadrupedo", "piernas-velocista"].includes(c.id)
         ),
       },
     ],

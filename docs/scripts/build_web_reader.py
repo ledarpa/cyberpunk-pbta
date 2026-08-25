@@ -24,6 +24,74 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
+# Retratos del lector web (mismas keys que web/ficha.js PROFESSION_PORTRAITS).
+PROFESSION_PORTRAITS: dict[str, str] = {
+    "Arreglador": "arreglador",
+    "Artista": "artista",
+    "Biohacker": "biohacker",
+    "Comunicador": "comunicador",
+    "Corpo": "corpo",
+    "Espía": "espia",
+    "Forastero": "forastero",
+    "Mercenario": "mercenario",
+    "Netrunner": "netrunner",
+}
+
+# Arte de catálogo (cromos / chapería): título MD → archivos en web/assets/catalog/.
+CATALOG_ART: dict[str, list[str]] = {
+    # Armas
+    "Pistola": ["pistola"],
+    "Escopeta": ["escopeta"],
+    "Fusil": ["fusil"],
+    "Rifle": ["rifle"],
+    "Lanzadardos": ["lanzadardos"],
+    "Lanzamisiles": ["lanzamisiles"],
+    "Granadas": ["granadas"],
+    # Herramientas / vestimenta
+    "Drone": ["drone"],
+    "Torreta móvil": ["torreta"],
+    "Trauma card": ["trauma_card"],
+    "Máscara fantasma": ["mascara_fantasma"],
+    "Kit de primeros auxilios": ["primeros_auxilios"],
+    "Pistola garfio": ["garfio"],
+    # Cromos
+    "Ojo biónico": ["ojo"],
+    "Aparato digestivo modular": ["bucales"],
+    "Cybervértebras": ["vertebras"],
+    "Brazo de combate": ["sable_mantis", "magnetoescudo"],
+    "Extremidad balística": ["balistica"],
+    "Cyberpiernas": ["acorazado", "cuadrupedo", "velocista"],
+}
+
+
+def profession_portrait_html(slug: str) -> str:
+    src = escape(f"assets/professions/{slug}.png")
+    return (
+        '<figure class="book-prof-portrait" aria-hidden="true">'
+        f'<img src="{src}" alt="" loading="lazy" width="240" height="240">'
+        "</figure>"
+    )
+
+
+def catalog_art_html(slugs: list[str]) -> str:
+    if not slugs:
+        return ""
+    figures: list[str] = []
+    for slug in slugs:
+        src = escape(f"assets/catalog/{slug}.png")
+        figures.append(
+            '<figure class="book-item-art" aria-hidden="true">'
+            f'<img src="{src}" alt="" loading="lazy">'
+            "</figure>"
+        )
+    if len(figures) == 1:
+        return figures[0]
+    return (
+        '<div class="book-item-art-row" aria-hidden="true">'
+        + "".join(figures)
+        + "</div>"
+    )
+
 
 def slugify(text: str, used: dict[str, int]) -> str:
     base = text.lower().strip()
@@ -57,7 +125,7 @@ def list_level(indent: str) -> int:
     return min(2, max(1, len(expanded) // 2))
 
 
-def table_html(rows: list[list[str]]) -> str:
+def table_html(rows: list[list[str]], *, rail: bool = False) -> str:
     if not rows:
         return ""
     cols = max(len(r) for r in rows)
@@ -68,8 +136,9 @@ def table_html(rows: list[list[str]]) -> str:
         tds = "".join(f"<td>{inline_md(c)}</td>" for c in r)
         body_rows.append(f"<tr>{tds}</tr>")
     tbody = "\n".join(body_rows)
+    wrap = "table-wrap table-wrap--rail" if rail else "table-wrap"
     return (
-        '<div class="table-wrap"><table>'
+        f'<div class="{wrap}"><table>'
         f"<thead><tr>{thead}</tr></thead>"
         f"<tbody>{tbody}</tbody>"
         "</table></div>"
@@ -82,16 +151,75 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
     i = 0
     table_buffer: list[list[str]] = []
     list_stack: list[str] = []  # open list types
+    pending_portrait: str | None = None
+    pending_catalog_art: list[str] | None = None
+    catalog_after_first_table = False
+    catalog_art_open = False  # dibujo recién emitido → 1.ª tabla Calidad puede ir al rail
+
+    def emit_catalog_art(slugs: list[str]) -> None:
+        nonlocal catalog_art_open
+        html.append(catalog_art_html(slugs))
+        catalog_art_open = True
 
     def flush_table() -> None:
-        nonlocal table_buffer
+        nonlocal table_buffer, pending_catalog_art, catalog_after_first_table, catalog_art_open
         if table_buffer:
-            html.append(table_html(table_buffer))
+            rail = False
+            if catalog_art_open:
+                head = (table_buffer[0][0] if table_buffer[0] else "").strip()
+                rail = head == "Calidad"
+                catalog_art_open = False
+            html.append(table_html(table_buffer, rail=rail))
             table_buffer = []
+            if catalog_after_first_table and pending_catalog_art:
+                emit_catalog_art(pending_catalog_art)
+                pending_catalog_art = None
+                catalog_after_first_table = False
 
     def close_lists(to_level: int = -1) -> None:
         while len(list_stack) > to_level + 1:
             html.append(f"</{list_stack.pop()}>")
+
+    def flush_portrait() -> None:
+        nonlocal pending_portrait
+        if pending_portrait:
+            html.append(profession_portrait_html(pending_portrait))
+            pending_portrait = None
+
+    def flush_catalog_art() -> None:
+        nonlocal pending_catalog_art, catalog_after_first_table
+        if pending_catalog_art:
+            emit_catalog_art(pending_catalog_art)
+            pending_catalog_art = None
+            catalog_after_first_table = False
+
+    def close_catalog_section() -> None:
+        """Cierra arte pendiente y evita que el rail/float contamine el siguiente bloque."""
+        nonlocal catalog_art_open
+        flush_catalog_art()
+        catalog_art_open = False
+
+    def next_nonempty(from_idx: int) -> str:
+        for j in range(from_idx, len(lines)):
+            s = lines[j].strip()
+            if s:
+                return s
+        return ""
+
+    def peek_first_table_header(from_idx: int) -> str | None:
+        """Primera cabecera de tabla tras el heading (salta prosa/listas)."""
+        for j in range(from_idx, len(lines)):
+            s = lines[j].strip()
+            if not s:
+                continue
+            if s == "---" or s.startswith("#"):
+                return None
+            if s.startswith("|") and "|" in s[1:]:
+                if is_table_sep(s):
+                    continue
+                cells = parse_row(s)
+                return cells[0].strip() if cells else None
+        return None
 
     def is_table_sep(s: str) -> bool:
         return bool(re.match(r"^\|[\s\-:|]+\|\s*$", s))
@@ -105,6 +233,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
 
         if stripped.startswith("|") and "|" in stripped[1:]:
             close_lists()
+            flush_portrait()
             if is_table_sep(stripped):
                 i += 1
                 continue
@@ -120,6 +249,8 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
 
         if stripped == "---":
             close_lists()
+            flush_portrait()
+            close_catalog_section()
             html.append("<hr>")
             i += 1
             continue
@@ -127,16 +258,36 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
         heading = re.match(r"^(#{1,4})\s+(.+)$", stripped)
         if heading:
             close_lists()
+            flush_portrait()
+            close_catalog_section()
             level = len(heading.group(1))
             title = heading.group(2).strip()
             hid = slugify(title, used_ids)
             toc.append({"id": hid, "level": level, "title": title})
             html.append(f'<h{level} id="{escape(hid)}">{inline_md(title)}</h{level}>')
+            if level == 3:
+                pending_portrait = PROFESSION_PORTRAITS.get(title)
+            art = CATALOG_ART.get(title)
+            if art:
+                pending_catalog_art = art
+                nxt = next_nonempty(i + 1)
+                first_th = peek_first_table_header(i + 1)
+                if first_th == "Calidad":
+                    # Dibujo antes de tabla Calidad → rail a la izquierda
+                    flush_catalog_art()
+                    catalog_after_first_table = False
+                elif nxt.startswith("|") and "|" in nxt[1:]:
+                    # Armas (Stat, Tipo…): dibujo tras la 1.ª tabla
+                    catalog_after_first_table = True
+                else:
+                    flush_catalog_art()
             i += 1
             continue
 
         if stripped.startswith("> "):
             close_lists()
+            flush_portrait()
+            flush_catalog_art()
             html.append(f'<blockquote>{inline_md(stripped[2:].strip())}</blockquote>')
             i += 1
             continue
@@ -144,6 +295,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
         if stripped.startswith("**En la mesa:**") or stripped.startswith("En la mesa:"):
             close_lists()
             html.append(f'<p class="mesa">{inline_md(stripped)}</p>')
+            flush_portrait()
             i += 1
             continue
 
@@ -155,6 +307,8 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
             while len(list_stack) > level + 1:
                 html.append(f"</{list_stack.pop()}>")
             if len(list_stack) < level + 1:
+                flush_portrait()
+                flush_catalog_art()
                 html.append(f"<{tag}>")
                 list_stack.append(tag)
             elif list_stack and list_stack[-1] != tag and len(list_stack) == level + 1:
@@ -166,11 +320,15 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
             continue
 
         close_lists()
+        flush_portrait()
+        flush_catalog_art()
         html.append(f"<p>{inline_md(stripped)}</p>")
         i += 1
 
     flush_table()
     close_lists()
+    flush_portrait()
+    flush_catalog_art()
     return "\n".join(html)
 
 
