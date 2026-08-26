@@ -1056,20 +1056,42 @@ window.PBTA_CATALOGO = (() => {
     vestimenta({
       id: "corposuit",
       name: "Corposuit",
+      attachable: true,
+      menuInfoTitle: "Traje actual",
       detail: "Traje de alta gama; oculta cyberware y armas pequeñas.",
       statsByQuality: {
         impro: {},
         corr: {},
         hitech: { tm: 1 },
-        mil: {},
+        mil: { tm: 1 },
       },
       detailByQuality: {
-        impro: "Solo ocultación.",
-        corr: "Ventaja MC.",
-        hitech: "Placas interiores: solo para absorber daño físico.",
-        mil:
-          "Traje experimental: al activar protocolo, pierde capacidades anteriores y gana modo militar.\nGhost: camuflaje fotoreflectivo; casi invisible 1 h o hasta apagar. 3 usos; recarga 2 h por uso.\nVIP box: armadura bloque macizo; cámaras/sensores miran fuera; sin movimiento; protege de todo daño. Recarga 6 h tras uso.\nRapaz: magnetopacks en manos/pies: vuelo controlado 1 h. 3 usos; recarga 2 h por uso.",
+        impro: "Ocultación de cyberware.",
+        corr: "Ocultación de cyberware. Ventaja MC.",
+        hitech: "Ocultación de cyberware. Ventaja MC. +1 TM (solo daño físico).",
+        mil: "Ocultación de cyberware. Ventaja MC. +1 TM. Tras activar protocolo, pierde capacidades anteriores y gana modo militar.",
       },
+      variantRequiredFromQuality: "mil",
+      variantSection: "Variante",
+      variants: [
+        {
+          id: "ghost",
+          name: "Ghost",
+          detail:
+            "Camuflaje fotoreflectivo; casi invisible 1 h o hasta apagar. 3 usos; recarga 2 h por uso.",
+        },
+        {
+          id: "vip-box",
+          name: "VIP box",
+          detail:
+            "Armadura bloque macizo; cámaras/sensores miran fuera; sin movimiento; protege de todo daño. Recarga 6 h tras uso.",
+        },
+        {
+          id: "rapaz",
+          name: "Rapaz",
+          detail: "Magnetopacks en manos/pies: vuelo controlado 1 h. 3 usos; recarga 2 h por uso.",
+        },
+      ],
     }),
     vestimenta({
       id: "mascara-fantasma",
@@ -1081,6 +1103,8 @@ window.PBTA_CATALOGO = (() => {
     vestimenta({
       id: "tecnoarmadura",
       name: "Tecnoarmadura",
+      attachable: true,
+      menuInfoTitle: "Armadura actual",
       detail: "Servomotores y placas.",
       statsByQuality: {
         impro: {},

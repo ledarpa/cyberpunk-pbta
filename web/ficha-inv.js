@@ -204,6 +204,12 @@ window.PBTA_INV = (() => {
     return item.charges;
   }
 
+  function isItemActive(item, def) {
+    if (!def) return false;
+    if (def.attachable) return item?.attached !== false;
+    return true;
+  }
+
   function createItem(catalogId, quality) {
     const def = CAT()?.get(catalogId);
     if (!def) return null;
@@ -217,7 +223,8 @@ window.PBTA_INV = (() => {
       modules: [],
       ballistics: [],
       neurodata: [],
-      attached: def.column === "cromos" && def.attachable !== false,
+      attached: def.attachable !== false,
+      variant: null,
       appliedStats: {},
       arsenalFixed: false,
       cromoFixed: false,
@@ -278,8 +285,12 @@ window.PBTA_INV = (() => {
     const qTag = hasQ ? qualityTag(item.quality, def) : "";
     const qAbr = hasQ ? qualityShort(item.quality, def) : "";
 
+    const varDef =
+      item.variant && def.variants ? def.variants.find((v) => v.id === item.variant) : null;
+
     const decorate = (core) => {
       let s = core;
+      if (varDef) s = `${s}·${varDef.name}`;
       if (def.attachable && item.attached === false) s = `${s} ·OFF`;
       return s;
     };
@@ -618,7 +629,7 @@ window.PBTA_INV = (() => {
   function statsFor(item) {
     if (item?.kind === "sub") return {};
     const def = defOf(item);
-    if (!def || !item?.attached) return {};
+    if (!def || !isItemActive(item, def)) return {};
     const out = { ...fixedStatsFor(item, def) };
     for (const [k, v] of Object.entries(moduleStatsFor(item, def))) {
       out[k] = (Number(out[k]) || 0) + Number(v);
@@ -828,7 +839,9 @@ window.PBTA_INV = (() => {
         if (cur) html += tipLine("Bono", cur);
       }
     }
-    if (def.attachable) html += tipLine("Acoplable", "Sí (cromo)");
+    if (def.attachable) {
+      html += tipLine("Acoplable", def.kind === "vestimenta" ? "Sí (vestimenta)" : "Sí (cromo)");
+    }
     if (def.countsAsCromo === false && def.kind === "cromo") {
       html += tipLine("@Psique", "sin degeneración neural");
     }
@@ -885,10 +898,17 @@ window.PBTA_INV = (() => {
     if (def.hasQuality !== false && item.quality && !def.detailByQuality) {
       html += tipLine("Calidad actual", qualityLabel(item.quality, def));
     }
+    if (item.variant && def.variants) {
+      const v = def.variants.find((x) => x.id === item.variant);
+      if (v) {
+        html += tipLine("Variante", v.name);
+        if (v.detail) html += `<div class="ficha-inv-tip-body">${tipRich(v.detail)}</div>`;
+      }
+    }
     if (def.saiSlots && item.quality) {
       html += tipLine("SAI", String(saiCap(def, item.quality)));
     }
-    const st = statsFor({ ...item, attached: true });
+    const st = statsFor(item);
     const stLine = formatStatMap(st);
     if (stLine) {
       html += tipLine(
@@ -987,6 +1007,10 @@ window.PBTA_INV = (() => {
       const opt = (def?.modules || []).find((x) => x.id === btn.dataset.mod);
       return buildOptionTipHtml("mod", opt || { name: btn.textContent.trim() }, item);
     }
+    if (btn.dataset.variant) {
+      const opt = (def?.variants || []).find((x) => x.id === btn.dataset.variant);
+      return buildOptionTipHtml("mod", opt || { name: btn.textContent.trim() }, item);
+    }
     if (btn.dataset.ndata) {
       const opt = (def?.neurodataOpts || []).find((x) => x.id === btn.dataset.ndata);
       return buildOptionTipHtml("ndata", opt || { name: btn.textContent.trim() }, item);
@@ -1035,6 +1059,7 @@ window.PBTA_INV = (() => {
             el.dataset.ndataRm ||
             el.dataset.arsenalPick ||
             el.dataset.quality ||
+            el.dataset.variant ||
             el.dataset.act ||
             el.textContent.trim())
         );
@@ -1233,6 +1258,35 @@ window.PBTA_INV = (() => {
       .join("");
   }
 
+  function buildItemMenuInfoHtml(item, def) {
+    if (!def?.detailByQuality || !item.quality) return "";
+    const text = def.detailByQuality[item.quality];
+    if (!text) return "";
+    let html = `<div class="ficha-inv-sec">${esc(def.menuInfoTitle || "Equipamiento actual")}</div>`;
+    html += `<div class="ficha-inv-menu-info">${tipRich(text)}</div>`;
+    if (item.quality === def.variantRequiredFromQuality && item.variant && def.variants) {
+      const v = def.variants.find((x) => x.id === item.variant);
+      if (v?.detail) {
+        html += `<div class="ficha-inv-menu-info ficha-inv-menu-info-sub">${tipRich(v.detail)}</div>`;
+      }
+    }
+    return html;
+  }
+
+  function buildVariantRow(item, def) {
+    if (!def?.variants?.length) return "";
+    const reqQ = def.variantRequiredFromQuality;
+    if (reqQ && item.quality !== reqQ) return "";
+    const head = `<div class="ficha-inv-sec">${esc(def.variantSection || "Variante")} (0/1)</div>`;
+    const opts = def.variants
+      .map((v) => {
+        const on = item.variant === v.id;
+        return `<button type="button" class="ficha-inv-opt" data-variant="${esc(v.id)}" ${on ? 'aria-selected="true"' : ""}>${on ? "× " : ""}${esc(v.name)}</button>`;
+      })
+      .join("");
+    return head + opts;
+  }
+
   function buildItemMenuHtml(item) {
     const def = defOf(item);
     if (!def) {
@@ -1272,6 +1326,9 @@ window.PBTA_INV = (() => {
     const capSai = saiCap(def, item.quality);
     const capMod = moduleCap(def, item.quality);
     const capNd = neurodataCap(def, item.quality);
+
+    const infoRow = buildItemMenuInfoHtml(item, def);
+    const variantRow = buildVariantRow(item, def);
 
     const statRow = buildStatsMenuHtml(item, def);
 
@@ -1340,12 +1397,17 @@ window.PBTA_INV = (() => {
         .join("");
     }
 
-    const attachBtn =
-      def.attachable && def.column === "cromos"
-        ? `<button type="button" class="ficha-inv-opt" data-act="toggle-attach">${
-            item.attached === false ? "Acoplar al cuerpo" : "Desacoplar del cuerpo"
-          }</button>`
-        : "";
+    const attachLabel =
+      def.kind === "vestimenta"
+        ? item.attached === false
+          ? "Acoplar traje"
+          : "Desacoplar traje"
+        : item.attached === false
+          ? "Acoplar al cuerpo"
+          : "Desacoplar del cuerpo";
+    const attachBtn = def.attachable
+      ? `<button type="button" class="ficha-inv-opt" data-act="toggle-attach">${attachLabel}</button>`
+      : "";
 
     const changeArsenal = item.arsenalInitial
       ? `<button type="button" class="ficha-inv-opt" data-act="change-arsenal">Cambiar arma inicial</button>`
@@ -1357,7 +1419,28 @@ window.PBTA_INV = (() => {
         ? `<button type="button" class="ficha-inv-opt" disabled title="Neuroranura de creación">Eliminar</button>`
         : `<button type="button" class="ficha-inv-opt ficha-inv-danger" data-act="delete">Eliminar</button>`;
 
-    return cromoHead + qRow + statRow + extras + attachBtn + changeArsenal + deleteBtn;
+    return cromoHead + qRow + infoRow + variantRow + statRow + extras + attachBtn + changeArsenal + deleteBtn;
+  }
+
+  function buildDeleteConfirmMenuHtml(label) {
+    const back = `<button type="button" class="ficha-inv-opt" data-act="delete-back">← Volver</button>`;
+    const head = `<div class="ficha-inv-sec">Eliminar</div>`;
+    const prompt = `<div class="ficha-inv-delete-prompt">¿Eliminar «${esc(label)}»?\n\nSe quitarán bonos EN/MC/RC/TM y efectos de ficha ligados a este elemento.</div>`;
+    const confirm =
+      `<button type="button" class="ficha-inv-opt ficha-inv-danger" data-act="delete-confirm">Confirmar eliminación</button>`;
+    return back + head + prompt + confirm;
+  }
+
+  function restoreItemMenu(row, item, menu) {
+    if (!menu || !row) return;
+    if (item?.catalogId) {
+      menu.innerHTML = buildItemMenuHtml(item);
+    } else if ((item?.label || "").trim()) {
+      menu.innerHTML = `<button type="button" class="ficha-inv-opt ficha-inv-danger" data-act="delete">Eliminar</button>`;
+    } else {
+      menu.innerHTML = buildCatalogMenuHtml(row.dataset.ledger || "chaperia");
+    }
+    placeMenu(menu, row);
   }
 
   function buildNeurodataPromptHtml(opt) {
@@ -1555,7 +1638,6 @@ window.PBTA_INV = (() => {
       saveSheet,
       applyInventoryStats,
       refreshInvRow,
-      confirmDelete,
       getArsenalChoices,
       setArsenalChoice,
       LEDGER_ROWS,
@@ -1592,7 +1674,7 @@ window.PBTA_INV = (() => {
       if (def?.hasQuality === false) quality = null;
       const item = createItem(addId, quality);
       if (!item) return;
-      if (def?.column === "cromos") item.attached = true;
+      if (def?.attachable !== false) item.attached = true;
       input.value = serializeSlot(item);
       doPack();
       applyInventoryStats();
@@ -1695,6 +1777,9 @@ window.PBTA_INV = (() => {
       const def = defOf(item);
       if (def?.lockedQuality || item.arsenalFixed) return;
       item.quality = btn.dataset.quality;
+      if (def?.variantRequiredFromQuality && item.quality !== def.variantRequiredFromQuality) {
+        item.variant = null;
+      }
       const cap = saiCap(def, item.quality);
       if ((item.sai || []).length > cap) item.sai = item.sai.slice(0, cap);
       const mcap = moduleCap(def, item.quality);
@@ -1739,6 +1824,16 @@ window.PBTA_INV = (() => {
       input.value = serializeSlot(item);
       doPack();
       applyInventoryStats();
+      reopenParentMenu(form, ledger, item.id, item);
+      saveSheet();
+      return;
+    }
+
+    if (btn.dataset.variant) {
+      const id = btn.dataset.variant;
+      item.variant = item.variant === id ? null : id;
+      input.value = serializeSlot(item);
+      doPack();
       reopenParentMenu(form, ledger, item.id, item);
       saveSheet();
       return;
@@ -1883,6 +1978,29 @@ window.PBTA_INV = (() => {
       return;
     }
 
+    if (btn.dataset.act === "delete-back") {
+      const menu = row.querySelector(".ficha-inv-menu");
+      restoreItemMenu(row, item, menu);
+      return;
+    }
+
+    if (btn.dataset.act === "delete-confirm") {
+      if (item.arsenalInitial || item.arsenalFixed) {
+        window.alert("El arsenal inicial no se elimina. Usá «Cambiar arma inicial».");
+        return;
+      }
+      if (item.cromoFixed) {
+        window.alert("La neuroranura inicial no se elimina.");
+        return;
+      }
+      input.value = "";
+      doPack();
+      applyInventoryStats();
+      closeMenus(form);
+      saveSheet();
+      return;
+    }
+
     if (btn.dataset.act === "delete") {
       if (item.arsenalInitial || item.arsenalFixed) {
         window.alert("El arsenal inicial no se elimina. Usá «Cambiar arma inicial».");
@@ -1893,18 +2011,12 @@ window.PBTA_INV = (() => {
         return;
       }
       const label = formatItem(item) || item.label || "este elemento";
-      const ok =
-        typeof confirmDelete === "function"
-          ? confirmDelete(label)
-          : window.confirm(
-              `¿Eliminar «${label}»?\n\nSe quitarán bonos y efectos de ficha ligados a este elemento.`
-            );
-      if (!ok) return;
-      input.value = "";
-      doPack();
-      applyInventoryStats();
-      closeMenus(form);
-      saveSheet();
+      const menu = row.querySelector(".ficha-inv-menu");
+      if (menu) {
+        menu.innerHTML = buildDeleteConfirmMenuHtml(label);
+        placeMenu(menu, row);
+      }
+      return;
     }
   }
 

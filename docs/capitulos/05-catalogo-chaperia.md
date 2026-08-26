@@ -278,15 +278,15 @@ Presentación variable (instrumento, caja de sonido, etc.). Colocado en un punto
 
 ### Drone
 
+- Movimiento: 5 m/turno
+- Vida: 5 puntos de daño
+
 | Calidad | Subsistemas |
 | --- | --- |
 | Improvisado | 1 |
 | Corriente | 2 |
 | Hi-Tech | 3 |
 | Militar | 4 |
-
-- Movimiento: 5 m/turno
-- Vida: 5 puntos de daño
 
 | Subsistema | Efecto |
 | --- | --- |

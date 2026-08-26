@@ -32,6 +32,174 @@
   syncFichaViewport();
   openFromHash();
   window.addEventListener("hashchange", openFromHash);
+  layoutBookArtWraps();
+  requestAnimationFrame(() => {
+    layoutBookArtWraps();
+    requestAnimationFrame(layoutBookArtWraps);
+  });
+  let artLayoutTimer = 0;
+  window.addEventListener("resize", () => {
+    clearTimeout(artLayoutTimer);
+    artLayoutTimer = setTimeout(layoutBookArtWraps, 60);
+  });
+
+  /** Alinea arte del wrap con el margen inferior de la tabla Calidad; texto full-width arriba. */
+  function layoutBookArtWraps() {
+    const wraps = book.querySelectorAll(".book-art-wrap");
+    if (!wraps.length) return;
+
+    const mobile = window.matchMedia("(max-width: 720px)").matches;
+
+    wraps.forEach((wrap) => {
+      const art = wrap.querySelector(":scope > .book-item-art, :scope > .book-item-art-row");
+      const copy = wrap.querySelector(":scope > .book-art-wrap-copy");
+      const table = copy && copy.querySelector(":scope > .table-wrap--rail");
+      if (!art || !copy || !table) return;
+
+      art.querySelectorAll("img").forEach((img) => {
+        if (img.dataset.artLayoutBound) return;
+        img.dataset.artLayoutBound = "1";
+        img.addEventListener("load", layoutBookArtWraps);
+      });
+
+      if (mobile) {
+        wrap.style.removeProperty("--art-shift");
+        wrap.style.removeProperty("--art-h");
+        return;
+      }
+
+      const prevDisplay = art.style.display;
+      wrap.style.setProperty("--art-shift", "0px");
+      wrap.style.removeProperty("--art-h");
+
+      // Medir texto+tabla a ancho completo (sin float)
+      art.style.display = "none";
+      const wrapTop0 = wrap.getBoundingClientRect().top;
+      const tableBottom0 = table.getBoundingClientRect().bottom - wrapTop0;
+      const tableH = table.offsetHeight;
+      const contentH = copy.offsetHeight;
+      art.style.display = prevDisplay;
+      if (!contentH || !tableH) return;
+
+      const naturalH = art.offsetHeight;
+      if (!naturalH) return;
+
+      const isBrazo = !!art.querySelector(".book-item-art--sable_mantis");
+      const isPortraitTop = art.dataset.artLayout === "portrait-top";
+      const isPortraitSpan = art.dataset.artLayout === "portrait-span";
+      const isCerebral = art.dataset.artSize === "cerebral";
+      if (isPortraitSpan) {
+        const railTable = copy.querySelector(":scope > .table-wrap--rail");
+        if (!railTable) return;
+
+        wrap.style.setProperty("--art-h", "auto");
+        wrap.style.removeProperty("--art-shift");
+
+        const img = art.querySelector("img");
+        if (!img) return;
+
+        const bottomDelta = () =>
+          Math.round(
+            railTable.getBoundingClientRect().bottom -
+              (img || art).getBoundingClientRect().bottom
+          );
+
+        let shift = Math.max(
+          0,
+          Math.round(
+            railTable.getBoundingClientRect().bottom -
+              wrap.getBoundingClientRect().top -
+              img.getBoundingClientRect().height
+          )
+        );
+        wrap.style.setProperty("--art-shift", `${shift}px`);
+
+        for (let i = 0; i < 6; i++) {
+          const fix = bottomDelta();
+          if (fix === 0) break;
+          shift = Math.max(0, shift + fix);
+          wrap.style.setProperty("--art-shift", `${shift}px`);
+        }
+        return;
+      }
+      if (isBrazo || isPortraitTop) {
+        wrap.style.setProperty("--art-shift", "0px");
+        art.style.display = prevDisplay;
+
+        const img = art.querySelector("img");
+        const imgBottomDelta = () =>
+          Math.round(
+            table.getBoundingClientRect().bottom -
+              (img || art).getBoundingClientRect().bottom
+          );
+
+        const isTool = art.dataset.artSize === "tool";
+        const alignBottomToTable = isCerebral || isTool;
+
+        if (alignBottomToTable && img) {
+          wrap.style.setProperty("--art-h", "auto");
+          wrap.style.removeProperty("--art-shift");
+          let shift = Math.max(
+            0,
+            Math.round(
+              table.getBoundingClientRect().bottom -
+                wrap.getBoundingClientRect().top -
+                img.getBoundingClientRect().height
+            )
+          );
+          wrap.style.setProperty("--art-shift", `${shift}px`);
+          for (let i = 0; i < 4; i++) {
+            const fix = imgBottomDelta();
+            if (fix === 0) break;
+            shift = Math.max(0, shift + fix);
+            wrap.style.setProperty("--art-shift", `${shift}px`);
+          }
+        } else {
+          let artH = Math.round(tableBottom0);
+          if (isPortraitTop && img?.naturalWidth && img.naturalHeight && art.offsetWidth) {
+            artH = Math.max(
+              artH,
+              Math.round((art.offsetWidth / img.naturalWidth) * img.naturalHeight)
+            );
+          }
+          wrap.style.setProperty("--art-h", `${artH}px`);
+
+          const fix = Math.round(
+            table.getBoundingClientRect().bottom -
+              wrap.getBoundingClientRect().top -
+              (art.getBoundingClientRect().bottom - wrap.getBoundingClientRect().top)
+          );
+          if (fix !== 0) {
+            artH = Math.max(tableH, artH + fix);
+            wrap.style.setProperty("--art-h", `${artH}px`);
+          }
+        }
+        return;
+      }
+
+      // Ojo y similares: arte anclado al margen inferior de la tabla
+      let artH = naturalH;
+      if (naturalH > contentH) {
+        wrap.style.setProperty("--art-h", `${Math.round(tableH)}px`);
+        artH = art.offsetHeight || tableH;
+      }
+
+      // Anclar margen inferior del arte al de la tabla
+      const shift = Math.max(0, Math.round(tableBottom0 - artH));
+      wrap.style.setProperty("--art-shift", `${shift}px`);
+
+      // Ajuste fino tras reflow del float
+      const wrapTop = wrap.getBoundingClientRect().top;
+      const delta = Math.round(
+        table.getBoundingClientRect().bottom -
+          wrapTop -
+          (art.getBoundingClientRect().bottom - wrapTop)
+      );
+      if (delta) {
+        wrap.style.setProperty("--art-shift", `${Math.max(0, shift + delta)}px`);
+      }
+    });
+  }
 
   function normalizeAscii(text) {
     return (window.PBTA_LOGO ? window.PBTA_LOGO.normalize(text) : text.replace(/\u00a0/g, " ")).replace(/\n+$/, "");

@@ -4,7 +4,7 @@
 
 Aquí defines quién eres al empezar: arquetipo, atributos iniciales y el equipo con el que sales a la calle.
 
-No eliges bonos sueltos: eliges un personaje con historia, contactos y límites. Cada profesión resuelve problemas de otra forma (negocios, violencia, información, arte, espionaje, vida nómada…) dentro del mismo sistema PbtA de *Sistema*.
+No montas un personaje a la carta: eliges un arquetipo con historia, contactos y límites. Cada profesión resuelve los problemas de otra forma (negocios, violencia, información, arte, espionaje, vida nómada…), pero todos comparten las mismas reglas dentro del Sistema.
 
 ### Qué obtienes al crear el personaje
 

@@ -34,6 +34,12 @@
   --lh: 1.2;
   --safe-b: env(safe-area-inset-bottom, 0px);
   --font: "VT323", "Courier New", monospace;
+  --art-wrap-gap: 1.65rem;
+  --art-cerebral-w: min(9.22rem, 27.62%);
+  --art-sintetica-w: min(9.41rem, 28.25%);
+  --art-chap-w: min(11.73rem, 36.87%);
+  --art-chap-max: 36.87%;
+  --art-chap-scale: 0.961;
 }
 
 *,
@@ -241,12 +247,6 @@ body {
   color: var(--cyan);
 }
 
-.toc .l4 {
-  padding-left: 2rem;
-  font-size: 18px;
-  color: var(--muted);
-}
-
 .stage {
   grid-row: 2;
   min-height: 0;
@@ -412,6 +412,12 @@ body {
   margin: 0.9rem 0 0.35rem;
   break-after: avoid;
   clear: both;
+  width: 100%;
+  max-width: 100%;
+}
+
+.book h2 + .book-art-wrap {
+  clear: both;
 }
 
 .book h3 {
@@ -459,6 +465,46 @@ body {
   margin: 0.7rem 0;
   height: auto;
   clear: both;
+}
+
+/* Separador de sección: fila exclusiva, nunca compartida con floats */
+.book-section-break {
+  display: flow-root;
+  clear: both;
+  width: 100%;
+  margin: 0.75rem 0 0;
+  padding-bottom: 1.15rem;
+  min-height: 1.35rem;
+}
+
+.book-section-break hr {
+  margin: 0;
+  clear: both;
+}
+
+.book-section-break + .book-art-wrap {
+  clear: both;
+  margin-top: 0.85rem;
+  padding-top: 0;
+}
+
+.book-section-break + .book-art-wrap > .book-item-art[data-art-layout="portrait-top"] {
+  margin-top: 0;
+}
+
+.book-section-break + :is(h2, h3, h4) {
+  clear: both;
+  margin-top: 0.85rem;
+}
+
+.book-float-boundary {
+  clear: both;
+  display: flow-root;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  visibility: hidden;
 }
 
 /* Retrato de profesión: float sin marco */
@@ -509,6 +555,100 @@ body {
   background: transparent;
 }
 
+.book-item-art--vertebras {
+  width: min(13.58rem, 42.69%);
+}
+
+.book-item-art--vertebras img {
+  max-height: 21.34rem;
+}
+
+.book-item-art--cyberoido {
+  width: min(12.9rem, 40.55%);
+}
+
+.book-item-art--cyberoido img {
+  max-height: 20.28rem;
+}
+
+.book-item-art--balistica {
+  width: min(11.2rem, 35.2%);
+}
+
+.book-item-art--balistica img {
+  max-height: 17.6rem;
+}
+
+.book-item-art--lanzadardos,
+.book-item-art--lanzamisiles,
+.book-item-art--granadas {
+  width: min(12.5rem, 39.27%);
+}
+
+.book-item-art--lanzadardos img {
+  max-height: 19.64rem;
+}
+
+.book-item-art--garfio img,
+.book-item-art--torreta img,
+.book-item-art--trauma_card img {
+  transform: scale(var(--art-chap-scale));
+  transform-origin: top right;
+}
+
+.book-item-art--drone img {
+  max-height: 18.43rem;
+  transform: scale(var(--art-chap-scale));
+  transform-origin: top right;
+}
+
+.book-art-wrap > .book-item-art[data-art-layout="portrait-span"] {
+  margin-top: var(--art-shift, 0px);
+  height: var(--art-h, auto);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  shape-outside: inset(var(--art-shift, 0px) 0 0 0);
+}
+
+.book-art-wrap > .book-item-art--drone {
+  overflow: visible;
+}
+
+.book-art-wrap > .book-item-art[data-art-layout="portrait-span"] img {
+  max-height: none;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: bottom right;
+}
+
+.book-art-wrap > .book-item-art--drone img {
+  transform: scale(var(--art-chap-scale));
+  transform-origin: bottom right;
+}
+
+/* Banner panorámico (Corposuit, etc.): ancho completo, sin float */
+.book-item-banner {
+  display: block;
+  float: none;
+  clear: both;
+  width: 100%;
+  max-width: 100%;
+  margin: 0.35rem 0 0.85rem;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.book-item-banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+  background: transparent;
+}
+
 .book-item-art-row {
   float: right;
   display: flex;
@@ -522,16 +662,6 @@ body {
   clear: right;
 }
 
-/* Cyberpiernas (3 dibujos): ~3/4 del ancho de columna */
-.book-item-art-row:has(> .book-item-art:nth-child(3)) {
-  width: min(48rem, 75%);
-  gap: 0.5rem;
-}
-
-.book-item-art-row:has(> .book-item-art:nth-child(3)) .book-item-art img {
-  max-height: 18rem;
-}
-
 .book-item-art-row .book-item-art {
   float: none;
   clear: none;
@@ -543,6 +673,35 @@ body {
 
 .book-item-art-row .book-item-art img {
   max-height: 16rem;
+}
+
+/* Cyberpiernas (3 dibujos): misma altura visual; ancho según proporción; sin solape */
+.book-item-art-row:has(.book-item-art--acorazado):has(.book-item-art--cuadrupedo):has(.book-item-art--velocista) {
+  width: fit-content;
+  max-width: min(48rem, 75%);
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.book-item-art-row:has(.book-item-art--acorazado):has(.book-item-art--cuadrupedo):has(.book-item-art--velocista)
+  .book-item-art {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.book-item-art-row:has(.book-item-art--acorazado):has(.book-item-art--cuadrupedo):has(.book-item-art--velocista)
+  .book-item-art
+  img {
+  height: 13.5rem;
+  width: auto;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  object-position: bottom center;
 }
 
 /* El prosa/listas fluyen al lado; tablas y títulos no se estrechan */
@@ -593,6 +752,10 @@ body {
   color: var(--cyan);
 }
 
+.book hr + :is(h2, h3, h4) {
+  clear: both;
+}
+
 .book blockquote {
   margin: 0.45rem 0;
   padding: 0 0.7rem;
@@ -627,8 +790,247 @@ body {
   margin-top: 0.2rem;
 }
 
-.book-item-art-row + p + .table-wrap--rail {
-  max-width: calc(100% - 29rem);
+/* Título "Módulos…" y tablas siguientes: debajo del float, a ancho completo */
+.table-wrap--rail + p,
+.table-wrap--rail + .table-wrap {
+  clear: both;
+}
+
+/*
+  Ojo / Brazo de combate: texto a ancho completo arriba; arte abajo al lado
+  de la tabla Calidad. --art-shift (JS) alinea márgenes inferiores;
+  shape-outside solo estrecha líneas que chocan con el arte.
+*/
+.book-art-wrap {
+  display: flow-root;
+  clear: both;
+  margin: 0.15rem 0 0.75rem;
+}
+
+.book-art-wrap > .book-item-art,
+.book-art-wrap > .book-item-art-row {
+  float: right;
+  clear: none;
+  margin: 0 0 0 1rem;
+  margin-top: var(--art-shift, 0px);
+  shape-outside: inset(var(--art-shift, 0px) 0 0 0);
+  shape-margin: 0;
+  background: transparent;
+}
+
+.book-art-wrap > .book-item-art {
+  width: min(14rem, 42%);
+  max-width: 42%;
+  display: block;
+  height: var(--art-h, auto);
+}
+
+.book-item-art--garfio,
+.book-item-art--torreta,
+.book-item-art--trauma_card,
+.book-item-art--drone,
+.book-item-art--primeros_auxilios,
+.book-art-wrap > .book-item-art.book-item-art--garfio,
+.book-art-wrap > .book-item-art.book-item-art--torreta,
+.book-art-wrap > .book-item-art.book-item-art--trauma_card,
+.book-art-wrap > .book-item-art.book-item-art--drone,
+.book-art-wrap > .book-item-art.book-item-art--primeros_auxilios {
+  width: var(--art-chap-w);
+  max-width: var(--art-chap-max);
+}
+
+.book-art-wrap > .book-item-art-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 0.45rem;
+  width: min(28rem, 58%);
+  max-width: 58%;
+  height: var(--art-h, auto);
+}
+
+/* Brazo de combate: 2 dibujos pegados a la derecha; marco del intro + tabla */
+.book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row {
+  width: min(35rem, 48%);
+  max-width: 48%;
+  gap: 2rem;
+  margin-top: 0;
+  margin-left: 0.75rem;
+  margin-right: 0;
+  shape-outside: inset(0);
+  overflow: visible;
+}
+
+/* Retratos verticales: maquetación declarativa (data-art-* en build) */
+.book-art-wrap > .book-item-art[data-art-layout="portrait-top"] {
+  margin-top: 0;
+  margin-left: var(--art-wrap-gap);
+  shape-outside: inset(0);
+  shape-margin: 0.35rem;
+}
+
+.book-art-wrap > .book-item-art[data-art-layout="portrait-top"][data-art-size="cerebral"] {
+  width: var(--art-cerebral-w);
+  max-width: 27.62%;
+  margin-top: var(--art-shift, 0px);
+  shape-outside: inset(var(--art-shift, 0px) 0 0 0);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: var(--art-h, auto);
+}
+
+.book-art-wrap > .book-item-art[data-art-layout="portrait-top"][data-art-size="sintetica"] {
+  width: var(--art-sintetica-w);
+  max-width: 28.25%;
+  margin-top: -0.4rem;
+}
+
+.book-art-wrap > .book-item-art[data-art-layout="portrait-top"][data-art-size="tool"] {
+  margin-top: var(--art-shift, 0px);
+  shape-outside: inset(var(--art-shift, 0px) 0 0 0);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: var(--art-h, auto);
+}
+
+.book-item-art[data-art-layout="portrait-float"][data-art-size="cerebral"] {
+  width: var(--art-cerebral-w);
+  max-width: 27.62%;
+  margin-left: var(--art-wrap-gap);
+}
+
+.book-art-wrap > .book-item-art[data-art-size="cerebral"] img {
+  transform: scale(1.042);
+  transform-origin: bottom center;
+}
+
+.book-art-wrap > .book-item-art[data-art-layout="portrait-top"][data-art-size="cerebral"] img {
+  max-height: none;
+}
+
+.book-art-wrap > .book-item-art[data-art-size="tool"] img {
+  transform: scale(var(--art-chap-scale));
+  transform-origin: bottom center;
+}
+
+.book-item-art[data-art-layout="portrait-float"][data-art-size="cerebral"] img {
+  transform: scale(0.993);
+  transform-origin: bottom center;
+}
+
+.book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row .book-item-art {
+  padding: 0 0.65rem;
+  box-sizing: border-box;
+}
+
+.book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row .book-item-art img {
+  transform: scale(1.3125);
+  transform-origin: bottom center;
+}
+
+.book-art-wrap:has(.book-item-art--sable_mantis) .book-art-wrap-copy .table-wrap--rail {
+  width: calc(100% - min(35rem, 48%) - 1.5rem);
+  max-width: none;
+  margin-right: 0.5rem;
+  box-sizing: border-box;
+}
+
+.book-art-wrap:has(.book-item-art--sable_mantis) .book-art-wrap-copy .table-wrap--rail table {
+  width: 100%;
+}
+
+.book-art-wrap > .book-item-art-row .book-item-art {
+  float: none;
+  clear: none;
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  height: 100%;
+  margin: 0;
+  shape-outside: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.book-art-wrap > .book-item-art img,
+.book-art-wrap > .book-item-art-row .book-item-art img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: var(--art-h, none);
+  object-fit: contain;
+  object-position: bottom center;
+  background: transparent;
+}
+
+.book-art-wrap-copy {
+  display: block;
+  min-width: 0;
+}
+
+.book-art-wrap-copy > :is(h3, h4) {
+  clear: none;
+  margin-top: 0;
+}
+
+.book-art-wrap-copy .table-wrap--rail {
+  display: flow-root;
+  margin-top: 0.35rem;
+  margin-bottom: 0;
+  margin-left: 0;
+  max-width: none;
+  width: auto;
+  clear: none;
+  background: transparent;
+}
+
+.book-art-wrap-copy .table-wrap--rail table {
+  width: 100%;
+}
+
+@media (max-width: 720px) {
+  .book-art-wrap > .book-item-art,
+  .book-art-wrap > .book-item-art-row {
+    float: none;
+    display: flex;
+    width: min(22rem, 92%);
+    max-width: 92%;
+    margin: 0 auto 0.65rem;
+    shape-outside: none;
+  }
+
+  .book-art-wrap > .book-item-art {
+    display: block;
+    width: min(16rem, 78%);
+    max-width: 78%;
+  }
+
+  .book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row {
+    width: min(27.5rem, 88%);
+    max-width: 88%;
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  .book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row .book-item-art img {
+    max-height: 22.5rem;
+    transform: none;
+  }
+
+  .book-art-wrap > .book-item-art img,
+  .book-art-wrap > .book-item-art-row .book-item-art img {
+    height: auto;
+    max-height: 18rem;
+  }
+
+  .book-art-wrap-copy .table-wrap--rail {
+    width: auto;
+  }
 }
 
 .book table {
@@ -1402,6 +1804,20 @@ body {
   color: var(--ficha-ghost, #3a703a);
 }
 
+.ficha-inv-menu-info {
+  flex: 0 0 auto;
+  padding: 0 0.7ch 0.35em;
+  color: var(--ficha-ghost, #3a703a);
+  font-size: 0.95em;
+  line-height: 1.25;
+  white-space: pre-wrap;
+}
+
+.ficha-inv-menu-info-sub {
+  padding-top: 0;
+  color: var(--yellow);
+}
+
 .ficha-inv-ndata-owned {
   display: flex;
   align-items: center;
@@ -1453,6 +1869,13 @@ body {
   color: var(--cyan);
   white-space: normal;
   line-height: 1.2;
+}
+
+.ficha-inv-delete-prompt {
+  padding: 0.15em 0.7ch 0.45em;
+  color: var(--cyan);
+  white-space: pre-wrap;
+  line-height: 1.25;
 }
 
 .ficha-inv-ndata-input {

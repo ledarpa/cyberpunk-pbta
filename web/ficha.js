@@ -8,17 +8,7 @@
   const PORTRAIT_INNER_W = 32;
   const PORTRAIT_INNER_H = PORTRAIT_H - 2; // interior 32×11
   const PORTRAIT_MAX_BYTES = 100 * 1024;
-  const PROFESSION_PORTRAITS = {
-    arreglador: "assets/professions/arreglador.png",
-    artista: "assets/professions/artista.png",
-    biohacker: "assets/professions/biohacker.png",
-    comunicador: "assets/professions/comunicador.png",
-    corpo: "assets/professions/corpo.png",
-    espia: "assets/professions/espia.png?v=20260825a",
-    forastero: "assets/professions/forastero.png",
-    mercenario: "assets/professions/mercenario.png",
-    netrunner: "assets/professions/netrunner.png",
-  };
+  const BUILD = window.PBTA_BUILD || { id: "", professions: {} };
   let portraitCustom = false;
   const GHOST = "ficha-g";
   const LOGO_FALLBACK = [
@@ -605,17 +595,12 @@
     if (!portraitCustom) syncPortraitField();
   }
 
-  function professionPortraitKey(professionName) {
-    return String(professionName || "")
-      .trim()
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/\p{M}/gu, "");
-  }
-
   function professionPortraitUrl(professionName) {
-    const key = professionPortraitKey(professionName);
-    return key && PROFESSION_PORTRAITS[key] ? PROFESSION_PORTRAITS[key] : "";
+    const prof = normalizeProfession(professionName);
+    const slug = BUILD.professions[prof];
+    if (!slug) return "";
+    const q = BUILD.id ? `?v=${BUILD.id}` : "";
+    return `assets/professions/${slug}.png${q}`;
   }
 
   function syncPortraitField() {
@@ -924,10 +909,6 @@
 
   function syncAllStatColors() {
     form.querySelectorAll('input[data-stat="1"]').forEach((el) => syncStatColor(el));
-  }
-
-  function closeAllStatMenus() {
-    closeAllFichaMenus();
   }
 
   function bindStatPickers() {
@@ -1704,10 +1685,6 @@
         writeArsenalInitialItem(name);
         saveSheet();
       },
-      confirmDelete: (label) =>
-        window.confirm(
-          `¿Eliminar «${label}»?\n\nAdvertencia: se quitarán bonos EN/MC/RC/TM y efectos de ficha ligados a este elemento.`
-        ),
       canAssignPsiqueStat,
     });
     const loaded = loadSheet();

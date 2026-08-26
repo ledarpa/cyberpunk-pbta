@@ -24,7 +24,30 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
-# Retratos del lector web (mismas keys que web/ficha.js PROFESSION_PORTRAITS).
+# Versión única del build web (cache bust + data/build.js).
+WEB_BUILD_ID = "20260826f6"
+
+# Segunda columna de tabla Calidad → intro+título contornean imagen en wrap.
+CALIDAD_WRAP_COL2 = frozenset({
+    "Módulos disponibles",
+    "Accesorios",
+    "Mejora EN",
+    "Efecto",
+})
+
+# Metadatos de maquetación por slug (única fuente: CSS data-* + JS layout).
+ART_META: dict[str, dict[str, str]] = {
+    "sai": {"layout": "portrait-top", "size": "cerebral"},
+    "conexion_neuronal": {"layout": "portrait-top", "size": "cerebral"},
+    "membrana_acorazada": {"layout": "portrait-top", "size": "sintetica"},
+    "nanoplastia": {"layout": "portrait-top", "size": "sintetica"},
+    "piel_perfecta": {"layout": "portrait-top", "size": "sintetica"},
+    "neurochip": {"layout": "portrait-float", "size": "cerebral"},
+    "primeros_auxilios": {"layout": "portrait-top", "size": "tool"},
+    "drone": {"layout": "portrait-span", "anchor": "table"},
+}
+
+# Retratos de profesión (nombre display → slug PNG).
 PROFESSION_PORTRAITS: dict[str, str] = {
     "Arreglador": "arreglador",
     "Artista": "artista",
@@ -55,17 +78,40 @@ CATALOG_ART: dict[str, list[str]] = {
     "Kit de primeros auxilios": ["primeros_auxilios"],
     "Pistola garfio": ["garfio"],
     # Cromos
+    "Conexión de arma inteligente": ["sai"],
+    "Conexión neuronal": ["conexion_neuronal"],
+    "Neurochip": ["neurochip"],
     "Ojo biónico": ["ojo"],
-    "Aparato digestivo modular": ["bucales"],
+    "Oído biónico": ["cyberoido"],
+    "Membrana acorazada": ["membrana_acorazada"],
+    "Nanoplastía": ["nanoplastia"],
+    "Piel perfecta": ["piel_perfecta"],
     "Cybervértebras": ["vertebras"],
     "Brazo de combate": ["sable_mantis", "magnetoescudo"],
     "Extremidad balística": ["balistica"],
     "Cyberpiernas": ["acorazado", "cuadrupedo", "velocista"],
 }
 
+# Banners a ancho completo (no float / no rail).
+CATALOG_BANNER: dict[str, str] = {
+    "Corposuit": "corposuit",
+    "Aparato digestivo modular": "bucales",
+    "Aparato respiratorio modular": "cybernasales",
+    "Tecnoarmadura": "tecnoarmadura",
+}
+
+# Ilustraciones del manual (capítulos, no catálogo).
+MANUAL_BANNER: dict[str, str] = {
+    "Crear un Cyberpunk": "night_city",
+}
+
+
+def asset_url(path: str) -> str:
+    return f"{path}?v={WEB_BUILD_ID}"
+
 
 def profession_portrait_html(slug: str) -> str:
-    src = escape(f"assets/professions/{slug}.png")
+    src = escape(asset_url(f"assets/professions/{slug}.png"))
     return (
         '<figure class="book-prof-portrait" aria-hidden="true">'
         f'<img src="{src}" alt="" loading="lazy" width="240" height="240">'
@@ -73,17 +119,44 @@ def profession_portrait_html(slug: str) -> str:
     )
 
 
+def catalog_banner_html(slug: str) -> str:
+    src = escape(asset_url(f"assets/catalog/{slug}.png"))
+    return (
+        '<figure class="book-item-banner" aria-hidden="true">'
+        f'<img src="{src}" alt="" loading="lazy">'
+        "</figure>"
+    )
+
+
+def manual_banner_html(slug: str) -> str:
+    src = escape(asset_url(f"assets/manual/{slug}.png"))
+    return (
+        '<figure class="book-item-banner" aria-hidden="true">'
+        f'<img src="{src}" alt="" loading="lazy">'
+        "</figure>"
+    )
+
+
+def art_figure_html(slug: str) -> str:
+    src = escape(asset_url(f"assets/catalog/{slug}.png"))
+    meta = ART_META.get(slug, {})
+    attrs = ""
+    if layout := meta.get("layout"):
+        attrs += f' data-art-layout="{escape(layout)}"'
+    if size := meta.get("size"):
+        attrs += f' data-art-size="{escape(size)}"'
+    if anchor := meta.get("anchor"):
+        attrs += f' data-art-anchor="{escape(anchor)}"'
+    return (
+        f'<figure class="book-item-art book-item-art--{escape(slug)}"{attrs} '
+        f'aria-hidden="true"><img src="{src}" alt="" loading="lazy"></figure>'
+    )
+
+
 def catalog_art_html(slugs: list[str]) -> str:
     if not slugs:
         return ""
-    figures: list[str] = []
-    for slug in slugs:
-        src = escape(f"assets/catalog/{slug}.png")
-        figures.append(
-            '<figure class="book-item-art" aria-hidden="true">'
-            f'<img src="{src}" alt="" loading="lazy">'
-            "</figure>"
-        )
+    figures = [art_figure_html(slug) for slug in slugs]
     if len(figures) == 1:
         return figures[0]
     return (
@@ -155,22 +228,43 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
     pending_catalog_art: list[str] | None = None
     catalog_after_first_table = False
     catalog_art_open = False  # dibujo recién emitido → 1.ª tabla Calidad puede ir al rail
+    pending_art_wrap = False  # wrap: título+intro+tabla contornean imagen
+    art_wrap_open = False
+    art_wrap_rail_plus_list = False  # Drone: rail Calidad + ul stats dentro del wrap
 
-    def emit_catalog_art(slugs: list[str]) -> None:
-        nonlocal catalog_art_open
-        html.append(catalog_art_html(slugs))
+    def emit_catalog_art(slugs: list[str], *, wrap: bool = False) -> None:
+        nonlocal catalog_art_open, art_wrap_open
+        if wrap:
+            html.append('<div class="book-art-wrap">')
+            html.append(catalog_art_html(slugs))
+            html.append('<div class="book-art-wrap-copy">')
+            art_wrap_open = True
+        else:
+            html.append(catalog_art_html(slugs))
         catalog_art_open = True
 
+    def close_art_wrap() -> None:
+        nonlocal art_wrap_open
+        if art_wrap_open:
+            html.append("</div></div>")
+            html.append('<div class="book-float-boundary" aria-hidden="true"></div>')
+            art_wrap_open = False
+
     def flush_table() -> None:
-        nonlocal table_buffer, pending_catalog_art, catalog_after_first_table, catalog_art_open
+        nonlocal table_buffer, pending_catalog_art, catalog_after_first_table, catalog_art_open, art_wrap_rail_plus_list
         if table_buffer:
+            head = (table_buffer[0][0] if table_buffer[0] else "").strip()
+            if art_wrap_open and art_wrap_rail_plus_list and head != "Calidad":
+                close_art_wrap()
+                art_wrap_rail_plus_list = False
             rail = False
             if catalog_art_open:
-                head = (table_buffer[0][0] if table_buffer[0] else "").strip()
                 rail = head == "Calidad"
                 catalog_art_open = False
             html.append(table_html(table_buffer, rail=rail))
             table_buffer = []
+            if rail and not art_wrap_rail_plus_list:
+                close_art_wrap()
             if catalog_after_first_table and pending_catalog_art:
                 emit_catalog_art(pending_catalog_art)
                 pending_catalog_art = None
@@ -187,16 +281,20 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
             pending_portrait = None
 
     def flush_catalog_art() -> None:
-        nonlocal pending_catalog_art, catalog_after_first_table
+        nonlocal pending_catalog_art, catalog_after_first_table, pending_art_wrap
         if pending_catalog_art:
-            emit_catalog_art(pending_catalog_art)
+            emit_catalog_art(pending_catalog_art, wrap=pending_art_wrap)
             pending_catalog_art = None
+            pending_art_wrap = False
             catalog_after_first_table = False
 
     def close_catalog_section() -> None:
         """Cierra arte pendiente y evita que el rail/float contamine el siguiente bloque."""
-        nonlocal catalog_art_open
+        nonlocal catalog_art_open, pending_art_wrap, art_wrap_rail_plus_list
+        pending_art_wrap = False
+        art_wrap_rail_plus_list = False
         flush_catalog_art()
+        close_art_wrap()
         catalog_art_open = False
 
     def next_nonempty(from_idx: int) -> str:
@@ -206,8 +304,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
                 return s
         return ""
 
-    def peek_first_table_header(from_idx: int) -> str | None:
-        """Primera cabecera de tabla tras el heading (salta prosa/listas)."""
+    def peek_first_table_cols(from_idx: int) -> tuple[str, str] | None:
         for j in range(from_idx, len(lines)):
             s = lines[j].strip()
             if not s:
@@ -218,7 +315,11 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
                 if is_table_sep(s):
                     continue
                 cells = parse_row(s)
-                return cells[0].strip() if cells else None
+                if not cells:
+                    return None
+                c0 = cells[0].strip()
+                c1 = cells[1].strip() if len(cells) > 1 else ""
+                return (c0, c1)
         return None
 
     def is_table_sep(s: str) -> bool:
@@ -251,7 +352,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
             close_lists()
             flush_portrait()
             close_catalog_section()
-            html.append("<hr>")
+            html.append('<div class="book-section-break"><hr></div>')
             i += 1
             continue
 
@@ -264,23 +365,62 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
             title = heading.group(2).strip()
             hid = slugify(title, used_ids)
             toc.append({"id": hid, "level": level, "title": title})
-            html.append(f'<h{level} id="{escape(hid)}">{inline_md(title)}</h{level}>')
-            if level == 3:
-                pending_portrait = PROFESSION_PORTRAITS.get(title)
-            art = CATALOG_ART.get(title)
-            if art:
-                pending_catalog_art = art
-                nxt = next_nonempty(i + 1)
-                first_th = peek_first_table_header(i + 1)
-                if first_th == "Calidad":
-                    # Dibujo antes de tabla Calidad → rail a la izquierda
-                    flush_catalog_art()
-                    catalog_after_first_table = False
-                elif nxt.startswith("|") and "|" in nxt[1:]:
-                    # Armas (Stat, Tipo…): dibujo tras la 1.ª tabla
-                    catalog_after_first_table = True
+            heading_html = f'<h{level} id="{escape(hid)}">{inline_md(title)}</h{level}>'
+            wrap_heading = False
+
+            manual_banner = MANUAL_BANNER.get(title)
+            if manual_banner:
+                html.append(heading_html)
+                html.append(manual_banner_html(manual_banner))
+            else:
+                if level == 3:
+                    pending_portrait = PROFESSION_PORTRAITS.get(title)
+                banner = CATALOG_BANNER.get(title)
+                if banner:
+                    html.append(heading_html)
+                    html.append(catalog_banner_html(banner))
                 else:
-                    flush_catalog_art()
+                    art = CATALOG_ART.get(title)
+                    if art:
+                        pending_catalog_art = art
+                        nxt = next_nonempty(i + 1)
+                        cols = peek_first_table_cols(i + 1)
+                        first_th = cols[0] if cols else None
+                        col2 = cols[1] if cols else ""
+                        if first_th == "Calidad" and col2 == "Subsistemas":
+                            pending_art_wrap = True
+                            wrap_heading = True
+                            art_wrap_rail_plus_list = True
+                            catalog_after_first_table = False
+                        elif first_th == "Calidad" and nxt.startswith("|"):
+                            pending_art_wrap = True
+                            wrap_heading = True
+                            catalog_after_first_table = False
+                        elif first_th == "Calidad" and col2 in CALIDAD_WRAP_COL2:
+                            pending_art_wrap = True
+                            wrap_heading = True
+                            catalog_after_first_table = False
+                        elif first_th == "Calidad" and col2 == "Módulos":
+                            html.append(heading_html)
+                            flush_catalog_art()
+                            catalog_after_first_table = False
+                        elif first_th == "Calidad":
+                            pending_art_wrap = True
+                            wrap_heading = True
+                            catalog_after_first_table = False
+                        elif nxt.startswith("|") and "|" in nxt[1:]:
+                            html.append(heading_html)
+                            catalog_after_first_table = True
+                        else:
+                            html.append(heading_html)
+                            flush_catalog_art()
+                    else:
+                        html.append(heading_html)
+
+                    if wrap_heading and pending_catalog_art:
+                        emit_catalog_art(pending_catalog_art, wrap=True)
+                        pending_catalog_art = None
+                        html.append(heading_html)
             i += 1
             continue
 
@@ -332,6 +472,22 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
     return "\n".join(html)
 
 
+def write_build_js() -> None:
+    payload = {"id": WEB_BUILD_ID, "professions": PROFESSION_PORTRAITS}
+    (DATA / "build.js").write_text(
+        "window.PBTA_BUILD = " + json.dumps(payload, ensure_ascii=False) + ";\n",
+        encoding="utf-8",
+    )
+
+
+def patch_index_cache() -> None:
+    html_path = WEB / "index.html"
+    text = html_path.read_text(encoding="utf-8")
+    patched = re.sub(r"\?v=[^\"']+", f"?v={WEB_BUILD_ID}", text)
+    if patched != text:
+        html_path.write_text(patched, encoding="utf-8")
+
+
 def main() -> None:
     WEB.mkdir(parents=True, exist_ok=True)
     DATA.mkdir(parents=True, exist_ok=True)
@@ -365,7 +521,9 @@ def main() -> None:
     fonts = WEB / "fonts"
     fonts.mkdir(parents=True, exist_ok=True)
     shutil.copy2(FONT_SRC, fonts / "VT323-Regular.ttf")
-    print(f"OK {DATA / 'manual.js'} ({len(js)} chars, {len(toc)} headings)")
+    write_build_js()
+    patch_index_cache()
+    print(f"OK {DATA / 'manual.js'} ({len(js)} chars, {len(toc)} headings, build={WEB_BUILD_ID})")
 
 
 if __name__ == "__main__":
