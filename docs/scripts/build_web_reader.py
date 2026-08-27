@@ -25,7 +25,7 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20260826f7"
+WEB_BUILD_ID = "20260827d8"
 
 # Segunda columna de tabla Calidad → intro+título contornean imagen en wrap.
 CALIDAD_WRAP_COL2 = frozenset({
@@ -100,9 +100,21 @@ CATALOG_BANNER: dict[str, str] = {
     "Tecnoarmadura": "tecnoarmadura",
 }
 
-# Ilustraciones del manual (capítulos, no catálogo).
-MANUAL_BANNER: dict[str, str] = {
-    "Crear un Cyberpunk": "night_city",
+# Ilustraciones del manual (capítulos, no catálogo): float derecha junto al texto.
+MANUAL_ART: dict[str, str] = {
+    "Mejoras de características": "mejora_de_atributos",
+    "Degeneración neural": "degeneracion",
+}
+
+# Secciones cuyo dibujo va al rail de la 1.ª tabla (intro arriba; tabla dentro del wrap).
+MANUAL_ART_TABLE_WRAP: frozenset[str] = frozenset({"Mejoras de características"})
+
+# Secciones cuyo dibujo bordea todo el bloque de prosa (cierra en --- / siguiente título).
+MANUAL_ART_COPY_WRAP: frozenset[str] = frozenset({"Degeneración neural"})
+
+# Tamaño extra por slug (default en CSS: data-art-size="manual").
+MANUAL_ART_SIZE: dict[str, str] = {
+    "mejora_de_atributos": "manual-xl",
 }
 
 
@@ -128,12 +140,19 @@ def catalog_banner_html(slug: str) -> str:
     )
 
 
-def manual_banner_html(slug: str) -> str:
+def manual_art_html(
+    slug: str,
+    *,
+    layout: str = "portrait-float",
+    anchor: str | None = None,
+    size: str = "manual",
+) -> str:
     src = escape(asset_url(f"assets/manual/{slug}.png"))
+    anchor_attr = f' data-art-anchor="{escape(anchor)}"' if anchor else ""
     return (
-        '<figure class="book-item-banner" aria-hidden="true">'
-        f'<img src="{src}" alt="" loading="lazy">'
-        "</figure>"
+        f'<figure class="book-item-art book-item-art--{escape(slug)}" '
+        f'data-art-layout="{escape(layout)}" data-art-size="{escape(size)}"{anchor_attr} '
+        f'aria-hidden="true"><img src="{src}" alt="" loading="lazy"></figure>'
     )
 
 
@@ -231,6 +250,10 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
     pending_art_wrap = False  # wrap: título+intro+tabla contornean imagen
     art_wrap_open = False
     art_wrap_rail_plus_list = False  # Drone: rail Calidad + ul stats dentro del wrap
+    pending_manual_art_wrap: str | None = None
+    pending_manual_art_anchor: str = "table"
+    manual_art_in_wrap = False
+    manual_art_anchor: str = "table"
 
     def emit_catalog_art(slugs: list[str], *, wrap: bool = False) -> None:
         nonlocal catalog_art_open, art_wrap_open
@@ -244,26 +267,49 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
         catalog_art_open = True
 
     def close_art_wrap() -> None:
-        nonlocal art_wrap_open
+        nonlocal art_wrap_open, manual_art_in_wrap, manual_art_anchor
         if art_wrap_open:
             html.append("</div></div>")
             html.append('<div class="book-float-boundary" aria-hidden="true"></div>')
             art_wrap_open = False
+            manual_art_in_wrap = False
+            manual_art_anchor = "table"
+
+    def open_manual_art_wrap(slug: str, *, anchor: str = "table") -> None:
+        nonlocal art_wrap_open, manual_art_in_wrap, pending_manual_art_wrap, manual_art_anchor
+        html.append('<div class="book-art-wrap">')
+        html.append(
+            manual_art_html(
+                slug,
+                layout="portrait-span",
+                anchor=anchor,
+                size=MANUAL_ART_SIZE.get(slug, "manual"),
+            )
+        )
+        html.append('<div class="book-art-wrap-copy">')
+        art_wrap_open = True
+        manual_art_in_wrap = True
+        manual_art_anchor = anchor
+        pending_manual_art_wrap = None
 
     def flush_table() -> None:
-        nonlocal table_buffer, pending_catalog_art, catalog_after_first_table, catalog_art_open, art_wrap_rail_plus_list
+        nonlocal table_buffer, pending_catalog_art, catalog_after_first_table, catalog_art_open, art_wrap_rail_plus_list, manual_art_in_wrap
         if table_buffer:
             head = (table_buffer[0][0] if table_buffer[0] else "").strip()
             if art_wrap_open and art_wrap_rail_plus_list and head != "Calidad":
                 close_art_wrap()
                 art_wrap_rail_plus_list = False
             rail = False
-            if catalog_art_open:
+            if manual_art_in_wrap and art_wrap_open and manual_art_anchor == "table":
+                rail = True
+            elif catalog_art_open:
                 rail = head == "Calidad"
                 catalog_art_open = False
             html.append(table_html(table_buffer, rail=rail))
             table_buffer = []
-            if rail and not art_wrap_rail_plus_list:
+            if manual_art_in_wrap and manual_art_anchor == "table":
+                close_art_wrap()
+            elif rail and not art_wrap_rail_plus_list:
                 close_art_wrap()
             if catalog_after_first_table and pending_catalog_art:
                 emit_catalog_art(pending_catalog_art)
@@ -290,9 +336,12 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
 
     def close_catalog_section() -> None:
         """Cierra arte pendiente y evita que el rail/float contamine el siguiente bloque."""
-        nonlocal catalog_art_open, pending_art_wrap, art_wrap_rail_plus_list
+        nonlocal catalog_art_open, pending_art_wrap, art_wrap_rail_plus_list, pending_manual_art_wrap, manual_art_in_wrap, pending_manual_art_anchor
         pending_art_wrap = False
         art_wrap_rail_plus_list = False
+        pending_manual_art_wrap = None
+        pending_manual_art_anchor = "table"
+        manual_art_in_wrap = False
         flush_catalog_art()
         close_art_wrap()
         catalog_art_open = False
@@ -335,6 +384,11 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
         if stripped.startswith("|") and "|" in stripped[1:]:
             close_lists()
             flush_portrait()
+            if pending_manual_art_wrap and not is_table_sep(stripped):
+                open_manual_art_wrap(
+                    pending_manual_art_wrap,
+                    anchor=pending_manual_art_anchor,
+                )
             if is_table_sep(stripped):
                 i += 1
                 continue
@@ -368,10 +422,22 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
             heading_html = f'<h{level} id="{escape(hid)}">{inline_md(title)}</h{level}>'
             wrap_heading = False
 
-            manual_banner = MANUAL_BANNER.get(title)
-            if manual_banner:
+            manual_art = MANUAL_ART.get(title)
+            if manual_art:
                 html.append(heading_html)
-                html.append(manual_banner_html(manual_banner))
+                if title in MANUAL_ART_TABLE_WRAP:
+                    pending_manual_art_wrap = manual_art
+                    pending_manual_art_anchor = "table"
+                elif title in MANUAL_ART_COPY_WRAP:
+                    pending_manual_art_wrap = manual_art
+                    pending_manual_art_anchor = "copy"
+                else:
+                    html.append(
+                        manual_art_html(
+                            manual_art,
+                            size=MANUAL_ART_SIZE.get(manual_art, "manual"),
+                        )
+                    )
             else:
                 if level == 3:
                     pending_portrait = PROFESSION_PORTRAITS.get(title)
@@ -449,6 +515,11 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
             if len(list_stack) < level + 1:
                 flush_portrait()
                 flush_catalog_art()
+                if pending_manual_art_wrap:
+                    open_manual_art_wrap(
+                        pending_manual_art_wrap,
+                        anchor=pending_manual_art_anchor,
+                    )
                 html.append(f"<{tag}>")
                 list_stack.append(tag)
             elif list_stack and list_stack[-1] != tag and len(list_stack) == level + 1:
@@ -462,6 +533,11 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
         close_lists()
         flush_portrait()
         flush_catalog_art()
+        if pending_manual_art_wrap:
+            open_manual_art_wrap(
+                pending_manual_art_wrap,
+                anchor=pending_manual_art_anchor,
+            )
         html.append(f"<p>{inline_md(stripped)}</p>")
         i += 1
 

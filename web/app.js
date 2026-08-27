@@ -54,7 +54,9 @@
       const art = wrap.querySelector(":scope > .book-item-art, :scope > .book-item-art-row");
       const copy = wrap.querySelector(":scope > .book-art-wrap-copy");
       const table = copy && copy.querySelector(":scope > .table-wrap--rail");
-      if (!art || !copy || !table) return;
+      const anchorCopy = art?.dataset?.artAnchor === "copy";
+      if (!art || !copy) return;
+      if (!table && !anchorCopy) return;
 
       art.querySelectorAll("img").forEach((img) => {
         if (img.dataset.artLayoutBound) return;
@@ -65,12 +67,28 @@
       if (mobile) {
         wrap.style.removeProperty("--art-shift");
         wrap.style.removeProperty("--art-h");
+        const img = art.querySelector("img");
+        if (img) img.style.removeProperty("max-height");
         return;
       }
 
       const prevDisplay = art.style.display;
       wrap.style.setProperty("--art-shift", "0px");
       wrap.style.removeProperty("--art-h");
+
+      const isBrazo = !!art.querySelector(".book-item-art--sable_mantis");
+      const isPortraitTop = art.dataset.artLayout === "portrait-top";
+      const isPortraitSpan = art.dataset.artLayout === "portrait-span";
+      const isCerebral = art.dataset.artSize === "cerebral";
+
+      if (isPortraitSpan && anchorCopy) {
+        // Degeneración: alineación por CSS (absolute bottom + padding de 1 línea).
+        wrap.style.removeProperty("--art-shift");
+        wrap.style.removeProperty("--art-h");
+        const img = art.querySelector("img");
+        if (img) img.style.removeProperty("max-height");
+        return;
+      }
 
       // Medir texto+tabla a ancho completo (sin float)
       art.style.display = "none";
@@ -84,10 +102,6 @@
       const naturalH = art.offsetHeight;
       if (!naturalH) return;
 
-      const isBrazo = !!art.querySelector(".book-item-art--sable_mantis");
-      const isPortraitTop = art.dataset.artLayout === "portrait-top";
-      const isPortraitSpan = art.dataset.artLayout === "portrait-span";
-      const isCerebral = art.dataset.artSize === "cerebral";
       if (isPortraitSpan) {
         const railTable = copy.querySelector(":scope > .table-wrap--rail");
         if (!railTable) return;
@@ -237,6 +251,11 @@
 
   function loadCover() {
     const pre = document.getElementById("cover-art");
+    const scene = document.getElementById("cover-scene");
+    if (scene) {
+      const v = window.PBTA_BUILD?.id || "";
+      scene.src = `assets/manual/night_city.png${v ? `?v=${v}` : ""}`;
+    }
     if (!pre) return;
     fetchCoverAscii()
       .then((text) => {
@@ -266,7 +285,7 @@
     const page = pre?.closest(".cover-page");
     if (!pre || !frame || !page || !pre.textContent) return;
     const boxW = frame.clientWidth;
-    const boxH = Math.max(32, page.clientHeight * 0.2);
+    const boxH = Math.max(32, page.clientHeight * 0.16);
     fitAsciiArt(pre, boxW, boxH, 40);
   }
 
