@@ -1,0 +1,22 @@
+---
+description: Cuentas personales ledarpa para este repo (no Crowder)
+alwaysApply: true
+---
+
+# Cuentas — cyberpunk-pbta
+
+Este workspace es **personal (ledarpa / ledarpa@gmail.com)**.
+
+- GitHub: org/user `ledarpa`, remote `git@github.com-ledarpa:ledarpa/cyberpunk-pbta.git`
+- Vercel: usuario/team **Darpa** (`darpa2`), proyecto `cyberpunk-pbta`
+- Neon: DB del marketplace de ese proyecto Vercel (`pbta-db`)
+
+**No** usar cuentas Crowder (`dario@getcrowder.com` / `dario-crowder`) para git push, `gh`, `vercel deploy`, ni Neon de este repo.
+
+Antes de operaciones remotas en esta carpeta, preferir:
+
+```bash
+./scripts/use-ledarpa-accounts.sh
+```
+
+Detalle: `docs/ACCOUNTS.md`.

@@ -6,6 +6,8 @@
 .vercel
 .env
 .env.*
+node_modules/
 docs/.generated/
 ficha horizontal.docx
 vt323-atlas.docx
+.env*

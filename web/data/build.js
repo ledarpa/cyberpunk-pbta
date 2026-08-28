@@ -1,1 +1,1 @@
-window.PBTA_BUILD = {"id": "20260827d8", "professions": {"Arreglador": "arreglador", "Artista": "artista", "Biohacker": "biohacker", "Comunicador": "comunicador", "Corpo": "corpo", "Espía": "espia", "Forastero": "forastero", "Mercenario": "mercenario", "Netrunner": "netrunner"}};
+window.PBTA_BUILD = {"id": "20260828c7", "professions": {"Arreglador": "arreglador", "Artista": "artista", "Biohacker": "biohacker", "Comunicador": "comunicador", "Corpo": "corpo", "Espía": "espia", "Forastero": "forastero", "Mercenario": "mercenario", "Netrunner": "netrunner"}};

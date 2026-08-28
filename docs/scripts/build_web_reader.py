@@ -25,7 +25,7 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20260827d8"
+WEB_BUILD_ID = "20260828c7"
 
 # Segunda columna de tabla Calidad → intro+título contornean imagen en wrap.
 CALIDAD_WRAP_COL2 = frozenset({
@@ -104,13 +104,30 @@ CATALOG_BANNER: dict[str, str] = {
 MANUAL_ART: dict[str, str] = {
     "Mejoras de características": "mejora_de_atributos",
     "Degeneración neural": "degeneracion",
+    "Recuperar la humanidad": "recuperar_humanidad",
+}
+
+# Banners panorámicos del manual (ancho completo bajo el título).
+MANUAL_BANNER: dict[str, str] = {
+    "Episodios de cyberpsicosis": "cyberpsicosis",
+}
+
+# Banner entre el párrafo intro y la 1.ª tabla de la sección.
+MANUAL_BANNER_BEFORE_TABLE: dict[str, str] = {
+    "Los cuatro atributos": "atributos",
+    "Tiradas (2d6 + atributo)": "tiradas",
 }
 
 # Secciones cuyo dibujo va al rail de la 1.ª tabla (intro arriba; tabla dentro del wrap).
-MANUAL_ART_TABLE_WRAP: frozenset[str] = frozenset({"Mejoras de características"})
+MANUAL_ART_TABLE_WRAP: frozenset[str] = frozenset({
+    "Mejoras de características",
+})
 
 # Secciones cuyo dibujo bordea todo el bloque de prosa (cierra en --- / siguiente título).
-MANUAL_ART_COPY_WRAP: frozenset[str] = frozenset({"Degeneración neural"})
+MANUAL_ART_COPY_WRAP: frozenset[str] = frozenset({
+    "Degeneración neural",
+    "Recuperar la humanidad",
+})
 
 # Tamaño extra por slug (default en CSS: data-art-size="manual").
 MANUAL_ART_SIZE: dict[str, str] = {
@@ -133,6 +150,15 @@ def profession_portrait_html(slug: str) -> str:
 
 def catalog_banner_html(slug: str) -> str:
     src = escape(asset_url(f"assets/catalog/{slug}.png"))
+    return (
+        '<figure class="book-item-banner" aria-hidden="true">'
+        f'<img src="{src}" alt="" loading="lazy">'
+        "</figure>"
+    )
+
+
+def manual_banner_html(slug: str) -> str:
+    src = escape(asset_url(f"assets/manual/{slug}.png"))
     return (
         '<figure class="book-item-banner" aria-hidden="true">'
         f'<img src="{src}" alt="" loading="lazy">'
@@ -252,6 +278,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
     art_wrap_rail_plus_list = False  # Drone: rail Calidad + ul stats dentro del wrap
     pending_manual_art_wrap: str | None = None
     pending_manual_art_anchor: str = "table"
+    pending_manual_banner_before_table: str | None = None
     manual_art_in_wrap = False
     manual_art_anchor: str = "table"
 
@@ -336,11 +363,12 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
 
     def close_catalog_section() -> None:
         """Cierra arte pendiente y evita que el rail/float contamine el siguiente bloque."""
-        nonlocal catalog_art_open, pending_art_wrap, art_wrap_rail_plus_list, pending_manual_art_wrap, manual_art_in_wrap, pending_manual_art_anchor
+        nonlocal catalog_art_open, pending_art_wrap, art_wrap_rail_plus_list, pending_manual_art_wrap, manual_art_in_wrap, pending_manual_art_anchor, pending_manual_banner_before_table
         pending_art_wrap = False
         art_wrap_rail_plus_list = False
         pending_manual_art_wrap = None
         pending_manual_art_anchor = "table"
+        pending_manual_banner_before_table = None
         manual_art_in_wrap = False
         flush_catalog_art()
         close_art_wrap()
@@ -384,6 +412,9 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
         if stripped.startswith("|") and "|" in stripped[1:]:
             close_lists()
             flush_portrait()
+            if pending_manual_banner_before_table and not is_table_sep(stripped):
+                html.append(manual_banner_html(pending_manual_banner_before_table))
+                pending_manual_banner_before_table = None
             if pending_manual_art_wrap and not is_table_sep(stripped):
                 open_manual_art_wrap(
                     pending_manual_art_wrap,
@@ -414,15 +445,25 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
         if heading:
             close_lists()
             flush_portrait()
-            close_catalog_section()
             level = len(heading.group(1))
+            # h4 dentro de un wrap de prosa (p. ej. Recuperar la humanidad): no cortar el arte
+            if not (manual_art_in_wrap and manual_art_anchor == "copy" and level >= 4):
+                close_catalog_section()
             title = heading.group(2).strip()
             hid = slugify(title, used_ids)
             toc.append({"id": hid, "level": level, "title": title})
             heading_html = f'<h{level} id="{escape(hid)}">{inline_md(title)}</h{level}>'
             wrap_heading = False
 
+            # Si el wrap de prosa sigue abierto, el h4 va dentro del copy
+            if manual_art_in_wrap and manual_art_anchor == "copy" and level >= 4:
+                html.append(heading_html)
+                i += 1
+                continue
+
             manual_art = MANUAL_ART.get(title)
+            manual_banner = MANUAL_BANNER.get(title)
+            manual_banner_mid = MANUAL_BANNER_BEFORE_TABLE.get(title)
             if manual_art:
                 html.append(heading_html)
                 if title in MANUAL_ART_TABLE_WRAP:
@@ -438,6 +479,12 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
                             size=MANUAL_ART_SIZE.get(manual_art, "manual"),
                         )
                     )
+            elif manual_banner:
+                html.append(heading_html)
+                html.append(manual_banner_html(manual_banner))
+            elif manual_banner_mid:
+                html.append(heading_html)
+                pending_manual_banner_before_table = manual_banner_mid
             else:
                 if level == 3:
                     pending_portrait = PROFESSION_PORTRAITS.get(title)

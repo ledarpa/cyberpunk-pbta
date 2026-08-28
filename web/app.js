@@ -64,7 +64,7 @@
         img.addEventListener("load", layoutBookArtWraps);
       });
 
-      if (mobile) {
+      if (mobile || wrap.clientWidth < 580) {
         wrap.style.removeProperty("--art-shift");
         wrap.style.removeProperty("--art-h");
         const img = art.querySelector("img");
@@ -82,7 +82,7 @@
       const isCerebral = art.dataset.artSize === "cerebral";
 
       if (isPortraitSpan && anchorCopy) {
-        // Degeneración: alineación por CSS (absolute bottom + padding de 1 línea).
+        // Degeneración / Recuperar: alineación por CSS (bottom o top absolutos).
         wrap.style.removeProperty("--art-shift");
         wrap.style.removeProperty("--art-h");
         const img = art.querySelector("img");
@@ -419,6 +419,17 @@
     if (id === FICHA_ID) {
       showFichaView();
       return;
+    }
+    if (isFichaView()) {
+      const player = window.PBTA_PLAYER;
+      if (player?.isLoggedIn?.() && window.PBTA_FICHA?.isDirty?.()) {
+        player
+          .gateDirty({ onDiscard: () => player.restoreActiveOrReset?.() })
+          .then((ok) => {
+            if (ok) showManualView(id);
+          });
+        return;
+      }
     }
     showManualView(id);
   }

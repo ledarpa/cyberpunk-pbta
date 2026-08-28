@@ -100,6 +100,252 @@ body {
   border-bottom: 1px solid var(--line);
   background: var(--bg-panel);
   min-height: 2.6rem;
+  overflow: visible;
+  z-index: 30;
+}
+
+.player-chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 0 1 auto;
+  flex-wrap: nowrap;
+  margin-left: 0.25rem;
+  min-width: 0;
+  overflow: visible;
+}
+
+.player-badge {
+  color: var(--muted);
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.player-badge[data-mode="player"] {
+  color: var(--cyan);
+}
+
+.text-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--green);
+  font: inherit;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0.25rem 0.55rem;
+  cursor: pointer;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.text-btn:hover,
+.text-btn:focus-visible {
+  border-color: var(--green);
+  color: var(--bright);
+  outline: none;
+}
+
+.text-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.text-btn-danger {
+  border-color: #aa3333;
+  color: #ff5555;
+}
+
+.text-btn-danger:hover,
+.text-btn-danger:focus-visible {
+  border-color: #ff5555;
+  color: #ffaaaa;
+}
+
+.player-char-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.player-char-wrap[hidden] {
+  display: none !important;
+}
+
+.player-char-trigger {
+  max-width: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--cyan);
+  border-color: var(--line);
+}
+
+.player-char-menu {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 0.15em 0;
+  min-width: 8rem;
+  max-width: min(18rem, 70vw);
+  max-height: min(50vh, 16rem);
+  overflow-y: auto;
+  box-sizing: border-box;
+  background: var(--bg);
+  border: 1px solid var(--green);
+  box-shadow: 0 0 0 1px var(--bg), 0 8px 24px rgba(0, 0, 0, 0.55);
+  font: inherit;
+  font-size: 18px;
+  line-height: 1.15;
+}
+
+.player-char-menu[hidden] {
+  display: none !important;
+}
+
+.player-char-opt {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0.2em 0.6ch;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  line-height: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: var(--cyan);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-char-opt:hover,
+.player-char-opt:focus-visible {
+  outline: none;
+  background: var(--green);
+  color: var(--bg);
+}
+
+.player-char-opt[aria-selected="true"] {
+  background: var(--line);
+}
+
+.text-btn[hidden],
+.ficha-save-status[hidden] {
+  display: none !important;
+}
+
+.ficha-save-btn:not(:disabled) {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.ficha-save-status {
+  font-size: 16px;
+  color: var(--muted);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.ficha-save-status[data-kind="dirty"] {
+  color: var(--yellow);
+}
+
+.ficha-save-status[data-kind="clean"] {
+  color: var(--muted);
+}
+
+.ficha-save-status[data-kind="error"] {
+  color: #ff5555;
+}
+
+.ficha-save-status[data-kind="busy"] {
+  color: var(--cyan);
+}
+
+.pbta-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgb(0 0 0 / 0.55);
+}
+
+.pbta-modal[hidden] {
+  display: none !important;
+}
+
+.pbta-modal-card {
+  width: min(22rem, 100%);
+  background: #050805;
+  border: 1px solid var(--green);
+  padding: 1rem 1.1rem 1.1rem;
+  color: var(--text);
+  box-shadow: 0 0 0 1px #003300, 0 12px 40px rgba(0, 0, 0, 0.65);
+}
+
+.pbta-modal-card h2 {
+  margin: 0 0 0.35rem;
+  color: var(--yellow);
+  font-size: 1.35rem;
+  font-weight: 400;
+}
+
+.pbta-modal-lead {
+  margin: 0 0 0.85rem;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.auth-form {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.auth-form label {
+  display: grid;
+  gap: 0.25rem;
+  color: var(--cyan);
+  font-size: 18px;
+}
+
+.auth-form input {
+  background: #020402;
+  border: 1px solid var(--line);
+  color: var(--green);
+  font: inherit;
+  font-size: 20px;
+  padding: 0.35rem 0.45rem;
+}
+
+.auth-form input:focus-visible {
+  outline: 1px solid var(--bright);
+  border-color: var(--bright);
+}
+
+.auth-error {
+  min-height: 1.2em;
+  margin: 0;
+  color: #ff5555;
+  font-size: 16px;
+}
+
+.pbta-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.35rem;
 }
 
 .search-box {
@@ -967,6 +1213,8 @@ body {
 /* Manual (Mejoras): intro+tabla al costado; borde inferior = borde inferior de la tabla */
 .book-art-wrap:has(.book-item-art--mejora_de_atributos) {
   margin-top: 0.1rem;
+  container-type: inline-size;
+  container-name: mejora;
 }
 
 .book-art-wrap:has(.book-item-art--mejora_de_atributos) > .book-item-art {
@@ -986,6 +1234,53 @@ body {
 .book-art-wrap:has(.book-item-art--mejora_de_atributos) .book-art-wrap-copy .table-wrap--rail {
   margin-bottom: 0;
   clear: none;
+  min-width: min(12rem, 100%);
+}
+
+.book-art-wrap:has(.book-item-art--mejora_de_atributos) .book-art-wrap-copy .table-wrap--rail th {
+  line-height: 1.15;
+  hyphens: auto;
+  overflow-wrap: anywhere;
+}
+
+/* Tiradas 2d6: banner panorámico (CSS genérico .book-item-banner) */
+
+/* Ancho medio: achica el arte para que la tabla no colapse */
+@container mejora (max-width: 48rem) {
+  .book-item-art--mejora_de_atributos {
+    width: min(16.5rem, 46%) !important;
+    max-width: 46% !important;
+  }
+}
+
+/* Angosto: apila imagen arriba y tabla a ancho completo */
+@container mejora (max-width: 36rem) {
+  .book-item-art--mejora_de_atributos {
+    float: none !important;
+    display: block !important;
+    width: min(20rem, 90%) !important;
+    max-width: 90% !important;
+    height: auto !important;
+    margin: 0.2rem auto 0.75rem !important;
+    shape-outside: none !important;
+  }
+
+  .book-item-art--mejora_de_atributos img {
+    max-height: 16rem;
+    object-position: center bottom;
+  }
+
+  .book-art-wrap-copy > p {
+    clear: both;
+  }
+
+  .book-art-wrap-copy .table-wrap--rail {
+    clear: both !important;
+    float: none;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0;
+  }
 }
 
 .book-art-wrap:has(.book-item-art--degeneracion) {
@@ -1057,11 +1352,83 @@ body {
   }
 }
 
+/* Recuperar la humanidad: float (marco de texto); sin imagen/columna reservada el texto llega al margen derecho */
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) {
+  position: relative;
+  display: flow-root;
+  padding-bottom: 0;
+}
+
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art {
+  float: right;
+  position: static;
+  /* .book p margin-top → top del marco ≈ primera línea bajo el título */
+  margin: 0.35rem 0 0.35rem 1rem;
+  top: auto;
+  bottom: auto;
+  width: min(30.949rem, 89.646%);
+  max-width: 89.646%;
+  padding: 0;
+  height: auto;
+  display: block;
+  shape-outside: margin-box;
+  shape-margin: 0.35rem;
+  clear: none;
+  overflow: visible;
+  z-index: 0;
+}
+
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art img {
+  display: block;
+  max-height: none !important;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: top right;
+}
+
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy {
+  position: static;
+  z-index: auto;
+  box-sizing: border-box;
+  padding-right: 0;
+  max-width: 100%;
+  /* No BFC: las líneas envuelven el float y, bajo la imagen, usan todo el ancho */
+  display: block;
+  overflow: visible;
+}
+
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy > :is(h4, p, ul, ol) {
+  clear: none;
+}
+
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy > :last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 720px) {
+  .book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art {
+    float: none;
+    width: min(34.151rem, 100%);
+    max-width: 100%;
+    margin: 0.35rem auto 0.75rem;
+    shape-outside: none;
+  }
+
+  .book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy {
+    padding-right: 0;
+  }
+}
+
 .book-art-wrap > .book-item-art[data-art-layout="portrait-span"][data-art-size="manual"] img,
 .book-art-wrap > .book-item-art[data-art-layout="portrait-span"][data-art-size="manual-xl"] img {
   max-height: none;
   object-fit: contain;
   object-position: bottom right;
+}
+
+.book-art-wrap > .book-item-art.book-item-art--recuperar_humanidad[data-art-layout="portrait-span"] img {
+  object-position: top right;
 }
 
 .book-art-wrap > .book-item-art[data-art-size="cerebral"] img {
@@ -1489,6 +1856,12 @@ body {
 .ficha-fill-input {
   color: var(--cyan);
   caret-color: var(--cyan);
+}
+
+.ficha-fill-input.ficha-jugador-locked {
+  color: var(--cyan);
+  cursor: default;
+  opacity: 0.92;
 }
 
 .ficha-stat-wrap {

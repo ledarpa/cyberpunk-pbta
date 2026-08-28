@@ -7,7 +7,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="favicon-192.png">
-  <link rel="stylesheet" href="app.css?v=20260827d8">
+  <link rel="stylesheet" href="app.css?v=20260828c7">
 </head>
 <body class="view-manual">
   <div class="shell">
@@ -22,6 +22,19 @@
         <span id="search-meta" class="search-meta" hidden>0/0</span>
         <button type="button" class="icon-btn" id="search-prev" title="Anterior" hidden>↑</button>
         <button type="button" class="icon-btn" id="search-next" title="Siguiente" hidden>↓</button>
+      </div>
+      <div class="player-chrome" aria-label="Cuenta de jugador">
+        <span id="player-badge" class="player-badge" data-mode="guest">Anónimo</span>
+        <span id="ficha-char-wrap" class="player-char-wrap" hidden>
+          <button type="button" class="text-btn player-char-trigger" id="ficha-char-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Personaje">Sin nombre</button>
+          <span id="ficha-char-menu" class="player-char-menu" role="listbox" hidden></span>
+        </span>
+        <button type="button" class="text-btn" id="ficha-new-btn" hidden>Nuevo</button>
+        <button type="button" class="text-btn" id="ficha-delete-btn" hidden>Eliminar</button>
+        <button type="button" class="text-btn ficha-save-btn" id="ficha-save-btn" hidden disabled>Guardar</button>
+        <span id="ficha-save-status" class="ficha-save-status" data-kind="" hidden></span>
+        <button type="button" class="text-btn" id="player-auth-btn">Entrar</button>
+        <button type="button" class="text-btn" id="player-logout-btn" hidden>Salir</button>
       </div>
     </header>
 
@@ -56,12 +69,60 @@
     </div>
   </div>
   <div id="scrim" class="scrim" hidden></div>
-  <script src="data/build.js?v=20260827d8"></script>
-  <script src="data/manual.js?v=20260827d8"></script>
-  <script src="data/catalogo.js?v=20260827d8"></script>
-  <script src="logo.js?v=20260827d8"></script>
-  <script src="ficha-inv.js?v=20260827d8"></script>
-  <script src="ficha.js?v=20260827d8"></script>
-  <script src="app.js?v=20260827d8"></script>
+
+  <div id="auth-modal" class="pbta-modal" hidden role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+    <div class="pbta-modal-card">
+      <h2 id="auth-modal-title">Cuenta de jugador</h2>
+      <p class="pbta-modal-lead">Creá una cuenta o entrá para guardar personajes en la nube.</p>
+      <form class="auth-form" autocomplete="on">
+        <label>Usuario
+          <input name="username" type="text" minlength="3" maxlength="32" pattern="[A-Za-z0-9_]{3,32}" required autocomplete="username">
+        </label>
+        <label>Contraseña
+          <input name="password" type="password" minlength="6" maxlength="128" required autocomplete="current-password">
+        </label>
+        <p class="auth-error" data-auth-error role="alert"></p>
+        <div class="pbta-modal-actions">
+          <button type="submit" class="text-btn" data-auth-login>Entrar</button>
+          <button type="button" class="text-btn" data-auth-register>Crear cuenta</button>
+          <button type="button" class="text-btn" data-auth-close>Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="dirty-modal" class="pbta-modal" hidden role="dialog" aria-modal="true" aria-labelledby="dirty-modal-title">
+    <div class="pbta-modal-card">
+      <h2 id="dirty-modal-title">Cambios sin guardar</h2>
+      <p class="pbta-modal-lead">Hay cambios en la ficha. ¿Qué querés hacer?</p>
+      <div class="pbta-modal-actions">
+        <button type="button" class="text-btn" data-dirty-save>Guardar</button>
+        <button type="button" class="text-btn" data-dirty-discard>Descartar</button>
+        <button type="button" class="text-btn" data-dirty-cancel>Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="delete-char-modal" class="pbta-modal" hidden role="dialog" aria-modal="true" aria-labelledby="delete-char-modal-title">
+    <div class="pbta-modal-card">
+      <h2 id="delete-char-modal-title">Eliminar personaje</h2>
+      <p class="pbta-modal-lead" data-delete-char-lead>
+        Vas a eliminar este personaje de forma permanente. Esta acción es <strong>irreversible</strong>: no se puede recuperar.
+      </p>
+      <div class="pbta-modal-actions">
+        <button type="button" class="text-btn text-btn-danger" data-delete-char-confirm>Eliminar definitivamente</button>
+        <button type="button" class="text-btn" data-delete-char-cancel>Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="data/build.js?v=20260828c7"></script>
+  <script src="data/manual.js?v=20260828c7"></script>
+  <script src="data/catalogo.js?v=20260828c7"></script>
+  <script src="logo.js?v=20260828c7"></script>
+  <script src="ficha-inv.js?v=20260828c7"></script>
+  <script src="ficha.js?v=20260828c7"></script>
+  <script src="player.js?v=20260828c7"></script>
+  <script src="app.js?v=20260828c7"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 /** Hoja de personaje — réplica de ficha horizontal.docx (3 cols apaisadas). */
 (() => {
-  const STORAGE_KEY = "pbta-ficha-v2";
+  const LEGACY_STORAGE_KEY = "pbta-ficha-v2";
   const LEDGER_ROWS = 31;
   const COL1_CH = 42; // ancho fijo columna identidad (ch) — mismo span que |…| Cromos (40+2)
   const PORTRAIT_W = 34; // ancho exterior (borde en col 34)
@@ -35,6 +35,70 @@
 
   const form = document.getElementById("ficha-form");
   if (!form) return;
+
+  let cleanSnapshot = "";
+  const dirtyListeners = [];
+  let lockedJugador = null;
+
+  function setJugadorAccount(username) {
+    lockedJugador = username ? String(username).trim() : null;
+    syncJugadorField();
+  }
+
+  function syncJugadorField() {
+    const el = form.elements.namedItem("jugador");
+    if (!(el instanceof HTMLInputElement)) return;
+    if (lockedJugador) {
+      el.value = lockedJugador;
+      el.readOnly = true;
+      el.tabIndex = -1;
+      el.classList.add("ficha-jugador-locked");
+      el.setAttribute("aria-readonly", "true");
+    } else {
+      el.value = "";
+      el.readOnly = false;
+      el.removeAttribute("tabIndex");
+      el.classList.remove("ficha-jugador-locked");
+      el.removeAttribute("aria-readonly");
+    }
+    syncTypedMask(el);
+  }
+
+  function emitDirty() {
+    const dirty = isDirty();
+    for (const fn of dirtyListeners) {
+      try {
+        fn(dirty);
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  function noteDirty() {
+    emitDirty();
+  }
+
+  function isDirty() {
+    try {
+      return JSON.stringify(collect()) !== cleanSnapshot;
+    } catch {
+      return true;
+    }
+  }
+
+  function markClean() {
+    try {
+      cleanSnapshot = JSON.stringify(collect());
+    } catch {
+      cleanSnapshot = "";
+    }
+    emitDirty();
+  }
+
+  function onDirtyChange(fn) {
+    if (typeof fn === "function") dirtyListeners.push(fn);
+  }
 
   function buildSheetHtml() {
     return `
@@ -661,7 +725,7 @@
       input.value = INV.serializeSlot(item);
       INV.packLedgers(form, LEDGER_ROWS, refreshInvRow);
       applyInventoryStats();
-      saveSheet();
+      noteDirty();
       return true;
     }
     return false;
@@ -813,7 +877,7 @@
         applyProfessionGear(input.value);
         if (!portraitCustom) syncPortraitField();
         closeAllFichaMenus();
-        saveSheet();
+        noteDirty();
       });
     });
   }
@@ -943,7 +1007,7 @@
           statsBaseline[input.name] = normalizeStat(baseN);
           applyInventoryStats();
           closeAllFichaMenus();
-          saveSheet();
+          noteDirty();
         });
       });
     });
@@ -1162,7 +1226,7 @@
       try {
         const dataUrl = await compressPortraitFile(file);
         setPortraitImage(dataUrl, { custom: true });
-        saveSheet();
+        noteDirty();
       } catch {
         window.alert("No se pudo procesar la imagen.");
       }
@@ -1209,7 +1273,7 @@
       ev.preventDefault();
       ev.stopPropagation();
       setPortraitImage("");
-      saveSheet();
+      noteDirty();
     });
   }
 
@@ -1343,7 +1407,7 @@
         } else if (group === "salud" && btn.getAttribute("aria-pressed") !== "true") {
           hideSaludDetachMenu();
         }
-        saveSheet();
+        noteDirty();
       });
     });
   }
@@ -1410,6 +1474,7 @@
       if (!el.name || el.classList.contains("ficha-box") || el.dataset.ledger) continue;
       data[el.name] = el.value;
     }
+    if (lockedJugador) data.jugador = lockedJugador;
     for (const col of ["cromos", "chaperia"]) {
       data[col] = [...form.querySelectorAll(`input[data-ledger="${col}"]`)].map((i) => i.value).join("\n");
     }
@@ -1426,37 +1491,32 @@
     return data;
   }
 
-  function saveSheet() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(collect()));
-    } catch {
-      /* ignore */
-    }
-  }
-
-  function loadSheet() {
-    let data;
-    try {
-      data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-    } catch {
-      data = null;
-    }
-    if (!data) return false;
+  function applySheet(data) {
+    data = data && typeof data === "object" ? data : {};
     for (const el of form.elements) {
       if (!el.name || el.classList.contains("ficha-box") || el.dataset.ledger) continue;
-      if (data[el.name] != null) el.value = data[el.name];
+      el.value = data[el.name] != null ? data[el.name] : "";
     }
     const expEl = form.querySelector('input[name="experiencia"][data-exp-stars="1"]');
     if (expEl) expEl.value = normalizeExpStars(expEl.value);
     for (const col of ["cromos", "chaperia"]) {
-      if (data[col] == null) continue;
-      const lines = String(data[col]).split("\n");
+      const lines = data[col] != null ? String(data[col]).split("\n") : [];
       form.querySelectorAll(`input[data-ledger="${col}"]`).forEach((el, i) => {
         el.value = lines[i] || "";
       });
     }
-    applyBoxes("psique", data.psique);
-    applyBoxes("salud", data.salud);
+    applyBoxes(
+      "psique",
+      Array.isArray(data.psique)
+        ? data.psique
+        : [...form.querySelectorAll('.ficha-box[data-group="psique"]')].map(() => false)
+    );
+    applyBoxes(
+      "salud",
+      Array.isArray(data.salud)
+        ? data.salud
+        : [...form.querySelectorAll('.ficha-box[data-group="salud"]')].map(() => false)
+    );
     normalizeSequential("psique");
     normalizeSequential("salud");
     if (data.portrait && String(data.portrait).startsWith("data:")) {
@@ -1467,13 +1527,19 @@
           .then((url) => {
             if (url && url !== data.portrait) {
               setPortraitImage(url, { custom: true });
-              saveSheet();
+              noteDirty();
             }
           })
           .catch(() => {});
       }
     } else {
       portraitCustom = false;
+      const img = form.querySelector(".ficha-portrait-img");
+      if (img) {
+        img.removeAttribute("src");
+        img.hidden = true;
+      }
+      syncPortraitField();
     }
     if (data.statsBaseline && typeof data.statsBaseline === "object") {
       statsBaseline = {
@@ -1485,7 +1551,7 @@
     } else {
       STAT_NAMES.forEach((name) => {
         const el = form.elements.namedItem(name);
-        if (el && "value" in el) el.value = normalizeStat(el.value);
+        if (el && "value" in el) el.value = normalizeStat(el.value || "0");
       });
       captureStatsBaseline();
     }
@@ -1498,7 +1564,14 @@
     syncNeuroranuraField();
     refreshAllInvRows();
     applyInventoryStats();
-    return true;
+    syncAllStatColors();
+    syncJugadorField();
+  }
+
+  function resetSheet() {
+    applySheet({});
+    syncJugadorField();
+    markClean();
   }
 
   function applyBoxes(group, states) {
@@ -1675,7 +1748,7 @@
     bindProfessionPicker();
     window.PBTA_INV?.bindInventory({
       form,
-      saveSheet,
+      saveSheet: noteDirty,
       applyInventoryStats,
       refreshInvRow,
       closeAllFichaMenus,
@@ -1683,11 +1756,15 @@
       getArsenalChoices: () => currentArsenalWeapons(),
       setArsenalChoice: (name) => {
         writeArsenalInitialItem(name);
-        saveSheet();
+        noteDirty();
       },
       canAssignPsiqueStat,
     });
-    const loaded = loadSheet();
+    try {
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
     syncAllTypedMasks();
     syncAllStatColors();
     syncProfessionField();
@@ -1696,10 +1773,9 @@
     syncNeuroranuraField();
     refreshAllInvRows();
     markFixedLedgerRows();
-    if (!loaded) {
-      captureStatsBaseline();
-      applyInventoryStats();
-    }
+    captureStatsBaseline();
+    applyInventoryStats();
+    syncJugadorField();
     form.addEventListener("input", (ev) => {
       const el = ev.target;
       if (el instanceof HTMLInputElement) {
@@ -1716,9 +1792,9 @@
         }
         syncTypedMask(el);
       }
-      saveSheet();
+      noteDirty();
     });
-    form.addEventListener("change", saveSheet);
+    form.addEventListener("change", noteDirty);
     requestFitSheet();
     window.addEventListener("resize", fitSheet);
     window.addEventListener("pbta-ficha-show", () => requestFitSheet());
@@ -1732,7 +1808,19 @@
         }).observe(panel);
       }
     }
+    markClean();
   }
+
+  window.PBTA_FICHA = {
+    collect,
+    applySheet,
+    resetSheet,
+    isDirty,
+    markClean,
+    noteDirty,
+    onDirtyChange,
+    setJugadorAccount,
+  };
 
   bootSheet();
 })();
