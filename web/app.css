@@ -153,13 +153,24 @@ body {
 }
 
 .text-btn-danger {
-  border-color: #aa3333;
+  border-color: #ff5555;
   color: #ff5555;
 }
 
 .text-btn-danger:hover,
 .text-btn-danger:focus-visible {
+  border-color: #ff8888;
+  color: #ffaaaa;
+}
+
+#ficha-delete-btn {
   border-color: #ff5555;
+  color: #ff5555;
+}
+
+#ficha-delete-btn:hover,
+#ficha-delete-btn:focus-visible {
+  border-color: #ff8888;
   color: #ffaaaa;
 }
 
@@ -179,8 +190,14 @@ body {
   max-width: 12rem;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--cyan);
-  border-color: var(--line);
+  color: var(--yellow);
+  border-color: var(--yellow);
+}
+
+.player-char-trigger:hover,
+.player-char-trigger:focus-visible {
+  color: var(--bright);
+  border-color: var(--bright);
 }
 
 .player-char-menu {
