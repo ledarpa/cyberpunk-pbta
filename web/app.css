@@ -1790,11 +1790,11 @@ body {
   color: var(--bright);
   white-space: pre;
   text-align: left;
-  overflow: visible;
+  overflow: hidden;
   width: max-content;
-  max-width: none;
+  max-width: 100%;
+  box-sizing: border-box;
   transform-origin: top left;
-  box-sizing: content-box;
   pointer-events: none;
 }
 

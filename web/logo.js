@@ -116,7 +116,8 @@
   function fitToWidth(el, maxW, baseSize = 40) {
     if (!el || !String(el.textContent || "").trim() || !maxW) return;
     el.style.transform = "none";
-    const pad = Math.max(4, Math.round(maxW * 0.02));
+    el.style.maxWidth = `${Math.floor(maxW)}px`;
+    const pad = Math.max(2, Math.round(maxW * 0.01));
     const limitW = Math.max(16, maxW - pad);
     el.style.fontSize = `${baseSize}px`;
     fitPrompt(el);

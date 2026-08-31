@@ -1141,7 +1141,9 @@
     const sizeByWidth = colW / (42 * Math.max(0.45, chPerEm));
     const sizeByHeight = innerH / ((LEDGER_ROWS + 3) * 1.03125);
     let size = Math.min(sizeByWidth, sizeByHeight);
-    size = Math.max(12, Math.min(28, size));
+    // En 2K/4K permitir tipografía mayor para que las 3 cols no queden “rotas”/vacías
+    const maxSize = availW >= 2800 ? 42 : availW >= 2000 ? 36 : availW >= 1400 ? 32 : 28;
+    size = Math.max(12, Math.min(maxSize, size));
     size = Math.round(size * 2) / 2;
     applySheetSize(size);
 
@@ -1157,7 +1159,7 @@
     // Subir de a 0.5px solo si sigue cabiendo tras alinear Experiencia
     for (let i = 0; i < 24; i += 1) {
       const next = Math.round((size + 0.5) * 2) / 2;
-      if (next > 28) break;
+      if (next > maxSize) break;
       applySheetSize(next);
       if (overflows()) {
         applySheetSize(size);
@@ -1201,18 +1203,44 @@
   }
 
   /**
-   * Logo Cyberpunk: misma tipografía/espaciado que el título del manual.
-   * Escala solo por ancho de columna; overflow visible (no se recorta).
+   * Logo Cyberpunk: mismo ancho máximo que el bloque de la 1.ª columna (42ch / .ficha-pre-main).
+   * Nunca más ancho que esa columna de contenido (en 2K/4K el grid cell es más ancho).
    */
   function fitFichaLogo() {
     const logo = document.getElementById("ficha-logo");
     const col = logo?.closest(".ficha-col1");
     if (!logo || !col) return;
-    const maxW = Math.max(48, col.clientWidth || 0);
+    const main = col.querySelector(".ficha-pre-main");
+    const colW = col.clientWidth || 0;
+    let contentW = 0;
+    if (main) {
+      contentW = main.getBoundingClientRect().width;
+      if (!contentW) {
+        // Fallback: medir 42ch con la tipografía de la ficha
+        const probe = document.createElement("span");
+        probe.setAttribute("aria-hidden", "true");
+        probe.style.cssText =
+          "position:absolute;left:-9999px;visibility:hidden;white-space:pre;font:inherit;";
+        probe.textContent = "0".repeat(COL1_CH);
+        form.appendChild(probe);
+        contentW = probe.getBoundingClientRect().width;
+        form.removeChild(probe);
+      }
+    }
+    const maxW = Math.max(48, Math.min(colW || contentW, contentW || colW));
+    logo.style.maxWidth = `${Math.floor(maxW)}px`;
     if (window.PBTA_LOGO?.fitToWidth) {
       window.PBTA_LOGO.fitToWidth(logo, maxW, 40);
     } else {
       fitLogoPrompt();
+    }
+    // Seguro final: si aún desborda, escala por transform
+    const drawn = logo.scrollWidth || logo.getBoundingClientRect().width;
+    if (drawn > maxW + 1) {
+      const scale = maxW / drawn;
+      logo.style.transform = `scale(${scale})`;
+    } else {
+      logo.style.transform = "none";
     }
   }
 
