@@ -3,6 +3,9 @@
   const LEGACY_STORAGE_KEY = "pbta-ficha-v2";
   const LEDGER_ROWS = 31;
   const COL1_CH = 42; // ancho fijo columna identidad (ch) — mismo span que |…| Cromos (40+2)
+  const CROMOS_CH = 42; // 40 underscores + bordes |
+  const CHAPERIA_CH = 41; // 39 underscores + bordes |
+  const SHEET_CH = COL1_CH + CROMOS_CH + CHAPERIA_CH;
   const PORTRAIT_W = 34; // ancho exterior (borde en col 34)
   const PORTRAIT_H = 13; // alto exterior (borde en fila 13)
   const PORTRAIT_INNER_W = 32;
@@ -1123,7 +1126,6 @@
 
     const innerH = availH - marginPx - marginBottom;
     const innerW = availW - marginPx * 2;
-    const colW = (innerW - gap * 2) / 3;
 
     form.style.fontSize = "100px";
     form.style.lineHeight = "1.03125";
@@ -1137,13 +1139,11 @@
     const chPerEm = probe.getBoundingClientRect().width / 10 / 100;
     form.removeChild(probe);
 
-    // título + blancos + filas; el freno fino es contentPastPageBottom
-    const sizeByWidth = colW / (42 * Math.max(0.45, chPerEm));
+    // Ancho total fijo (3 cols en ch + gaps); escala con altura como en resoluciones chicas
+    const sizeByWidth = (innerW - gap * 2) / (SHEET_CH * Math.max(0.45, chPerEm));
     const sizeByHeight = innerH / ((LEDGER_ROWS + 3) * 1.03125);
     let size = Math.min(sizeByWidth, sizeByHeight);
-    // En 2K/4K permitir tipografía mayor para que las 3 cols no queden “rotas”/vacías
-    const maxSize = availW >= 2800 ? 42 : availW >= 2000 ? 36 : availW >= 1400 ? 32 : 28;
-    size = Math.max(12, Math.min(maxSize, size));
+    size = Math.max(12, size);
     size = Math.round(size * 2) / 2;
     applySheetSize(size);
 
@@ -1159,7 +1159,6 @@
     // Subir de a 0.5px solo si sigue cabiendo tras alinear Experiencia
     for (let i = 0; i < 24; i += 1) {
       const next = Math.round((size + 0.5) * 2) / 2;
-      if (next > maxSize) break;
       applySheetSize(next);
       if (overflows()) {
         applySheetSize(size);
@@ -1175,6 +1174,24 @@
       if (size < 12) break;
       applySheetSize(size);
     }
+
+    // Rellenar alto/ancho libre (2K/4K): subir hasta ocupar el panel como en resoluciones chicas
+    for (let i = 0; i < 48; i += 1) {
+      const layout = form.querySelector(".ficha-layout");
+      if (!layout) break;
+      const totalW = layout.offsetWidth + marginPx * 2;
+      const totalH = layout.offsetHeight + marginPx + marginBottom;
+      if (totalW >= innerW - 2 && totalH >= innerH - 2) break;
+      const next = Math.round((size + 0.5) * 2) / 2;
+      applySheetSize(next);
+      if (overflows()) {
+        applySheetSize(size);
+        break;
+      }
+      size = next;
+    }
+
+    form.style.transform = "";
   }
 
   /** Refit tras fuentes/layout (evita última línea cortada al recargar). */
