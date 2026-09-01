@@ -1188,7 +1188,7 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Cyberpiernas: título → imgs → intro (siempre apilado; panel ~78ch) */
+/* Cyberpiernas: título → intro → imgs (siempre apilado; panel ~78ch) */
 .book-art-wrap:has(.book-item-art-row--cyberpiernas) {
   --cyberpierna-h: 13.5rem;
   container-type: inline-size;
@@ -1208,9 +1208,14 @@ body {
   margin-top: 0;
 }
 
-.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-item-art-row.book-item-art-row--cyberpiernas {
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-art-wrap-copy > p {
   grid-column: 1;
   grid-row: 2;
+}
+
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-item-art-row.book-item-art-row--cyberpiernas {
+  grid-column: 1;
+  grid-row: 3;
   float: none;
   clear: none;
   margin: 0;
@@ -1229,11 +1234,6 @@ body {
   width: auto;
   max-width: none;
   margin-right: 0;
-}
-
-.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-art-wrap-copy > p {
-  grid-column: 1;
-  grid-row: 3;
 }
 
 .book-art-wrap:has(.book-item-art-row--cyberpiernas) .book-item-art-row--cyberpiernas .book-item-art {
