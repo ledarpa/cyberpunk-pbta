@@ -878,10 +878,14 @@ body {
 }
 
 .book-item-art--garfio img,
-.book-item-art--torreta img,
-.book-item-art--trauma_card img {
+.book-item-art--torreta img {
   transform: scale(var(--art-chap-scale));
   transform-origin: top right;
+}
+
+.book-item-art--trauma_card img {
+  transform: scale(var(--art-chap-scale));
+  transform-origin: bottom right;
 }
 
 .book-item-art--drone img {
@@ -1369,14 +1373,16 @@ body {
   }
 }
 
-/* Recuperar la humanidad: float (marco de texto); sin imagen/columna reservada el texto llega al margen derecho */
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) {
+/* Recuperar la humanidad / Rol del Director: float (marco de texto) */
+.book-art-wrap:has(.book-item-art--recuperar_humanidad),
+.book-art-wrap:has(.book-item-art--director) {
   position: relative;
   display: flow-root;
   padding-bottom: 0;
 }
 
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art {
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art,
+.book-art-wrap:has(.book-item-art--director) > .book-item-art {
   float: right;
   position: static;
   /* .book p margin-top → top del marco ≈ primera línea bajo el título */
@@ -1395,7 +1401,8 @@ body {
   z-index: 0;
 }
 
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art img {
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art img,
+.book-art-wrap:has(.book-item-art--director) > .book-item-art img {
   display: block;
   max-height: none !important;
   width: 100%;
@@ -1404,7 +1411,8 @@ body {
   object-position: top right;
 }
 
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy {
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy,
+.book-art-wrap:has(.book-item-art--director) .book-art-wrap-copy {
   position: static;
   z-index: auto;
   box-sizing: border-box;
@@ -1415,16 +1423,19 @@ body {
   overflow: visible;
 }
 
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy > :is(h4, p, ul, ol) {
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy > :is(h4, p, ul, ol),
+.book-art-wrap:has(.book-item-art--director) .book-art-wrap-copy > :is(h4, p, ul, ol) {
   clear: none;
 }
 
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy > :last-child {
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy > :last-child,
+.book-art-wrap:has(.book-item-art--director) .book-art-wrap-copy > :last-child {
   margin-bottom: 0;
 }
 
 @media (max-width: 720px) {
-  .book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art {
+  .book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art,
+  .book-art-wrap:has(.book-item-art--director) > .book-item-art {
     float: none;
     width: min(34.151rem, 100%);
     max-width: 100%;
@@ -1432,7 +1443,8 @@ body {
     shape-outside: none;
   }
 
-  .book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy {
+  .book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy,
+  .book-art-wrap:has(.book-item-art--director) .book-art-wrap-copy {
     padding-right: 0;
   }
 }
@@ -1444,7 +1456,8 @@ body {
   object-position: bottom right;
 }
 
-.book-art-wrap > .book-item-art.book-item-art--recuperar_humanidad[data-art-layout="portrait-span"] img {
+.book-art-wrap > .book-item-art.book-item-art--recuperar_humanidad[data-art-layout="portrait-span"] img,
+.book-art-wrap > .book-item-art.book-item-art--director[data-art-layout="portrait-span"] img {
   object-position: top right;
 }
 

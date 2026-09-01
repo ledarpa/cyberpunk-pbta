@@ -25,7 +25,7 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20260828c9"
+WEB_BUILD_ID = "20260901e"
 
 # Segunda columna de tabla Calidad → intro+título contornean imagen en wrap.
 CALIDAD_WRAP_COL2 = frozenset({
@@ -44,6 +44,7 @@ ART_META: dict[str, dict[str, str]] = {
     "piel_perfecta": {"layout": "portrait-top", "size": "sintetica"},
     "neurochip": {"layout": "portrait-float", "size": "cerebral"},
     "primeros_auxilios": {"layout": "portrait-top", "size": "tool"},
+    "trauma_card": {"layout": "portrait-top", "size": "tool"},
     "drone": {"layout": "portrait-span", "anchor": "table"},
 }
 
@@ -92,11 +93,19 @@ CATALOG_ART: dict[str, list[str]] = {
     "Cyberpiernas": ["acorazado", "cuadrupedo", "velocista"],
 }
 
-# Banners a ancho completo (no float / no rail).
+# Secciones con intro + tabla (cabecera distinta de Calidad) en wrap flotante.
+CATALOG_ART_INTRO_WRAP: frozenset[str] = frozenset({
+    "Trauma card",
+})
+
 CATALOG_BANNER: dict[str, str] = {
-    "Corposuit": "corposuit",
     "Aparato digestivo modular": "bucales",
     "Aparato respiratorio modular": "cybernasales",
+}
+
+# Banner tras la 1.ª tabla de la sección (p. ej. Calidad → imagen → Modos).
+CATALOG_BANNER_AFTER_TABLE: dict[str, str] = {
+    "Corposuit": "corposuit",
     "Tecnoarmadura": "tecnoarmadura",
 }
 
@@ -105,6 +114,7 @@ MANUAL_ART: dict[str, str] = {
     "Mejoras de características": "mejora_de_atributos",
     "Degeneración neural": "degeneracion",
     "Recuperar la humanidad": "recuperar_humanidad",
+    "Rol del Director": "director",
 }
 
 # Banners panorámicos del manual (ancho completo bajo el título).
@@ -127,6 +137,7 @@ MANUAL_ART_TABLE_WRAP: frozenset[str] = frozenset({
 MANUAL_ART_COPY_WRAP: frozenset[str] = frozenset({
     "Degeneración neural",
     "Recuperar la humanidad",
+    "Rol del Director",
 })
 
 # Tamaño extra por slug (default en CSS: data-art-size="manual").
@@ -279,6 +290,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
     pending_manual_art_wrap: str | None = None
     pending_manual_art_anchor: str = "table"
     pending_manual_banner_before_table: str | None = None
+    pending_catalog_banner_after_table: str | None = None
     manual_art_in_wrap = False
     manual_art_anchor: str = "table"
 
@@ -320,7 +332,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
         pending_manual_art_wrap = None
 
     def flush_table() -> None:
-        nonlocal table_buffer, pending_catalog_art, catalog_after_first_table, catalog_art_open, art_wrap_rail_plus_list, manual_art_in_wrap
+        nonlocal table_buffer, pending_catalog_art, catalog_after_first_table, catalog_art_open, art_wrap_rail_plus_list, manual_art_in_wrap, pending_catalog_banner_after_table
         if table_buffer:
             head = (table_buffer[0][0] if table_buffer[0] else "").strip()
             if art_wrap_open and art_wrap_rail_plus_list and head != "Calidad":
@@ -330,10 +342,13 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
             if manual_art_in_wrap and art_wrap_open and manual_art_anchor == "table":
                 rail = True
             elif catalog_art_open:
-                rail = head == "Calidad"
+                rail = art_wrap_open or head == "Calidad"
                 catalog_art_open = False
             html.append(table_html(table_buffer, rail=rail))
             table_buffer = []
+            if pending_catalog_banner_after_table:
+                html.append(catalog_banner_html(pending_catalog_banner_after_table))
+                pending_catalog_banner_after_table = None
             if manual_art_in_wrap and manual_art_anchor == "table":
                 close_art_wrap()
             elif rail and not art_wrap_rail_plus_list:
@@ -363,12 +378,13 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
 
     def close_catalog_section() -> None:
         """Cierra arte pendiente y evita que el rail/float contamine el siguiente bloque."""
-        nonlocal catalog_art_open, pending_art_wrap, art_wrap_rail_plus_list, pending_manual_art_wrap, manual_art_in_wrap, pending_manual_art_anchor, pending_manual_banner_before_table
+        nonlocal catalog_art_open, pending_art_wrap, art_wrap_rail_plus_list, pending_manual_art_wrap, manual_art_in_wrap, pending_manual_art_anchor, pending_manual_banner_before_table, pending_catalog_banner_after_table
         pending_art_wrap = False
         art_wrap_rail_plus_list = False
         pending_manual_art_wrap = None
         pending_manual_art_anchor = "table"
         pending_manual_banner_before_table = None
+        pending_catalog_banner_after_table = None
         manual_art_in_wrap = False
         flush_catalog_art()
         close_art_wrap()
@@ -489,9 +505,13 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
                 if level == 3:
                     pending_portrait = PROFESSION_PORTRAITS.get(title)
                 banner = CATALOG_BANNER.get(title)
+                banner_after_table = CATALOG_BANNER_AFTER_TABLE.get(title)
                 if banner:
                     html.append(heading_html)
                     html.append(catalog_banner_html(banner))
+                elif banner_after_table:
+                    html.append(heading_html)
+                    pending_catalog_banner_after_table = banner_after_table
                 else:
                     art = CATALOG_ART.get(title)
                     if art:
@@ -518,6 +538,10 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
                             flush_catalog_art()
                             catalog_after_first_table = False
                         elif first_th == "Calidad":
+                            pending_art_wrap = True
+                            wrap_heading = True
+                            catalog_after_first_table = False
+                        elif title in CATALOG_ART_INTRO_WRAP:
                             pending_art_wrap = True
                             wrap_heading = True
                             catalog_after_first_table = False
