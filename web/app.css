@@ -795,13 +795,15 @@ body {
   visibility: hidden;
 }
 
-/* Retrato de profesión: float sin marco */
+/* Retrato de profesión: float como marco de texto */
 .book-prof-portrait {
   float: right;
   width: min(26rem, 100%);
   margin: 0.15rem 0 0.7rem 1rem;
   padding: 0;
   box-sizing: border-box;
+  shape-outside: margin-box;
+  shape-margin: 0.35rem;
 }
 
 .book-prof-portrait img {
@@ -811,15 +813,6 @@ body {
   aspect-ratio: 1;
   object-fit: cover;
   object-position: center;
-}
-
-@media (max-width: 720px) {
-  .book-prof-portrait {
-    float: none;
-    display: block;
-    width: min(26rem, 100%);
-    margin: 0.35rem auto 0.75rem;
-  }
 }
 
 /* Arte de catálogo: float derecha; texto a la izquierda. Tablas/hr con clear. */
@@ -849,14 +842,6 @@ body {
 
 .book-item-art--vertebras img {
   max-height: 21.34rem;
-}
-
-.book-item-art--cyberoido {
-  width: min(12.9rem, 40.55%);
-}
-
-.book-item-art--cyberoido img {
-  max-height: 20.28rem;
 }
 
 .book-item-art--balistica {
@@ -967,34 +952,44 @@ body {
   max-height: 16rem;
 }
 
-/* Cyberpiernas (3 dibujos): caben en el float; se encogen al estrechar; no solapan prosa */
+.book-item-art-row--cyberpiernas + p + h4 {
+  clear: both;
+}
+
+/* Cyberpiernas (3 dibujos): mismo alto fijo; ancho libre por aspect ratio */
+.book-item-art-row--cyberpiernas,
 .book-item-art-row:has(.book-item-art--acorazado):has(.book-item-art--cuadrupedo):has(.book-item-art--velocista) {
-  width: min(28rem, 58%);
-  max-width: 58%;
+  --cyberpierna-h: 13.5rem;
+  --cyberpierna-row-max: min(31.5rem, 64%);
+  max-width: var(--cyberpierna-row-max);
   gap: 0.5rem;
   align-items: flex-end;
-  overflow: hidden;
   box-sizing: border-box;
 }
 
+.book-item-art-row--cyberpiernas .book-item-art,
 .book-item-art-row:has(.book-item-art--acorazado):has(.book-item-art--cuadrupedo):has(.book-item-art--velocista)
   .book-item-art {
-  flex: 1 1 0;
+  flex: 0 0 auto;
   width: auto;
   min-width: 0;
-  max-width: 100%;
+  max-width: none;
+  height: var(--cyberpierna-h);
   display: flex;
   justify-content: center;
   align-items: flex-end;
 }
 
+.book-item-art-row--cyberpiernas .book-item-art img,
 .book-item-art-row:has(.book-item-art--acorazado):has(.book-item-art--cuadrupedo):has(.book-item-art--velocista)
   .book-item-art
   img {
-  height: auto;
-  width: 100%;
-  max-width: 100%;
-  max-height: 13.5rem;
+  display: block;
+  height: var(--cyberpierna-h);
+  min-height: var(--cyberpierna-h);
+  max-height: var(--cyberpierna-h);
+  width: auto;
+  max-width: none;
   object-fit: contain;
   object-position: bottom center;
 }
@@ -1007,22 +1002,20 @@ body {
 }
 
 @media (max-width: 720px) {
-  .book-item-art,
-  .book-item-art-row {
-    float: none;
-    display: block;
+  .book-item-art:not(.book-item-art-row--cyberpiernas .book-item-art),
+  .book-item-art-row:not(.book-item-art-row--cyberpiernas) {
     width: min(16rem, 78%);
-    margin: 0.35rem auto 0.75rem;
+    margin-right: 0.65rem;
   }
 
-  .book-item-art-row {
+  .book-item-art-row:not(.book-item-art-row--cyberpiernas) {
     display: flex;
     flex-wrap: nowrap;
-    justify-content: center;
+    justify-content: flex-end;
     width: min(28rem, 96%);
   }
 
-  .book-item-art-row:has(> .book-item-art:nth-child(3)) {
+  .book-item-art-row:has(> .book-item-art:nth-child(3)):not(.book-item-art-row--cyberpiernas) {
     width: min(48rem, 96%);
   }
 
@@ -1030,6 +1023,31 @@ body {
     width: auto;
     flex: 1 1 0;
     min-width: 0;
+  }
+
+  .book-item-art-row--cyberpiernas {
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+    margin-right: 0;
+  }
+
+  .book-item-art-row--cyberpiernas .book-item-art,
+  .book-item-art-row:has(.book-item-art--acorazado):has(.book-item-art--cuadrupedo):has(.book-item-art--velocista)
+    .book-item-art {
+    flex: 0 0 auto;
+    min-width: 0;
+  }
+
+  .book-item-art-row--cyberpiernas .book-item-art img,
+  .book-item-art-row:has(.book-item-art--acorazado):has(.book-item-art--cuadrupedo):has(.book-item-art--velocista)
+    .book-item-art
+    img {
+    height: var(--cyberpierna-h, 13.5rem);
+    min-height: var(--cyberpierna-h, 13.5rem);
+    max-height: var(--cyberpierna-h, 13.5rem);
+    width: auto;
+    max-width: none;
   }
 
   .book-item-art + p + .table-wrap,
@@ -1146,7 +1164,7 @@ body {
   max-width: var(--art-manual-xl-max);
 }
 
-.book-art-wrap > .book-item-art-row {
+.book-art-wrap > .book-item-art-row:not(.book-item-art-row--cyberpiernas) {
   display: flex;
   flex-wrap: nowrap;
   justify-content: flex-end;
@@ -1155,6 +1173,73 @@ body {
   width: min(28rem, 58%);
   max-width: 58%;
   height: var(--art-h, auto);
+}
+
+.book-art-wrap > .book-item-art-row--cyberpiernas {
+  height: var(--cyberpierna-h, 13.5rem);
+  width: 100%;
+  max-width: 100%;
+  align-items: flex-end;
+  justify-content: center;
+  margin-top: 0;
+  gap: 0.35rem;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Cyberpiernas: título → imgs → intro (siempre apilado; panel ~78ch) */
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) {
+  --cyberpierna-h: 13.5rem;
+  container-type: inline-size;
+  container-name: cyberpiernas;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 0.55rem;
+}
+
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-art-wrap-copy {
+  display: contents;
+}
+
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-art-wrap-copy > h3 {
+  grid-column: 1;
+  grid-row: 1;
+  margin-top: 0;
+}
+
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-item-art-row.book-item-art-row--cyberpiernas {
+  grid-column: 1;
+  grid-row: 2;
+  float: none;
+  clear: none;
+  margin: 0;
+  margin-right: 0;
+  shape-outside: none;
+  justify-self: stretch;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+}
+
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-item-art-row.book-item-art-row--cyberpiernas .book-item-art {
+  width: auto;
+  max-width: none;
+  margin-right: 0;
+}
+
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-art-wrap-copy > p {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) .book-item-art-row--cyberpiernas .book-item-art {
+  flex: 0 0 auto;
+  min-width: 0;
+  height: var(--cyberpierna-h, 13.5rem);
 }
 
 /* Brazo de combate: 2 dibujos pegados a la derecha; marco del intro + tabla */
@@ -1191,7 +1276,12 @@ body {
 .book-art-wrap > .book-item-art[data-art-layout="portrait-top"][data-art-size="sintetica"] {
   width: var(--art-sintetica-w);
   max-width: 28.25%;
-  margin-top: -0.4rem;
+  margin-top: var(--art-shift, 0px);
+  shape-outside: inset(var(--art-shift, 0px) 0 0 0);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: var(--art-h, auto);
 }
 
 .book-art-wrap > .book-item-art[data-art-layout="portrait-top"][data-art-size="tool"] {
@@ -1373,16 +1463,14 @@ body {
   }
 }
 
-/* Recuperar la humanidad / Rol del Director: float (marco de texto) */
-.book-art-wrap:has(.book-item-art--recuperar_humanidad),
-.book-art-wrap:has(.book-item-art--director) {
+/* Recuperar la humanidad: float (marco de texto) */
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) {
   position: relative;
   display: flow-root;
   padding-bottom: 0;
 }
 
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art,
-.book-art-wrap:has(.book-item-art--director) > .book-item-art {
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art {
   float: right;
   position: static;
   /* .book p margin-top → top del marco ≈ primera línea bajo el título */
@@ -1401,8 +1489,7 @@ body {
   z-index: 0;
 }
 
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art img,
-.book-art-wrap:has(.book-item-art--director) > .book-item-art img {
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art img {
   display: block;
   max-height: none !important;
   width: 100%;
@@ -1411,8 +1498,7 @@ body {
   object-position: top right;
 }
 
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy,
-.book-art-wrap:has(.book-item-art--director) .book-art-wrap-copy {
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy {
   position: static;
   z-index: auto;
   box-sizing: border-box;
@@ -1423,28 +1509,22 @@ body {
   overflow: visible;
 }
 
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy > :is(h4, p, ul, ol),
-.book-art-wrap:has(.book-item-art--director) .book-art-wrap-copy > :is(h4, p, ul, ol) {
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy > :is(h4, p, ul, ol) {
   clear: none;
 }
 
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy > :last-child,
-.book-art-wrap:has(.book-item-art--director) .book-art-wrap-copy > :last-child {
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy > :last-child {
   margin-bottom: 0;
 }
 
 @media (max-width: 720px) {
-  .book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art,
-  .book-art-wrap:has(.book-item-art--director) > .book-item-art {
-    float: none;
-    width: min(34.151rem, 100%);
-    max-width: 100%;
-    margin: 0.35rem auto 0.75rem;
-    shape-outside: none;
+  .book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art {
+    width: min(34.151rem, 89.646%);
+    max-width: 89.646%;
+    margin: 0.35rem 0 0.35rem 1rem;
   }
 
-  .book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy,
-  .book-art-wrap:has(.book-item-art--director) .book-art-wrap-copy {
+  .book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy {
     padding-right: 0;
   }
 }
@@ -1456,8 +1536,7 @@ body {
   object-position: bottom right;
 }
 
-.book-art-wrap > .book-item-art.book-item-art--recuperar_humanidad[data-art-layout="portrait-span"] img,
-.book-art-wrap > .book-item-art.book-item-art--director[data-art-layout="portrait-span"] img {
+.book-art-wrap > .book-item-art.book-item-art--recuperar_humanidad[data-art-layout="portrait-span"] img {
   object-position: top right;
 }
 
@@ -1527,6 +1606,43 @@ body {
   background: transparent;
 }
 
+/* Cyberpiernas en wrap: alto fijo; no escalar — scroll horizontal si no caben */
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) .book-item-art-row--cyberpiernas .book-item-art img {
+  display: block;
+  width: auto;
+  max-width: none;
+  height: var(--cyberpierna-h, 13.5rem);
+  min-height: var(--cyberpierna-h, 13.5rem);
+  max-height: var(--cyberpierna-h, 13.5rem);
+  object-fit: contain;
+  object-position: bottom center;
+}
+
+/* Cyberpiernas suelta (fallback): width auto */
+.book-item-art-row--cyberpiernas:not(:where(.book-art-wrap *)) .book-item-art img {
+  width: auto;
+  max-width: none;
+  height: var(--cyberpierna-h, 13.5rem);
+  min-height: var(--cyberpierna-h, 13.5rem);
+  max-height: var(--cyberpierna-h, 13.5rem);
+}
+
+/* Ojo / oído: mismo marco flotante (14rem, margen izq. 1rem) */
+.book-art-wrap > .book-item-art.book-item-art--ojo,
+.book-art-wrap > .book-item-art.book-item-art--cyberoido {
+  width: min(14rem, 42%);
+  max-width: 42%;
+}
+
+.book-art-wrap > .book-item-art.book-item-art--ojo img,
+.book-art-wrap > .book-item-art.book-item-art--cyberoido img {
+  width: 100%;
+  height: auto;
+  max-height: 14rem;
+  object-fit: contain;
+  object-position: bottom center;
+}
+
 .book-art-wrap-copy {
   display: block;
   min-width: 0;
@@ -1555,16 +1671,12 @@ body {
 @media (max-width: 720px) {
   .book-art-wrap > .book-item-art,
   .book-art-wrap > .book-item-art-row {
-    float: none;
-    display: flex;
     width: min(22rem, 92%);
     max-width: 92%;
-    margin: 0 auto 0.65rem;
-    shape-outside: none;
+    margin-left: 0.65rem;
   }
 
   .book-art-wrap > .book-item-art {
-    display: block;
     width: min(16rem, 78%);
     max-width: 78%;
   }
@@ -1582,7 +1694,7 @@ body {
   }
 
   .book-art-wrap > .book-item-art img,
-  .book-art-wrap > .book-item-art-row .book-item-art img {
+  .book-art-wrap > .book-item-art-row:not(.book-item-art-row--cyberpiernas) .book-item-art img {
     height: auto;
     max-height: 18rem;
   }

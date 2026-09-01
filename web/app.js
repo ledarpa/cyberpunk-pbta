@@ -48,8 +48,6 @@
     const wraps = book.querySelectorAll(".book-art-wrap");
     if (!wraps.length) return;
 
-    const mobile = window.matchMedia("(max-width: 720px)").matches;
-
     wraps.forEach((wrap) => {
       const art = wrap.querySelector(":scope > .book-item-art, :scope > .book-item-art-row");
       const copy = wrap.querySelector(":scope > .book-art-wrap-copy");
@@ -64,7 +62,7 @@
         img.addEventListener("load", layoutBookArtWraps);
       });
 
-      if (mobile || wrap.clientWidth < 580) {
+      if (wrap.clientWidth < 320) {
         wrap.style.removeProperty("--art-shift");
         wrap.style.removeProperty("--art-h");
         const img = art.querySelector("img");
@@ -148,7 +146,8 @@
           );
 
         const isTool = art.dataset.artSize === "tool";
-        const alignBottomToTable = isCerebral || isTool;
+        const isSintetica = art.dataset.artSize === "sintetica";
+        const alignBottomToTable = isCerebral || isTool || isSintetica;
 
         if (alignBottomToTable && img) {
           wrap.style.setProperty("--art-h", "auto");
@@ -187,6 +186,41 @@
             artH = Math.max(tableH, artH + fix);
             wrap.style.setProperty("--art-h", `${artH}px`);
           }
+        }
+        return;
+      }
+
+      // Ojo / oído biónico: tamaño natural; margen inferior alineado a la tabla
+      const isSensoryArt =
+        art.classList.contains("book-item-art--ojo") ||
+        art.classList.contains("book-item-art--cyberoido");
+
+      if (isSensoryArt) {
+        wrap.style.setProperty("--art-h", "auto");
+        wrap.style.removeProperty("--art-shift");
+        const img = art.querySelector("img");
+        if (!img) return;
+
+        const imgBottomDelta = () =>
+          Math.round(
+            table.getBoundingClientRect().bottom -
+              (img || art).getBoundingClientRect().bottom
+          );
+
+        let shift = Math.max(
+          0,
+          Math.round(
+            table.getBoundingClientRect().bottom -
+              wrap.getBoundingClientRect().top -
+              img.getBoundingClientRect().height
+          )
+        );
+        wrap.style.setProperty("--art-shift", `${shift}px`);
+        for (let i = 0; i < 4; i++) {
+          const fix = imgBottomDelta();
+          if (fix === 0) break;
+          shift = Math.max(0, shift + fix);
+          wrap.style.setProperty("--art-shift", `${shift}px`);
         }
         return;
       }

@@ -25,7 +25,7 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20260901e"
+WEB_BUILD_ID = "20260901j"
 
 # Segunda columna de tabla Calidad → intro+título contornean imagen en wrap.
 CALIDAD_WRAP_COL2 = frozenset({
@@ -114,12 +114,12 @@ MANUAL_ART: dict[str, str] = {
     "Mejoras de características": "mejora_de_atributos",
     "Degeneración neural": "degeneracion",
     "Recuperar la humanidad": "recuperar_humanidad",
-    "Rol del Director": "director",
 }
 
 # Banners panorámicos del manual (ancho completo bajo el título).
 MANUAL_BANNER: dict[str, str] = {
     "Episodios de cyberpsicosis": "cyberpsicosis",
+    "Rol del Director": "director",
 }
 
 # Banner entre el párrafo intro y la 1.ª tabla de la sección.
@@ -137,7 +137,6 @@ MANUAL_ART_TABLE_WRAP: frozenset[str] = frozenset({
 MANUAL_ART_COPY_WRAP: frozenset[str] = frozenset({
     "Degeneración neural",
     "Recuperar la humanidad",
-    "Rol del Director",
 })
 
 # Tamaño extra por slug (default en CSS: data-art-size="manual").
@@ -215,8 +214,11 @@ def catalog_art_html(slugs: list[str]) -> str:
     figures = [art_figure_html(slug) for slug in slugs]
     if len(figures) == 1:
         return figures[0]
+    row_class = "book-item-art-row"
+    if slugs == ["acorazado", "cuadrupedo", "velocista"]:
+        row_class += " book-item-art-row--cyberpiernas"
     return (
-        '<div class="book-item-art-row" aria-hidden="true">'
+        f'<div class="{row_class}" aria-hidden="true">'
         + "".join(figures)
         + "</div>"
     )
@@ -402,8 +404,13 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
             s = lines[j].strip()
             if not s:
                 continue
-            if s == "---" or s.startswith("#"):
+            if s == "---":
                 return None
+            if s.startswith("#"):
+                level = len(re.match(r"^(#{1,6})\s", s).group(1))
+                if level <= 3:
+                    return None
+                continue
             if s.startswith("|") and "|" in s[1:]:
                 if is_table_sep(s):
                     continue
@@ -534,8 +541,8 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
                             wrap_heading = True
                             catalog_after_first_table = False
                         elif first_th == "Calidad" and col2 == "Módulos":
-                            html.append(heading_html)
-                            flush_catalog_art()
+                            pending_art_wrap = True
+                            wrap_heading = True
                             catalog_after_first_table = False
                         elif first_th == "Calidad":
                             pending_art_wrap = True
