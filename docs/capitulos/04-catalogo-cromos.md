@@ -107,6 +107,8 @@ Una recepción configurada vía protocolo de velo (bolsa en tiempo real, sensore
 
 Signos vitales y estado de cromos/chapería; transmisión local o inalámbrica para monitoreo remoto.
 
+![](assets/manual/sensores.png)
+
 | Calidad | Informa |
 | --- | --- |
 | Improvisado | Constantes vitales |

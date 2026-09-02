@@ -1643,6 +1643,46 @@ body {
   object-position: bottom center;
 }
 
+/* 2d6: float derecha, marco al margen derecho y pegado bajo el título */
+.book h2 + .book-art-wrap:has(.book-item-art--2d6) {
+  margin-top: 0;
+}
+
+.book-art-wrap:has(.book-item-art--2d6) {
+  margin-top: 0;
+}
+
+.book-art-wrap > .book-item-art.book-item-art--2d6,
+.book-art-wrap > .book-item-art.book-item-art--2d6[data-art-size="manual"],
+.book-item-art.book-item-art--2d6[data-art-size="manual"] {
+  float: right;
+  clear: none;
+  width: min(28rem, 58%) !important;
+  max-width: 58% !important;
+  margin: 0 0 0.65rem 0.85rem !important;
+  height: auto !important;
+  display: block !important;
+  justify-content: unset !important;
+  shape-outside: margin-box;
+  shape-margin: 0.3rem;
+}
+
+.book-art-wrap > .book-item-art.book-item-art--2d6 img,
+.book-art-wrap > .book-item-art.book-item-art--2d6[data-art-layout="portrait-float"] img,
+.book-art-wrap > .book-item-art.book-item-art--2d6[data-art-layout="portrait-span"] img {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  object-position: top right !important;
+  transform: none !important;
+}
+
+.book-art-wrap:has(.book-item-art--2d6) .book-art-wrap-copy > p:first-child {
+  margin-top: 0.15rem;
+}
+
 .book-art-wrap-copy {
   display: block;
   min-width: 0;

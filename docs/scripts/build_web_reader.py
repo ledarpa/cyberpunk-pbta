@@ -25,7 +25,7 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20260902f"
+WEB_BUILD_ID = "20260902n"
 
 # Segunda columna de tabla Calidad → intro+título contornean imagen en wrap.
 CALIDAD_WRAP_COL2 = frozenset({
@@ -111,6 +111,7 @@ CATALOG_BANNER_AFTER_TABLE: dict[str, str] = {
 
 # Ilustraciones del manual (capítulos, no catálogo): float derecha junto al texto.
 MANUAL_ART: dict[str, str] = {
+    "Cuándo se tira (y cuándo no)": "2d6",
     "Mejoras de características": "mejora_de_atributos",
     "Degeneración neural": "degeneracion",
     "Recuperar la humanidad": "recuperar_humanidad",
@@ -120,12 +121,12 @@ MANUAL_ART: dict[str, str] = {
 MANUAL_BANNER: dict[str, str] = {
     "Episodios de cyberpsicosis": "cyberpsicosis",
     "Rol del Director": "director",
+    "Movimientos": "tiradas",
 }
 
 # Banner entre el párrafo intro y la 1.ª tabla de la sección.
 MANUAL_BANNER_BEFORE_TABLE: dict[str, str] = {
     "Los cuatro atributos": "atributos",
-    "Tiradas (2d6 + atributo)": "tiradas",
 }
 
 # Secciones cuyo dibujo va al rail de la 1.ª tabla (intro arriba; tabla dentro del wrap).
@@ -135,6 +136,7 @@ MANUAL_ART_TABLE_WRAP: frozenset[str] = frozenset({
 
 # Secciones cuyo dibujo bordea todo el bloque de prosa (cierra en --- / siguiente título).
 MANUAL_ART_COPY_WRAP: frozenset[str] = frozenset({
+    "Cuándo se tira (y cuándo no)",
     "Degeneración neural",
     "Recuperar la humanidad",
 })
@@ -318,11 +320,12 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
 
     def open_manual_art_wrap(slug: str, *, anchor: str = "table") -> None:
         nonlocal art_wrap_open, manual_art_in_wrap, pending_manual_art_wrap, manual_art_anchor
+        layout = "portrait-float" if slug == "2d6" else "portrait-span"
         html.append('<div class="book-art-wrap">')
         html.append(
             manual_art_html(
                 slug,
-                layout="portrait-span",
+                layout=layout,
                 anchor=anchor,
                 size=MANUAL_ART_SIZE.get(slug, "manual"),
             )
