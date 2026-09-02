@@ -20,9 +20,9 @@
 
 - Degeneración neural — Por cada 3 cromos instalados: −1 a una característica a elección (mín. −4) y 1 casilla @Psique. Ver *Cyberware*.
 
-- Director — Quien conduce la mesa: presenta amenazas y aplica consecuencias (sobre todo en 7–9 y 6−). No compite contra los jugadores.
+- Director — Quien conduce la mesa: describe la situación, decide si hay tirada, aplica consecuencias (sobre todo en 7–9 y 6−). No tira dados para «ganar» ni compite contra los jugadores.
 
-- EN (Enlaces Neuronales) — Atributo: lógica, técnica, redes, implantes, sistemas.
+- EN (Enlaces Neuronales) — Atributo: pensar, recordar, hackear, operar sistemas, usar implantes/técnicas.
 
 - Escena Estrella — Momento más memorable de la sesión, elegido por los jugadores; puede dar 1 Estrella si el personaje participó. Ver *Cyberware → Estrellas*.
 
@@ -34,9 +34,9 @@
 
 - ICE — Jerga de Red: defensas anti-intruso. Color; el combate en Red se resuelve con las reglas de la mesa / cromos pertinentes.
 
-- MC (Manipulación Cognitiva) — Atributo: leer gente, empatía, persuasión, presión social.
+- MC (Manipulación Cognitiva) — Atributo: leer gente, persuasión, mentira, presión social, empatía.
 
-- Movimiento — Acción importante con riesgo, incertidumbre o consecuencias serias, resuelta con reglas (suele implicar tirada). Cualquiera puede intentarlo si la ficción lo permite; cambian las herramientas (cromos/chapería).
+- Movimiento — Regla con disparador en la ficción, tirada (si aplica) y resultados 10+ / 7–9 / (a veces) 6−. Si el personaje hace la acción del disparador, el movimiento ocurre. Cualquiera puede intentarlo si la ficción lo permite; cambian las herramientas (cromos/chapería).
 
 - Neurodata — Experiencia vivida volcada a terminal y vendible. El Tasador la paga en Estrellas. También hay neurodata como chapería (contenido en neuroranura): ver catálogo de chapería.
 
@@ -44,21 +44,21 @@
 
 - Night City — Ciudad-escenario por defecto del tono cyberpunk de este manual.
 
-- PbtA — *Powered by the Apocalypse*: las reglas siguen a la ficción; se tira cuando hay riesgo o incertidumbre.
+- PbtA — *Powered by the Apocalypse*: primero la ficción, después las reglas; se tira cuando hay riesgo, incertidumbre o consecuencias serias.
 
 - Pifia — Fallo crítico en la mesa al usar una característica mejorada por cromos: episodio de cyberpsicosis 1 turno + 1 casilla @Psique. Ver *Cyberware*.
 
 - Profesión — Arquetipo de creación (una sola). Fija rasgos iniciales y arsenal. Trasfondo = ficción, no reglas nuevas.
 
-- RC (Reacción Cinética) — Atributo: reflejos, coordinación, actuar bajo fuego.
+- RC (Reacción Cinética) — Atributo: reflejos, precisión, esquivar, actuar bajo fuego, timing.
 
 - SAI — Sistema de arma inteligente. Suele exigir el cromo de conexión de arma inteligente. Opciones recurrentes: acelerador iónico, apuntado asistido, flujo balístico, estabilizador. Ver catálogo de chapería.
 
 - Tasador Virtual — Evalúa Neurodata y paga Estrellas según criterios de sesión. Ver *Cyberware*.
 
-- Tirada — 2d6 + atributo cuando hay riesgo, incertidumbre o consecuencias serias.
+- Tirada — 2d6 + atributo cuando hay riesgo, incertidumbre o consecuencias serias. No se tira si el resultado es claro y sin presión interesante. Tiran los jugadores.
 
-- TM (Tejido Muscular) — Atributo: fuerza, aguante, daño físico, esfuerzo extremo.
+- TM (Tejido Muscular) — Atributo: fuerza, aguante, violencia física, resistir condiciones extremas.
 
 - Tope de mejora (+4) — La suma de bonos de cromos no puede dejar ninguna característica por encima de +4.
 
