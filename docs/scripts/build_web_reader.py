@@ -25,7 +25,7 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20260902a"
+WEB_BUILD_ID = "20260902f"
 
 # Segunda columna de tabla Calidad → intro+título contornean imagen en wrap.
 CALIDAD_WRAP_COL2 = frozenset({
@@ -565,6 +565,28 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
                         emit_catalog_art(pending_catalog_art, wrap=True)
                         pending_catalog_art = None
                         html.append(heading_html)
+            i += 1
+            continue
+
+        img_line = re.match(r"^!\[([^\]]*)\]\(([^)]+)\)$", stripped)
+        if img_line:
+            close_lists()
+            flush_portrait()
+            flush_catalog_art()
+            alt = img_line.group(1).strip()
+            src_path = img_line.group(2).strip()
+            # Banners panorámicos del manual: ![](assets/manual/slug.png)
+            if src_path.startswith("assets/manual/") and src_path.endswith(".png"):
+                slug = Path(src_path).stem
+                html.append(manual_banner_html(slug))
+            else:
+                src = escape(asset_url(src_path))
+                alt_attr = f' alt="{escape(alt)}"' if alt else ' alt=""'
+                html.append(
+                    f'<figure class="book-item-banner" aria-hidden="true">'
+                    f'<img src="{src}"{alt_attr} loading="lazy">'
+                    f"</figure>"
+                )
             i += 1
             continue
 

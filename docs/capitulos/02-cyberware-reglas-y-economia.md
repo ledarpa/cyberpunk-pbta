@@ -103,6 +103,8 @@ Terapia y estabilización neuronal especializada.
 
 ## Progresión: Neurodata, Estrellas y Créditos
 
+![](assets/manual/mejoras.png)
+
 En Night City las vivencias intensas se venden. Corporaciones, laboratorios y plataformas pagan por recuerdos con adrenalina, miedo y emoción real.
 
 Tras una misión o una escena muy fuerte, puedes descargar la experiencia en una terminal compatible. Ese archivo es Neurodata: recuerdos, sensaciones y percepción completa, listos para almacenar y comercializar.
@@ -116,6 +118,8 @@ Un Tasador Virtual evalúa la Neurodata y paga en Estrellas. 1 Estrella = 1 Cré
 ### Cómo obtener Estrellas
 
 Al terminar una misión o sesión relevante, el Tasador puede dar 1 Estrella por cada criterio cumplido:
+
+![](assets/manual/creditos.png)
 
 - ★ El personaje sobrevive a la misión.
 
@@ -173,6 +177,8 @@ Entregas la versión anterior y pagas solo la diferencia en Créditos entre cate
 El Director puede usar el mismo coste para consumibles o accesorios parecidos si encaja en la campaña.
 
 ---
+
+![](assets/manual/experiencia.png)
 
 En Night City importa sobrevivir y aprender. El recurso más cotizado sigue siendo la experiencia vivida: cada Neurodata vendida te acerca a mejores cromos… y un paso más hacia la pérdida de humanidad.
 
