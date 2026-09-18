@@ -19,6 +19,21 @@ La mesa es una conversación:
 
 La historia no se detiene con un fallo. Un 6 o menos **abre** peligro, coste o presión nueva.
 
+> **Ejemplo — El fallo que abre juego**
+> Dante, Mercenario, está en el ducto de ventilación del piso 40 de la torre Biotechnica. Abajo, el laboratorio. Atrás, nada.
+>
+> —Me deslizo hasta la rejilla y la abro sin ruido.
+>
+> —2d6 + RC.
+>
+> Los dados ruedan. Un 2 y un 3. Con el +1: **6**. Mesa en silencio. Dante elige la consecuencia: *alguien ya sabía que venía*.
+>
+> "Apoyo los dedos en la rejilla y siento el error antes de verlo: los tornillos ya están aflojados. Alguien los sacó y los volvió a poner. La rejilla cae con un golpe seco, y cuando me asomo hay tres guardias abajo, mirando hacia arriba, sonriendo. Uno habla por radio: 'Sí, es él. El de la foto'."
+>
+> El DJ se recuesta. No se murió la escena: se abrió otra, peor y mejor. Ahora Dante sabe algo terrible e invaluable: **lo vendieron**. Alguien de su propia red habló. El 6− no es una pared, es una puerta que da a un cuarto más oscuro. El reloj de la extracción empieza a correr, la traición tiene nombre pendiente, y la sesión acaba de ganar un motor nuevo.
+>
+> Fallar no es frenar la historia. Es pisar el acelerador con el auto en llamas.
+
 **Quién tira:** los jugadores. El Director no tira dados para «ganar»: interpreta el mundo y aplica consecuencias.
 
 ---
@@ -31,6 +46,19 @@ La historia no se detiene con un fallo. Un 6 o menos **abre** peligro, coste o p
 
 Pregunta útil en la mesa: *«¿Qué puede salir mal de forma interesante si esto falla o sale a medias?»*
 Si la respuesta es «nada», no tires.
+
+> **Ejemplo — Cuándo no tirar**
+> Tres de la mañana. El Ramen Sintético de la calle 22, vapor graso contra el neón. Vera entra, pide lo de siempre, se sienta al fondo.
+>
+> El tipo de al lado tiene el brazo cromado hasta el hombro y la cara de alguien que no duerme desde el martes. Levanta la vista. La mira fijo. Un segundo largo, de esos que en la calle valen plata.
+>
+> —Cuidado —dice la jugadora—. Me acomodo el bolso, por las dudas.
+>
+> —No tires nada —dice el DJ, mordiendo un sándwich—. El tipo te mira, bosteza, y vuelve a su sopa. Le falta una muela y le sobran años.
+>
+> Y sigue: el tipo paga, sale a la lluvia, y Vera termina el ramen viendo los cables colgar del toldo como lianas muertas. Nada pasó. Y justamente por eso: no hubo dados.
+>
+> Porque si no hay nada interesante que pueda salir mal, no hay tirada. El DJ narra, la escena respira, el café se enfría. Preguntate siempre: *¿qué se rompe si esto falla?* Si la respuesta es "nada", seguí de largo. Los dados son para cuando la calle muerde, no para cuando bosteza.
 
 ---
 
@@ -68,6 +96,29 @@ Ejemplo corto:
 > - **10+:** saltás limpio; el drone no te marca.
 > - **7–9:** saltás, pero el drone te pilla un segundo: alarma local, o te raspás, o perdés un equipo al trepar.
 > - **6−:** no cruzás a tiempo / te ven / caés mal. El Director dice cómo se pone peor la escena.
+
+> **Ejemplo — El bucle de la mesa**
+> Depósito Arasaka, docks de Watson. Lluvia. Nix (Netrunner) tiene que colarse por la puerta de servicio sin que la cámara lo fiche. Alrededor de la mesa, tres latas de cerveza vacías y tazas de café recalentado.
+>
+> —Voy a la puerta. Cuidado, despacio.
+>
+> —Hay una cámara girando y un guardia con la vista clavada en el escaneo del HUD. Tirame **2d6 + RC**.
+>
+> **Si sacás 10+** (sale 11), narrás vos, limpio:
+>
+> "Espero el barrido de la cámara contando en la cabeza. Tres, dos… me pego a la pared justo en el hueco ciego, cruzo en dos zancadas y la puerta cede con un clic. Adentro. Ni se me movió la chaqueta."
+>
+> **Si sacás 7-9** (sale 8), el DJ te da a elegir: *te ficha la cámara un segundo, dejás huella en el picaporte, o el guardia se da vuelta y te ve de lejos.*
+>
+> —Elijo: me fichó la cámara.
+>
+> "Cruzo perfecto, entro, la puerta se cierra… y en el reflejo del vidrio veo el ojo rojo de la cámara clavado en mí un segundo entero. Estoy adentro, pero Arasaka ya sabe que hay alguien."
+>
+> **Si sacás 6−** (sale 5), elegís una consecuencia y narrás el fracaso encima:
+>
+> —La alarma.
+>
+> "Piso mal, la chapa cruje, la cámara gira y me baña de luz blanca. Corro, me tiro detrás de un contenedor y escucho la sirena despertarse arriba. El plan se murió. Ahora improvisamos."
 
 ---
 

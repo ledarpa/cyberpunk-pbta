@@ -32,6 +32,7 @@ from word_styles import (  # noqa: E402
     STYLE_MESA,
     STYLE_NORMAL,
     STYLE_QUOTE,
+    STYLE_EJEMPLO,
     add_body_paragraph,
     add_bullet,
     add_cover_art,
@@ -209,7 +210,8 @@ def process_markdown(doc: Document, content: str) -> None:
             continue
 
         if stripped.startswith("> "):
-            add_body_paragraph(doc, stripped[2:].strip(), STYLE_QUOTE)
+            style = STYLE_EJEMPLO if stripped.startswith("> **Ejemplo") else STYLE_QUOTE
+            add_body_paragraph(doc, stripped[2:].strip(), style)
             i += 1
             continue
 

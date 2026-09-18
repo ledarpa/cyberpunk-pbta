@@ -190,6 +190,13 @@ Módulos (varios reemplazan la audición convencional mientras estén activos)
 | Radar | “Audición” tipo murciélago; movimiento normal en oscuridad total. **+1 RC** |
 | Receptor de banda ancha | Frecuencias sub y supersónicas. **+1 EN** |
 
+> **Ejemplo — Cromos sensoriales en acción**
+> La Espía está en la cornisa del piso 41, lluvia fina bajando por el neón de Arasaka. Dice: «Quiero leer la conversación de la sala de juntas sin entrar». El DJ: «RC, con tu fotosensor tenés +1». 2d6+RC: **9**.
+>
+> El DJ ofrece: te marca un láser de seguridad, o perdés la ventana y llegás tarde al punto de extracción, o el audio queda corrupto y solo captás la mitad. Ella elige el láser.
+>
+> «Ajusto el fotosensor un grado y la penumbra se vuelve mediodía gris. El zoom óptico ×10 me pone la sala en la retina como si estuviera apoyada en la mesa: tres corpos, un maletín. Cambio al térmico y veo los dos guardias detrás del vidrio blindado, manchas naranjas respirando. Abro el micrófono láser, lo pinto contra el ventanal, y el cyberoído me trae cada palabra a 500 metros como si me la susurraran al oído. Nombres, cifras, un envío. Lo grabo todo. Lo que no veo es la línea roja finísima del láser de seguridad que me cruza el tobillo cuando me repliego. En algún servidor, una alerta tibia empieza a contar. Consigo los datos. Ahora tengo que irme antes de que la cuenta llegue a cero.»
+
 ---
 
 ## Cyberbucales
@@ -435,3 +442,10 @@ Solo en módulo de cybervértebra (orugas plegables o cuadrúpedo equivalente). 
 | Militar | ×5; **+4 RC** |
 
 ---
+
+---
+
+> **Ejemplo — Cyberextremidad en acción**
+> El Mercenario entra al almacén del muelle y el primero ya está sacando la escopeta. «Lo bajo antes de que termine de apuntar.» El DJ: «TM, dale». 2d6+TM: **11**.
+>
+> «El brazo de combate se abre con un chasquido seco y el Sable Mantis despliega su metro de filo desde el antebrazo. No hay tiempo de pensar, el cuerpo ya está adentro. El primer tajo le corta la escopeta en dos —1d6 con ventaja, calidad corriente, y hoy la ventaja pesa— y el segundo le abre el chaleco de arriba abajo. Cae sin ruido. El socio aparece por la izquierda disparando: cruzo el magnetoescudo, la ráfaga rebota en el campo con chispas azules, la tirada de RC sale limpia y ni una bala me toca. Un paso, servo a tope, y el Mantis termina la conversación. Silencio. Solo la lluvia en el techo de chapa y el zumbido del escudo bajando de potencia. Cuento los cuerpos: dos. Cuento mis balas: cero gastadas. El cromo hizo todo el trabajo. Así se pelea cuando el brazo vale más que el tipo que lo enfrenta.»

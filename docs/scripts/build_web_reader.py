@@ -25,7 +25,7 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20260902n"
+WEB_BUILD_ID = "20260918a"
 
 # Segunda columna de tabla Calidad → intro+título contornean imagen en wrap.
 CALIDAD_WRAP_COL2 = frozenset({
@@ -297,6 +297,17 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
     pending_catalog_banner_after_table: str | None = None
     manual_art_in_wrap = False
     manual_art_anchor: str = "table"
+    quote_buffer: list[str] | None = None  # blockquotes consecutivos → un bloque
+
+    def flush_quote() -> None:
+        nonlocal quote_buffer
+        if quote_buffer is None:
+            return
+        cls = ' class="ejemplo"' if quote_buffer[0].startswith("**Ejemplo") else ""
+        ps = "".join(f"<p>{inline_md(q)}</p>" for q in quote_buffer if q)
+        if ps:
+            html.append(f"<blockquote{cls}>{ps}</blockquote>")
+        quote_buffer = None
 
     def emit_catalog_art(slugs: list[str], *, wrap: bool = False) -> None:
         nonlocal catalog_art_open, art_wrap_open
@@ -434,6 +445,8 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
     while i < len(lines):
         line = lines[i]
         stripped = line.strip()
+        if not (stripped.startswith("> ") or stripped == ">"):
+            flush_quote()
 
         if stripped.startswith("|") and "|" in stripped[1:]:
             close_lists()
@@ -593,11 +606,14 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
             i += 1
             continue
 
-        if stripped.startswith("> "):
+        if stripped.startswith("> ") or stripped == ">":
             close_lists()
             flush_portrait()
             flush_catalog_art()
-            html.append(f'<blockquote>{inline_md(stripped[2:].strip())}</blockquote>')
+            content = stripped[2:].strip() if stripped.startswith("> ") else ""
+            if quote_buffer is None:
+                quote_buffer = []
+            quote_buffer.append(content)
             i += 1
             continue
 
@@ -648,6 +664,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
     close_lists()
     flush_portrait()
     flush_catalog_art()
+    flush_quote()
     return "\n".join(html)
 
 

@@ -73,6 +73,17 @@ Según el nivel de @Psique en la ficha:
 | **4 o 5** | Cyberpsicosis **mayor** durante **toda la escena** |
 | **Más de 5** | **Cyberpsicópata permanente** — el personaje pasa al control del Director |
 
+> **Ejemplo — Episodio de cyberpsicosis**
+> La pelea en el bar viene bien hasta que Kessler tira para esquivar y los dados escupen **pifia**. Con el brazo de combate mejorando su RC, eso significa una cosa: episodio. Un turno. Una casilla más de @Psique.
+>
+> Y desde adentro se siente así:
+>
+> "Mi brazo deja de ser mío en medio del movimiento. Quiero agarrar la botella y el brazo decide que no: la esquiva, gira, y le hunde el codo en la garganta al tipo que estaba a MI espalda, uno que yo ni había visto. Siento los dedos cerrarse solos en el cuello de alguien. Aprieto. No. *Aprieta.* Yo estoy atrás de mis propios ojos, gritando en un cuarto sin puertas, mirando por una ventana que es mi cara. El brazo tararea una frecuencia bajita, contenta, como una aspiradora vieja. Cuando me devuelve el control hay un tipo en el piso y todos me miran como se mira a un perro que habló."
+>
+> Un turno. Sesenta segundos de ser pasajero en tu propia carne.
+>
+> Después, en el baño del bar, Kessler marca la casilla en la ficha con la mano que todavía tiembla. La otra mano, la de cromo, está tranquila. Perfectamente tranquila. Eso es lo peor.
+
 ---
 
 ### Recuperar la humanidad
@@ -90,6 +101,23 @@ El personaje puede quitarse un implante a propósito.
 - Volver a instalarlo sin tratamiento adecuado vuelve a subir @Psique.
 
 - Los cromos improvisados deben destruirse para retirarlos en pleno conflicto; después un biohacker puede repararlos.
+
+> **Ejemplo — Retirar un cromo a propósito**
+> El taller de Yuri, otra vez. Pero esta vez no hay caja nueva sobre la mesa. Hay una ficha con casillas de @Psique marcadas, y la decisión ya tomada.
+>
+> —Los ojos —dice Mara, Artista, señalándose la cara—. Quiero que me los saques.
+>
+> Yuri no pregunta. Los ópticos Kirigami le habían costado diez Créditos y tres años de ver el mundo en capas: espectros, cables, mentiras. También le habían costado las noches, los sueños, la manera de mirar a la gente a la cara en vez de a través.
+>
+> El procedimiento es al revés que una instalación: en vez de sumar, resta. Yuri desconecta, desenrosca, y deposita los dos ojos en una bandeja de acero, donde quedan mirando el techo con una paciencia de insecto.
+>
+> Mara pierde todo lo que esos lentes le daban. Nunca más va a ver el calor de un cuerpo a través de una pared ni leer el miedo en la pupila de un corpo. A cambio, una casilla de @Psique se borra de la ficha, como una deuda saldada.
+>
+> Cuando abre los ojos nuevos —carne, lágrima, límite— el taller se ve borroso y pequeño. Hermoso.
+>
+> —¿Y ahora? —pregunta Yuri.
+>
+> —Ahora lloro —dice Mara, y llora, y le sale bien, porque las lágrimas ya no pasan por ningún filtro.
 
 #### 2. Tratamiento psicológico digital
 
@@ -112,6 +140,27 @@ Tras una misión o una escena muy fuerte, puedes descargar la experiencia en una
 Un Tasador Virtual evalúa la Neurodata y paga en Estrellas. 1 Estrella = 1 Crédito para cromos, chapería y mejoras.
 
 > Vender experiencias te da poder; cada cromo nuevo también te acerca a perder humanidad. Economía y @Psique van ligadas.
+
+> **Ejemplo — Vender Neurodata**
+> El búnker del Tasador está tres pisos bajo tierra, en un local que fue tienda de videos y todavía huele a plástico de los noventa. La banda llega con la misión terminada y la adrenalina todavía tibia.
+>
+> Sable, Espía, se sienta en la silla. Los electrodos muerden las sienes. En la pantalla, el Tasador Virtual: una cara de maniquí con sonrisa de banco.
+>
+> —Descargando experiencia —dice, con voz de ascensor—. Evaluando.
+>
+> Y ahí empieza el mareo: la misión entera drenándote por la nuca. El miedo en el ducto, el disparo, el sabor a sangre cuando mordiste la bala. Todo eso que fue tuyo, ahora es archivo. Mercadería.
+>
+> El Tasador parpadea.
+>
+> —Sujeto sobrevivió a la misión. **Una Estrella.** Adquirió conocimiento nuevo y relevante: la identidad del topo. **Una Estrella.** Objetivo principal del grupo: cumplido. **Una Estrella.** Y la escena del tejado, con el helicóptero… —la cara de maniquí hace una pausa que casi parece placer—. Los jugadores la eligieron Escena Estrella. **Una Estrella más.**
+>
+> Cuatro Estrellas. Cuatro Créditos, depositados con un tintineo digital.
+>
+> Sable se saca los electrodos y se queda un momento mirando la pared, intentando recordar a qué olía el miedo en el ducto. Ya no lo recuerda. Lo vendió. Está en un servidor, esperando que algún corpo aburrido lo viva en primera persona desde un sillón.
+>
+> —Gracias por su experiencia —dice el Tasador—. Vuelva pronto.
+>
+> Y uno vuelve. Siempre se vuelve.
 
 ---
 
@@ -157,6 +206,21 @@ Incluye un subsistema básico de esa pieza.
 | Corriente | 10 |
 | Hi-Tech | 15 |
 | Militar | 20 |
+
+> **Ejemplo — Instalación de un cromo**
+> El consultorio del biohacker Yuri huele a alcohol, soldador y cigarrillo apagado. Quince Créditos sobre la mesa de acero: un **amplificador de reflejos Hi-Tech**, todavía en su caja sellada, con el logo de Militech raspado.
+>
+> —¿Seguro? —pregunta Yuri, calentando el bisturí sónico—. Después de esto, tu columna ya no es del todo tuya.
+>
+> —Hace tres meses que no es mía. Dale.
+>
+> Te acostás boca abajo. La anestesia es parcial: dormís el dolor, no la conciencia. Sentís el frío del corte a lo largo de la espina, el cosquilleo eléctrico de cada vértebra siendo leída, mapeada, escrita. Yuri murmura números como quien reza. Algo se enrosca en tu médula con un beso de estática.
+>
+> —No te levantes rápido —dice, cosiendo—. El cuerpo tarda en aceptar que ahora obedece a dos amos.
+>
+> Cuando te incorporás, el mundo se mueve distinto. Más lento. La mosca que zumbaba junto a la lámpara ahora vuela en cuadros, y tu mano la atrapa antes de que termines de decidirlo. Abrís el puño. La mirás salir.
+>
+> Yuri cuenta los Créditos. Vos contás los segundos que te regaló la máquina, y en algún rincón de la nuca, una vocecita nueva empieza a hablar con acento de fábrica.
 
 #### Mejorar cyberware que ya tienes
 

@@ -32,6 +32,7 @@ python3 docs/scripts/build_web_reader.py                # web/data + fuente + po
 | Título 3 | 10 pt | no | `#55FFFF` |
 | Título 4 | 9 pt | no | `#00FF00` |
 | En la mesa | 8 pt | no | `#55FFFF` |
+| Ejemplo (`> **Ejemplo — …**`) | 8 pt | no | `#E0A0E8` (rosa munición de la ficha) |
 | Cuerpo | 8 pt | — | `#55FF55` |
 
 Tema: `docs/assets/word-theme.yaml` + `docs/scripts/word_styles.py`. Layout documentado: `docs/assets/layout.yaml`. Original mecánico (solo lectura): `docs/ref/pbta-original.docx`. Inventario: `docs/inventario-reglas.md`.

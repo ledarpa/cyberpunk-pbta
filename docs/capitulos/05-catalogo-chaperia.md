@@ -26,6 +26,15 @@ En resumen: Armas, herramientas, neurodata en ranura y vestimenta:
 
 Muchas piezas piden conocimiento técnico o integración con cromos (HUD + cyberópticas). Llevar arsenal letal o PEM a la vista puede ser contraproducente: se resuelve en ficción con el Director.
 
+> **Ejemplo — Por qué no conviene ir como arsenal ambulante**
+> El Forastero cruza la garita de entrada al barrio con el fusil colgado, la escopeta a la espalda, el lanzamisiles Minimal en la mano y una tecnoarmadura que brilla bajo el neón. Dice: «Entro caminando tranquilo, total no hice nada». El DJ sonríe: «MC, y no tenés nada que te ayude». 2d6+MC: **5**.
+>
+> Elige la consecuencia: patrulla corporativa.
+>
+> «Camino tres cuadras y el barrio me cierra la cara. Los puestos bajan persianas a mi paso. Una chica me filma con el celular sin disimulo. En la esquina, dos tipos de traje hablan por la muñeca mirándome. Antes de llegar al hotel, una patrulla corporativa me corta la calle con el transporte de costado: focos, altavoz, cuatro cascos bajando con armas en la mano. ‘Identificación y permisos de portación.’ Media hora contra la pared mientras me revisan hasta las muelas y me ‘retienen’ el lanzamisiles para verificación. Entro al barrio libre, sí. Sin lanzamisiles, fichado en tres bases de datos y con medio distrito sabiendo que llegué.»
+>
+> Corte: el Arreglador cruza la misma garita una hora después con corposuit corriente —ventaja MC— y una pistola discreta bajo el corte de la chaqueta. Saluda al guardia por el nombre. Le preguntan cómo anda la familia. Nadie lo filma. Nadie lo mira dos veces. En Night City, el arsenal que impresiona es el que no se ve.
+
 ---
 
 ## Recordatorio rápido
@@ -268,6 +277,13 @@ Cualquier dardo puede venderse como jeringa: impacto cuerpo a cuerpo, tirada TM 
 | **Veneno letal** | Muerte en **6** turnos si un biohacker no lo trata. No afecta cyberware |
 | **Paralizante** | Inmovilizado **1d6** turnos |
 
+> **Ejemplo — Un arma con SAI en acción**
+> El Corpo está acorralado en el estacionamiento subterráneo, tres matones de la calle bajando las rampas. Tiene el cromo de conexión de arma inteligente y un fusil Hi-Tech con dos subsistemas: apuntado asistido y flujo balístico. «Les corto la bajada.» El DJ: «RC, con el HUD tenés ventaja». 2d6+RC con ventaja: **8**.
+>
+> El DJ ofrece: te quedás sin cargas para lo que venga después, o el ruido sube y la seguridad del edificio te ficha, o uno de los tres queda vivo y herido. Elige el ruido.
+>
+> «El HUD me dibuja los tres en rojo antes de que doblen la esquina: distancia, pulso, cobertura. Primer tiro manual, uno solo, controlado: el de adelante cae con el pecho abierto, 1d6 seco. Los otros dos se tiran detrás de una camioneta. Cambio a semi y el flujo balístico hace su magia: no recargo, no pienso, ráfaga de tres con ventaja en RC y el segundo se desploma contra el neumático. El tercero corre rampa arriba, lo dejo ir. El fusil se enfría en mis manos mientras las alarmas del edificio se encienden piso por piso. Conseguí salir vivo. Ahora toda la seguridad corporativa tiene mi firma balística.»
+
 ---
 
 ## Herramientas
@@ -357,6 +373,13 @@ Membresía Trauma Team en el bolsillo; monitoriza biológico y cibernético. Si 
 | **Miembro** | **5 min** |
 | **Preferencial** | Tras **1 día** de terapia: curado y reparado al **50%** |
 | **VIP** | Cubren **100%** de gastos y tiempo de tratamiento necesario (salud y cibernética) |
+
+> **Ejemplo — Una herramienta en acción**
+> El Biohacker está en su taller de containers, olor a soldadura y fritanga, y necesita saber cuántos guardias hay en la clínica clandestina de enfrente sin moverse de la silla. Saca su drone corriente —dos subsistemas: vigilante y silencioso— y lo tira por la ventilación. «Lo paseo por el techo y mapeo la clínica.» El DJ: «EN». 2d6+EN: **7**.
+>
+> El DJ ofrece: el drone vuelve tocado y hay que repararlo, o alguien capta la señal de control y triangularla es cuestión de tiempo, o el video sale incompleto, sin el sótano. Ella elige la señal.
+>
+> «El drone se desliza por el ducto sin hacer ruido —silencioso, casi inaudible, solo lo escucharías en el vacío— y yo miro todo por su cámara en la pantalla rota del taller. Vigilante grabando: dos guardias en recepción, uno dormido en el pasillo, cámaras en cada esquina, la puerta del quirófano con teclado. Cinco metros por turno, paciente, deja que el drone respire. Anoto todo en la pizarra con marcador. Cuando lo traigo de vuelta, una lucecita me parpadea en el analizador: alguien rastreó la señal de control. No saben dónde estoy todavía, pero ya están mirando. La chapería no me toca el @Psique, me toca otra cosa: la suerte. Y la mía acaba de quedar fichada.»
 
 ---
 

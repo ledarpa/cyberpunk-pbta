@@ -1076,6 +1076,16 @@ body {
   color: var(--cyan);
 }
 
+/* Bloques «Ejemplo — …» — rosa munición de la ficha (#e0a0e8) */
+.book blockquote.ejemplo {
+  border-left-color: #e0a0e8;
+  color: #e0a0e8;
+}
+
+.book blockquote.ejemplo strong {
+  color: #e0a0e8;
+}
+
 .book code,
 .book strong {
   color: var(--bright);

@@ -67,6 +67,7 @@ STYLE_LIST = "List Bullet"
 STYLE_LIST2 = "List Bullet 2"
 STYLE_QUOTE = "PBTA Quote"
 STYLE_MESA = "PBTA Mesa"               # «En la mesa» — celeste como Título 3
+STYLE_EJEMPLO = "PBTA Ejemplo"           # Bloques «Ejemplo — …» (rosa munición en web)
 STYLE_COVER = "PBTA Cover Line"
 STYLE_PART_DECO = "PBTA Part Deco"   # barras ASCII; no entra al TOC
 
@@ -347,7 +348,7 @@ def setup_document_styles(doc: Document) -> DocTheme:
     """Tematiza estilos nativos Word + auxiliares PBTA; numera viñetas."""
     set_document_page_background(doc)
 
-    for sid in (STYLE_QUOTE, STYLE_MESA, STYLE_COVER, STYLE_PART_DECO, STYLE_LIST2):
+    for sid in (STYLE_QUOTE, STYLE_MESA, STYLE_EJEMPLO, STYLE_COVER, STYLE_PART_DECO, STYLE_LIST2):
         _ensure_paragraph_style(doc, sid)
 
     # Normal = párrafo de cuerpo (viudas/huérfanas controladas)
@@ -439,6 +440,15 @@ def setup_document_styles(doc: Document) -> DocTheme:
         size=SZ_BODY,
         color=C_ACCENT,
         left_indent=Inches(0.35),
+        space_after=Pt(4),
+    )
+    # Bloques de ejemplo («Ejemplo — …») — sangría mayor que Quote
+    _style_paragraph(
+        doc,
+        STYLE_EJEMPLO,
+        size=SZ_BODY,
+        color=C_ACCENT,
+        left_indent=Inches(0.5),
         space_after=Pt(4),
     )
     # Líneas mecánicas de profesión — celeste; sin negrita de título
@@ -588,6 +598,7 @@ def add_body_paragraph(doc: Document, text: str, style: str = STYLE_NORMAL, bold
         STYLE_H4: SZ_H4,
         STYLE_QUOTE: SZ_BODY,
         STYLE_MESA: SZ_BODY,
+        STYLE_EJEMPLO: SZ_BODY,
     }
     color_map = {
         STYLE_H1: C_HEADING,
@@ -596,6 +607,7 @@ def add_body_paragraph(doc: Document, text: str, style: str = STYLE_NORMAL, bold
         STYLE_H4: C_TEXT_BRIGHT,
         STYLE_QUOTE: C_ACCENT,
         STYLE_MESA: C_ACCENT,
+        STYLE_EJEMPLO: C_ACCENT,
     }
     size = size_map.get(style, SZ_BODY)
     default_color = color_map.get(style, C_TEXT)
@@ -609,8 +621,8 @@ def add_body_paragraph(doc: Document, text: str, style: str = STYLE_NORMAL, bold
         for part in parts:
             if part.startswith("**") and part.endswith("**"):
                 run = p.add_run(part[2:-2])
-                # En mesa: negrita del mismo celeste; en cuerpo: verde brillante
-                emph = default_color if style == STYLE_MESA else (
+                # En mesa/ejemplo: negrita del mismo color; en cuerpo: verde brillante
+                emph = default_color if style in (STYLE_MESA, STYLE_EJEMPLO) else (
                     C_TEXT_BRIGHT if not heading_bold else default_color
                 )
                 _apply_font(run, size=size, bold=True, color=emph)
