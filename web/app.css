@@ -1930,6 +1930,41 @@ body {
   align-items: stretch;
 }
 
+/* Modo vertical (retrato o pantallas bajas): columnas apiladas, scroll vertical */
+.ficha-panel.is-vertical {
+  overflow-y: auto;
+  overflow-x: hidden;
+  place-items: start center;
+}
+
+.ficha-panel.is-vertical .ficha-page {
+  display: block;
+  height: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+.ficha-panel.is-vertical .ficha-sheet {
+  width: max-content;
+  max-width: none;
+  height: auto;
+  max-height: none;
+  margin: 0 auto;
+  padding-bottom: 1.5em;
+  overflow: visible;
+}
+
+.ficha-panel.is-vertical .ficha-layout {
+  grid-template-columns: 1fr;
+  row-gap: 1.5em;
+  width: auto;
+}
+
+.ficha-panel.is-vertical .ficha-col1,
+.ficha-panel.is-vertical .ficha-pre {
+  overflow: visible;
+}
+
 .ficha-pre {
   margin: 0;
   padding: 0;

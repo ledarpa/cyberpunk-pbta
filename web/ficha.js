@@ -1142,7 +1142,23 @@
     // Ancho total fijo (3 cols en ch + gaps); escala con altura como en resoluciones chicas
     const sizeByWidth = (innerW - gap * 2) / (SHEET_CH * Math.max(0.45, chPerEm));
     const sizeByHeight = innerH / ((LEDGER_ROWS + 3) * 1.03125);
-    let size = Math.min(sizeByWidth, sizeByHeight);
+    const fit3 = Math.min(sizeByWidth, sizeByHeight);
+
+    // Modo vertical (retrato o pantallas angostas/bajas): columnas apiladas, font por ancho.
+    const vertical = availW / availH < 1 || fit3 < 10.5;
+    panel.classList.toggle("is-vertical", vertical);
+
+    if (vertical) {
+      page.style.height = "auto";
+      let size = innerW / (COL1_CH * Math.max(0.45, chPerEm));
+      size = Math.max(11, Math.min(14, size));
+      size = Math.round(size * 2) / 2;
+      applySheetSize(size);
+      form.style.transform = "";
+      return;
+    }
+
+    let size = fit3;
     size = Math.max(12, size);
     size = Math.round(size * 2) / 2;
     applySheetSize(size);
