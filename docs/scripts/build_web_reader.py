@@ -20,12 +20,13 @@ CAPITULOS = ROOT / "docs" / "capitulos"
 WEB = ROOT / "web"
 DATA = WEB / "data"
 FONT_SRC = ROOT / "docs" / "assets" / "fonts" / "VT323-Regular.ttf"
+FONT_SRC_WOFF2 = ROOT / "docs" / "assets" / "fonts" / "VT323-Regular.woff2"
 ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20260918b"
+WEB_BUILD_ID = "20260921a"
 
 # Segunda columna de tabla Calidad → intro+título contornean imagen en wrap.
 CALIDAD_WRAP_COL2 = frozenset({
@@ -717,6 +718,7 @@ def main() -> None:
     fonts = WEB / "fonts"
     fonts.mkdir(parents=True, exist_ok=True)
     shutil.copy2(FONT_SRC, fonts / "VT323-Regular.ttf")
+    shutil.copy2(FONT_SRC_WOFF2, fonts / "VT323-Regular.woff2")
     write_build_js()
     patch_index_cache()
     print(f"OK {DATA / 'manual.js'} ({len(js)} chars, {len(toc)} headings, build={WEB_BUILD_ID})")

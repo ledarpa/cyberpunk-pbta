@@ -20,4 +20,3 @@ python3 docs/scripts/build_web_reader.py                # web/data + fuente + po
 
 Original mecánico (solo lectura): `docs/ref/pbta-original.docx`. Inventario: `docs/inventario-reglas.md`.
 
-Lo que queda del pipeline Word por si lo reconstruimos: `docs/scripts/build_pbta_docx.py`, `docs/scripts/build_ficha_docx.py`, `docs/scripts/word_styles.py` (con el estilo `PBTA Ejemplo` en `#E0A0E8`).
