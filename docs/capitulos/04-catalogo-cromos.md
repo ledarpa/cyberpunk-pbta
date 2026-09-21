@@ -384,6 +384,11 @@ Accesorios
 | **Descarga de fluidos circulatorios** | Requiere aparato circulatorio auxiliar. Alcance: Imp. 3 m personal · Corr. 6 m personal · Hi-T 6 m cono 90° · Mil. 12 m cono 90°. **+1 RC** |
 | **Magnetoescudo** | Imp./Corr.: escudo personal, bloquea 1d6 (Corr. con ventaja), tirada RC vs ataque. Hi-T: escudo zonal cuerpo entero, no te mueves, bloquea sin RC. Mil.: zona 3 m², protege otros/equipo; Hi-T/Mil.: modo baja energía = escudo personal. **+1 TM** |
 
+> **Ejemplo — Cyberextremidad en acción**
+> El Mercenario entra al almacén del muelle y el primero ya está sacando la escopeta. «Lo bajo antes de que termine de apuntar.» El DJ: «TM, dale». 2d6+TM: **11**.
+>
+> «El brazo de combate se abre con un chasquido seco y el Sable Mantis despliega su metro de filo desde el antebrazo. No hay tiempo de pensar, el cuerpo ya está adentro. El primer tajo le corta la escopeta en dos —1d6 con ventaja, calidad corriente, y hoy la ventaja pesa— y el segundo le abre el chaleco de arriba abajo. Cae sin ruido. El socio aparece por la izquierda disparando: cruzo el magnetoescudo, la ráfaga rebota en el campo con chispas azules, la tirada de RC sale limpia y ni una bala me toca. Un paso, servo a tope, y el Mantis termina la conversación. Silencio. Solo la lluvia en el techo de chapa y el zumbido del escudo bajando de potencia. Cuento los cuerpos: dos. Cuento mis balas: cero gastadas. El cromo hizo todo el trabajo. Así se pelea cuando el brazo vale más que el tipo que lo enfrenta.»
+
 #### Extremidad balística
 
 Solo en módulo de cybervértebra. Arma inteligente integrada + enlace SAI automático (ver chapería). +1 RC.
@@ -441,11 +446,3 @@ Solo en módulo de cybervértebra (orugas plegables o cuadrúpedo equivalente). 
 | Hi-Tech | ×4; **+3 RC** |
 | Militar | ×5; **+4 RC** |
 
----
-
----
-
-> **Ejemplo — Cyberextremidad en acción**
-> El Mercenario entra al almacén del muelle y el primero ya está sacando la escopeta. «Lo bajo antes de que termine de apuntar.» El DJ: «TM, dale». 2d6+TM: **11**.
->
-> «El brazo de combate se abre con un chasquido seco y el Sable Mantis despliega su metro de filo desde el antebrazo. No hay tiempo de pensar, el cuerpo ya está adentro. El primer tajo le corta la escopeta en dos —1d6 con ventaja, calidad corriente, y hoy la ventaja pesa— y el segundo le abre el chaleco de arriba abajo. Cae sin ruido. El socio aparece por la izquierda disparando: cruzo el magnetoescudo, la ráfaga rebota en el campo con chispas azules, la tirada de RC sale limpia y ni una bala me toca. Un paso, servo a tope, y el Mantis termina la conversación. Silencio. Solo la lluvia en el techo de chapa y el zumbido del escudo bajando de potencia. Cuento los cuerpos: dos. Cuento mis balas: cero gastadas. El cromo hizo todo el trabajo. Así se pelea cuando el brazo vale más que el tipo que lo enfrenta.»

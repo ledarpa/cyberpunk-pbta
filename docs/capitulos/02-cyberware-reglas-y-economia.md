@@ -16,7 +16,7 @@ A diferencia de la chapería (equipo que llevas encima), los cromos:
 
 - Reglas (esta página): humanidad, mejoras, @Psique, Neurodata, Estrellas y Créditos.
 
-- Catálogo: [04-catalogo-cromos.md](04-catalogo-cromos.md) — implantes y módulos.
+- Catálogo: implantes y módulos.
 
 Si es tu primera partida, lee las reglas antes del catálogo. En campaña, el catálogo es consulta rápida.
 
@@ -80,7 +80,7 @@ Según el nivel de @Psique en la ficha:
 >
 > "Mi brazo deja de ser mío en medio del movimiento. Quiero agarrar la botella y el brazo decide que no: la esquiva, gira, y le hunde el codo en la garganta al tipo que estaba a MI espalda, uno que yo ni había visto. Siento los dedos cerrarse solos en el cuello de alguien. Aprieto. No. *Aprieta.* Yo estoy atrás de mis propios ojos, gritando en un cuarto sin puertas, mirando por una ventana que es mi cara. El brazo tararea una frecuencia bajita, contenta, como una aspiradora vieja. Cuando me devuelve el control hay un tipo en el piso y todos me miran como se mira a un perro que habló."
 >
-> Un turno. Sesenta segundos de ser pasajero en tu propia carne.
+> Un turno. Tres segundos de ser pasajero en tu propia carne.
 >
 > Después, en el baño del bar, Kessler marca la casilla en la ficha con la mano que todavía tiembla. La otra mano, la de cromo, está tranquila. Perfectamente tranquila. Eso es lo peor.
 
@@ -156,9 +156,9 @@ Un Tasador Virtual evalúa la Neurodata y paga en Estrellas. 1 Estrella = 1 Cré
 >
 > Cuatro Estrellas. Cuatro Créditos, depositados con un tintineo digital.
 >
-> Sable se saca los electrodos y se queda un momento mirando la pared, intentando recordar a qué olía el miedo en el ducto. Ya no lo recuerda. Lo vendió. Está en un servidor, esperando que algún corpo aburrido lo viva en primera persona desde un sillón.
+> Sable se saca los electrodos y se queda un momento mirando la pared, intentando recordar a qué olía el miedo en el ducto. Aún lo recuerda, pero con vaga precisión. Lo vendió. Está en un servidor, esperando que algún corpo aburrido lo viva en primera persona desde un sillón.
 >
-> —Gracias por su experiencia —dice el Tasador—. Vuelva pronto.
+> —Gracias por su experiencia —dice el Tasador, mientras deposita los créditos en su cuenta—. Vuelva pronto.
 >
 > Y uno vuelve. Siempre se vuelve.
 

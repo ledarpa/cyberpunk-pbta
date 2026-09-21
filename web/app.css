@@ -635,6 +635,12 @@ body {
   letter-spacing: 0.08em;
 }
 
+.cover-version {
+  margin-top: 0.25em;
+  font-size: round(nearest, clamp(10px, 2.6cqw, 13px), 1px);
+  opacity: 0.85;
+}
+
 .cover-scene {
   display: block;
   width: 100%;

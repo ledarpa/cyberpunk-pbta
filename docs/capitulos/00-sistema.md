@@ -9,9 +9,9 @@ Nadie «activa un movimiento» anunciando el nombre. El personaje **hace algo** 
 
 La mesa es una conversación:
 
-1. El Director describe la situación: qué se ve, qué amenaza, qué aprieta.
+1. El Director de Juego (DJ) describe la situación: qué se ve, qué amenaza, qué aprieta.
 2. Un jugador dice qué hace su personaje (con detalle suficiente para imaginarlo).
-3. El Director responde de una de estas formas:
+3. El DJ responde de una de estas formas:
    - **Pasa sin tirada** (es seguro, obvio o sin coste interesante), o
    - **Hay movimiento / tirada** (hay riesgo, incertidumbre o consecuencias que importan).
 4. Se aplica el resultado y la ficción cambia.
@@ -30,7 +30,7 @@ La historia no se detiene con un fallo. Un 6 o menos **abre** peligro, coste o p
 >
 > "Apoyo los dedos en la rejilla y siento el error antes de verlo: los tornillos ya están aflojados. Alguien los sacó y los volvió a poner. La rejilla cae con un golpe seco, y cuando me asomo hay tres guardias abajo, mirando hacia arriba, sonriendo. Uno habla por radio: 'Sí, es él. El de la foto'."
 >
-> El DJ se recuesta. No se murió la escena: se abrió otra, peor y mejor. Ahora Dante sabe algo terrible e invaluable: **lo vendieron**. Alguien de su propia red habló. El 6− no es una pared, es una puerta que da a un cuarto más oscuro. El reloj de la extracción empieza a correr, la traición tiene nombre pendiente, y la sesión acaba de ganar un motor nuevo.
+> No se murió la escena: se abrió otra, peor y mejor. Ahora Dante sabe algo terrible e invaluable: **lo vendieron**. Alguien de su propia red habló. El 6− no es una pared, es una puerta que da a un cuarto más oscuro. El reloj de la extracción empieza a correr, la traición tiene nombre pendiente, y la sesión acaba de ganar un motor nuevo.
 >
 > Fallar no es frenar la historia. Es pisar el acelerador con el auto en llamas.
 
@@ -42,7 +42,7 @@ La historia no se detiene con un fallo. Un 6 o menos **abre** peligro, coste o p
 
 **Se tira** cuando la acción del personaje tiene **riesgo**, **incertidumbre** o **consecuencias serias**.
 
-**No se tira** cuando el resultado es claro y aburrido: abrir una puerta sin vigilancia, recorrer un pasillo vacío, comprar un café. Si no hay presión, el Director narra y listo.
+**No se tira** cuando el resultado es claro y aburrido: abrir una puerta sin vigilancia, recorrer un pasillo vacío, comprar un café. Si no hay presión, el Jugador narra y el Director aporta comentarios, y listo.
 
 Pregunta útil en la mesa: *«¿Qué puede salir mal de forma interesante si esto falla o sale a medias?»*
 Si la respuesta es «nada», no tires.
@@ -54,11 +54,11 @@ Si la respuesta es «nada», no tires.
 >
 > —Cuidado —dice la jugadora—. Me acomodo el bolso, por las dudas.
 >
-> —No tires nada —dice el DJ, mordiendo un sándwich—. El tipo te mira, bosteza, y vuelve a su sopa. Le falta una muela y le sobran años.
+> —No tires nada —dice el DJ—. El tipo te mira, bosteza, y vuelve a su sopa. Le falta una muela y le sobran años.
 >
 > Y sigue: el tipo paga, sale a la lluvia, y Vera termina el ramen viendo los cables colgar del toldo como lianas muertas. Nada pasó. Y justamente por eso: no hubo dados.
 >
-> Porque si no hay nada interesante que pueda salir mal, no hay tirada. El DJ narra, la escena respira, el café se enfría. Preguntate siempre: *¿qué se rompe si esto falla?* Si la respuesta es "nada", seguí de largo. Los dados son para cuando la calle muerde, no para cuando bosteza.
+> Porque si no hay nada interesante que pueda salir mal, no hay tirada. El Jugador narra, la escena respira. Preguntate siempre: *¿qué se rompe si esto falla?* Si la respuesta es "nada", seguí de largo. Los dados son para cuando la calle muerde, no para cuando bosteza.
 
 ---
 
@@ -102,13 +102,13 @@ Ejemplo corto:
 >
 > —Voy a la puerta. Cuidado, despacio.
 >
-> —Hay una cámara girando y un guardia con la vista clavada en el escaneo del HUD. Tirame **2d6 + RC**.
+> —Hay una cámara girando y un guardia con la vista clavada en el escaneo del HUD. Para este movimiento, que requiere precisión, tirá 2 dados de 6 + tu tonificador de Reacción Cinética (2d6 + RC).
 >
 > **Si sacás 10+** (sale 11), narrás vos, limpio:
 >
 > "Espero el barrido de la cámara contando en la cabeza. Tres, dos… me pego a la pared justo en el hueco ciego, cruzo en dos zancadas y la puerta cede con un clic. Adentro. Ni se me movió la chaqueta."
 >
-> **Si sacás 7-9** (sale 8), el DJ te da a elegir: *te ficha la cámara un segundo, dejás huella en el picaporte, o el guardia se da vuelta y te ve de lejos.*
+> **Si sacás 7-9** (sale 8), el DJ te da a elegir: *te ficha la cámara un segundo, dejás huella en el picaporte, el guardia se da vuelta y te ve de lejos o se activa la alarma sonora.*
 >
 > —Elijo: me fichó la cámara.
 >
@@ -176,7 +176,7 @@ Dos tipos de herramientas definen el poder en Night City:
 
 Muchas acciones avanzadas exigen el implante o la pieza adecuada, además de la tirada.
 
-El personaje no progresa solo subiendo atributos. También consigue mejores cromos, mejor chapería y recursos (ver *Neurodata, Estrellas y Créditos*). Un infiltrador con camuflaje y un mercenario blindado resuelven los mismos movimientos de formas muy distintas.
+El personaje no progresa subiendo atributos. Para hacerlo, necesita conseguir mejores cromos, mejor chapería y recursos (ver *Neurodata, Estrellas y Créditos*). Un infiltrador con camuflaje y un mercenario blindado resuelven los mismos movimientos de formas muy distintas.
 
 ---
 

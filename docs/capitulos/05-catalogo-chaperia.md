@@ -33,7 +33,7 @@ Muchas piezas piden conocimiento técnico o integración con cromos (HUD + cyber
 >
 > «Camino tres cuadras y el barrio me cierra la cara. Los puestos bajan persianas a mi paso. Una chica me filma con el celular sin disimulo. En la esquina, dos tipos de traje hablan por la muñeca mirándome. Antes de llegar al hotel, una patrulla corporativa me corta la calle con el transporte de costado: focos, altavoz, cuatro cascos bajando con armas en la mano. ‘Identificación y permisos de portación.’ Media hora contra la pared mientras me revisan hasta las muelas y me ‘retienen’ el lanzamisiles para verificación. Entro al barrio libre, sí. Sin lanzamisiles, fichado en tres bases de datos y con medio distrito sabiendo que llegué.»
 >
-> Corte: el Arreglador cruza la misma garita una hora después con corposuit corriente —ventaja MC— y una pistola discreta bajo el corte de la chaqueta. Saluda al guardia por el nombre. Le preguntan cómo anda la familia. Nadie lo filma. Nadie lo mira dos veces. En Night City, el arsenal que impresiona es el que no se ve.
+> Corte: el Arreglador cruza la misma garita una hora después con corposuit corriente —ventaja MC— y una pistola discreta bajo el corte del saco. Saluda al guardia por el nombre. Le preguntan cómo anda la familia. Nadie lo filma. Nadie lo mira dos veces. En Night City, el arsenal que impresiona es el que no se ve.
 
 ---
 
@@ -47,7 +47,7 @@ Muchas piezas piden conocimiento técnico o integración con cromos (HUD + cyber
 
 - Accesorios y subsistemas: se añaden sin penalidad; solo pagan su coste en Créditos/Estrellas.
 
-### SAI (se repiten en varias armas)
+### Sistema de arma inteligente (SAI)
 
 | SAI | Efecto |
 | --- | --- |

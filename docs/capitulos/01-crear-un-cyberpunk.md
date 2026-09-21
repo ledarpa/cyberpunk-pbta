@@ -84,11 +84,11 @@ El poder que manejas no es el de un fusil, pero mueve fusiles. Una obra tuya pue
 Night City te ofrece contratos, sponsors y una jaula dorada con buen sonido. Aceptarás lo justo para no morir de hambre y rechazarás lo que te convierta en jingle. Sabes que te van a amenazar, a comprar, a clonar tu estilo. Que te van a amar en público y odiar en privado. Sigues igual: cada noche el mismo pacto con el público —decir algo verdadero antes de que apaguen las luces—. Si el sistema quiere artistas decorativos, que contrate maniquíes. Tú vienes a hacer ruido que duele.
 
 > **Ejemplo — Artista**
-> El boliche no tiene nombre, tiene una pared. Y la pared tiene tu cara, proyectada desde un satélite que le choreaste el ancho de banda a una corpo de seguros. Abajo, doscientas personas que salieron del curro hace dos horas y todavía no les alcanza para morfar. Vos les cantás lo que ya saben: que la torre de ahí al lado tiene aire filtrado y ascensores que no bajan a esta altura.
+> El boliche no tiene nombre, tiene una pared. Y la pared tiene tu cara, proyectada desde un satélite al que le robaste ancho de banda, es de una corpo de seguros. Abajo, doscientas personas que salieron del trabajo hace dos horas y todavía no les alcanza para comer. Vos les cantás lo que ya saben: que la torre de ahí al lado tiene aire filtrado y ascensores que no bajan a esta altura.
 >
-> El primer tema es bronca. El segundo, duelo. Al tercero, los celulares dejan de grabarte y empiezan a transmitir — no por vos, *contra* ellos. Esa es la diferencia: no sos contenido, sos el agujero en la pantalla por donde se cuela la calle.
+> El primer tema es bronca. El segundo, duelo. Al tercero, los celulares dejan de grabarte y empiezan a transmitir — no por vos, contra la corpo. Esa es la diferencia: no sos contenido, sos el agujero en la pantalla por donde se cuela la calle.
 >
-> Mañana la poli borra el mural. Mañana la corpo compra un algoritmo para que tu nombre no aparezca en ningún feed. Mañana. Hoy hay una piba en primera fila que se aprendió la letra y la va a cantar en una marcha dentro de un mes, y no va a saber de dónde salió. Así funciona. No firmás nada. Dejás la voz prendida en la ciudad como quien deja una ventana abierta en verano: para que entre aire, aunque también entren balas.
+> Mañana la poli borra el mural. Mañana la corpo compra un algoritmo para que tu nombre no aparezca en ningún feed. Mañana. Hoy hay una chica en primera fila que se aprendió la letra y la va a cantar en una marcha dentro de un mes, y no va a saber de dónde salió. Así funciona. No firmás nada. Dejás la voz prendida en la ciudad como quien deja una ventana abierta en verano: para que entre aire, aunque también entren balas.
 
 ---
 
@@ -140,7 +140,7 @@ Sabes que tu propia Corporación mediática te usa tanto como tú la usas a ella
 >
 > —Lo que ven ahí no es un accidente industrial —dice, y la voz le sale entera, entrenada en mil transmisiones borradas—. Es un inventario que dejó de ser rentable con gente adentro. Tengo los manifiestos de carga. Tengo los turnos. Tengo los nombres.
 >
-> Un drone de seguridad cruza el encuadre. El mercenario levanta el fusil; ella le baja el cañón con dos dedos, sin dejar de mirar a cámara. No quiere mártires, quiere audiencia.
+> Un drone de seguridad cruza el encuadre. Detrás, a quemarropa un mercenario levanta el fusil; ella le baja el cañón con dos dedos, sin dejar de mirar a cámara. No quiere mártires, quiere audiencia.
 >
 > —Antes de que me corten la señal, y me la van a cortar: los archivos ya están replicados en cuatrocientos nodos. Borrarme a mí no borra nada.
 >
@@ -190,7 +190,7 @@ El cuerpo paga el precio que el informe no menciona. Implantes discretos, hábit
 > **Ejemplo — Espía**
 > Lleva cuatro meses siendo Marcelo. Marcelo trabaja en logística del complejo, almuerza solo, saluda con la cabeza, nadie recuerda de qué habló ayer. Marcelo es un mueble con credencial.
 >
-> Hoy Marcelo fotocopia. Nadie mira a quien fotocopia. El archivo pasa por el escáner, y por el escáner pasa a un chip cosido en el forro de la camisa. Dieciséis segundos. En el segundo doce entra la supervisora y le pregunta si vio el mate de la oficina tres. Dice que no. Le desea buen finde. Ella se va. Segundo dieciséis: archivo completo, máquina reiniciada, registro borrado.
+> Hoy Marcelo fotocopia. Nadie mira a quien fotocopia. El archivo pasa por el escáner, y por el escáner pasa a un chip cosido en el forro de la camisa. Dieciséis segundos. En el segundo doce entra la supervisora y le pregunta si vio el café de la oficina tres. Dice que no. Le desea un buen fin de semana. Ella se va. Segundo dieciséis: archivo completo, máquina reiniciada, registro borrado.
 >
 > En el estacionamiento deja un papel bajo el limpiaparabrisas de un auto gris. Nadie lo verá retirarlo. El papel dice solamente: *puerta norte, jueves, 02:00*. Otro equipo cruzará esa puerta con rifles dentro de seis días y nunca sabrá quién la abrió.
 >
@@ -271,7 +271,7 @@ En la Calle eres el especialista que todos quieren contratar y nadie quiere sent
 >
 > 2d6 + 1. Sale **12**. Éxito completo.
 >
-> **Jugador (narra):** «Me desprendo del cuerpo como quien se saca una campera. La Red me recibe con su clima de siempre: corrientes frías, basura flotando, el latido de un millón de máquinas. El vampiro sale de mi muñeca — mi código, mi bebé, afilado durante meses — y se pega al perímetro de Biotechnica como una sanguijuela educada. El ICE patrulla a tres metros de mi cara y no me huele. Sigo el ducto de mantenimiento hasta el sótano, y ahí está: el archivo, envuelto en cifrado corporativo que se deshace como azúcar en lluvia. Copio, salgo, cierro la puerta con llave del lado de afuera. Cuando vuelvo al cuerpo, en el sillón mugriento de mi cubo, solo pasaron once segundos. Me tiemblan las manos. Sonrío. En algún piso de Biotechnica, mañana, alguien va a descubrir que el vidrio negro tenía una ventana abierta.»
+> **Jugador (narra):** «Me desprendo del cuerpo como quien se saca una chaqueta. La Red me recibe con su clima de siempre: corrientes frías, basura flotando, el latido de un millón de máquinas. El vampiro sale de mi muñeca — mi código, mi bebé, afilado durante meses — y se pega al perímetro de Biotechnica como una sanguijuela educada. El ICE patrulla a tres metros de mi cara y no me huele. Sigo el ducto de mantenimiento hasta el sótano, y ahí está: el archivo, envuelto en cifrado corporativo que se deshace como azúcar en lluvia. Copio, salgo, cierro la puerta con llave del lado de afuera. Cuando vuelvo al cuerpo, en el sillón mugriento de mi cubo, solo pasaron once segundos. Me tiemblan las manos. Sonrío. En algún piso de Biotechnica, mañana, alguien va a descubrir que el vidrio negro tenía una ventana abierta.»
 >
 > ---
 

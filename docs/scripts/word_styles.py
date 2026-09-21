@@ -29,7 +29,7 @@ PAGE_H = Cm(29.7)                      # A4
 PAGE_MARGIN = Cm(0.5)                  # Márgenes exteriores
 COLUMN_GAP_TWIPS = 283                 # ~0,5 cm (formato.docx)
 PART_BAR_LEN = 35                      # barras ===== de Título 1 (snapshot Word)
-COVER_SUBTITLE = "MANUAL DE REGLAS"
+COVER_SUBTITLE = "MANUAL DE REGLAS\nv1.0"
 # Portada: sangría izquierda medida en pbta-original.docx (EMU 2070735)
 COVER_LEFT_INDENT = Cm(5.752)
 SZ_COVER_ART = Pt(7.5)                 # Courier New bold — exacto original
