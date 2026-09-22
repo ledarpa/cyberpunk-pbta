@@ -1108,6 +1108,7 @@
 
   function fitSheet() {
     const page = form.closest(".ficha-page");
+    const layout = form.querySelector(".ficha-layout");
     const panel = document.getElementById("ficha-panel");
     if (!page || !panel || panel.hidden) return;
     if (panel.clientWidth < 40 || panel.clientHeight < 40) return;
@@ -1206,6 +1207,24 @@
         break;
       }
       size = next;
+    }
+
+    // Seguro post-medición: si el layout real desborda la página (típico al caer
+    // al fallback Courier, más ancho que VT323), achicá de a 0.5px hasta que
+    // entre. Solo baja: piso 12px, nunca sube del tamaño ya calculado.
+    if (layout) {
+      for (let i = 0; i < 40; i += 1) {
+        if (layout.offsetWidth <= page.clientWidth) break;
+        if (size <= 12) break;
+        size = Math.round((size - 0.5) * 2) / 2;
+        applySheetSize(size);
+      }
+      for (let i = 0; i < 40; i += 1) {
+        if (layout.offsetHeight <= page.clientHeight) break;
+        if (size <= 12) break;
+        size = Math.round((size - 0.5) * 2) / 2;
+        applySheetSize(size);
+      }
     }
 
     form.style.transform = "";
@@ -1858,6 +1877,8 @@
     });
     form.addEventListener("change", noteDirty);
     requestFitSheet();
+    // Re-fit cuando termina de cargar la fuente real (fallback → VT323)
+    if (document.fonts) document.fonts.onloadingdone = requestFitSheet;
     window.addEventListener("resize", fitSheet);
     window.addEventListener("pbta-ficha-show", () => requestFitSheet());
     if ("ResizeObserver" in window) {
