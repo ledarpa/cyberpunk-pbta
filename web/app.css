@@ -1797,6 +1797,103 @@ body {
   display: none;
 }
 
+/* Imágenes manual responsive */
+.book-item-art img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Banners siempre ancho completo */
+.book-item-banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em 0;
+}
+
+/* Float derecha solo si hay espacio (min 40ch texto) */
+@media (min-width: 761px) {
+  .book-item-art[data-art-layout="portrait-float"] {
+    float: right;
+    margin: 0 0 1em 2em;
+    max-width: 45%;
+    clear: right;
+  }
+  .book-item-art[data-art-layout="portrait-float"] img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+/* Ancho completo en móvil y cuando no hay espacio */
+@media (max-width: 760px) {
+  .book-item-art[data-art-layout="portrait-float"],
+  .book-item-art[data-art-layout="portrait-top"],
+  .book-item-art[data-art-layout="portrait-span"] {
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 1.5em 0 !important;
+    clear: both !important;
+  }
+  .book-item-art img {
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+
+/* Portrait-span siempre ancho completo */
+.book-item-art[data-art-layout="portrait-span"] {
+  clear: both;
+  margin: 1.5em 0;
+}
+.book-item-art[data-art-layout="portrait-span"] img {
+  width: 100%;
+  height: auto;
+}
+
+/* Portrait-top: ancho completo en móvil, float en desktop solo si hay espacio */
+@media (min-width: 761px) {
+  .book-item-art[data-art-layout="portrait-top"] {
+    float: right;
+    margin: 0 0 1em 2em;
+    max-width: 50%;
+  }
+}
+@media (max-width: 760px) {
+  .book-item-art[data-art-layout="portrait-top"] {
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 1.5em 0 !important;
+    clear: both !important;
+  }
+}
+
+/* Evitar que el texto se arrugue: min-width en párrafos junto a floats */
+@media (min-width: 761px) {
+  .book-art-wrap-copy {
+    overflow: hidden; /* crea contexto de formato, evita que texto se arrugue junto a float */
+  }
+}
+
+/* Columnas de catálogo: responsive */
+@media (max-width: 760px) {
+  .book-item-art-row {
+    flex-direction: column !important;
+  }
+  .book-item-art-row .book-item-art {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0.5em 0 !important;
+  }
+  .book-item-art-row .book-item-art img {
+    width: 100% !important;
+    height: auto;
+  }
+}
+
 @media (max-height: 520px) {
   :root {
     --pad: 0.45rem;

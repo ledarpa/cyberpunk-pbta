@@ -1227,7 +1227,26 @@
       }
     }
 
+    // Verificar overflow real y achicar hasta que quepa
+    const layout2 = form.querySelector(".ficha-layout");
+    const page2 = form.closest(".ficha-page");
+    if (layout2 && page2) {
+      for (let i = 0; i < 60; i++) {
+        const layoutW = layout2.offsetWidth;
+        const layoutH = layout2.offsetHeight;
+        const pageW = page2.clientWidth;
+        const pageH = page2.clientHeight;
+        const overflowsW = layoutW > pageW - 4;
+        const overflowsH = layoutH > pageH - 4;
+        if (!overflowsW && !overflowsH) break;
+        size = Math.max(12, size - 0.5);
+        size = Math.round(size * 2) / 2;
+        applySheetSize(size);
+      }
+    }
+
     form.style.transform = "";
+    requestAnimationFrame(() => requestFitSheet());
   }
 
   /** Refit tras fuentes/layout (evita última línea cortada al recargar). */
@@ -1282,9 +1301,24 @@
     }
     const maxW = Math.max(48, Math.min(colW || contentW, contentW || colW));
     logo.style.maxWidth = `${Math.floor(maxW)}px`;
+    let fitOk = false;
     if (window.PBTA_LOGO?.fitToWidth) {
-      window.PBTA_LOGO.fitToWidth(logo, maxW, 40);
-    } else {
+      try {
+        window.PBTA_LOGO.fitToWidth(logo, maxW, 40);
+        fitOk = true;
+      } catch {
+        fitOk = false;
+      }
+    }
+    if (!fitOk) {
+      // Fallback: medir ancho real de .ficha-pre-main y ajustar logo para que no se desborde
+      const main = col.querySelector(".ficha-pre-main");
+      if (main) {
+        const mainRect = main.getBoundingClientRect();
+        if (mainRect.width > 0 && mainRect.width < maxW) {
+          logo.style.maxWidth = `${Math.floor(mainRect.width)}px`;
+        }
+      }
       fitLogoPrompt();
     }
     // Seguro final: si aún desborda, escala por transform
