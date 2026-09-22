@@ -1246,26 +1246,26 @@
     }
 
     form.style.transform = "";
-    requestAnimationFrame(() => requestFitSheet());
   }
 
   /** Refit tras fuentes/layout (evita última línea cortada al recargar). */
+  let fitSheetPending = false;
   function requestFitSheet() {
+    if (fitSheetPending) return;
+    fitSheetPending = true;
     const run = () => {
+      fitSheetPending = false;
       const panel = document.getElementById("ficha-panel");
       if (!panel || panel.hidden) return;
       fitSheet();
     };
     requestAnimationFrame(() => {
       run();
-      requestAnimationFrame(() => {
-        run();
-        const ready = document.fonts?.ready;
-        if (ready) ready.then(run).catch(() => {});
-        setTimeout(run, 40);
-        setTimeout(run, 160);
-        setTimeout(run, 400);
-      });
+      const ready = document.fonts?.ready;
+      if (ready) ready.then(run).catch(() => {});
+      setTimeout(run, 40);
+      setTimeout(run, 160);
+      setTimeout(run, 400);
     });
   }
 
