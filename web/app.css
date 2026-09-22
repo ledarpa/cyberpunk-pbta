@@ -91,6 +91,14 @@ body {
   overflow: hidden;
 }
 
+/* Modo ficha: el índice lateral no interesa aquí → ficha a ancho completo */
+.view-ficha .shell {
+  grid-template-columns: minmax(0, 1fr);
+}
+.view-ficha .sidebar {
+  display: none;
+}
+
 .topbar {
   grid-column: 1 / -1;
   display: flex;

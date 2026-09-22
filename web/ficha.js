@@ -1227,6 +1227,19 @@
       }
     }
 
+    // Si ni al piso de 12px entran las 3 columnas, la ficha nunca debe quedar
+    // cortada: pasar a modo vertical (1 columna apilada, scroll vertical).
+    if (layout && layout.offsetWidth > page.clientWidth) {
+      panel.classList.add("is-vertical");
+      page.style.height = "auto";
+      let vsize = innerW / (COL1_CH * Math.max(0.45, chPerEm));
+      vsize = Math.max(11, vsize);
+      vsize = Math.round(vsize * 2) / 2;
+      applySheetSize(vsize);
+      form.style.transform = "";
+      return;
+    }
+
     // Verificar overflow real y achicar hasta que quepa
     const layout2 = form.querySelector(".ficha-layout");
     const page2 = form.closest(".ficha-page");
