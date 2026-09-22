@@ -91,12 +91,32 @@ body {
   overflow: hidden;
 }
 
-/* Modo ficha: el índice lateral no interesa aquí → ficha a ancho completo */
+/* Modo ficha: la ficha ocupa el ancho completo; el índice es un drawer (hamburguesa) */
 .view-ficha .shell {
   grid-template-columns: minmax(0, 1fr);
 }
 .view-ficha .sidebar {
-  display: none;
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  width: min(20rem, 86vw);
+  height: 100dvh;
+  padding-top: 3.2rem;
+  transform: translateX(-105%);
+  transition: transform 0.18s ease;
+  border-right: 1px solid var(--line);
+  background: var(--bg-panel);
+}
+.view-ficha.toc-open .sidebar {
+  transform: none;
+}
+.view-ficha.toc-open .scrim:not([hidden]) {
+  display: block;
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 0.55);
+  z-index: 15;
 }
 
 .topbar {

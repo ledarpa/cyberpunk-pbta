@@ -419,6 +419,10 @@
     if (headingObserver) headingObserver.disconnect();
     document.body.classList.remove("view-manual");
     document.body.classList.add("view-ficha");
+    // El índice arranca oculto en la ficha; la hamburguesa lo abre como drawer
+    document.body.classList.remove("toc-open");
+    scrim.hidden = true;
+    toggle.setAttribute("aria-expanded", "false");
     reader.hidden = true;
     fichaPanel.hidden = false;
     setSearchEnabled(false);
@@ -432,6 +436,11 @@
   function showManualView(id) {
     document.body.classList.remove("view-ficha");
     document.body.classList.add("view-manual");
+    // Cerrar el drawer del índice al volver al manual
+    document.body.classList.remove("toc-open");
+    scrim.hidden = true;
+    const mobile = window.matchMedia("(max-width: 760px)").matches;
+    toggle.setAttribute("aria-expanded", mobile ? "false" : "true");
     fichaPanel.hidden = true;
     reader.hidden = false;
     setSearchEnabled(true);
@@ -589,7 +598,8 @@
     sync();
 
     toggle.addEventListener("click", () => {
-      if (!mq.matches) return;
+      const inFicha = document.body.classList.contains("view-ficha");
+      if (!mq.matches && !inFicha) return;
       const open = !document.body.classList.contains("toc-open");
       document.body.classList.toggle("toc-open", open);
       toggle.setAttribute("aria-expanded", String(open));
@@ -603,7 +613,9 @@
 
   function closeDrawer() {
     document.body.classList.remove("toc-open");
-    toggle.setAttribute("aria-expanded", window.matchMedia("(max-width: 760px)").matches ? "false" : "true");
+    const mobile = window.matchMedia("(max-width: 760px)").matches;
+    const inFicha = document.body.classList.contains("view-ficha");
+    toggle.setAttribute("aria-expanded", mobile || inFicha ? "false" : "true");
     scrim.hidden = true;
   }
 
