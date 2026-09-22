@@ -1150,8 +1150,9 @@
 
     if (vertical) {
       page.style.height = "auto";
+      // Una columna que llena el ancho disponible; el alto scrollea. Sin tope superior.
       let size = innerW / (COL1_CH * Math.max(0.45, chPerEm));
-      size = Math.max(11, Math.min(14, size));
+      size = Math.max(11, size);
       size = Math.round(size * 2) / 2;
       applySheetSize(size);
       form.style.transform = "";
