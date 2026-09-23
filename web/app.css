@@ -1140,6 +1140,13 @@ body {
   clear: both;
 }
 
+/* Atributos: columna Nombre al ancho mínimo necesario (1 línea para "Manipulación Cognitiva") */
+#los-cuatro-atributos ~ .table-wrap th:nth-child(2),
+#los-cuatro-atributos ~ .table-wrap td:nth-child(2) {
+  min-width: 19ch;
+  white-space: nowrap;
+}
+
 /* Tablas compactas Calidad/* al lado del dibujo (no Tipo/Efecto, Stat, etc.) */
 .table-wrap--rail {
   clear: none;
