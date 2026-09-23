@@ -24,7 +24,7 @@ La historia no se detiene con un fallo. Un 6 o menos **abre** peligro, coste o p
 >
 > —Me deslizo hasta la rejilla y la abro sin ruido.
 >
-> —2d6 + RC.
+> —Para este movimiento, que requiere precisión, tirá 2 dados de 6 + tu modificador de Reacción Cinética (2d6 + RC).
 >
 > Los dados ruedan. Un 2 y un 3. Con el +1: **6**. Mesa en silencio. Dante elige la consecuencia: *alguien ya sabía que venía*.
 >
@@ -102,7 +102,7 @@ Ejemplo corto:
 >
 > —Voy a la puerta. Cuidado, despacio.
 >
-> —Hay una cámara girando y un guardia con la vista clavada en el escaneo del HUD. Para este movimiento, que requiere precisión, tirá 2 dados de 6 + tu tonificador de Reacción Cinética (2d6 + RC).
+> —Hay una cámara girando y un guardia con la vista clavada en el escaneo del HUD. Para este movimiento, que requiere precisión, tirá 2 dados de 6 + tu modificador de Reacción Cinética (2d6 + RC).
 >
 > **Si sacás 10+** (sale 11), narrás vos, limpio:
 >
