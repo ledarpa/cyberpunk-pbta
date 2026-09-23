@@ -26,7 +26,7 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20260922d"
+WEB_BUILD_ID = "20260922e"
 
 # Segunda columna de tabla Calidad → intro+título contornean imagen en wrap.
 CALIDAD_WRAP_COL2 = frozenset({
@@ -238,13 +238,16 @@ def slugify(text: str, used: dict[str, int]) -> str:
 
 
 def inline_md(text: str) -> str:
-    parts = re.split(r"(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)", text)
+    parts = re.split(r"(`[^`]+`|\*\*[^*]+\*\*|==[^=]+==|\*[^*]+\*)", text)
     out: list[str] = []
     for part in parts:
         if part.startswith("`") and part.endswith("`") and len(part) >= 2:
             out.append(f"<code>{escape(part[1:-1])}</code>")
         elif part.startswith("**") and part.endswith("**") and len(part) >= 4:
             out.append(f"<strong>{escape(part[2:-2])}</strong>")
+        elif part.startswith("==") and part.endswith("==") and len(part) >= 4:
+            # ==palabra== → tinta cian (resaltado de voz en ejemplos)
+            out.append(f'<span class="hl-cyan">{escape(part[2:-2])}</span>')
         elif part.startswith("*") and part.endswith("*") and len(part) >= 2:
             out.append(f"<em>{escape(part[1:-1])}</em>")
         else:

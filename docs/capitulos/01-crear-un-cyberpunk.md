@@ -86,7 +86,7 @@ Night City te ofrece contratos, sponsors y una jaula dorada con buen sonido. Ace
 > **Ejemplo — Artista**
 > El boliche no tiene nombre, tiene una pared. Y la pared tiene tu cara, proyectada desde un satélite al que le robaste ancho de banda, es de una corpo de seguros. Abajo, doscientas personas que salieron del trabajo hace dos horas y todavía no les alcanza para comer. Vos les cantás lo que ya saben: que la torre de ahí al lado tiene aire filtrado y ascensores que no bajan a esta altura.
 >
-> El primer tema es bronca. El segundo, duelo. Al tercero, los celulares dejan de grabarte y empiezan a transmitir — no por vos, contra la corpo. Esa es la diferencia: no sos contenido, sos el agujero en la pantalla por donde se cuela la calle.
+> El primer tema es bronca. El segundo, duelo. Al tercero, los celulares dejan de grabarte y empiezan a transmitir — no por vos, ==contra== la corpo. Esa es la diferencia: no sos contenido, sos el agujero en la pantalla por donde se cuela la calle.
 >
 > Mañana la poli borra el mural. Mañana la corpo compra un algoritmo para que tu nombre no aparezca en ningún feed. Mañana. Hoy hay una chica en primera fila que se aprendió la letra y la va a cantar en una marcha dentro de un mes, y no va a saber de dónde salió. Así funciona. No firmás nada. Dejás la voz prendida en la ciudad como quien deja una ventana abierta en verano: para que entre aire, aunque también entren balas.
 

@@ -1111,6 +1111,11 @@ body {
   color: var(--cyan);
 }
 
+/* Resaltado de palabra en cian (==palabra== en las fuentes MD) */
+.hl-cyan {
+  color: var(--cyan);
+}
+
 /* Bloques «Ejemplo — …» — rosa munición de la ficha (#e0a0e8) */
 .book blockquote.ejemplo {
   border-left-color: #e0a0e8;
