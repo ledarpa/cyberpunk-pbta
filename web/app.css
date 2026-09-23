@@ -1899,12 +1899,7 @@ body {
   }
 }
 
-/* Evitar que el texto se arrugue: min-width en párrafos junto a floats */
-@media (min-width: 761px) {
-  .book-art-wrap-copy {
-    overflow: hidden; /* crea contexto de formato, evita que texto se arrugue junto a float */
-  }
-}
+/* Las líneas del texto envuelven el float de las imágenes (sin BFC que lo bloquee) */
 
 /* Columnas de catálogo: responsive */
 @media (max-width: 760px) {
