@@ -272,10 +272,6 @@ En la Calle eres el especialista que todos quieren contratar y nadie quiere sent
 > 2d6 + 1. Sale **12**. Éxito completo.
 >
 > **Jugador (narra):** «Me desprendo del cuerpo como quien se saca una chaqueta. La Red me recibe con su clima de siempre: corrientes frías, basura flotando, el latido de un millón de máquinas. El vampiro sale de mi muñeca — mi código, mi bebé, afilado durante meses — y se pega al perímetro de Biotechnica como una sanguijuela educada. El ICE patrulla a tres metros de mi cara y no me huele. Sigo el ducto de mantenimiento hasta el sótano, y ahí está: el archivo, envuelto en cifrado corporativo que se deshace como azúcar en lluvia. Copio, salgo, cierro la puerta con llave del lado de afuera. Cuando vuelvo al cuerpo, en el sillón mugriento de mi cubo, solo pasaron once segundos. Me tiemblan las manos. Sonrío. En algún piso de Biotechnica, mañana, alguien va a descubrir que el vidrio negro tenía una ventana abierta.»
->
-> ---
-
----
 
 ---
 
@@ -319,3 +315,5 @@ En la Calle eres el especialista que todos quieren contratar y nadie quiere sent
 > *Flash: el implante despertando en la nariz, la ciudad entera traduciéndose en olores —cobre, miedo, solvente—, datos que antes su madre leía a pulso.*
 >
 > —Listo —dice el DJ—. Ahora salí a la calle. Ya sabés cómo termina esto: nadie empieza de cero gratis.
+
+---
