@@ -489,10 +489,16 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
             close_lists()
             flush_portrait()
             level = len(heading.group(1))
-            # h4 dentro de un wrap de prosa (p. ej. Recuperar la humanidad): no cortar el arte
-            if not (manual_art_in_wrap and manual_art_anchor == "copy" and level >= 4):
-                close_catalog_section()
             title = heading.group(2).strip()
+            # ¿Este encabezado trae arte o banner propio? Eso requiere su propio wrap.
+            heading_own_art = (
+                level == 3 and title in PROFESSION_PORTRAITS
+            ) or title in CATALOG_ART or title in CATALOG_BANNER or title in CATALOG_BANNER_AFTER_TABLE or title in MANUAL_ART or title in MANUAL_BANNER or title in MANUAL_BANNER_BEFORE_TABLE
+            # h4 sin arte propio dentro de un wrap abierto → no cortar el wrap:
+            # el contenido (texto, tablas) sigue contorneando la imagen de la sección madre.
+            keep_wrap_open = level >= 4 and not heading_own_art and art_wrap_open
+            if not keep_wrap_open:
+                close_catalog_section()
             hid = slugify(title, used_ids)
             toc.append({"id": hid, "level": level, "title": title})
             heading_html = f'<h{level} id="{escape(hid)}">{inline_md(title)}</h{level}>'

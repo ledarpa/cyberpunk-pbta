@@ -569,6 +569,13 @@ body {
   --reader-vw: 100%;
 }
 
+@media (max-width: 720px) {
+  .book-item-art {
+    margin-top: calc(var(--pad) * 1.5);
+    margin-bottom: calc(var(--pad) * 1.5);
+  }
+}
+
 .cover {
   min-height: var(--reader-vh);
   display: grid;
