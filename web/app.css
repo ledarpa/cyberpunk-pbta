@@ -1210,7 +1210,7 @@ body {
 .table-wrap--rail {
   clear: none;
   width: auto;
-  max-width: calc(100% - 15rem);
+  max-width: 100%;
   margin-top: 0.2rem;
 }
 
@@ -1938,7 +1938,7 @@ body {
 }
 
 .book-art-wrap-copy .table-wrap--rail {
-  max-width: calc(100% - 45% - 1em);
+  max-width: 100%;
 }
 }
 
