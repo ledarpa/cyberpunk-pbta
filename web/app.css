@@ -1920,18 +1920,26 @@ body {
   margin: 1em 0;
 }
 
-/* Float derecha solo si hay espacio (min 40ch texto) */
+/* Imagen alineada a la derecha con texto a la izquierda (portal desktop) */
 @media (min-width: 761px) {
-  .book-item-art[data-art-layout="portrait-float"] {
+  .book-item-art[data-art-layout='portrait-float'] {
     float: right;
-    margin: 0 0 1em 2em;
+    margin: 0 1em 1em 2em;
     max-width: 45%;
     clear: right;
+    shape-outside: margin-box;
+    shape-margin: 1em;
   }
-  .book-item-art[data-art-layout="portrait-float"] img {
+  .book-item-art[data-art-layout='portrait-float'] img {
     width: 100%;
     height: auto;
+    display: block;
   }
+}
+
+.book-art-wrap-copy .table-wrap--rail {
+  max-width: calc(100% - 45% - 1em);
+}
 }
 
 /* Ancho completo en móvil y cuando no hay espacio */
