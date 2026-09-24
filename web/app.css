@@ -3431,3 +3431,74 @@ body {
   border-top: 1px solid var(--line);
   padding-top: 0.45rem;
 }
+/* ========== USER REQUIREMENTS: IMAGE LAYOUT ========== */
+
+/* Ghost margin/máscara fantasma: espacio consistente alrededor de arts en móvil */
+@media (max-width: 720px) {
+  .book-item-art {
+    margin-top: calc(var(--pad) * 1.5) !important;
+    margin-bottom: calc(var(--pad) * 1.5) !important;
+  }
+}
+
+/* Side‑by‑side móvil: brazo de combate, cybervertebras, drone */
+@media (max-width: 720px) {
+  .book-item-art--brazo_de_combate,
+  .book-item-art--cybervertebras,
+  .book-item-art--drone {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: calc(var(--pad) * 0.5);
+    height: auto;
+    align-items: stretch;
+  }
+}
+
+/* Armas (pistola‑lanzamisles): debajo de la tabla, margen derecho, texto a la izquierda */
+@media (max-width: 720px) {
+  .weapon-section .book-item-art { 
+    order: 2; 
+    margin-left: 0; 
+    margin-right: calc(var(--pad) * 2); 
+  }
+  .weapon-section .table-wrapper { 
+    order: 1; 
+    margin-bottom: calc(var(--pad) * 1.5); 
+  }
+}
+
+/* Igualación márgenes "Mejoras de característica": imagen y tabla */
+.book-item-art--mejora_de_atributos {
+  margin-bottom: calc(var(--pad));
+}
+.book-item-art--mejora_de_atributos img {
+  margin-bottom: calc(var(--pad));
+  /* Subir la imagen un poco */
+  max-height: calc(20rem);
+}
+
+/* ========== ESPECÍFICO: brazo de combate side‑by‑side ========== */
+@media (max-width: 720px) {
+  .book-item-art--brazo_de_combate .book-item-art {
+    /* Cada imagen en la grid tiene ancho 1fr */
+    width: 100%;
+  }
+  .book-item-art--brazo_de_combate .book-item-art img {
+    /* Misma altura máxima aunque widths differen */
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+/* ========== ESPECÍFICO: texto enmarcando imágenes (armas) ========== */
+@media (max-width: 720px) {
+  /* Que el texto quede a la izquierda de la imagen */
+  .weapon-section .text-content {
+    float: left;
+    margin-right: calc(var(--pad) * 1);
+    width: calc(100% - 200px);
+  }
+  .weapon-section .book-item-art {
+    margin-left: calc(var(--pad) * 2);
+  }
+}
