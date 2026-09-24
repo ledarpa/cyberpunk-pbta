@@ -576,6 +576,52 @@ body {
   }
 }
 
+/* Efecto "máscara fantasma": márgenes superiores consistentemente mayores en móvil
+   para que el arte respire y no aplaste el texto */
+@media (max-width: 720px) {
+  .book-item-art,
+  .book-item-art--brazo_de_combate,
+  .book-item-art--cybervertebras,
+  .book-item-art--drone,
+  .book-item-art--kit_de_primeros_auxilios,
+  .book-item-art--traumacard,
+  .book-item-art--ojo_bionico,
+  .book-item-art--oido_bionico {
+    margin-top: calc(var(--pad) * 2);
+    margin-bottom: calc(var(--pad) * 2);
+  }
+}
+
+/* Disposición side‑by‑side en móvil: two arts al mismo nivel, ancho completo,
+   misma altura independientemente de su ancho */
+@media (max-width: 720px) {
+  .book-item-art--brazo_de_combate,
+  .book-item-art--cybervertebras,
+  .book-item-art--drone {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: calc(var(--pad) * 0.5);
+    height: auto;
+    align-items: stretch;
+  }
+}
+
+/* Armas (pistola‑lanzamisles): imagen debajo de la tabla, margen derecho,
+   texto a la izquierda enmarcando la imagen */
+@media (max-width: 720px) {
+  .weapon-section .book-item-art { order: 2; margin-left: 0; margin-right: calc(var(--pad) * 2); }
+  .weapon-section .table-wrapper { order: 1; margin-bottom: calc(var(--pad) * 1.5); }
+}
+
+/* Igualación de márgenes-bottom en "Mejoras de característica": imagen y tabla */
+.book-item-art--mejora_de_atributos {
+  margin-bottom: calc(var(--pad));
+}
+.book-item-art--mejora_de_atributos img {
+  margin-bottom: calc(var(--pad));
+  max-height: calc(22rem - 1ch);
+}
+
 .cover {
   min-height: var(--reader-vh);
   display: grid;
