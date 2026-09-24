@@ -620,6 +620,7 @@ body {
 .book-item-art--mejora_de_atributos img {
   margin-bottom: calc(var(--pad));
   max-height: calc(22rem - 1ch);
+  margin-bottom: 1.5rem;
 }
 
 .cover {
