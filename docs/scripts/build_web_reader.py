@@ -113,7 +113,23 @@ CATALOG_BANNER_AFTER_TABLE: dict[str, str] = {
 # Ilustraciones del manual (capítulos, no catálogo): float derecha junto al texto.
 MANUAL_ART: dict[str, str] = {    "Cuándo se tira (y cuándo no)": "2d6",    "Mejoras de características": "mejora_de_atributos",    "Degeneración neural": "degeneracion",    "Recuperar la humanidad": "recuperar_humanidad",    "Ojo biónico": "ojo",    "Oído biónico": "cyberoido",        # Membrana acorazada - usa membrana_acorazada.png del catalog    "Membrana acorazada": "membrana_acorazada",        # Nanoplastia - usa nanoplastia.png del catalog    "Nanoplastia": "nanoplastia",        # Piel perfecta - usa piel_perfecta.png del manual    "Piel perfecta": "piel_perfecta",        # Cibervértebras - usa vertebras.png del catalog    "Cibervértebras": "vertebras",        # Extremidad balística - usa balistica.png del catalog    "Extremidad balística": "balistica",        # Armas del armamento inicial    "Pistola": "pistola",    "Escopeta": "escopeta",    "Fusil": "fusil",    "Rifle": "rifle",    "Lanzamisiles": "lanzamisiles",        # Otros    "Drone": "drone",    "Kit de primeros auxilios": "primeros_auxilios",    "Traumacard": "trauma_card",        # Los ya existentes mantenidos    "Conexión dearma inteligente": "conexion_neuronal",    "Conexión neuronal": "conexion_neuronal",    "Neurochip": "neurochip",
 }
-# Banners panorámicos del manual (ancho completo bajo el título).
+# Validation: ensure all MANUAL_ART asset paths exist
+_MANUAL_ART_VALIDATE: bool = False
+try:
+    manual_dir = Path(__file__).resolve().parents[2] / 'web' / 'assets' / 'manual'
+    catalog_dir = Path(__file__).resolve().parents[2] / 'web' / 'assets' / 'catalog'
+    for title, stem in MANUAL_ART.items():
+        # Check both manual/{stem}.png and catalog/{stem}.png
+        manual_path = manual_dir / f'{stem}.png'
+        catalog_path = catalog_dir / f'{stem}.png'
+        if not manual_path.exists() and not catalog_path.exists():
+            print(f'WARNING: MANUAL_ART entry "{title}" references non-existent asset stem "{stem}"')
+            print(f'  Looked for: manual/{stem}.png and catalog/{stem}.png')
+    if _MANUAL_ART_VALIDATE:
+        pass  # validation runs at import time if enabled
+except Exception as e:
+    print(f'MANUAL_ART validation error: {e}')
+ 
 MANUAL_BANNER: dict[str, str] = {
     "Episodios de cyberpsicosis": "cyberpsicosis",
     "Rol del Director": "director",
