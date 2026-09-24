@@ -116,6 +116,28 @@ MANUAL_ART: dict[str, str] = {
     "Mejoras de características": "mejora_de_atributos",
     "Degeneración neural": "degeneracion",
     "Recuperar la humanidad": "recuperar_humanidad",
+    
+    # Nuevas entradas añadidas para cubrir todos los sectores solicitados
+    "implantes cerebrales": "cerebro.png",
+    "Conexión de arma inteligente": "conexion_neuronal.png",
+    "Conexión neuronal": "conexion_neuronal.png",
+    "Neurochip": "neurochip.png",
+    "Ojo biónico": "ojo.png",
+    "Oído biónico": "cyberoido.png",
+    "Membrana acorazada": "membrana_acorazada.png",
+    "Nanoplastia": "nanoplastia.png",
+    "Piel perfecta": "piel_perfecta.png",
+    "Cibervértebras": "vertebras.png",
+    "Extremidad balística": "balistica.png",
+    "Cyberpierna": "pierna.png",
+    "Pistola": "pistola.png",
+    "Escopeta": "escopeta.png",
+    "Fusil": "fusil.png",
+    "Rifle": "rifle.png",
+    "Lanzamisiles": "lanzamisiles.png",
+    "Drone": "drone.png",
+    "Kit de primeros auxilios": "primeros_auxilios.png",
+    "Traumacard": "trauma_card.png",
 }
 
 # Banners panorámicos del manual (ancho completo bajo el título).
