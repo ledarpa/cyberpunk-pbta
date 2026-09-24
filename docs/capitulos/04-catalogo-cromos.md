@@ -446,3 +446,5 @@ Solo en módulo de cybervértebra (orugas plegables o cuadrúpedo equivalente). 
 | Hi-Tech | ×4; **+3 RC** |
 | Militar | ×5; **+4 RC** |
 
+
+---
