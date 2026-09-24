@@ -1354,6 +1354,16 @@ body {
 
 /* Brazo de combate: 2 dibujos pegados a la derecha; marco del intro + tabla */
 .book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row {
+  width: min(35rem, 88%);
+  max-width: 88%;
+  gap: 2rem;
+  margin-top: 0;
+  margin-left: auto;
+  margin-right: 0;
+  margin-bottom: 1rem;
+  shape-outside: inset(0);
+  overflow: visible;
+}
   width: min(35rem, 48%);
   max-width: 48%;
   gap: 2rem;
@@ -1446,6 +1456,7 @@ body {
   max-height: none;
   object-fit: contain;
   object-position: bottom right;
+  margin-bottom: -1.5rem;
 }
 
 .book-art-wrap:has(.book-item-art--mejora_de_atributos) .book-art-wrap-copy > p {
@@ -1453,7 +1464,7 @@ body {
 }
 
 .book-art-wrap:has(.book-item-art--mejora_de_atributos) .book-art-wrap-copy .table-wrap--rail {
-  margin-bottom: 0;
+  margin-bottom: 1.5rem;
   clear: none;
   min-width: min(12rem, 100%);
 }
@@ -1512,39 +1523,37 @@ body {
 
 .book-art-wrap:has(.book-item-art--degeneracion) > .book-item-art {
   float: none;
-  position: absolute;
-  right: 0;
-  /* Baja ~1 línea respecto al fondo del texto */
-  bottom: -1.35em;
+  position: static;
+  width: min(17.34rem, 78%);
+  max-width: 78%;
+  margin: 0.35rem auto 0.75rem;
   top: auto;
-  width: var(--art-degen-w);
-  max-width: var(--art-degen-max);
-  margin: 0;
-  padding: 0;
+  bottom: auto;
   height: auto;
   display: block;
   shape-outside: none;
   clear: none;
   overflow: visible;
-  z-index: 0;
+  z-index: auto;
 }
 
 .book-art-wrap:has(.book-item-art--degeneracion) > .book-item-art img {
   display: block;
-  max-height: none !important;
   width: 100%;
   height: auto;
+  max-height: none !important;
   object-fit: contain;
-  object-position: bottom right;
+  object-position: center bottom;
 }
 
 .book-art-wrap:has(.book-item-art--degeneracion) .book-art-wrap-copy {
   position: relative;
-  z-index: 1;
+  z-index: auto;
   box-sizing: border-box;
-  /* Misma huella que la imagen + hueco mínimo (antes usaba solo el % y dejaba aire de más) */
-  padding-right: calc(var(--art-degen-w) + 0.2rem);
+  padding-right: 0;
   max-width: 100%;
+  display: block;
+  overflow: visible;
 }
 
 .book-art-wrap:has(.book-item-art--degeneracion) .book-art-wrap-copy > :is(p, ul, ol) {
@@ -1553,24 +1562,6 @@ body {
 
 .book-art-wrap:has(.book-item-art--degeneracion) .book-art-wrap-copy > :last-child {
   margin-bottom: 0;
-}
-
-@media (max-width: 720px) {
-  .book-art-wrap:has(.book-item-art--degeneracion) {
-    padding-bottom: 0;
-  }
-
-  .book-art-wrap:has(.book-item-art--degeneracion) > .book-item-art {
-    position: static;
-    bottom: auto;
-    width: min(17.34rem, 78%);
-    max-width: 78%;
-    margin: 0.35rem auto 0.75rem;
-  }
-
-  .book-art-wrap:has(.book-item-art--degeneracion) .book-art-wrap-copy {
-    padding-right: 0;
-  }
 }
 
 /* Recuperar la humanidad: float (marco de texto) */
@@ -1670,13 +1661,25 @@ body {
 }
 
 .book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row .book-item-art {
-  padding: 0 0.65rem;
-  box-sizing: border-box;
+  flex: 1 1 0;
+  width: auto;
+  max-width: none;
+  height: 100%;
+  margin: 0;
+  shape-outside: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 }
 
 .book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row .book-item-art img {
-  transform: scale(1.3125);
-  transform-origin: bottom center;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: 22.5rem;
+  object-fit: contain;
+  object-position: bottom center;
+  transform: none;
 }
 
 .book-art-wrap:has(.book-item-art--sable_mantis) .book-art-wrap-copy .table-wrap--rail {
@@ -1740,17 +1743,18 @@ body {
 /* Ojo / oído: mismo marco flotante (14rem, margen izq. 1rem) */
 .book-art-wrap > .book-item-art.book-item-art--ojo,
 .book-art-wrap > .book-item-art.book-item-art--cyberoido {
-  width: min(14rem, 42%);
-  max-width: 42%;
+  width: 100%;
+  max-width: 100%;
+  margin: 1.5em auto;
 }
 
 .book-art-wrap > .book-item-art.book-item-art--ojo img,
 .book-art-wrap > .book-item-art.book-item-art--cyberoido img {
   width: 100%;
   height: auto;
-  max-height: 14rem;
+  max-height: none;
   object-fit: contain;
-  object-position: bottom center;
+  object-position: center bottom;
 }
 
 /* 2d6: float derecha, marco al margen derecho y pegado bajo el título */
@@ -1832,6 +1836,16 @@ body {
   }
 
   .book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row {
+  width: min(35rem, 88%);
+  max-width: 88%;
+  gap: 2rem;
+  margin-top: 0;
+  margin-left: auto;
+  margin-right: 0;
+  margin-bottom: 1rem;
+  shape-outside: inset(0);
+  overflow: visible;
+}
     width: min(27.5rem, 88%);
     max-width: 88%;
     margin-left: auto;
