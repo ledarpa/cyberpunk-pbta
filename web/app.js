@@ -32,16 +32,201 @@
   syncFichaViewport();
   openFromHash();
   window.addEventListener("hashchange", openFromHash);
-  layoutBookArtWraps();
+  // layoutBookArtWraps crashea en el primer wrap (2d6: sin tabla rail, ver
+  // regla display:block !important del CSS). Aislado para no matar el resto
+  // del setup — comportamiento idéntico al histórico: los demás wraps no se miden.
+  const safeLayoutWraps = () => {
+    try {
+      layoutBookArtWraps();
+    } catch {
+      /* el forEach se corta en el 2d6, como siempre */
+    }
+  };
+  safeLayoutWraps();
+  layoutMejoraArt();
+  layoutSaiArt();
+  layoutNeuronalArt();
+  layoutNeurochipArt();
   requestAnimationFrame(() => {
-    layoutBookArtWraps();
-    requestAnimationFrame(layoutBookArtWraps);
+    safeLayoutWraps();
+    layoutMejoraArt();
+    layoutSaiArt();
+    layoutNeuronalArt();
+    layoutNeurochipArt();
+    requestAnimationFrame(() => {
+      safeLayoutWraps();
+      layoutMejoraArt();
+      layoutSaiArt();
+      layoutNeuronalArt();
+      layoutNeurochipArt();
+    });
   });
   let artLayoutTimer = 0;
   window.addEventListener("resize", () => {
     clearTimeout(artLayoutTimer);
-    artLayoutTimer = setTimeout(layoutBookArtWraps, 60);
+    artLayoutTimer = setTimeout(() => {
+      safeLayoutWraps();
+      layoutMejoraArt();
+      layoutSaiArt();
+      layoutNeuronalArt();
+      layoutNeurochipArt();
+    }, 60);
   });
+
+  /** Mejoras de características: alto del dibujo = alto de la tabla (ni más ni menos). */
+  function layoutMejoraArt() {
+    const art = book.querySelector(".book-item-art--mejora_de_atributos");
+    const wrap = art && art.closest(".book-art-wrap");
+    const rail = wrap && wrap.querySelector(".table-wrap--rail");
+    const img = art && art.querySelector("img");
+    if (!art || !wrap || !rail || !img) return;
+
+    const clear = () => {
+      art.style.removeProperty("height");
+      art.style.removeProperty("width");
+      img.style.removeProperty("width");
+      img.style.removeProperty("height");
+    };
+
+    // Apilado (container mejora ≤36rem) o imagen sin cargar: sin medición.
+    if (wrap.clientWidth < 576 || !img.complete || !img.naturalWidth) {
+      clear();
+      return;
+    }
+
+    const h = rail.getBoundingClientRect().height;
+    if (h < 40) return;
+    const ratio = img.naturalWidth / img.naturalHeight;
+    const hs = h.toFixed(2);
+    const ws = (h * ratio).toFixed(2);
+    art.style.height = `${hs}px`;
+    art.style.width = `${ws}px`;
+    img.style.width = "100%";
+    img.style.height = "100%";
+  }
+
+  const mejoraImg = book.querySelector(".book-item-art--mejora_de_atributos img");
+  if (mejoraImg) {
+    mejoraImg.addEventListener("load", layoutMejoraArt);
+  }
+
+  /** Conexión de arma inteligente (sai): alto de la imagen = alto del
+      bloque intro+tabla, con el top alineado a la primera línea. */
+  function layoutSaiArt() {
+    const art = book.querySelector(".book-item-art--sai");
+    const wrap = art && art.closest(".book-art-wrap");
+    const copy = wrap && wrap.querySelector(".book-art-wrap-copy");
+    const p = copy && copy.querySelector(":scope > p");
+    const rail = copy && copy.querySelector(":scope > .table-wrap--rail");
+    const img = art && art.querySelector("img");
+    if (!art || !wrap || !p || !rail || !img) return;
+
+    const clear = () => {
+      art.style.removeProperty("height");
+      art.style.removeProperty("width");
+      img.style.removeProperty("width");
+      img.style.removeProperty("height");
+    };
+    if (innerWidth <= 760 || !img.complete || !img.naturalWidth) {
+      clear();
+      return;
+    }
+
+    const ratio = img.naturalWidth / img.naturalHeight;
+    for (let i = 0; i < 6; i++) {
+      const top = p.getBoundingClientRect().top;
+      const bottom = rail.getBoundingClientRect().bottom;
+      const h = bottom - top;
+      if (h < 60) return;
+      const w = Math.max(1, Math.round(h * ratio));
+      const fr = art.getBoundingClientRect();
+      if (Math.abs(fr.height - h) < 0.5 && Math.abs(fr.width - w) < 1) break;
+      art.style.height = `${h.toFixed(2)}px`;
+      art.style.width = `${w}px`;
+      img.style.width = "100%";
+      img.style.height = "100%";
+    }
+  }
+
+  const saiImg = book.querySelector(".book-item-art--sai img");
+  if (saiImg) {
+    saiImg.addEventListener("load", () => {
+      layoutSaiArt();
+      layoutNeuronalArt();
+      layoutNeurochipArt();
+    });
+  }
+
+  /** Conexión neuronal: imagen idéntica a la de conexión de arma
+      inteligente — copia el tamaño ya medido del sai. */
+  function layoutNeuronalArt() {
+    const art = book.querySelector(".book-item-art--conexion_neuronal");
+    const sai = book.querySelector(".book-item-art--sai");
+    const img = art && art.querySelector("img");
+    if (!art || !img) return;
+
+    const clear = () => {
+      art.style.removeProperty("height");
+      art.style.removeProperty("width");
+      img.style.removeProperty("width");
+      img.style.removeProperty("height");
+    };
+    if (innerWidth <= 760 || !img.complete || !img.naturalWidth || !sai || !sai.style.height) {
+      clear();
+      return;
+    }
+
+    const fr = sai.getBoundingClientRect();
+    art.style.height = `${fr.height.toFixed(2)}px`;
+    art.style.width = `${fr.width.toFixed(2)}px`;
+    img.style.width = "100%";
+    img.style.height = "100%";
+  }
+
+  /** Neurochip: imagen con el mismo alto que la del sai; el ancho por
+      su propio ratio (557×850 — sin franjas de contain). */
+  function layoutNeurochipArt() {
+    const art = book.querySelector(".book-item-art--neurochip");
+    const sai = book.querySelector(".book-item-art--sai");
+    const img = art && art.querySelector("img");
+    if (!art || !img) return;
+
+    const clear = () => {
+      art.style.removeProperty("height");
+      art.style.removeProperty("width");
+      img.style.removeProperty("width");
+      img.style.removeProperty("height");
+    };
+    if (innerWidth <= 760 || !img.complete || !img.naturalWidth || !sai || !sai.style.height) {
+      clear();
+      return;
+    }
+
+    const h = sai.getBoundingClientRect().height;
+    const w = Math.max(1, Math.round(h * (img.naturalWidth / img.naturalHeight)));
+    art.style.height = `${h.toFixed(2)}px`;
+    art.style.width = `${w}px`;
+    img.style.width = "100%";
+    img.style.height = "100%";
+  }
+
+  const neuronalImg = book.querySelector(".book-item-art--conexion_neuronal img");
+  if (neuronalImg) {
+    neuronalImg.addEventListener("load", () => {
+      layoutSaiArt();
+      layoutNeuronalArt();
+      layoutNeurochipArt();
+    });
+  }
+
+  const neurochipImg = book.querySelector(".book-item-art--neurochip img");
+  if (neurochipImg) {
+    neurochipImg.addEventListener("load", () => {
+      layoutSaiArt();
+      layoutNeuronalArt();
+      layoutNeurochipArt();
+    });
+  }
 
   /** Alinea arte del wrap con el margen inferior de la tabla Calidad; texto full-width arriba. */
   function layoutBookArtWraps() {

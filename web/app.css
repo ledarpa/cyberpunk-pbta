@@ -43,8 +43,6 @@
   --art-chap-scale: 0.961;
   --art-manual-w: min(15.21rem, 47.61%);
   --art-manual-max: 47.61%;
-  --art-degen-w: min(17.34rem, 54.27%);
-  --art-degen-max: 54.27%;
   --art-manual-xl-w: min(25.11rem, 65.15%);
   --art-manual-xl-max: 65.15%;
 }
@@ -569,60 +567,12 @@ body {
   --reader-vw: 100%;
 }
 
-@media (max-width: 720px) {
-  .book-item-art {
-    margin-top: calc(var(--pad) * 1.5);
-    margin-bottom: calc(var(--pad) * 1.5);
-  }
-}
+/* ==================================================================
+   MANUAL — portada, tipografía, tablas y arte embebido.
+   Mismos hooks que genera docs/scripts/build_web_reader.py.
+   ================================================================== */
 
-/* Efecto "máscara fantasma": márgenes superiores consistentemente mayores en móvil
-   para que el arte respire y no aplaste el texto */
-@media (max-width: 720px) {
-  .book-item-art,
-  .book-item-art--brazo_de_combate,
-  .book-item-art--cybervertebras,
-  .book-item-art--drone,
-  .book-item-art--kit_de_primeros_auxilios,
-  .book-item-art--traumacard,
-  .book-item-art--ojo_bionico,
-  .book-item-art--oido_bionico {
-    margin-top: calc(var(--pad) * 2);
-    margin-bottom: calc(var(--pad) * 2);
-  }
-}
-
-/* Disposición side‑by‑side en móvil: two arts al mismo nivel, ancho completo,
-   misma altura independientemente de su ancho */
-@media (max-width: 720px) {
-  .book-item-art--brazo_de_combate,
-  .book-item-art--cybervertebras,
-  .book-item-art--drone {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: calc(var(--pad) * 0.5);
-    height: auto;
-    align-items: stretch;
-  }
-}
-
-/* Armas (pistola‑lanzamisles): imagen debajo de la tabla, margen derecho,
-   texto a la izquierda enmarcando la imagen */
-@media (max-width: 720px) {
-  .weapon-section .book-item-art { order: 2; margin-left: 0; margin-right: calc(var(--pad) * 2); }
-  .weapon-section .table-wrapper { order: 1; margin-bottom: calc(var(--pad) * 1.5); }
-}
-
-/* Igualación de márgenes-bottom en "Mejoras de característica": imagen y tabla */
-.book-item-art--mejora_de_atributos {
-  margin-bottom: calc(var(--pad));
-}
-.book-item-art--mejora_de_atributos img {
-  margin-bottom: calc(var(--pad));
-  max-height: calc(22rem - 1ch);
-  margin-bottom: 1.5rem;
-}
-
+/* ---------- Portada ---------- */
 .cover {
   min-height: var(--reader-vh);
   display: grid;
@@ -742,11 +692,11 @@ body {
   background: transparent;
 }
 
+/* ---------- Tipografía del libro ---------- */
 .book {
   width: var(--measure);
   max-width: 100%;
-  margin-inline: auto;
-  margin-top: 1.5rem;
+  margin: 1.5rem auto 0;
   font-size: var(--fs);
   line-height: var(--lh);
   font-weight: 400;
@@ -765,7 +715,6 @@ body {
   font-size: round(nearest, var(--fs-h1), 1px);
   color: var(--yellow);
   text-align: center;
-  font-weight: 400;
   margin: 1.4rem 0 0.7rem;
 }
 
@@ -774,7 +723,6 @@ body {
   content: "===================================";
   display: block;
   color: var(--yellow);
-  font-weight: 400;
   line-height: 1;
   overflow: hidden;
 }
@@ -844,6 +792,17 @@ body {
   clear: both;
 }
 
+.book hr::before {
+  content: "----------------------------";
+  display: block;
+  text-align: center;
+  color: var(--cyan);
+}
+
+.book hr + :is(h2, h3, h4) {
+  clear: both;
+}
+
 /* Separador de sección: fila exclusiva, nunca compartida con floats */
 .book-section-break {
   display: flow-root;
@@ -874,6 +833,7 @@ body {
   margin-top: 0.85rem;
 }
 
+/* Corte de floats al cierre de cada wrap */
 .book-float-boundary {
   clear: both;
   display: flow-root;
@@ -884,27 +844,108 @@ body {
   visibility: hidden;
 }
 
-/* Retrato de profesión: float como marco de texto */
-.book-prof-portrait {
-  float: right;
-  width: min(26rem, 100%);
-  margin: 0.15rem 0 0.7rem 1rem;
+.book blockquote {
+  margin: 0.45rem 0;
+  padding: 0 0.7rem;
+  border-left: 2px solid var(--cyan);
+  color: var(--cyan);
+}
+
+/* Bloques «Ejemplo — …» — rosa munición de la ficha (#e0a0e8) */
+.book blockquote.ejemplo {
+  border-left-color: #e0a0e8;
+  color: #e0a0e8;
+}
+
+.book blockquote.ejemplo strong {
+  color: #e0a0e8;
+}
+
+.book code,
+.book strong {
+  color: var(--bright);
+  font-family: inherit;
+  font-weight: 400;
+}
+
+.book em {
+  font-style: normal;
+  color: var(--cyan);
+}
+
+/* ==palabra== → tinta cian (voz en ejemplos) */
+.hl-cyan {
+  color: var(--cyan);
+}
+
+.book p,
+.book ul,
+.book ol {
+  max-width: 100%;
+}
+
+/* ---------- Hits de búsqueda dentro del manual ---------- */
+.book mark {
+  background: var(--hit-bg);
+  color: var(--hit);
   padding: 0;
-  box-sizing: border-box;
-  shape-outside: margin-box;
-  shape-margin: 0.35rem;
 }
 
-.book-prof-portrait img {
-  display: block;
+.book mark.is-current {
+  background: var(--hit-active-bg);
+  color: #000;
+}
+
+/* ---------- Tablas ---------- */
+.table-wrap {
+  overflow-x: auto;
+  margin: 0.45rem 0 0.7rem;
+  break-inside: avoid;
+  clear: both;
+}
+
+.book table {
   width: 100%;
-  height: auto;
-  aspect-ratio: 1;
-  object-fit: cover;
-  object-position: center;
+  border-collapse: collapse;
 }
 
-/* Arte de catálogo: float derecha; texto a la izquierda. Tablas/hr con clear. */
+.book th,
+.book td {
+  border: none;
+  border-top: 1px solid #145014;
+  border-bottom: 1px solid #145014;
+  padding: 0.15rem 0.4rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.book th {
+  background: var(--table-head);
+  color: #000000;
+  font-weight: 400;
+}
+
+/* Atributos: columna Nombre al ancho mínimo necesario */
+#los-cuatro-atributos ~ .table-wrap th:nth-child(2),
+#los-cuatro-atributos ~ .table-wrap td:nth-child(2) {
+  min-width: 19ch;
+  white-space: nowrap;
+}
+
+/* Tablas compactas Calidad/* al lado del dibujo */
+.table-wrap--rail {
+  clear: none;
+  width: auto;
+  max-width: 100%;
+  margin-top: 0.2rem;
+}
+
+.table-wrap--rail + p,
+.table-wrap--rail + .table-wrap {
+  clear: both;
+}
+
+/* ---------- Arte de catálogo (float derecho, sin wrap) ---------- */
 .book-item-art {
   float: right;
   width: min(14rem, 44%);
@@ -968,33 +1009,7 @@ body {
   transform-origin: top right;
 }
 
-.book-art-wrap > .book-item-art[data-art-layout="portrait-span"] {
-  margin-top: var(--art-shift, 0px);
-  height: var(--art-h, auto);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  shape-outside: inset(var(--art-shift, 0px) 0 0 0);
-}
-
-.book-art-wrap > .book-item-art--drone {
-  overflow: visible;
-}
-
-.book-art-wrap > .book-item-art[data-art-layout="portrait-span"] img {
-  max-height: none;
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  object-position: bottom right;
-}
-
-.book-art-wrap > .book-item-art--drone img {
-  transform: scale(var(--art-chap-scale));
-  transform-origin: bottom right;
-}
-
-/* Banner panorámico (Corposuit, etc.): ancho completo, sin float */
+/* Banner panorámico (Corposuit, atributos, 2d6…): ancho completo, sin float */
 .book-item-banner {
   display: block;
   float: none;
@@ -1013,8 +1028,11 @@ body {
   object-fit: contain;
   object-position: center;
   background: transparent;
+  /* El margin colapsa fuera del figure: da el respiro del banner */
+  margin: 1em 0;
 }
 
+/* ---------- Filas de arte ---------- */
 .book-item-art-row {
   float: right;
   display: flex;
@@ -1083,148 +1101,7 @@ body {
   object-position: bottom center;
 }
 
-/* El prosa/listas fluyen al lado; tablas y títulos no se estrechan */
-.book p,
-.book ul,
-.book ol {
-  max-width: 100%;
-}
-
-@media (max-width: 720px) {
-  .book-item-art:not(.book-item-art-row--cyberpiernas .book-item-art),
-  .book-item-art-row:not(.book-item-art-row--cyberpiernas) {
-    width: min(16rem, 78%);
-    margin-right: 0.65rem;
-  }
-
-  .book-item-art-row:not(.book-item-art-row--cyberpiernas) {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: flex-end;
-    width: min(28rem, 96%);
-  }
-
-  .book-item-art-row:has(> .book-item-art:nth-child(3)):not(.book-item-art-row--cyberpiernas) {
-    width: min(48rem, 96%);
-  }
-
-  .book-item-art-row .book-item-art {
-    width: auto;
-    flex: 1 1 0;
-    min-width: 0;
-  }
-
-  .book-item-art-row--cyberpiernas {
-    width: 100%;
-    max-width: 100%;
-    justify-content: center;
-    margin-right: 0;
-  }
-
-  .book-item-art-row--cyberpiernas .book-item-art,
-  .book-item-art-row:has(.book-item-art--acorazado):has(.book-item-art--cuadrupedo):has(.book-item-art--velocista)
-    .book-item-art {
-    flex: 0 0 auto;
-    min-width: 0;
-  }
-
-  .book-item-art-row--cyberpiernas .book-item-art img,
-  .book-item-art-row:has(.book-item-art--acorazado):has(.book-item-art--cuadrupedo):has(.book-item-art--velocista)
-    .book-item-art
-    img {
-    height: var(--cyberpierna-h, 13.5rem);
-    min-height: var(--cyberpierna-h, 13.5rem);
-    max-height: var(--cyberpierna-h, 13.5rem);
-    width: auto;
-    max-width: none;
-  }
-
-  .book-item-art + p + .table-wrap,
-  .book-item-art-row + p + .table-wrap,
-  .table-wrap--rail {
-    clear: both;
-    max-width: none;
-  }
-}
-
-.book hr::before {
-  content: "----------------------------";
-  display: block;
-  text-align: center;
-  color: var(--cyan);
-}
-
-.book hr + :is(h2, h3, h4) {
-  clear: both;
-}
-
-.book blockquote {
-  margin: 0.45rem 0;
-  padding: 0 0.7rem;
-  border-left: 2px solid var(--cyan);
-  color: var(--cyan);
-}
-
-/* Resaltado de palabra en cian (==palabra== en las fuentes MD) */
-.hl-cyan {
-  color: var(--cyan);
-}
-
-/* Bloques «Ejemplo — …» — rosa munición de la ficha (#e0a0e8) */
-.book blockquote.ejemplo {
-  border-left-color: #e0a0e8;
-  color: #e0a0e8;
-}
-
-.book blockquote.ejemplo strong {
-  color: #e0a0e8;
-}
-
-.book code,
-.book strong {
-  color: var(--bright);
-  font-family: inherit;
-  font-weight: 400;
-}
-
-.book em {
-  font-style: normal;
-  color: var(--cyan);
-}
-
-.table-wrap {
-  overflow-x: auto;
-  margin: 0.45rem 0 0.7rem;
-  break-inside: avoid;
-  clear: both;
-}
-
-/* Atributos: columna Nombre al ancho mínimo necesario (1 línea para "Manipulación Cognitiva") */
-#los-cuatro-atributos ~ .table-wrap th:nth-child(2),
-#los-cuatro-atributos ~ .table-wrap td:nth-child(2) {
-  min-width: 19ch;
-  white-space: nowrap;
-}
-
-/* Tablas compactas Calidad/* al lado del dibujo (no Tipo/Efecto, Stat, etc.) */
-.table-wrap--rail {
-  clear: none;
-  width: auto;
-  max-width: 100%;
-  margin-top: 0.2rem;
-}
-
-/* Título "Módulos…" y tablas siguientes: debajo del float, a ancho completo */
-.table-wrap--rail + p,
-.table-wrap--rail + .table-wrap {
-  clear: both;
-}
-
-/*
-  Ojo / Brazo de combate: texto a ancho completo arriba; arte abajo al lado
-  de la tabla Calidad. --art-shift (JS) alinea márgenes inferiores;
-  shape-outside solo estrecha líneas que chocan con el arte.
-*/
+/* ---------- Sistema art-wrap: el texto enmarca el arte ---------- */
 .book-art-wrap {
   display: flow-root;
   clear: both;
@@ -1249,16 +1126,28 @@ body {
   height: var(--art-h, auto);
 }
 
-.book-item-art--garfio,
-.book-item-art--torreta,
-.book-item-art--trauma_card,
-.book-item-art--drone,
-.book-item-art--primeros_auxilios,
+.book-art-wrap > .book-item-art-row:not(.book-item-art-row--cyberpiernas) {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 0.45rem;
+  width: min(28rem, 58%);
+  max-width: 58%;
+  height: var(--art-h, auto);
+}
+
+/* Chapería dentro del wrap: marco propio */
 .book-art-wrap > .book-item-art.book-item-art--garfio,
 .book-art-wrap > .book-item-art.book-item-art--torreta,
 .book-art-wrap > .book-item-art.book-item-art--trauma_card,
 .book-art-wrap > .book-item-art.book-item-art--drone,
-.book-art-wrap > .book-item-art.book-item-art--primeros_auxilios {
+.book-art-wrap > .book-item-art.book-item-art--primeros_auxilios,
+.book-item-art--garfio,
+.book-item-art--torreta,
+.book-item-art--trauma_card,
+.book-item-art--drone,
+.book-item-art--primeros_auxilios {
   width: var(--art-chap-w);
   max-width: var(--art-chap-max);
 }
@@ -1275,107 +1164,59 @@ body {
   max-width: var(--art-manual-xl-max);
 }
 
-.book-art-wrap > .book-item-art-row:not(.book-item-art-row--cyberpiernas) {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: flex-end;
-  align-items: flex-end;
-  gap: 0.45rem;
-  width: min(28rem, 58%);
-  max-width: 58%;
-  height: var(--art-h, auto);
-}
-
-.book-art-wrap > .book-item-art-row--cyberpiernas {
-  height: var(--cyberpierna-h, 13.5rem);
+/* Imágenes dentro del wrap: cap global */
+.book-art-wrap > .book-item-art img,
+.book-art-wrap > .book-item-art-row .book-item-art img {
+  display: block;
   width: 100%;
-  max-width: 100%;
-  align-items: flex-end;
-  justify-content: center;
-  margin-top: 0;
-  gap: 0.35rem;
-  overflow-x: auto;
-  overflow-y: visible;
-  -webkit-overflow-scrolling: touch;
+  height: auto;
+  max-height: 18rem;
+  object-fit: contain;
+  object-position: bottom center;
+  background: transparent;
 }
 
-/* Cyberpiernas: título → intro → imgs (siempre apilado; panel ~78ch) */
-.book-art-wrap:has(.book-item-art-row--cyberpiernas) {
-  --cyberpierna-h: 13.5rem;
-  container-type: inline-size;
-  container-name: cyberpiernas;
-  display: grid;
-  grid-template-columns: 1fr;
-  row-gap: 0.55rem;
-}
-
-.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-art-wrap-copy {
-  display: contents;
-}
-
-.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-art-wrap-copy > h3 {
-  grid-column: 1;
-  grid-row: 1;
-  margin-top: 0;
-}
-
-.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-art-wrap-copy > p {
-  grid-column: 1;
-  grid-row: 2;
-}
-
-.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-item-art-row.book-item-art-row--cyberpiernas {
-  grid-column: 1;
-  grid-row: 3;
+.book-art-wrap > .book-item-art-row .book-item-art {
   float: none;
   clear: none;
-  margin: 0;
-  margin-right: 0;
-  shape-outside: none;
-  justify-self: stretch;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  overflow-x: auto;
-  overflow-y: visible;
-  -webkit-overflow-scrolling: touch;
-}
-
-.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-item-art-row.book-item-art-row--cyberpiernas .book-item-art {
+  flex: 1 1 0;
   width: auto;
-  max-width: none;
-  margin-right: 0;
-}
-
-.book-art-wrap:has(.book-item-art-row--cyberpiernas) .book-item-art-row--cyberpiernas .book-item-art {
-  flex: 0 0 auto;
   min-width: 0;
-  height: var(--cyberpierna-h, 13.5rem);
+  max-width: none;
+  height: 100%;
+  margin: 0;
+  shape-outside: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 }
 
-/* Brazo de combate: 2 dibujos pegados a la derecha; marco del intro + tabla */
-.book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row {
-  width: min(35rem, 88%);
-  max-width: 88%;
-  gap: 2rem;
-  margin-top: 0;
-  margin-left: auto;
-  margin-right: 0;
-  margin-bottom: 1rem;
-  shape-outside: inset(0);
-  overflow: visible;
-}
-  width: min(35rem, 48%);
-  max-width: 48%;
-  gap: 2rem;
-  margin-top: 0;
-  margin-left: 0.75rem;
-  margin-right: 0;
-  shape-outside: inset(0);
-  overflow: visible;
+.book-art-wrap-copy {
+  display: block;
+  min-width: 0;
 }
 
-/* Retratos verticales: maquetación declarativa (data-art-* en build) */
+.book-art-wrap-copy > :is(h3, h4) {
+  clear: none;
+  margin-top: 0;
+}
+
+.book-art-wrap-copy .table-wrap--rail {
+  display: flow-root;
+  margin-top: 0.35rem;
+  margin-bottom: 0;
+  margin-left: 0;
+  max-width: 100%;
+  width: auto;
+  clear: none;
+  background: transparent;
+}
+
+.book-art-wrap-copy .table-wrap--rail table {
+  width: 100%;
+}
+
+/* ---------- Retratos verticales (data-art-*) ---------- */
 .book-art-wrap > .book-item-art[data-art-layout="portrait-top"] {
   margin-top: 0;
   margin-left: var(--art-wrap-gap);
@@ -1442,206 +1283,40 @@ body {
   object-position: right top;
 }
 
-/* Manual (Mejoras): intro+tabla al costado; borde inferior = borde inferior de la tabla */
-.book-art-wrap:has(.book-item-art--mejora_de_atributos) {
-  margin-top: 0.1rem;
-  container-type: inline-size;
-  container-name: mejora;
+.book-art-wrap > .book-item-art[data-art-layout="portrait-span"] {
+  margin-top: var(--art-shift, 0px);
+  height: var(--art-h, auto);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  shape-outside: inset(var(--art-shift, 0px) 0 0 0);
 }
 
-.book-art-wrap:has(.book-item-art--mejora_de_atributos) > .book-item-art {
-  margin-left: 0.55rem;
-}
-
-.book-art-wrap:has(.book-item-art--mejora_de_atributos) > .book-item-art img {
+.book-art-wrap > .book-item-art[data-art-layout="portrait-span"] img {
   max-height: none;
-  object-fit: contain;
-  object-position: bottom right;
-  margin-bottom: -1.5rem;
-}
-
-.book-art-wrap:has(.book-item-art--mejora_de_atributos) .book-art-wrap-copy > p {
-  clear: none;
-}
-
-.book-art-wrap:has(.book-item-art--mejora_de_atributos) .book-art-wrap-copy .table-wrap--rail {
-  margin-bottom: 1.5rem;
-  clear: none;
-  min-width: min(12rem, 100%);
-}
-
-.book-art-wrap:has(.book-item-art--mejora_de_atributos) .book-art-wrap-copy .table-wrap--rail th {
-  line-height: 1.15;
-  hyphens: auto;
-  overflow-wrap: anywhere;
-}
-
-/* Tiradas 2d6: banner panorámico (CSS genérico .book-item-banner) */
-
-/* Ancho medio: achica el arte para que la tabla no colapse */
-@container mejora (max-width: 48rem) {
-  .book-item-art--mejora_de_atributos {
-    width: min(16.5rem, 46%) !important;
-    max-width: 46% !important;
-  }
-}
-
-/* Angosto: apila imagen arriba y tabla a ancho completo */
-@container mejora (max-width: 36rem) {
-  .book-item-art--mejora_de_atributos {
-    float: none !important;
-    display: block !important;
-    width: min(20rem, 90%) !important;
-    max-width: 90% !important;
-    height: auto !important;
-    margin: 0.2rem auto 0.75rem !important;
-    shape-outside: none !important;
-  }
-
-  .book-item-art--mejora_de_atributos img {
-    max-height: 16rem;
-    object-position: center bottom;
-  }
-
-  .book-art-wrap-copy > p {
-    clear: both;
-  }
-
-  .book-art-wrap-copy .table-wrap--rail {
-    clear: both !important;
-    float: none;
-    width: 100% !important;
-    max-width: none !important;
-    min-width: 0;
-  }
-}
-
-.book-art-wrap:has(.book-item-art--degeneracion) {
-  position: relative;
-  display: block;
-  padding-bottom: 0;
-}
-
-.book-art-wrap:has(.book-item-art--degeneracion) > .book-item-art {
-  float: none;
-  position: static;
-  width: min(17.34rem, 78%);
-  max-width: 78%;
-  margin: 0.35rem auto 0.75rem;
-  top: auto;
-  bottom: auto;
-  height: auto;
-  display: block;
-  shape-outside: none;
-  clear: none;
-  overflow: visible;
-  z-index: auto;
-}
-
-.book-art-wrap:has(.book-item-art--degeneracion) > .book-item-art img {
-  display: block;
   width: 100%;
   height: auto;
-  max-height: none !important;
-  object-fit: contain;
-  object-position: center bottom;
-}
-
-.book-art-wrap:has(.book-item-art--degeneracion) .book-art-wrap-copy {
-  position: relative;
-  z-index: auto;
-  box-sizing: border-box;
-  padding-right: 0;
-  max-width: 100%;
-  display: block;
-  overflow: visible;
-}
-
-.book-art-wrap:has(.book-item-art--degeneracion) .book-art-wrap-copy > :is(p, ul, ol) {
-  clear: none;
-}
-
-.book-art-wrap:has(.book-item-art--degeneracion) .book-art-wrap-copy > :last-child {
-  margin-bottom: 0;
-}
-
-/* Recuperar la humanidad: float (marco de texto) */
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) {
-  position: relative;
-  display: flow-root;
-  padding-bottom: 0;
-}
-
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art {
-  float: right;
-  position: static;
-  /* .book p margin-top → top del marco ≈ primera línea bajo el título */
-  margin: 0.35rem 0 0.35rem 1rem;
-  top: auto;
-  bottom: auto;
-  width: min(30.949rem, 89.646%);
-  max-width: 89.646%;
-  padding: 0;
-  height: auto;
-  display: block;
-  shape-outside: margin-box;
-  shape-margin: 0.35rem;
-  clear: none;
-  overflow: visible;
-  z-index: 0;
-}
-
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art img {
-  display: block;
-  max-height: none !important;
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  object-position: top right;
-}
-
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy {
-  position: static;
-  z-index: auto;
-  box-sizing: border-box;
-  padding-right: 0;
-  max-width: 100%;
-  /* No BFC: las líneas envuelven el float y, bajo la imagen, usan todo el ancho */
-  display: block;
-  overflow: visible;
-}
-
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy > :is(h4, p, ul, ol) {
-  clear: none;
-}
-
-.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy > :last-child {
-  margin-bottom: 0;
-}
-
-@media (max-width: 720px) {
-  .book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art {
-    width: min(34.151rem, 89.646%);
-    max-width: 89.646%;
-    margin: 0.35rem 0 0.35rem 1rem;
-  }
-
-  .book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy {
-    padding-right: 0;
-  }
-}
-
-.book-art-wrap > .book-item-art[data-art-layout="portrait-span"][data-art-size="manual"] img,
-.book-art-wrap > .book-item-art[data-art-layout="portrait-span"][data-art-size="manual-xl"] img {
-  max-height: none;
   object-fit: contain;
   object-position: bottom right;
 }
 
-.book-art-wrap > .book-item-art.book-item-art--recuperar_humanidad[data-art-layout="portrait-span"] img {
-  object-position: top right;
+.book-art-wrap > .book-item-art--drone img {
+  transform: scale(var(--art-chap-scale));
+  transform-origin: bottom right;
 }
 
+/* Portrait-span suelto: siempre ancho completo */
+.book-item-art[data-art-layout="portrait-span"] {
+  clear: both;
+  margin: 1.5em 0;
+}
+
+.book-item-art[data-art-layout="portrait-span"] img {
+  width: 100%;
+  height: auto;
+}
+
+/* Escalas puntuales */
 .book-art-wrap > .book-item-art[data-art-size="cerebral"] img {
   transform: scale(1.042);
   transform-origin: bottom center;
@@ -1661,87 +1336,46 @@ body {
   transform-origin: bottom center;
 }
 
-.book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row .book-item-art {
-  flex: 1 1 0;
-  width: auto;
-  max-width: none;
-  height: 100%;
-  margin: 0;
-  shape-outside: none;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
+/* ---------- Casos especiales ---------- */
+
+/* 2d6: float derecha, marco al margen derecho y pegado bajo el título */
+.book h2 + .book-art-wrap:has(.book-item-art--2d6),
+.book-art-wrap:has(.book-item-art--2d6) {
+  margin-top: 0;
 }
 
-.book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row .book-item-art img {
+.book-art-wrap:has(.book-item-art--2d6) > .book-item-art {
+  float: right;
+  clear: none;
+  /* !important estructurales (heredados del CSS original): en móvil (≤760)
+     este bloque debe ganar width/margin/height/display sobre la media
+     full-width de portrait-float, pero perder float/clear → block centrado
+     a 58%. Además, display vence al display:none inline que app.js deja
+     en este wrap (crashea midiendo: no tiene tabla rail). */
+  width: min(28rem, 58%) !important;
+  max-width: 58% !important;
+  margin: 0 0 0.65rem 0.85rem !important;
+  height: auto !important;
+  display: block !important;
+  shape-outside: margin-box;
+  shape-margin: 0.3rem;
+}
+
+.book-art-wrap:has(.book-item-art--2d6) > .book-item-art img {
+  display: block;
   width: 100%;
-  max-width: 100%;
   height: auto;
-  max-height: 22.5rem;
+  max-height: none;
   object-fit: contain;
-  object-position: bottom center;
+  object-position: top right;
   transform: none;
 }
 
-.book-art-wrap:has(.book-item-art--sable_mantis) .book-art-wrap-copy .table-wrap--rail {
-  width: calc(100% - min(35rem, 48%) - 1.5rem);
-  max-width: none;
-  margin-right: 0.5rem;
-  box-sizing: border-box;
+.book-art-wrap:has(.book-item-art--2d6) .book-art-wrap-copy > p:first-child {
+  margin-top: 0.15rem;
 }
 
-.book-art-wrap:has(.book-item-art--sable_mantis) .book-art-wrap-copy .table-wrap--rail table {
-  width: 100%;
-}
-
-.book-art-wrap > .book-item-art-row .book-item-art {
-  float: none;
-  clear: none;
-  flex: 1 1 0;
-  width: auto;
-  min-width: 0;
-  max-width: none;
-  height: 100%;
-  margin: 0;
-  shape-outside: none;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.book-art-wrap > .book-item-art img,
-.book-art-wrap > .book-item-art-row .book-item-art img {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: var(--art-h, none);
-  object-fit: contain;
-  object-position: bottom center;
-  background: transparent;
-}
-
-/* Cyberpiernas en wrap: alto fijo; no escalar — scroll horizontal si no caben */
-.book-art-wrap:has(.book-item-art-row--cyberpiernas) .book-item-art-row--cyberpiernas .book-item-art img {
-  display: block;
-  width: auto;
-  max-width: none;
-  height: var(--cyberpierna-h, 13.5rem);
-  min-height: var(--cyberpierna-h, 13.5rem);
-  max-height: var(--cyberpierna-h, 13.5rem);
-  object-fit: contain;
-  object-position: bottom center;
-}
-
-/* Cyberpiernas suelta (fallback): width auto */
-.book-item-art-row--cyberpiernas:not(:where(.book-art-wrap *)) .book-item-art img {
-  width: auto;
-  max-width: none;
-  height: var(--cyberpierna-h, 13.5rem);
-  min-height: var(--cyberpierna-h, 13.5rem);
-  max-height: var(--cyberpierna-h, 13.5rem);
-}
-
-/* Ojo / oído: mismo marco flotante (14rem, margen izq. 1rem) */
+/* Ojo / oído: centrados dentro del wrap */
 .book-art-wrap > .book-item-art.book-item-art--ojo,
 .book-art-wrap > .book-item-art.book-item-art--cyberoido {
   width: 100%;
@@ -1758,72 +1392,664 @@ body {
   object-position: center bottom;
 }
 
-/* 2d6: float derecha, marco al margen derecho y pegado bajo el título */
-.book h2 + .book-art-wrap:has(.book-item-art--2d6) {
+/* Cyberpiernas en wrap: título → intro → imgs (apilado en grid) */
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) {
+  --cyberpierna-h: 13.5rem;
+  container-type: inline-size;
+  container-name: cyberpiernas;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 0.55rem;
+}
+
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-art-wrap-copy {
+  display: contents;
+}
+
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-art-wrap-copy > h3 {
+  grid-column: 1;
+  grid-row: 1;
   margin-top: 0;
 }
 
-.book-art-wrap:has(.book-item-art--2d6) {
-  margin-top: 0;
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-art-wrap-copy > p {
+  grid-column: 1;
+  grid-row: 2;
 }
 
-.book-art-wrap > .book-item-art.book-item-art--2d6,
-.book-art-wrap > .book-item-art.book-item-art--2d6[data-art-size="manual"],
-.book-item-art.book-item-art--2d6[data-art-size="manual"] {
-  float: right;
+/* Cyberpiernas en wrap: fila horizontal centrada, scroll si no caben.
+   Ojo con la especificidad: sin :has() acá (0,2,0) — la regla suelta con
+   :has(acorazado/cuadrupedo/velocista) (0,4,0) define el gap ganador (0.5rem). */
+.book-art-wrap > .book-item-art-row--cyberpiernas {
+  height: var(--cyberpierna-h, 13.5rem);
+  width: 100%;
+  max-width: 100%;
+  align-items: flex-end;
+  justify-content: center;
+  margin-top: 0;
+  margin-right: 0;
+  gap: 0.35rem;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+}
+
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-item-art-row.book-item-art-row--cyberpiernas {
+  grid-column: 1;
+  grid-row: 3;
+  float: none;
   clear: none;
-  width: min(28rem, 58%) !important;
-  max-width: 58% !important;
-  margin: 0 0 0.65rem 0.85rem !important;
-  height: auto !important;
-  display: block !important;
-  justify-content: unset !important;
-  shape-outside: margin-box;
-  shape-margin: 0.3rem;
-}
-
-.book-art-wrap > .book-item-art.book-item-art--2d6 img,
-.book-art-wrap > .book-item-art.book-item-art--2d6[data-art-layout="portrait-float"] img,
-.book-art-wrap > .book-item-art.book-item-art--2d6[data-art-layout="portrait-span"] img {
-  display: block;
-  width: 100% !important;
-  height: auto !important;
-  max-height: none !important;
-  object-fit: contain !important;
-  object-position: top right !important;
-  transform: none !important;
-}
-
-.book-art-wrap:has(.book-item-art--2d6) .book-art-wrap-copy > p:first-child {
-  margin-top: 0.15rem;
-}
-
-.book-art-wrap-copy {
-  display: block;
+  margin: 0;
+  margin-right: 0;
+  shape-outside: none;
+  justify-self: stretch;
+  width: 100%;
+  max-width: 100%;
   min-width: 0;
 }
 
-.book-art-wrap-copy > :is(h3, h4) {
-  clear: none;
-  margin-top: 0;
-}
-
-.book-art-wrap-copy .table-wrap--rail {
-  display: flow-root;
-  margin-top: 0.35rem;
-  margin-bottom: 0;
-  margin-left: 0;
-  max-width: none;
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) > .book-item-art-row.book-item-art-row--cyberpiernas .book-item-art {
   width: auto;
-  clear: none;
-  background: transparent;
+  max-width: none;
+  margin-right: 0;
 }
 
-.book-art-wrap-copy .table-wrap--rail table {
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) .book-item-art-row--cyberpiernas .book-item-art {
+  flex: 0 0 auto;
+  min-width: 0;
+  height: var(--cyberpierna-h, 13.5rem);
+}
+
+.book-art-wrap:has(.book-item-art-row--cyberpiernas) .book-item-art-row--cyberpiernas .book-item-art img {
+  display: block;
+  width: auto;
+  max-width: none;
+  height: var(--cyberpierna-h, 13.5rem);
+  min-height: var(--cyberpierna-h, 13.5rem);
+  max-height: var(--cyberpierna-h, 13.5rem);
+  object-fit: contain;
+  object-position: bottom center;
+}
+
+/* Brazo de combate (sable mantis): 2 dibujos pegados a la derecha */
+.book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row {
+  width: min(35rem, 88%);
+  max-width: 88%;
+  gap: 2rem;
+  margin-top: 0;
+  margin-left: auto;
+  margin-right: 0;
+  margin-bottom: 1rem;
+  shape-outside: inset(0);
+  overflow: visible;
+}
+
+.book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row .book-item-art {
+  flex: 1 1 0;
+  width: auto;
+  max-width: none;
+  height: 100%;
+  margin: 0;
+  shape-outside: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row .book-item-art img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  /* Sin max-height propio: gana el cap global del wrap (18rem), como en el CSS original */
+  object-fit: contain;
+  object-position: bottom center;
+  transform: none;
+}
+
+.book-art-wrap:has(.book-item-art--sable_mantis) .book-art-wrap-copy .table-wrap--rail {
+  width: calc(100% - min(35rem, 48%) - 1.5rem);
+  max-width: none;
+  margin-right: 0.5rem;
+  box-sizing: border-box;
+}
+
+.book-art-wrap:has(.book-item-art--sable_mantis) .book-art-wrap-copy .table-wrap--rail table {
   width: 100%;
 }
 
+/* Mejoras de características: intro a ancho completo arriba;
+   tabla compacta a la izquierda, dibujo a la derecha con el MISMO
+   alto que la tabla (lo fija app.js midiendo el rail; 1:1 de fallback). */
+.book-art-wrap:has(.book-item-art--mejora_de_atributos) {
+  margin-top: 0.1rem;
+  container-type: inline-size;
+  container-name: mejora;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-items: start;
+  column-gap: 1rem;
+}
+
+.book-art-wrap:has(.book-item-art--mejora_de_atributos) > .book-art-wrap-copy {
+  display: contents;
+}
+
+.book-art-wrap:has(.book-item-art--mejora_de_atributos) .book-art-wrap-copy > p {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+.book-art-wrap:has(.book-item-art--mejora_de_atributos) .book-art-wrap-copy .table-wrap--rail {
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: start;
+  min-width: min(12rem, 100%);
+  margin-top: 0;
+}
+
+/* Header en 2 líneas exactas: "Bonificación a la" / "característica"
+   (VT323 monoespaciada: 19ch de texto no alcanza para las 31ch completas) */
+.book-art-wrap:has(.book-item-art--mejora_de_atributos) .book-art-wrap-copy .table-wrap--rail th {
+  line-height: 1.15;
+  hyphens: none;
+  overflow-wrap: normal;
+  max-width: calc(19ch + 0.8rem);
+}
+
+.book-art-wrap:has(.book-item-art--mejora_de_atributos) > .book-item-art {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+  float: none;
+  clear: none;
+  margin: 0;
+  shape-outside: none;
+  aspect-ratio: 1 / 1;
+  height: var(--mejora-h, 13rem);
+  width: auto;
+  /* ancho por aspect-ratio/JS; manual-xl no debe caparlo */
+  max-width: none;
+}
+
+.book-art-wrap:has(.book-item-art--mejora_de_atributos) > .book-item-art img {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: contain;
+  object-position: center;
+  margin-bottom: 0;
+}
+
+/* Angosto: apila dibujo arriba centrado y tabla a ancho completo */
+@container mejora (max-width: 36rem) {
+  .book-art-wrap:has(.book-item-art--mejora_de_atributos) > .book-item-art {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: center;
+    aspect-ratio: auto;
+    height: auto !important;
+    width: min(20rem, 90%) !important;
+    margin: 0.2rem auto 0.75rem;
+  }
+
+  .book-art-wrap:has(.book-item-art--mejora_de_atributos) > .book-item-art img {
+    height: auto;
+    max-height: 16rem;
+    object-position: center bottom;
+  }
+
+  .book-art-wrap:has(.book-item-art--mejora_de_atributos) .book-art-wrap-copy .table-wrap--rail {
+    grid-column: 1;
+    grid-row: 3;
+    width: 100%;
+    min-width: 0;
+    margin-top: 0;
+  }
+}
+
+/* Degeneración neural: dibujo flotado a la derecha, texto a la izquierda.
+   Sin caso especial: usa el patrón genérico portrait-span + data-art-size="manual". */
+
+/* Implantes cerebrales (conexión de arma / conexión neuronal):
+   h3 arriba a ancho completo; intro+tabla a la izquierda, dibujo a la derecha. */
+.book-art-wrap:has(.book-item-art--sai),
+.book-art-wrap:has(.book-item-art--conexion_neuronal) {
+  display: grid;
+  /* Track derecho acotado al tamaño cerebral: sin esto, el intrinsic
+     natural del img (587px) devora la columna izquierda. */
+  grid-template-columns: minmax(0, 1fr) var(--art-cerebral-w);
+  grid-template-rows: auto auto auto;
+  column-gap: 1rem;
+}
+
+.book-art-wrap:has(.book-item-art--sai) > .book-art-wrap-copy,
+.book-art-wrap:has(.book-item-art--conexion_neuronal) > .book-art-wrap-copy {
+  display: contents;
+}
+
+.book-art-wrap:has(.book-item-art--sai) .book-art-wrap-copy > h3,
+.book-art-wrap:has(.book-item-art--conexion_neuronal) .book-art-wrap-copy > h3 {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  margin-top: 0;
+}
+
+.book-art-wrap:has(.book-item-art--sai) .book-art-wrap-copy > p,
+.book-art-wrap:has(.book-item-art--conexion_neuronal) .book-art-wrap-copy > p {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.book-art-wrap:has(.book-item-art--sai) .book-art-wrap-copy > .table-wrap--rail,
+.book-art-wrap:has(.book-item-art--conexion_neuronal) .book-art-wrap-copy > .table-wrap--rail {
+  grid-column: 1;
+  grid-row: 3;
+  justify-self: start;
+}
+
+/* El track derecho ya mide el tamaño cerebral; el width con % del
+   data-size re-resolvería contra el track y colapsaría (40px). */
+.book-art-wrap:has(.book-item-art--sai) > .book-item-art[data-art-size],
+.book-art-wrap:has(.book-item-art--conexion_neuronal) > .book-item-art[data-art-size] {
+  grid-column: 2;
+  grid-row: 2 / 4;
+  align-self: start;
+  float: none;
+  margin: 0;
+  shape-outside: none;
+  height: auto;
+  width: auto;
+  max-width: none;
+}
+
+/* Móvil: título arriba → dibujo debajo del título → intro → tabla */
+@media (max-width: 760px) {
+  .book-art-wrap:has(.book-item-art--sai),
+  .book-art-wrap:has(.book-item-art--conexion_neuronal) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .book-art-wrap:has(.book-item-art--sai) .book-art-wrap-copy > h3,
+  .book-art-wrap:has(.book-item-art--conexion_neuronal) .book-art-wrap-copy > h3 {
+    order: 1;
+    margin-top: 0.75rem;
+  }
+
+  .book-art-wrap:has(.book-item-art--sai) > .book-item-art,
+  .book-art-wrap:has(.book-item-art--conexion_neuronal) > .book-item-art {
+    order: 2;
+  }
+
+  .book-art-wrap:has(.book-item-art--sai) .book-art-wrap-copy > p,
+  .book-art-wrap:has(.book-item-art--conexion_neuronal) .book-art-wrap-copy > p {
+    order: 3;
+  }
+
+  .book-art-wrap:has(.book-item-art--sai) .book-art-wrap-copy > .table-wrap--rail,
+  .book-art-wrap:has(.book-item-art--conexion_neuronal) .book-art-wrap-copy > .table-wrap--rail {
+    order: 4;
+  }
+}
+
+/* Conexión de arma inteligente (sai): imagen a la derecha abarcando
+   exactamente el bloque intro+tabla — top alineado a la primera línea,
+   bottom alineado al borde inferior de la tabla (alto lo fija app.js). */
+.book-art-wrap:has(.book-item-art--sai) {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.book-art-wrap:has(.book-item-art--sai) .book-art-wrap-copy > p {
+  margin-top: 0;
+}
+
+.book-art-wrap:has(.book-item-art--sai) > .book-item-art[data-art-size] {
+  /* Pre-JS: ancho de fallback sin % (un % en track auto colapsaría el sizing).
+     app.js lo reemplaza por el ancho exacto del alto medido. */
+  width: 9.22rem;
+  max-width: none;
+  height: auto;
+}
+
+.book-art-wrap:has(.book-item-art--sai) > .book-item-art[data-art-size] img {
+  /* Sin el scale cerebral: el contorno visual debe ser el del figure */
+  transform: none;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* La tabla llega hasta el marco de la imagen con un gap de respiro (1rem,
+   el mismo margen interno del arte del manual); el texto hereda el mismo aire. */
+.book-art-wrap:has(.book-item-art--sai) {
+  column-gap: 1rem;
+}
+
+@media (min-width: 761px) {
+  .book-art-wrap:has(.book-item-art--sai) .book-art-wrap-copy > .table-wrap--rail {
+    justify-self: stretch;
+  }
+}
+
+/* Conexión neuronal: réplica exacta del bloque sai — misma imagen al
+   píxel (app.js copia el tamaño medido del sai), mismo gap, tabla al marco. */
+.book-art-wrap:has(.book-item-art--conexion_neuronal) {
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 1rem;
+}
+
+.book-art-wrap:has(.book-item-art--conexion_neuronal) .book-art-wrap-copy > p {
+  margin-top: 0;
+}
+
+.book-art-wrap:has(.book-item-art--conexion_neuronal) > .book-item-art[data-art-size] {
+  /* Pre-JS: fallback sin % — app.js aplica el tamaño exacto del sai */
+  width: 9.22rem;
+  max-width: none;
+  height: auto;
+}
+
+.book-art-wrap:has(.book-item-art--conexion_neuronal) > .book-item-art[data-art-size] img {
+  transform: none;
+  object-fit: contain;
+  object-position: center;
+}
+
+@media (min-width: 761px) {
+  .book-art-wrap:has(.book-item-art--conexion_neuronal) .book-art-wrap-copy > .table-wrap--rail {
+    justify-self: stretch;
+  }
+}
+
+/* Neurochip: mismo patrón que sai / conexión neuronal — h3 arriba,
+   intro + h4 + tabla a la izquierda, imagen a la derecha con el mismo
+   alto que las anteriores (app.js copia la altura del sai). */
+.book-art-wrap:has(.book-item-art--neurochip) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto auto auto auto;
+  column-gap: 1rem;
+}
+
+.book-art-wrap:has(.book-item-art--neurochip) > .book-art-wrap-copy {
+  display: contents;
+}
+
+.book-art-wrap:has(.book-item-art--neurochip) .book-art-wrap-copy > :nth-child(1) {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  margin-top: 0;
+}
+
+.book-art-wrap:has(.book-item-art--neurochip) .book-art-wrap-copy > :nth-child(2) {
+  grid-column: 1;
+  grid-row: 2;
+  margin-top: 0;
+}
+
+.book-art-wrap:has(.book-item-art--neurochip) .book-art-wrap-copy > :nth-child(3) {
+  grid-column: 1;
+  grid-row: 3;
+  margin-top: 0.55rem;
+}
+
+.book-art-wrap:has(.book-item-art--neurochip) .book-art-wrap-copy > :nth-child(4) {
+  grid-column: 1;
+  grid-row: 4;
+}
+
+.book-art-wrap:has(.book-item-art--neurochip) .book-art-wrap-copy > :nth-child(5) {
+  grid-column: 1;
+  grid-row: 5;
+}
+
+.book-art-wrap:has(.book-item-art--neurochip) > .book-item-art[data-art-size] {
+  grid-column: 2;
+  grid-row: 2 / 6;
+  align-self: start;
+  float: none;
+  margin: 0;
+  shape-outside: none;
+  height: auto;
+  width: 9.22rem;
+  max-width: none;
+}
+
+.book-art-wrap:has(.book-item-art--neurochip) > .book-item-art[data-art-size] img {
+  transform: none;
+  max-height: none;
+  object-fit: contain;
+  object-position: center;
+}
+
+@media (min-width: 761px) {
+  .book-art-wrap:has(.book-item-art--neurochip) .book-art-wrap-copy > .table-wrap--rail {
+    justify-self: stretch;
+  }
+}
+
+/* Móvil: título arriba → dibujo → resto del contenido */
+@media (max-width: 760px) {
+  .book-art-wrap:has(.book-item-art--neurochip) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .book-art-wrap:has(.book-item-art--neurochip) .book-art-wrap-copy > :nth-child(1) {
+    order: 1;
+    margin-top: 0.75rem;
+  }
+
+  .book-art-wrap:has(.book-item-art--neurochip) > .book-item-art {
+    order: 2;
+  }
+
+  .book-art-wrap:has(.book-item-art--neurochip) .book-art-wrap-copy > :not(:first-child) {
+    order: 3;
+  }
+}
+
+/* Ojo biónico: imagen suelta pegada al margen derecho de la página;
+   intro + bullets fluyen a su izquierda; las tablas (con clear) cortan
+   el float y siguen full-width debajo. */
+@media (min-width: 761px) {
+  .book-item-art.book-item-art--ojo[data-art-layout="portrait-float"] {
+    float: right;
+    margin: 0 0 0.75rem 1rem;
+    shape-outside: margin-box;
+    shape-margin: 0;
+  }
+}
+
+/* Oído biónico (cyberoido): igual que el ojo biónico, con la tabla
+   Calidad fluyendo a la izquierda de la imagen (no debajo). La tabla
+   larga de Módulos corta el float y sigue full-width debajo. */
+/* PNG vertical (499×586): sin el cap 15.21rem del portrait-float manual,
+   que la aplastaba a un box cuadrado con franjas de contain.
+   Global (aplica también en móvil, no solo ≥761). */
+.book-item-art.book-item-art--cyberoido[data-art-layout="portrait-float"] img {
+  max-height: none;
+}
+
+@media (min-width: 761px) {
+  .book-item-art.book-item-art--cyberoido[data-art-layout="portrait-float"] {
+    float: right;
+    margin: 0 0 0.75rem 1rem;
+    shape-outside: margin-box;
+    shape-margin: 0;
+  }
+
+  /* Tabla junto a la imagen: sin clear, acotada al espacio libre
+     (ancho de la imagen 15.21rem + gap 1rem) — una tabla full-width
+     solaparía el float en vez de envolverlo. */
+  .book-item-art--cyberoido + p + .table-wrap {
+    clear: none;
+    max-width: calc(100% - 15.21rem - 1rem);
+  }
+}
+
+/* Recuperar la humanidad: marco flotante */
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) {
+  position: relative;
+  display: flow-root;
+  padding-bottom: 0;
+}
+
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art {
+  float: right;
+  position: static;
+  margin: 0.35rem 0 0.35rem 1rem;
+  top: auto;
+  bottom: auto;
+  width: min(30.949rem, 89.646%);
+  max-width: 89.646%;
+  padding: 0;
+  height: auto;
+  display: block;
+  shape-outside: margin-box;
+  shape-margin: 0.35rem;
+  clear: none;
+  overflow: visible;
+  z-index: 0;
+}
+
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art img {
+  display: block;
+  max-height: none;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: top right;
+}
+
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy {
+  position: static;
+  z-index: auto;
+  box-sizing: border-box;
+  padding-right: 0;
+  max-width: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy > :is(h4, p, ul, ol) {
+  clear: none;
+}
+
+.book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy > :last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Retratos de profesión ---------- */
+.book-prof-portrait {
+  float: right;
+  width: min(26rem, 100%);
+  margin: 0.15rem 0 0.7rem 1rem;
+  padding: 0;
+  box-sizing: border-box;
+  shape-outside: margin-box;
+  shape-margin: 0.35rem;
+}
+
+.book-prof-portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ---------- Responsive del manual ---------- */
+
+/* Portal desktop: retratos flotan a la derecha */
+@media (min-width: 761px) {
+  .book-item-art[data-art-layout="portrait-float"] {
+    float: right;
+    margin: 0 1em 1em 2em;
+    max-width: 45%;
+    clear: right;
+    shape-outside: margin-box;
+    shape-margin: 1em;
+  }
+
+  .book-item-art[data-art-layout="portrait-float"] img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .book-item-art[data-art-layout="portrait-top"] {
+    float: right;
+    margin: 0 0 1em 2em;
+    max-width: 50%;
+  }
+}
+
+/* Móvil del manual: tamaños y clears */
 @media (max-width: 720px) {
+  /* Respiro del arte (máscara fantasma) */
+  .book-item-art {
+    margin-top: calc(var(--pad) * 1.5) !important;
+    margin-bottom: calc(var(--pad) * 1.5) !important;
+  }
+
+  .book-item-art:not(.book-item-art-row--cyberpiernas .book-item-art),
+  .book-item-art-row:not(.book-item-art-row--cyberpiernas) {
+    width: min(16rem, 78%);
+    margin-right: 0.65rem;
+  }
+
+  .book-item-art-row:not(.book-item-art-row--cyberpiernas) {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    width: min(28rem, 96%);
+  }
+
+  .book-item-art-row:has(> .book-item-art:nth-child(3)):not(.book-item-art-row--cyberpiernas) {
+    width: min(48rem, 96%);
+  }
+
+  .book-item-art-row .book-item-art {
+    width: auto;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .book-item-art-row--cyberpiernas {
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+    margin-right: 0;
+  }
+
+  .book-item-art-row--cyberpiernas .book-item-art,
+  .book-item-art-row:has(.book-item-art--acorazado):has(.book-item-art--cuadrupedo):has(.book-item-art--velocista)
+    .book-item-art {
+    flex: 0 0 auto;
+    min-width: 0;
+  }
+
+  .book-item-art-row--cyberpiernas .book-item-art img,
+  .book-item-art-row:has(.book-item-art--acorazado):has(.book-item-art--cuadrupedo):has(.book-item-art--velocista)
+    .book-item-art
+    img {
+    height: var(--cyberpierna-h, 13.5rem);
+    min-height: var(--cyberpierna-h, 13.5rem);
+    max-height: var(--cyberpierna-h, 13.5rem);
+    width: auto;
+    max-width: none;
+  }
+
+  .book-item-art + p + .table-wrap,
+  .book-item-art-row + p + .table-wrap,
+  .table-wrap--rail {
+    clear: both;
+    max-width: none;
+  }
+
+  /* Arte dentro del wrap */
   .book-art-wrap > .book-item-art,
   .book-art-wrap > .book-item-art-row {
     width: min(22rem, 92%);
@@ -1836,113 +2062,32 @@ body {
     max-width: 78%;
   }
 
+  /* Brazo de combate móvil */
   .book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row {
-  width: min(35rem, 88%);
-  max-width: 88%;
-  gap: 2rem;
-  margin-top: 0;
-  margin-left: auto;
-  margin-right: 0;
-  margin-bottom: 1rem;
-  shape-outside: inset(0);
-  overflow: visible;
-}
-    width: min(27.5rem, 88%);
+    width: min(35rem, 88%);
     max-width: 88%;
+    gap: 2rem;
+    margin-top: 0;
     margin-left: auto;
     margin-right: 0;
+    margin-bottom: 1rem;
+    shape-outside: inset(0);
+    overflow: visible;
   }
 
-  .book-art-wrap:has(.book-item-art--sable_mantis) > .book-item-art-row .book-item-art img {
-    max-height: 22.5rem;
-    transform: none;
+  /* Recuperar la humanidad móvil */
+  .book-art-wrap:has(.book-item-art--recuperar_humanidad) > .book-item-art {
+    width: min(34.151rem, 89.646%);
+    max-width: 89.646%;
+    margin: 0.35rem 0 0.35rem 1rem;
   }
 
-  .book-art-wrap > .book-item-art img,
-  .book-art-wrap > .book-item-art-row:not(.book-item-art-row--cyberpiernas) .book-item-art img {
-    height: auto;
-    max-height: 18rem;
-  }
-
-  .book-art-wrap-copy .table-wrap--rail {
-    width: auto;
-  }
-}
-
-.book table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.book th,
-.book td {
-  border: none;
-  border-top: 1px solid #145014;
-  border-bottom: 1px solid #145014;
-  padding: 0.15rem 0.4rem;
-  text-align: left;
-  vertical-align: top;
-}
-
-.book th {
-  background: var(--table-head);
-  color: #000000;
-  font-weight: 400;
-}
-
-.book mark {
-  background: var(--hit-bg);
-  color: var(--hit);
-  padding: 0;
-}
-
-.book mark.is-current {
-  background: var(--hit-active-bg);
-  color: #000;
-}
-
-.scrim {
-  display: none;
-}
-
-/* Imágenes manual responsive */
-.book-item-art img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* Banners siempre ancho completo */
-.book-item-banner img {
-  width: 100%;
-  height: auto;
-  display: block;
-  margin: 1em 0;
-}
-
-/* Imagen alineada a la derecha con texto a la izquierda (portal desktop) */
-@media (min-width: 761px) {
-  .book-item-art[data-art-layout='portrait-float'] {
-    float: right;
-    margin: 0 1em 1em 2em;
-    max-width: 45%;
-    clear: right;
-    shape-outside: margin-box;
-    shape-margin: 1em;
-  }
-  .book-item-art[data-art-layout='portrait-float'] img {
-    width: 100%;
-    height: auto;
-    display: block;
+  .book-art-wrap:has(.book-item-art--recuperar_humanidad) .book-art-wrap-copy {
+    padding-right: 0;
   }
 }
 
-.book-art-wrap-copy .table-wrap--rail {
-  max-width: 100%;
-}
-}
-
-/* Ancho completo en móvil y cuando no hay espacio */
+/* Móvil angosto: retratos y filas a ancho completo */
 @media (max-width: 760px) {
   .book-item-art[data-art-layout="portrait-float"],
   .book-item-art[data-art-layout="portrait-top"],
@@ -1953,58 +2098,32 @@ body {
     margin: 1.5em 0 !important;
     clear: both !important;
   }
+
   .book-item-art img {
     width: 100% !important;
     height: auto !important;
   }
-}
 
-/* Portrait-span siempre ancho completo */
-.book-item-art[data-art-layout="portrait-span"] {
-  clear: both;
-  margin: 1.5em 0;
-}
-.book-item-art[data-art-layout="portrait-span"] img {
-  width: 100%;
-  height: auto;
-}
-
-/* Portrait-top: ancho completo en móvil, float en desktop solo si hay espacio */
-@media (min-width: 761px) {
-  .book-item-art[data-art-layout="portrait-top"] {
-    float: right;
-    margin: 0 0 1em 2em;
-    max-width: 50%;
-  }
-}
-@media (max-width: 760px) {
-  .book-item-art[data-art-layout="portrait-top"] {
-    float: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 1.5em 0 !important;
-    clear: both !important;
-  }
-}
-
-/* Las líneas del texto envuelven el float de las imágenes (sin BFC que lo bloquee) */
-
-/* Columnas de catálogo: responsive */
-@media (max-width: 760px) {
   .book-item-art-row {
     flex-direction: column !important;
   }
+
   .book-item-art-row .book-item-art {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0.5em 0 !important;
   }
+
   .book-item-art-row .book-item-art img {
     width: 100% !important;
     height: auto;
   }
 }
 
+/* ---------- Scrim base (drawer índice) ---------- */
+.scrim {
+  display: none;
+}
 @media (max-height: 520px) {
   :root {
     --pad: 0.45rem;
@@ -3453,75 +3572,4 @@ body {
   margin-top: 0.55rem;
   border-top: 1px solid var(--line);
   padding-top: 0.45rem;
-}
-/* ========== USER REQUIREMENTS: IMAGE LAYOUT ========== */
-
-/* Ghost margin/máscara fantasma: espacio consistente alrededor de arts en móvil */
-@media (max-width: 720px) {
-  .book-item-art {
-    margin-top: calc(var(--pad) * 1.5) !important;
-    margin-bottom: calc(var(--pad) * 1.5) !important;
-  }
-}
-
-/* Side‑by‑side móvil: brazo de combate, cybervertebras, drone */
-@media (max-width: 720px) {
-  .book-item-art--brazo_de_combate,
-  .book-item-art--cybervertebras,
-  .book-item-art--drone {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: calc(var(--pad) * 0.5);
-    height: auto;
-    align-items: stretch;
-  }
-}
-
-/* Armas (pistola‑lanzamisles): debajo de la tabla, margen derecho, texto a la izquierda */
-@media (max-width: 720px) {
-  .weapon-section .book-item-art { 
-    order: 2; 
-    margin-left: 0; 
-    margin-right: calc(var(--pad) * 2); 
-  }
-  .weapon-section .table-wrapper { 
-    order: 1; 
-    margin-bottom: calc(var(--pad) * 1.5); 
-  }
-}
-
-/* Igualación márgenes "Mejoras de característica": imagen y tabla */
-.book-item-art--mejora_de_atributos {
-  margin-bottom: calc(var(--pad));
-}
-.book-item-art--mejora_de_atributos img {
-  margin-bottom: calc(var(--pad));
-  /* Subir la imagen un poco */
-  max-height: calc(20rem);
-}
-
-/* ========== ESPECÍFICO: brazo de combate side‑by‑side ========== */
-@media (max-width: 720px) {
-  .book-item-art--brazo_de_combate .book-item-art {
-    /* Cada imagen en la grid tiene ancho 1fr */
-    width: 100%;
-  }
-  .book-item-art--brazo_de_combate .book-item-art img {
-    /* Misma altura máxima aunque widths differen */
-    height: 100%;
-    object-fit: contain;
-  }
-}
-
-/* ========== ESPECÍFICO: texto enmarcando imágenes (armas) ========== */
-@media (max-width: 720px) {
-  /* Que el texto quede a la izquierda de la imagen */
-  .weapon-section .text-content {
-    float: left;
-    margin-right: calc(var(--pad) * 1);
-    width: calc(100% - 200px);
-  }
-  .weapon-section .book-item-art {
-    margin-left: calc(var(--pad) * 2);
-  }
 }
