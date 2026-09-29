@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="C">
+  <rect width="32" height="32" fill="#0a0a0a"/>
+  <text fill="#00ff00"
+        font-family="'Courier New', Courier, ui-monospace, monospace"
+        font-size="7.2"
+        font-weight="700"
+        xml:space="preserve">
+    <tspan x="2.2" y="9.2">  _____</tspan>
+    <tspan x="2.2" y="16.2"> / ___/</tspan>
+    <tspan x="2.2" y="23.2">/ /__</tspan>
+    <tspan x="2.2" y="30.2">\___/</tspan>
+  </text>
+</svg>
