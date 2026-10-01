@@ -1088,10 +1088,10 @@ table.t-aspecto tbody td:first-child {
   width: calc(14ch + 0.8rem);
 }
 
-/* Tabla @Psique (episodios de cyberpsicosis): a 21px, la columna Efecto
-   en UNA línea (nowrap). Para que entre en la columna del lector, col1
-   queda angosta: «Casillas @Psique» y «Más de 5» envuelven en 2 líneas.
-   En pantallas angostas .table-wrap scrollea (overflow-x: auto). */
+/* Tabla @Psique (episodios de cyberpsicosis): col1 angosta pero entera
+   — headers «Casillas @Psique» / «@Psyche boxes» envuelven en 2 líneas,
+   celdas del cuerpo («Más de 5», «More than 5») en 1 línea a 21px.
+   La columna Efecto envuelve natural (la fila larga queda en 2 líneas). */
 table.t-psique {
   table-layout: fixed;
 }
@@ -1103,12 +1103,7 @@ table.t-psique tbody td {
 
 table.t-psique thead th:first-child,
 table.t-psique tbody td:first-child {
-  width: calc(6.5ch + 0.5rem);
-}
-
-table.t-psique thead th:last-child,
-table.t-psique tbody td:last-child {
-  white-space: nowrap;
+  width: calc(11ch + 0.5rem);
 }
 
 /* Tablas compactas Calidad/* al lado del dibujo */
