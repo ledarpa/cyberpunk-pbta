@@ -230,7 +230,7 @@ SAI
 
 Sold in boxes of 8.
 
-> The blast radius doesn't pick sides: allies, hostages, and bystanders are all in the fiction. Throwing one changes the scene for everyone.
+> The blast radius doesn't pick sides: allies, hostages, and bystanders are all in the fiction. Who ends up inside the reach is decided by what the scene already showed, not by the thrower's generosity. Throwing one changes the scene for everyone — including whoever wasn't part of the plan. And the noise stays in the city long after the smoke is gone.
 
 | Type | Effect |
 | --- | --- |

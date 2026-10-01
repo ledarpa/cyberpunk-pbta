@@ -230,7 +230,7 @@ SAI
 
 Se venden en cajas de 8 unidades.
 
-> El radio no elige bandos: aliados, rehenes y testigos también están en la ficción. Tirar una es cambiar la escena para todos.
+> El radio no elige bandos: aliados, rehenes y testigos también están en la ficción. Quién cae dentro lo decide lo que la escena ya mostró, no la generosidad del que tira. Tirar una es cambiar la escena para todos — también para los que no estaban en el plan. Y el ruido queda en la ciudad mucho después de que el humo se va.
 
 | Tipo | Efecto |
 | --- | --- |
