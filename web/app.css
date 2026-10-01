@@ -1088,11 +1088,22 @@ table.t-aspecto tbody td:first-child {
   width: calc(14ch + 0.8rem);
 }
 
-/* Tabla @Psique (episodios de cyberpsicosis): la columna Efecto en una
-   sola línea. 19px: la fila larga («Cyberpsicópata permanente…») entra
-   en la columna del lector; en pantallas angostas .table-wrap scrollea. */
+/* Tabla @Psique (episodios de cyberpsicosis): a 21px, la columna Efecto
+   en UNA línea (nowrap). Para que entre en la columna del lector, col1
+   queda angosta: «Casillas @Psique» y «Más de 5» envuelven en 2 líneas.
+   En pantallas angostas .table-wrap scrollea (overflow-x: auto). */
 table.t-psique {
-  font-size: 19px;
+  table-layout: fixed;
+}
+
+table.t-psique thead th,
+table.t-psique tbody td {
+  padding-inline: 4px;
+}
+
+table.t-psique thead th:first-child,
+table.t-psique tbody td:first-child {
+  width: calc(6.5ch + 0.5rem);
 }
 
 table.t-psique thead th:last-child,
