@@ -1077,15 +1077,16 @@ table.t-calidad tbody td:first-child {
 }
 
 /* Tablas de comparación «Aspecto» (Cromos/Chapería, cap. 00 y 05):
-   la primera columna mide lo mismo en ambos idiomas y en el par completo,
-   así las filas de las dos tablas quedan alineadas entre sí. */
+   primera columna uniforme entre pares y capítulos. 16.5ch: respiración
+   extra para «¿Afecta @Psique / humanidad?» sin que el col2 del cap. 00
+   («Equipo externo…», 470px) pierda su línea. */
 table.t-aspecto {
   table-layout: fixed;
 }
 
 table.t-aspecto thead th:first-child,
 table.t-aspecto tbody td:first-child {
-  width: calc(14ch + 0.8rem);
+  width: calc(16.5ch + 0.8rem);
 }
 
 /* Tabla @Psique (episodios de cyberpsicosis): col1 angosta pero entera
