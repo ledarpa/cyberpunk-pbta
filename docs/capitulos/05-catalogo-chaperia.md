@@ -230,6 +230,8 @@ SAI
 
 Se venden en cajas de 8 unidades.
 
+> El radio no elige bandos: aliados, rehenes y testigos también están en la ficción. Tirar una es cambiar la escena para todos.
+
 | Tipo | Efecto |
 | --- | --- |
 | **Ácida** | **1d6** corrosivo, radio **1 m**. Si el daño es **5+**, destruye un **segundo** cromo (automático **−2** a tiradas; marca daño en zona «*») o chapería a elección del lanzador |

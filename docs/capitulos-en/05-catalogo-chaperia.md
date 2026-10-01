@@ -230,6 +230,8 @@ SAI
 
 Sold in boxes of 8.
 
+> The blast radius doesn't pick sides: allies, hostages, and bystanders are all in the fiction. Throwing one changes the scene for everyone.
+
 | Type | Effect |
 | --- | --- |
 | **Acid** | **1d6** corrosive, **1 m** radius. If damage is **5+**, destroys a **second** chrome piece (automatic **−2** on rolls; mark zone damage with an "*") or a hardware piece of the thrower's choice |
