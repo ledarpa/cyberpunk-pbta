@@ -135,6 +135,7 @@ TITLE_EN: dict[str, str] = {
 # clase t-calidad). El texto mostrado queda en EN.
 TABLE_HEAD_EN: dict[str, str] = {
     "Quality": "Calidad",
+    "Aspect": "Aspecto",
     "Subsystems": "Subsistemas",
     "Available modules": "Módulos disponibles",
     "Accessories": "Accesorios",
@@ -375,7 +376,12 @@ def table_html(rows: list[list[str]], *, rail: bool = False, lang: str = "es") -
     head0 = norm[0][0].strip()
     if lang == "en":
         head0 = TABLE_HEAD_EN.get(head0, head0)
-    tcls = ' class="t-calidad"' if head0 == "Calidad" else ""
+    if head0 == "Calidad":
+        tcls = ' class="t-calidad"'
+    elif head0 == "Aspecto":
+        tcls = ' class="t-aspecto"'
+    else:
+        tcls = ""
     return (
         f'<div class="{wrap}"><table{tcls}>'
         f"<thead><tr>{thead}</tr></thead>"
