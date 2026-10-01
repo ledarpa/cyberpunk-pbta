@@ -136,6 +136,7 @@ TITLE_EN: dict[str, str] = {
 TABLE_HEAD_EN: dict[str, str] = {
     "Quality": "Calidad",
     "Aspect": "Aspecto",
+    "@Psyche boxes": "Casillas @Psique",
     "Subsystems": "Subsistemas",
     "Available modules": "Módulos disponibles",
     "Accessories": "Accesorios",
@@ -380,6 +381,8 @@ def table_html(rows: list[list[str]], *, rail: bool = False, lang: str = "es") -
         tcls = ' class="t-calidad"'
     elif head0 == "Aspecto":
         tcls = ' class="t-aspecto"'
+    elif head0 == "Casillas @Psique":
+        tcls = ' class="t-psique"'
     else:
         tcls = ""
     return (
