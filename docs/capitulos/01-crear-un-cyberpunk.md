@@ -217,7 +217,7 @@ En Night City eres el olor a aceite y desierto que entra cuando alguien abre la 
 >
 > La ciudad te ofrece otra cosa. Te ofrece un contrato, un cromo en cuotas, un techo con cámaras. Y cuando no servís más, te ofrece la calle. Nosotros no tenemos calle: tenemos ruta, y la ruta es de todos o no es de nadie. El que se queda sin rueda a las tres de la mañana no llama a una grúa, silba, y el convoy para. Siempre para.
 >
-> ¿Qué hay ratas entre nosotros? Sí. Los Raffen Shiv también son hijos del éxodo, pero eligieron saquear a los que caminan igual que ellos. Por eso, cuando veas polvo en el horizonte, mirá dos veces antes de sonreír. El desierto no distingue. Nosotros sí.
+> ¿Que hay ratas entre nosotros? Sí. Los Raffen Shiv también son hijos del éxodo, pero eligieron saquear a los que caminan igual que ellos. Por eso, cuando veas polvo en el horizonte, mirá dos veces antes de sonreír. El desierto no distingue. Nosotros sí.
 
 ---
 
