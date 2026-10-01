@@ -27,7 +27,7 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20261001b"
+WEB_BUILD_ID = "20261001c"
 
 # Segunda columna de tabla Calidad → intro+título contornean imagen en wrap.
 CALIDAD_WRAP_COL2 = frozenset({
@@ -137,6 +137,7 @@ TABLE_HEAD_EN: dict[str, str] = {
     "Quality": "Calidad",
     "Aspect": "Aspecto",
     "@Psyche boxes": "Casillas @Psique",
+    "Module": "Módulo",
     "Subsystems": "Subsistemas",
     "Available modules": "Módulos disponibles",
     "Accessories": "Accesorios",
@@ -383,6 +384,8 @@ def table_html(rows: list[list[str]], *, rail: bool = False, lang: str = "es") -
         tcls = ' class="t-aspecto"'
     elif head0 == "Casillas @Psique":
         tcls = ' class="t-psique"'
+    elif head0 == "Módulo":
+        tcls = ' class="t-modulo"'
     else:
         tcls = ""
     return (

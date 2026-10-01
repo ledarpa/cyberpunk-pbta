@@ -1106,6 +1106,18 @@ table.t-psique tbody td:first-child {
   width: calc(11ch + 0.5rem);
 }
 
+/* Tablas de módulos (| Módulo | Efecto |, catálogo de cromos): col1
+   uniforme y ligeramente más angosta en las 6 tablas — Ojo/Oído quedan
+   alineadas como par; los nombres largos envuelven, Efecto gana aire. */
+table.t-modulo {
+  table-layout: fixed;
+}
+
+table.t-modulo thead th:first-child,
+table.t-modulo tbody td:first-child {
+  width: calc(20ch + 0.8rem);
+}
+
 /* Tablas compactas Calidad/* al lado del dibujo */
 .table-wrap--rail {
   clear: none;
