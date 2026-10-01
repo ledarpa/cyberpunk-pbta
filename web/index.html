@@ -7,7 +7,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="favicon-192.png">
-  <link rel="stylesheet" href="app.css?v=20260929g">
+  <link rel="stylesheet" href="app.css?v=20260930a">
 </head>
 <body class="view-manual">
   <div class="shell">
@@ -23,18 +23,22 @@
         <button type="button" class="icon-btn" id="search-prev" title="Anterior" hidden>↑</button>
         <button type="button" class="icon-btn" id="search-next" title="Siguiente" hidden>↓</button>
       </div>
+      <div class="lang-switch" id="lang-switch" role="group" aria-label="Idioma / Language">
+        <button type="button" class="lang-btn" data-lang="es" aria-pressed="true">ES</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
       <div class="player-chrome" aria-label="Cuenta de jugador">
         <span id="player-badge" class="player-badge" data-mode="guest">Anónimo</span>
         <span id="ficha-char-wrap" class="player-char-wrap" hidden>
-          <button type="button" class="text-btn player-char-trigger" id="ficha-char-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Personaje">Sin nombre</button>
+          <button type="button" class="text-btn player-char-trigger" id="ficha-char-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Personaje" data-i18n-aria="Personaje">Sin nombre</button>
           <span id="ficha-char-menu" class="player-char-menu" role="listbox" hidden></span>
         </span>
-        <button type="button" class="text-btn" id="ficha-new-btn" hidden>Nuevo</button>
-        <button type="button" class="text-btn text-btn-danger" id="ficha-delete-btn" hidden>Eliminar</button>
-        <button type="button" class="text-btn ficha-save-btn" id="ficha-save-btn" hidden disabled>Guardar</button>
+        <button type="button" class="text-btn" id="ficha-new-btn" data-i18n="Nuevo" hidden>Nuevo</button>
+        <button type="button" class="text-btn text-btn-danger" id="ficha-delete-btn" data-i18n="Eliminar" hidden>Eliminar</button>
+        <button type="button" class="text-btn ficha-save-btn" id="ficha-save-btn" data-i18n="Guardar" hidden disabled>Guardar</button>
         <span id="ficha-save-status" class="ficha-save-status" data-kind="" hidden></span>
-        <button type="button" class="text-btn" id="player-auth-btn">Entrar</button>
-        <button type="button" class="text-btn" id="player-logout-btn" hidden>Salir</button>
+        <button type="button" class="text-btn" id="player-auth-btn" data-i18n="Entrar">Entrar</button>
+        <button type="button" class="text-btn" id="player-logout-btn" data-i18n="Salir" hidden>Salir</button>
       </div>
     </header>
 
@@ -50,7 +54,7 @@
               <div class="cover-art-frame">
                 <pre class="cover-art" id="cover-art"></pre>
               </div>
-              <p class="cover-sub">MANUAL DE REGLAS</p>
+              <p class="cover-sub" id="cover-sub-title">MANUAL DE REGLAS</p>
               <p class="cover-sub cover-version">v1.0</p>
             </div>
             <figure class="cover-scene" aria-hidden="true">
@@ -74,20 +78,20 @@
 
   <div id="auth-modal" class="pbta-modal" hidden role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
     <div class="pbta-modal-card">
-      <h2 id="auth-modal-title">Cuenta de jugador</h2>
-      <p class="pbta-modal-lead">Creá una cuenta o entrá para guardar personajes en la nube.</p>
+      <h2 id="auth-modal-title" data-i18n="Cuenta de jugador">Cuenta de jugador</h2>
+      <p class="pbta-modal-lead" data-i18n="Creá una cuenta o entrá para guardar personajes en la nube.">Creá una cuenta o entrá para guardar personajes en la nube.</p>
       <form class="auth-form" autocomplete="on">
-        <label>Usuario
+        <label><span data-i18n="Usuario">Usuario</span>
           <input name="username" type="text" minlength="3" maxlength="32" pattern="[A-Za-z0-9_]{3,32}" required autocomplete="username">
         </label>
-        <label>Contraseña
+        <label><span data-i18n="Contraseña">Contraseña</span>
           <input name="password" type="password" minlength="6" maxlength="128" required autocomplete="current-password">
         </label>
         <p class="auth-error" data-auth-error role="alert"></p>
         <div class="pbta-modal-actions">
-          <button type="submit" class="text-btn" data-auth-login>Entrar</button>
-          <button type="button" class="text-btn" data-auth-register>Crear cuenta</button>
-          <button type="button" class="text-btn" data-auth-close>Cancelar</button>
+          <button type="submit" class="text-btn" data-auth-login data-i18n="Entrar">Entrar</button>
+          <button type="button" class="text-btn" data-auth-register data-i18n="Crear cuenta">Crear cuenta</button>
+          <button type="button" class="text-btn" data-auth-close data-i18n="Cancelar">Cancelar</button>
         </div>
       </form>
     </div>
@@ -95,36 +99,38 @@
 
   <div id="dirty-modal" class="pbta-modal" hidden role="dialog" aria-modal="true" aria-labelledby="dirty-modal-title">
     <div class="pbta-modal-card">
-      <h2 id="dirty-modal-title">Cambios sin guardar</h2>
-      <p class="pbta-modal-lead">Hay cambios en la ficha. ¿Qué querés hacer?</p>
+      <h2 id="dirty-modal-title" data-i18n="Cambios sin guardar">Cambios sin guardar</h2>
+      <p class="pbta-modal-lead" data-i18n="Hay cambios en la ficha. ¿Qué querés hacer?">Hay cambios en la ficha. ¿Qué querés hacer?</p>
       <div class="pbta-modal-actions">
-        <button type="button" class="text-btn" data-dirty-save>Guardar</button>
-        <button type="button" class="text-btn" data-dirty-discard>Descartar</button>
-        <button type="button" class="text-btn" data-dirty-cancel>Cancelar</button>
+        <button type="button" class="text-btn" data-dirty-save data-i18n="Guardar">Guardar</button>
+        <button type="button" class="text-btn" data-dirty-discard data-i18n="Descartar">Descartar</button>
+        <button type="button" class="text-btn" data-dirty-cancel data-i18n="Cancelar">Cancelar</button>
       </div>
     </div>
   </div>
 
   <div id="delete-char-modal" class="pbta-modal" hidden role="dialog" aria-modal="true" aria-labelledby="delete-char-modal-title">
     <div class="pbta-modal-card">
-      <h2 id="delete-char-modal-title">Eliminar personaje</h2>
+      <h2 id="delete-char-modal-title" data-i18n="Eliminar personaje">Eliminar personaje</h2>
       <p class="pbta-modal-lead" data-delete-char-lead>
         Vas a eliminar este personaje de forma permanente. Esta acción es <strong>irreversible</strong>: no se puede recuperar.
       </p>
       <div class="pbta-modal-actions">
-        <button type="button" class="text-btn text-btn-danger" data-delete-char-confirm>Eliminar definitivamente</button>
-        <button type="button" class="text-btn" data-delete-char-cancel>Cancelar</button>
+        <button type="button" class="text-btn text-btn-danger" data-delete-char-confirm data-i18n="Eliminar definitivamente">Eliminar definitivamente</button>
+        <button type="button" class="text-btn" data-delete-char-cancel data-i18n="Cancelar">Cancelar</button>
       </div>
     </div>
   </div>
 
-  <script src="data/build.js?v=20260929g"></script>
-  <script src="data/manual.js?v=20260929g"></script>
-  <script src="data/catalogo.js?v=20260929g"></script>
-  <script src="logo.js?v=20260929g"></script>
-  <script src="ficha-inv.js?v=20260929g"></script>
-  <script src="ficha.js?v=20260929g"></script>
-  <script src="player.js?v=20260929g"></script>
-  <script src="app.js?v=20260929g"></script>
+  <script src="i18n.js?v=20260930a"></script>
+  <script src="data/build.js?v=20260930a"></script>
+  <script src="data/manual.js?v=20260930a"></script>
+  <script src="data/manual-en.js?v=20260930a"></script>
+  <script src="data/catalogo.js?v=20260930a"></script>
+  <script src="logo.js?v=20260930a"></script>
+  <script src="ficha-inv.js?v=20260930a"></script>
+  <script src="ficha.js?v=20260930a"></script>
+  <script src="player.js?v=20260930a"></script>
+  <script src="app.js?v=20260930a"></script>
 </body>
 </html>

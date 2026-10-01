@@ -233,7 +233,7 @@ Se venden en cajas de 8 unidades.
 | Tipo | Efecto |
 | --- | --- |
 | **Ácida** | **1d6** corrosivo, radio **1 m**. Si el daño es **5+**, destruye un **segundo** cromo (automático **−2** a tiradas; marca daño en zona «*») o chapería a elección del lanzador |
-| **Aturdidora** | Anula oído orgánico, cyberoído y radar ultrasónico **1d6** turnos, radio **10 m**. Turno de detonación: quien no supere **TM** pierde la acción. Atenuador de dB anula |
+| **Aturdidora** | Anula oído orgánico, cyberoído y radar ultrasónico **1d6** turnos, radio **10 m**. Turno de detonación: quien no supere **TM** pierde la acción. Adecuador de dB anula |
 | **Criogénica** | **1d6** congelante, radio **3 m**; **1d6** turnos a mitad de movimiento; congela/destruye tejido vivo; paraliza temporalmente cromos y chapería |
 | **Fragmentación** | **3d6** explosivo, radio **5 m** |
 | **Gas** | Nube tóxica **5 m**, **1d6** turnos; **1d6** daño por turno dentro del radio |
@@ -251,7 +251,7 @@ Todas las armas de fuego o energía incluyen munición estándar. Munición espe
 | Tipo | Efecto |
 | --- | --- |
 | Balas de carbono | Pistola y fusil **+1** daño; escopeta y rifle **+3** |
-| Celdas entrelazado cuántico | Disparos atraviesan al primer objetivo (rifle: hasta **3** objetivos) |
+| Celdas de entrelazamiento cuántico | Disparos atraviesan al primer objetivo (rifle: hasta **3** objetivos) |
 | Celdas sobrecargadas | Disparar **2 veces** al mismo objetivo en el turno (segundo disparo: RC con **−1**) |
 | Proyectiles de goma y descarga | Daño **no letal** a tejido biológico y cibernética |
 | Rastreador | Sin daño; **1** proyectil por cargador (resto del cargador = transmisor/receptor) |
@@ -407,7 +407,7 @@ Anula la desventaja al entrar en la antigua red y enlaces remotos.
 
 - Si fallas al implementarlo, sigues expuesto a las IA de la red antigua.
 
-- Doble 1: el protocolo se desactiva; IA pueden minar/invasar el procesador cerebral → consecuencias catastróficas (Director).
+- Doble 1: el protocolo se desactiva; IA pueden minar/invadir el procesador cerebral → consecuencias catastróficas (Director).
 
 ---
 

@@ -1,5 +1,4 @@
 (() => {
-  const data = window.PBTA_MANUAL;
   const book = document.getElementById("book");
   const tocEl = document.getElementById("toc");
   const reader = document.getElementById("reader");
@@ -13,6 +12,40 @@
   const sidebar = document.getElementById("sidebar");
 
   const FICHA_ID = "hoja-personaje";
+  const LANG_KEY = "pbta-lang";
+  const MANUALS = {
+    es: window.PBTA_MANUAL,
+    en: window.PBTA_MANUAL_EN || window.PBTA_MANUAL,
+  };
+  const I18N = {
+    es: {
+      tocToggle: "Índice",
+      searchLabel: "Buscar en el manual",
+      placeholder: "Buscar...",
+      prev: "Anterior",
+      next: "Siguiente",
+      coverSub: "MANUAL DE REGLAS",
+      ficha: "Hoja de personaje",
+    },
+    en: {
+      tocToggle: "Contents",
+      searchLabel: "Search the manual",
+      placeholder: "Search...",
+      prev: "Previous",
+      next: "Next",
+      coverSub: "RULEBOOK",
+      ficha: "Character sheet",
+    },
+  };
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  };
+  let lang = (() => {
+    const v = store.get(LANG_KEY);
+    return v === "en" || v === "es" ? v : "es";
+  })();
+  let data = MANUALS[lang] || MANUALS.es;
   let manualScrollTop = 0;
   let headingObserver = null;
 
@@ -21,39 +54,44 @@
     return;
   }
 
-  book.innerHTML = data.html;
+  const t = () => I18N[lang] || I18N.es;
+
+  /** Render completo del manual (idioma activo): DOM + TOC + arte + observer. */
+  function renderBook() {
+    book.innerHTML = data.html;
+    renderToc(data.toc || []);
+    bindBookArt();
+    runArtLayout();
+    if (!isFichaView()) observeHeadings();
+  }
+
+  renderBook();
   loadCover();
-  renderToc(data.toc || []);
   bindNav();
   bindSearch();
   bindChrome();
+  bindLangSwitch();
   bindReaderScroll();
   syncReaderViewport();
   syncFichaViewport();
+  applyChromeStrings();
   openFromHash();
   window.addEventListener("hashchange", openFromHash);
-  // layoutBookArtWraps crashea en el primer wrap (2d6: sin tabla rail, ver
-  // regla display:block !important del CSS). Aislado para no matar el resto
-  // del setup — comportamiento idéntico al histórico: los demás wraps no se miden.
-  const safeLayoutWraps = () => {
+  /** Pasada completa de layout de arte (se repite en rAF: imgs cargan tarde). */
+  // layoutBookArtWraps crashea en el wrap del 2d6 (anchor=copy sin tabla rail,
+  // ver regla display:block !important del CSS). Aislado en TODOS sus puntos
+  // de entrada (boot, resize y el listener img load) — comportamiento
+  // histórico: el forEach se corta en el 2d6, los demás wraps no se miden.
+  function safeLayoutArtWraps() {
     try {
       layoutBookArtWraps();
     } catch {
       /* el forEach se corta en el 2d6, como siempre */
     }
-  };
-  safeLayoutWraps();
-  layoutMejoraArt();
-  layoutBalisticaArt();
-  layoutDroneArt();
-  layoutPrimerosAuxiliosArt();
-  layoutTraumaCardArt();
-  layoutBrazoRow();
-  layoutSaiArt();
-  layoutNeuronalArt();
-  layoutNeurochipArt();
-  requestAnimationFrame(() => {
-    safeLayoutWraps();
+  }
+
+  function runArtLayoutPass() {
+    safeLayoutArtWraps();
     layoutMejoraArt();
     layoutBalisticaArt();
     layoutDroneArt();
@@ -63,34 +101,20 @@
     layoutSaiArt();
     layoutNeuronalArt();
     layoutNeurochipArt();
+  }
+
+  function runArtLayout() {
+    runArtLayoutPass();
     requestAnimationFrame(() => {
-      safeLayoutWraps();
-      layoutMejoraArt();
-    layoutBalisticaArt();
-    layoutDroneArt();
-    layoutPrimerosAuxiliosArt();
-    layoutTraumaCardArt();
-    layoutBrazoRow();
-      layoutSaiArt();
-      layoutNeuronalArt();
-      layoutNeurochipArt();
+      runArtLayoutPass();
+      requestAnimationFrame(runArtLayoutPass);
     });
-  });
+  }
+
   let artLayoutTimer = 0;
   window.addEventListener("resize", () => {
     clearTimeout(artLayoutTimer);
-    artLayoutTimer = setTimeout(() => {
-      safeLayoutWraps();
-      layoutMejoraArt();
-    layoutBalisticaArt();
-    layoutDroneArt();
-    layoutPrimerosAuxiliosArt();
-    layoutTraumaCardArt();
-    layoutBrazoRow();
-      layoutSaiArt();
-      layoutNeuronalArt();
-      layoutNeurochipArt();
-    }, 60);
+    artLayoutTimer = setTimeout(runArtLayoutPass, 60);
   });
 
   /** Mejoras de características: alto del dibujo = alto de la tabla (ni más ni menos). */
@@ -225,34 +249,36 @@
     }
   }
 
-  const mejoraImg = book.querySelector(".book-item-art--mejora_de_atributos img");
-  if (mejoraImg) {
-    mejoraImg.addEventListener("load", layoutMejoraArt);
+  /** Listeners de load por dibujo: se re-ligan en cada render (DOM nuevo). */
+  function bindBookArt() {
+    const onImg = (sel, fn) => {
+      const im = book.querySelector(sel);
+      if (im) im.addEventListener("load", fn);
+    };
+    onImg(".book-item-art--mejora_de_atributos img", layoutMejoraArt);
+    onImg(".book-item-art--balistica img", layoutBalisticaArt);
+    onImg(".book-item-art--drone img", layoutDroneArt);
+    onImg(".book-item-art--primeros_auxilios img", layoutPrimerosAuxiliosArt);
+    onImg(".book-item-art--trauma_card img", layoutTraumaCardArt);
+    book.querySelectorAll(".book-art-wrap:has(.book-item-art--sable_mantis) .book-item-art-row img").forEach((im) => {
+      im.addEventListener("load", layoutBrazoRow);
+    });
+    onImg(".book-item-art--sai img", () => {
+      layoutSaiArt();
+      layoutNeuronalArt();
+      layoutNeurochipArt();
+    });
+    onImg(".book-item-art--conexion_neuronal img", () => {
+      layoutSaiArt();
+      layoutNeuronalArt();
+      layoutNeurochipArt();
+    });
+    onImg(".book-item-art--neurochip img", () => {
+      layoutSaiArt();
+      layoutNeuronalArt();
+      layoutNeurochipArt();
+    });
   }
-
-  const balisticaImg = book.querySelector(".book-item-art--balistica img");
-  if (balisticaImg) {
-    balisticaImg.addEventListener("load", layoutBalisticaArt);
-  }
-
-  const droneImg = book.querySelector(".book-item-art--drone img");
-  if (droneImg) {
-    droneImg.addEventListener("load", layoutDroneArt);
-  }
-
-  const primerosAuxiliosImg = book.querySelector(".book-item-art--primeros_auxilios img");
-  if (primerosAuxiliosImg) {
-    primerosAuxiliosImg.addEventListener("load", layoutPrimerosAuxiliosArt);
-  }
-
-  const traumaCardImg = book.querySelector(".book-item-art--trauma_card img");
-  if (traumaCardImg) {
-    traumaCardImg.addEventListener("load", layoutTraumaCardArt);
-  }
-
-  book.querySelectorAll(".book-art-wrap:has(.book-item-art--sable_mantis) .book-item-art-row img").forEach((im) => {
-    im.addEventListener("load", layoutBrazoRow);
-  });
 
   /** Conexión de arma inteligente (sai): alto de la imagen = alto del
       bloque intro+tabla, con el top alineado a la primera línea. */
@@ -367,15 +393,6 @@
     }
   }
 
-  const saiImg = book.querySelector(".book-item-art--sai img");
-  if (saiImg) {
-    saiImg.addEventListener("load", () => {
-      layoutSaiArt();
-      layoutNeuronalArt();
-      layoutNeurochipArt();
-    });
-  }
-
   /** Conexión neuronal: imagen idéntica a la de conexión de arma
       inteligente — copia el tamaño ya medido del sai. */
   function layoutNeuronalArt() {
@@ -429,24 +446,6 @@
     img.style.height = "100%";
   }
 
-  const neuronalImg = book.querySelector(".book-item-art--conexion_neuronal img");
-  if (neuronalImg) {
-    neuronalImg.addEventListener("load", () => {
-      layoutSaiArt();
-      layoutNeuronalArt();
-      layoutNeurochipArt();
-    });
-  }
-
-  const neurochipImg = book.querySelector(".book-item-art--neurochip img");
-  if (neurochipImg) {
-    neurochipImg.addEventListener("load", () => {
-      layoutSaiArt();
-      layoutNeuronalArt();
-      layoutNeurochipArt();
-    });
-  }
-
   /** Alinea arte del wrap con el margen inferior de la tabla Calidad; texto full-width arriba. */
   function layoutBookArtWraps() {
     const wraps = book.querySelectorAll(".book-art-wrap");
@@ -463,7 +462,7 @@
       art.querySelectorAll("img").forEach((img) => {
         if (img.dataset.artLayoutBound) return;
         img.dataset.artLayoutBound = "1";
-        img.addEventListener("load", layoutBookArtWraps);
+        img.addEventListener("load", safeLayoutArtWraps);
       });
 
       if (wrap.clientWidth < 320) {
@@ -750,7 +749,7 @@
     const fichaLink = document.createElement("a");
     fichaLink.href = `#${FICHA_ID}`;
     fichaLink.className = "l1 toc-ficha";
-    fichaLink.textContent = "Hoja de personaje";
+    fichaLink.textContent = t().ficha;
     fichaLink.dataset.id = FICHA_ID;
     frag.appendChild(fichaLink);
     tocEl.replaceChildren(frag);
@@ -783,6 +782,116 @@
     const boxW = Math.max(48, sidebar.clientWidth - 24);
     const boxH = 36;
     fitAsciiArt(pre, boxW, boxH, 10);
+  }
+
+  /** Índice del último heading visible sobre el viewport (posición de lectura). */
+  function currentHeadingIndex() {
+    if (isFichaView()) return null;
+    const heads = [...book.querySelectorAll("h1, h2, h3")];
+    if (!heads.length) return null;
+    const top = reader.getBoundingClientRect().top;
+    // margen generoso: al cambiar de idioma conviene quedar un poco arriba
+    const margin = Math.min(reader.clientHeight * 0.4, 300);
+    let idx = -1;
+    heads.forEach((h, i) => {
+      if (h.getBoundingClientRect().top - top <= margin) idx = i;
+    });
+    return idx;
+  }
+
+  /** Restaura la posición de lectura tras un cambio de idioma (estructura 1:1). */
+  function scrollToHeadingIndex(idx) {
+    const heads = [...book.querySelectorAll("h1, h2, h3")];
+    const el = idx != null && idx >= 0 ? heads[idx] : null;
+    // scroll instantáneo: el swap de idioma no debe animar, y el smooth se
+    // descarrila con lazy imgs cargando (mismo problema que showManualView).
+    const prevBehavior = reader.style.scrollBehavior;
+    reader.style.scrollBehavior = "auto";
+    try {
+      if (!el) {
+        reader.scrollTop = 0;
+        setActiveToc("portada");
+        history.replaceState(null, "", "#portada");
+        return;
+      }
+      // lazy imgs previas al destino: estabilizan el layout del scroll
+      book.querySelectorAll("img[loading='lazy']").forEach((im) => {
+        if (im.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) {
+          im.loading = "eager";
+        }
+      });
+      el.scrollIntoView({ block: "start" });
+      setActiveToc(el.id);
+      if (el.id) history.replaceState(null, "", `#${el.id}`);
+    } finally {
+      reader.style.scrollBehavior = prevBehavior;
+    }
+  }
+
+  /** Strings del chrome según idioma activo (título, búsqueda, portada, modales). */
+  function applyChromeStrings() {
+    const s = t();
+    document.documentElement.lang = lang;
+    document.title = data.title || document.title;
+    const toggleSr = toggle.querySelector(".sr-only");
+    if (toggleSr) toggleSr.textContent = s.tocToggle;
+    toggle.title = s.tocToggle;
+    const searchSr = document.querySelector(".cli-prompt .sr-only");
+    if (searchSr) searchSr.textContent = s.searchLabel;
+    q.placeholder = s.placeholder;
+    prevBtn.title = s.prev;
+    nextBtn.title = s.next;
+    const coverSub = document.getElementById("cover-sub-title");
+    if (coverSub) coverSub.textContent = s.coverSub;
+    window.PBTA_I18N?.applyDom?.();
+    syncLangSwitch();
+  }
+
+  function syncLangSwitch() {
+    const sel = document.getElementById("lang-switch");
+    if (!sel) return;
+    for (const btn of sel.querySelectorAll(".lang-btn")) {
+      const active = btn.dataset.lang === lang;
+      btn.classList.toggle("is-active", active);
+      btn.setAttribute("aria-pressed", String(active));
+    }
+  }
+
+  function bindLangSwitch() {
+    const sel = document.getElementById("lang-switch");
+    if (!sel) return;
+    sel.addEventListener("click", (ev) => {
+      const btn = ev.target.closest(".lang-btn");
+      if (!btn) return;
+      setLanguage(btn.dataset.lang);
+    });
+  }
+
+  /** Cambio de idioma: re-render del manual + chrome + posición por índice. */
+  function setLanguage(next) {
+    if (next !== "en" && next !== "es") return;
+    if (next === lang) return;
+    const idx = currentHeadingIndex();
+    lang = next;
+    store.set(LANG_KEY, lang);
+    data = MANUALS[lang] || MANUALS.es;
+    applyChromeStrings();
+    renderBook();
+    // Ficha + player chrome: re-render con el idioma activo
+    window.PBTA_FICHA?.rebuild?.();
+    window.PBTA_PLAYER?.syncAuthChrome?.();
+    if (isFichaView()) {
+      setActiveToc(FICHA_ID);
+    } else {
+      scrollToHeadingIndex(idx);
+    }
+    // búsqueda: el DOM se reemplazó → reset completo del estado
+    q.value = "";
+    meta.hidden = true;
+    prevBtn.hidden = true;
+    nextBtn.hidden = true;
+    q.dispatchEvent(new Event("input"));
+    requestAnimationFrame(clampReaderScroll);
   }
 
   function bindNav() {

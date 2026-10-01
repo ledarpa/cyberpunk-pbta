@@ -2,6 +2,9 @@
 window.PBTA_INV = (() => {
   const CAT = () => window.PBTA_CATALOGO;
   const STATS = ["en", "mc", "rc", "tm"];
+  const I18N = () => window.PBTA_I18N;
+  const T = (s) => I18N()?.t(s) ?? s;
+  const STAT = (k) => I18N()?.stat(k) ?? String(k).toUpperCase();
 
   const esc = (s) => window.PBTA_LOGO.esc(s);
 
@@ -14,15 +17,15 @@ window.PBTA_INV = (() => {
   }
 
   function qualityLabel(q, def) {
-    return def?.qualityLabels?.[q] || CAT()?.Q_LABEL?.[q] || q || "";
+    return T(def?.qualityLabels?.[q] || CAT()?.Q_LABEL?.[q] || q || "");
   }
 
   function qualityShort(q, def) {
-    return def?.qualityShort?.[q] || CAT()?.Q_SHORT?.[q] || qualityLabel(q, def);
+    return T(def?.qualityShort?.[q] || CAT()?.Q_SHORT?.[q] || qualityLabel(q, def));
   }
 
   function qualityTag(q, def) {
-    return def?.qualityTags?.[q] || CAT()?.Q_TAG?.[q] || String(q || "").toLowerCase();
+    return T(def?.qualityTags?.[q] || CAT()?.Q_TAG?.[q] || String(q || "").toLowerCase());
   }
 
   function saiCap(def, quality) {
@@ -128,7 +131,7 @@ window.PBTA_INV = (() => {
         const n = (Number(fixed[k]) || 0) + (Number(modSt[k]) || 0);
         return (
           `<div class="ficha-inv-stat-fixed">` +
-          `<span class="ficha-inv-stat-tag">[${k.toUpperCase()}]</span>` +
+          `<span class="ficha-inv-stat-tag">[${STAT(k)}]</span>` +
           `<span class="ficha-inv-stat-val">${esc(formatStatDelta(n))}</span>` +
           `</div>`
         );
@@ -146,19 +149,19 @@ window.PBTA_INV = (() => {
           const val = Number(applied[k]) || 0;
           return (
             `<div class="ficha-inv-stat-row">` +
-            `<span class="ficha-inv-stat-tag">[${k.toUpperCase()}]</span>` +
-            `<button type="button" class="ficha-inv-stat-btn" data-stat-dn="${k}" aria-label="Menos ${k.toUpperCase()}" ${val <= 0 ? "disabled" : ""}>▼</button>` +
+            `<span class="ficha-inv-stat-tag">[${STAT(k)}]</span>` +
+            `<button type="button" class="ficha-inv-stat-btn" data-stat-dn="${k}" aria-label="${T("Menos")} ${STAT(k)}" ${val <= 0 ? "disabled" : ""}>▼</button>` +
             `<span class="ficha-inv-stat-val">${esc(formatStatDelta(val))}</span>` +
-            `<button type="button" class="ficha-inv-stat-btn" data-stat-up="${k}" aria-label="Más ${k.toUpperCase()}" ${atCap ? "disabled" : ""}>▲</button>` +
+            `<button type="button" class="ficha-inv-stat-btn" data-stat-up="${k}" aria-label="${T("Más")} ${STAT(k)}" ${atCap ? "disabled" : ""}>▲</button>` +
             `</div>`
           );
         })
         .join("");
-      poolHtml += `<div class="ficha-inv-stat-pool">${total}/${poolCap} puntos</div>`;
+      poolHtml += `<div class="ficha-inv-stat-pool">${total}/${poolCap} ${T("puntos")}</div>`;
     }
 
     if (!fixedHtml && !poolHtml) return "";
-    return `<div class="ficha-inv-sec">Bonos</div>${fixedHtml}${poolHtml}`;
+    return `<div class="ficha-inv-sec">${T("Bonos")}</div>${fixedHtml}${poolHtml}`;
   }
 
   function normalizeNeurodataEntry(entry) {
@@ -175,7 +178,7 @@ window.PBTA_INV = (() => {
   }
 
   function neurodataDisplayName(opt, note) {
-    const base = String(opt?.name || "").trim();
+    const base = T(String(opt?.name || "").trim());
     const n = String(note || "").trim();
     return n ? `${base} ${n}` : base;
   }
@@ -261,8 +264,8 @@ window.PBTA_INV = (() => {
     const lim = maxCh || 40;
 
     if (item?.kind === "psique-load") {
-      const stat = String(item.stat || "en").toUpperCase();
-      const label = `  Degeneración neural: [${stat}]`;
+      const stat = STAT(String(item.stat || "en"));
+      const label = `  ${T("Degeneración neural")}: [${stat}]`;
       if (label.length <= lim) return label;
       return `${label.slice(0, Math.max(1, lim - 1))}…`;
     }
@@ -290,7 +293,7 @@ window.PBTA_INV = (() => {
 
     const decorate = (core) => {
       let s = core;
-      if (varDef) s = `${s}·${varDef.name}`;
+      if (varDef) s = `${s}·${T(varDef.name)}`;
       if (def.attachable && item.attached === false) s = `${s} ·OFF`;
       return s;
     };
@@ -302,11 +305,12 @@ window.PBTA_INV = (() => {
     };
 
     for (const core of coreNames) {
+      const coreES = T(core);
       if (hasQ) {
-        push(`${core} [${qTag}]`);
-        push(`${core} [${qAbr}]`);
+        push(`${coreES} [${qTag}]`);
+        push(`${coreES} [${qAbr}]`);
       } else {
-        push(core);
+        push(coreES);
       }
     }
 
@@ -353,7 +357,7 @@ window.PBTA_INV = (() => {
         subKind,
         subId: id,
         // Dos espacios entre | verde y el símbolo (VT323 mono)
-        label: `  ${mark}${o.name}`,
+        label: `  ${mark}${T(o.name)}`,
       });
     };
     for (const id of item.accessories || []) push("acc", id, def.accessories);
@@ -717,6 +721,7 @@ window.PBTA_INV = (() => {
     vestimenta: "Vestimenta",
     neurodata: "Neurodata",
   };
+  const kindLabel = (k) => T(KIND_LABEL[k] || k || "Ítem");
 
   let tipEl = null;
   let tipTimer = null;
@@ -773,17 +778,20 @@ window.PBTA_INV = (() => {
     return `<div class="ficha-inv-tip-line"><span class="ficha-inv-tip-k">${esc(label)}</span> ${tipRich(value)}</div>`;
   }
 
-  /** Resalta ventaja/desventaja (+ EN/MC/RC/TM) y bonos +N STAT en textos de tip. */
+  /** Resalta ventaja/desventaja (+ EN/MC/RC/TM / NE/CM/KR/MT) y bonos +N STAT en tips. */
   function tipRich(text) {
-    // Sin flag `i` en atributos: "en" (prep.) ≠ "EN" (stat).
-    let s = esc(text).replace(
-      /(Desventaja|desventaja|Ventaja|ventaja)((?:\s+en)?(?:\s+(?:EN|MC|RC|TM)(?:,\s*(?:EN|MC|RC|TM))*(?:\s+o\s+(?:EN|MC|RC|TM))?)?)/g,
-      (match, word, rest) => {
-        const cls = /^[Dd]es/.test(word) ? "ficha-inv-tip-dis" : "ficha-inv-tip-adv";
-        return `<span class="${cls}">${word}${rest || ""}</span>`;
-      }
+    // Bilingüe: detalle ES (Ventaja en RC) o EN (Advantage on KR).
+    const WORD = "Desventaja|desventaja|Ventaja|ventaja|Disadvantage|disadvantage|Advantage|advantage";
+    const CODE = "EN|MC|RC|TM|NE|CM|KR|MT";
+    const re = new RegExp(
+      `(${WORD})((?:\\s+(?:en|on))?(?:\\s+(?:${CODE})(?:,\\s*(?:${CODE}))*(?:\\s+(?:o|or)\\s+(?:${CODE}))?)?)`,
+      "g"
     );
-    s = s.replace(/(\+\d+\s*(?:EN|MC|RC|TM))/g, '<span class="ficha-inv-tip-adv">$1</span>');
+    let s = esc(text).replace(re, (match, word, rest) => {
+      const cls = /^[Dd]es/.test(word) ? "ficha-inv-tip-dis" : "ficha-inv-tip-adv";
+      return `<span class="${cls}">${word}${rest || ""}</span>`;
+    });
+    s = s.replace(new RegExp(`(\\+\\d+\\s*(?:${CODE}))`, "g"), '<span class="ficha-inv-tip-adv">$1</span>');
     return s;
   }
 
@@ -791,7 +799,7 @@ window.PBTA_INV = (() => {
     if (!st || typeof st !== "object") return "";
     return Object.entries(st)
       .filter(([, v]) => Number(v))
-      .map(([k, v]) => `${v > 0 ? "+" : ""}${v} ${String(k).toUpperCase()}`)
+      .map(([k, v]) => `${v > 0 ? "+" : ""}${v} ${STAT(k)}`)
       .join(", ");
   }
 
@@ -803,28 +811,28 @@ window.PBTA_INV = (() => {
     for (const q of qualities) {
       const text = byQ[q];
       if (!text) continue;
-      html += tipLine(def.qualitySection ? `${def.qualitySection} actual` : "Calidad actual", qualityLabel(q, def));
-      html += `<div class="ficha-inv-tip-body">${tipRich(text)}</div>`;
+      html += tipLine(T(def.qualitySection ? `${def.qualitySection} actual` : "Calidad actual"), qualityLabel(q, def));
+      html += `<div class="ficha-inv-tip-body">${tipRich(T(text))}</div>`;
     }
     return html;
   }
 
   function buildDefTipHtml(def, opts = {}) {
-    if (!def) return tipBlock("—", "Sin datos en catálogo.");
-    const kind = KIND_LABEL[def.kind] || def.kind || "Ítem";
-    let html = tipBlock(def.name || "Ítem", kind);
-    if (def.detail) html += `<div class="ficha-inv-tip-body">${tipRich(def.detail)}</div>`;
+    if (!def) return tipBlock("—", T("Sin datos en catálogo."));
+    const kind = T(KIND_LABEL[def.kind] || def.kind || "Ítem");
+    let html = tipBlock(T(def.name || "Ítem"), kind);
+    if (def.detail) html += `<div class="ficha-inv-tip-body">${tipRich(T(def.detail))}</div>`;
     if (def.detailByQuality && opts.quality) {
       html += buildQualityTipSections(def, opts.quality);
     }
     if (def.moduleSlots && !def.saiSlots) {
       if (opts.quality) {
-        html += tipLine("Cupo módulos", String(moduleCap(def, opts.quality)));
+        html += tipLine(T("Cupo módulos"), String(moduleCap(def, opts.quality)));
       } else {
         const slots = (CAT()?.Q || [])
           .map((q) => `${qualityShort(q)}:${def.moduleSlots[q] ?? 0}`)
           .join(" · ");
-        html += tipLine("Cupo módulos", slots);
+        html += tipLine(T("Cupo módulos"), slots);
       }
     }
     // Bono de la calidad actual (o fijo si no hay calidades)
@@ -833,17 +841,17 @@ window.PBTA_INV = (() => {
         const flat =
           formatStatMap(def.statsByQuality.impro) ||
           formatStatMap(Object.values(def.statsByQuality).find((v) => v && Object.keys(v).length));
-        if (flat) html += tipLine("Bono", flat);
+        if (flat) html += tipLine(T("Bono"), flat);
       } else if (opts.quality) {
         const cur = formatStatMap(def.statsByQuality[opts.quality]);
-        if (cur) html += tipLine("Bono", cur);
+        if (cur) html += tipLine(T("Bono"), cur);
       }
     }
     if (def.attachable) {
-      html += tipLine("Acoplable", def.kind === "vestimenta" ? "Sí (vestimenta)" : "Sí (cromo)");
+      html += tipLine(T("Acoplable"), T(def.kind === "vestimenta" ? "Sí (vestimenta)" : "Sí (cromo)"));
     }
     if (def.countsAsCromo === false && def.kind === "cromo") {
-      html += tipLine("@Psique", "sin degeneración neural");
+      html += tipLine(T("@Psique"), T("sin degeneración neural"));
     }
     return html;
   }
@@ -852,24 +860,24 @@ window.PBTA_INV = (() => {
     if (!opt) return tipBlock("—", "");
     const title =
       kind === "acc"
-        ? "Accesorio"
+        ? T("Accesorio")
         : kind === "bal"
-          ? "Balística especial"
+          ? T("Balística especial")
           : kind === "mod"
-            ? "Módulo"
+            ? T("Módulo")
             : kind === "ndata"
-              ? "Neurodata"
-              : "Opción";
-    let html = tipBlock(opt.name || "—", title);
-    if (opt.detail) html += `<div class="ficha-inv-tip-body">${tipRich(opt.detail)}</div>`;
+              ? T("Neurodata")
+              : T("Opción");
+    let html = tipBlock(T(opt.name || "—"), title);
+    if (opt.detail) html += `<div class="ficha-inv-tip-body">${tipRich(T(opt.detail))}</div>`;
     const parentQ = parentItem?.quality;
     if (opt.detailByQuality && parentQ && opt.detailByQuality[parentQ]) {
       const parentDef = defOf(parentItem);
       html += tipLine(
-        parentDef?.qualitySection ? `${parentDef.qualitySection} actual` : "Calidad actual",
+        T(parentDef?.qualitySection ? `${parentDef.qualitySection} actual` : "Calidad actual"),
         qualityLabel(parentQ, parentDef)
       );
-      html += `<div class="ficha-inv-tip-body">${tipRich(opt.detailByQuality[parentQ])}</div>`;
+      html += `<div class="ficha-inv-tip-body">${tipRich(T(opt.detailByQuality[parentQ]))}</div>`;
     } else if (opt.detailByQuality && !parentQ) {
       // Sin calidad de padre aún: ficha completa compacta
       const full = (CAT()?.Q || [])
@@ -881,10 +889,10 @@ window.PBTA_INV = (() => {
         .join("\n");
       if (full) html += `<div class="ficha-inv-tip-body">${tipRich(full)}</div>`;
     } else if (!opt.detail && !opt.detailByQuality) {
-      html += `<div class="ficha-inv-tip-body muted">Sin ficha ampliada.</div>`;
+      html += `<div class="ficha-inv-tip-body muted">${T("Sin ficha ampliada.")}</div>`;
     }
     const bonus = formatStatMap(opt.stats);
-    if (bonus) html += tipLine("Bono", bonus);
+    if (bonus) html += tipLine(T("Bono"), bonus);
     return html;
   }
 
@@ -896,13 +904,13 @@ window.PBTA_INV = (() => {
     }
     let html = buildDefTipHtml(def, { quality: item.quality });
     if (def.hasQuality !== false && item.quality && !def.detailByQuality) {
-      html += tipLine("Calidad actual", qualityLabel(item.quality, def));
+      html += tipLine(T("Calidad actual"), qualityLabel(item.quality, def));
     }
     if (item.variant && def.variants) {
       const v = def.variants.find((x) => x.id === item.variant);
       if (v) {
-        html += tipLine("Variante", v.name);
-        if (v.detail) html += `<div class="ficha-inv-tip-body">${tipRich(v.detail)}</div>`;
+        html += tipLine(T("Variante"), T(v.name));
+        if (v.detail) html += `<div class="ficha-inv-tip-body">${tipRich(T(v.detail))}</div>`;
       }
     }
     if (def.saiSlots && item.quality) {
@@ -912,17 +920,17 @@ window.PBTA_INV = (() => {
     const stLine = formatStatMap(st);
     if (stLine) {
       html += tipLine(
-        "Bonos activos",
-        item.attached === false ? `${stLine} (desacoplado: no aplica)` : stLine
+        T("Bonos activos"),
+        item.attached === false ? `${stLine} ${T("(desacoplado: no aplica)")}` : stLine
       );
     } else if (def.attachable && item.attached === false) {
-      html += tipLine("Estado", "Desacoplado del cuerpo");
+      html += tipLine(T("Estado"), T("Desacoplado del cuerpo"));
     }
     const named = (ids, list, prefix) =>
       (ids || [])
         .map((id) => {
           const o = (list || []).find((x) => x.id === id);
-          return o ? `${prefix}${o.name}` : null;
+          return o ? `${prefix}${T(o.name)}` : null;
         })
         .filter(Boolean);
     const accs = named(item.accessories, def.accessories, "");
@@ -935,15 +943,15 @@ window.PBTA_INV = (() => {
       })
       .filter(Boolean);
     if (accs.length) html += tipBlock("Accesorios", accs.join("\n"));
-    if (nds.length) html += tipBlock("Neurodata", nds.join("\n"));
-    if (bals.length) html += tipBlock("Balística especial", bals.join("\n"));
-    if (mods.length) html += tipBlock("Módulos", mods.join("\n"));
+    if (nds.length) html += tipBlock(T("Neurodata"), nds.join("\n"));
+    if (bals.length) html += tipBlock(T("Balística especial"), bals.join("\n"));
+    if (mods.length) html += tipBlock(T("Módulos"), mods.join("\n"));
     if (item.arsenalFixed) {
-      html += tipLine("Arsenal fijo", "No se puede cambiar ni eliminar");
+      html += tipLine(T("Arsenal fijo"), T("No se puede cambiar ni eliminar"));
     } else if (item.arsenalInitial) {
-      html += tipLine("Arsenal inicial", "Arma de profesión");
+      html += tipLine(T("Arsenal inicial"), T("Arma de profesión"));
     }
-    html += `<div class="ficha-inv-tip-foot">Clic para editar</div>`;
+    html += `<div class="ficha-inv-tip-foot">${T("Clic para editar")}</div>`;
     return html;
   }
 
@@ -1110,13 +1118,13 @@ window.PBTA_INV = (() => {
         if (kind === "ndata") opt = (def?.neurodataOpts || []).find((x) => x.id === item.subId);
         return (
           buildOptionTipHtml(kind || "acc", opt || { name: item.label || "Subítem" }, parent) +
-          tipLine("De", def?.name || "ítem padre") +
-          `<div class="ficha-inv-tip-foot">Clic para editar el ítem padre</div>`
+          tipLine(T("De"), T(def?.name || "ítem padre")) +
+          `<div class="ficha-inv-tip-foot">${T("Clic para editar el ítem padre")}</div>`
         );
       }
       const empty = !raw.trim() || (!item?.catalogId && !(item?.label || "").trim());
       if (empty) {
-        return tipBlock("Ranura vacía", "Clic para abrir el catálogo y agregar un elemento.");
+        return tipBlock(T("Ranura vacía"), T("Clic para abrir el catálogo y agregar un elemento."));
       }
       return buildItemTipHtml(item);
     }
@@ -1233,9 +1241,9 @@ window.PBTA_INV = (() => {
   function catalogItemLabel(it, sec) {
     const name = String(it?.name || "").trim();
     if (sec?.stripNeurochipPrefix || (it?.id || "").startsWith("neurochip-")) {
-      return neurochipSubtypeName(name) || name;
+      return T(neurochipSubtypeName(name) || name);
     }
-    return name;
+    return T(name);
   }
 
   function buildCatalogMenuHtml(column, opts = {}) {
@@ -1244,7 +1252,7 @@ window.PBTA_INV = (() => {
       .map((sec) => {
         const items = (sec.items || []).filter((it) => catalogItemAllowed(it, column, opts));
         if (!items.length) return "";
-        const head = `<div class="ficha-inv-sec" role="presentation">${esc(sec.title)}</div>`;
+        const head = `<div class="ficha-inv-sec" role="presentation">${esc(T(sec.title))}</div>`;
         const optClass = sec.optClass ? ` ${sec.optClass}` : "";
         const optsHtml = items
           .map(
@@ -1262,12 +1270,12 @@ window.PBTA_INV = (() => {
     if (!def?.detailByQuality || !item.quality) return "";
     const text = def.detailByQuality[item.quality];
     if (!text) return "";
-    let html = `<div class="ficha-inv-sec">${esc(def.menuInfoTitle || "Equipamiento actual")}</div>`;
-    html += `<div class="ficha-inv-menu-info">${tipRich(text)}</div>`;
+    let html = `<div class="ficha-inv-sec">${esc(T(def.menuInfoTitle || "Equipamiento actual"))}</div>`;
+    html += `<div class="ficha-inv-menu-info">${tipRich(T(text))}</div>`;
     if (item.quality === def.variantRequiredFromQuality && item.variant && def.variants) {
       const v = def.variants.find((x) => x.id === item.variant);
       if (v?.detail) {
-        html += `<div class="ficha-inv-menu-info ficha-inv-menu-info-sub">${tipRich(v.detail)}</div>`;
+        html += `<div class="ficha-inv-menu-info ficha-inv-menu-info-sub">${tipRich(T(v.detail))}</div>`;
       }
     }
     return html;
@@ -1277,11 +1285,11 @@ window.PBTA_INV = (() => {
     if (!def?.variants?.length) return "";
     const reqQ = def.variantRequiredFromQuality;
     if (reqQ && item.quality !== reqQ) return "";
-    const head = `<div class="ficha-inv-sec">${esc(def.variantSection || "Variante")} (0/1)</div>`;
+    const head = `<div class="ficha-inv-sec">${esc(T(def.variantSection || "Variante"))} (0/1)</div>`;
     const opts = def.variants
       .map((v) => {
         const on = item.variant === v.id;
-        return `<button type="button" class="ficha-inv-opt" data-variant="${esc(v.id)}" ${on ? 'aria-selected="true"' : ""}>${on ? "× " : ""}${esc(v.name)}</button>`;
+        return `<button type="button" class="ficha-inv-opt" data-variant="${esc(v.id)}" ${on ? 'aria-selected="true"' : ""}>${on ? "× " : ""}${esc(T(v.name))}</button>`;
       })
       .join("");
     return head + opts;
@@ -1290,20 +1298,20 @@ window.PBTA_INV = (() => {
   function buildItemMenuHtml(item) {
     const def = defOf(item);
     if (!def) {
-      return `<button type="button" class="ficha-inv-opt" data-act="delete">Eliminar</button>`;
+      return `<button type="button" class="ficha-inv-opt" data-act="delete">${T("Eliminar")}</button>`;
     }
     if (item.arsenalFixed) {
-      return `<div class="ficha-inv-sec">Arsenal fijo</div>`;
+      return `<div class="ficha-inv-sec">${T("Arsenal fijo")}</div>`;
     }
     const lockedQ = !!def.lockedQuality || item.arsenalFixed;
     const cromoHead = item.cromoFixed
-      ? `<div class="ficha-inv-sec">Neuroranura inicial</div>`
+      ? `<div class="ficha-inv-sec">${T("Neuroranura inicial")}</div>`
       : "";
     const qRow =
       def.hasQuality === false
         ? ""
-        : `<div class="ficha-inv-sec">${esc(def.qualitySection || "Calidad")}</div>` +
-          `<div class="ficha-inv-quality" role="group" aria-label="${esc(def.qualitySection || "Calidad")}">` +
+        : `<div class="ficha-inv-sec">${esc(T(def.qualitySection || "Calidad"))}</div>` +
+          `<div class="ficha-inv-quality" role="group" aria-label="${esc(T(def.qualitySection || "Calidad"))}">` +
           (CAT()?.Q || [])
             .map((q) => {
               const on = item.quality === q;
@@ -1334,47 +1342,47 @@ window.PBTA_INV = (() => {
 
     let extras = "";
     if (accList.length) {
-      extras += `<div class="ficha-inv-sec">Agregar accesorio</div>`;
+      extras += `<div class="ficha-inv-sec">${T("Agregar accesorio")}</div>`;
       extras += accList
         .map((a) => {
           const has = (item.accessories || []).includes(a.id);
-          return `<button type="button" class="ficha-inv-opt" data-acc="${esc(a.id)}" ${has ? 'aria-selected="true"' : ""}>${has ? "× " : ""}${esc(a.name)}</button>`;
+          return `<button type="button" class="ficha-inv-opt" data-acc="${esc(a.id)}" ${has ? 'aria-selected="true"' : ""}>${has ? "× " : ""}${esc(T(a.name))}</button>`;
         })
         .join("");
     }
     if (saiList.length) {
-      extras += `<div class="ficha-inv-sec">Agregar SAI (${(item.sai || []).length}/${capSai})</div>`;
+      extras += `<div class="ficha-inv-sec">${T("Agregar SAI")} (${(item.sai || []).length}/${capSai})</div>`;
       extras += saiList
         .map((s) => {
           const has = (item.sai || []).includes(s.id);
           const full = !has && (item.sai || []).length >= capSai;
-          return `<button type="button" class="ficha-inv-opt" data-sai="${esc(s.id)}" ${has ? 'aria-selected="true"' : ""} ${full ? "disabled" : ""}>${has ? "× " : ""}${esc(s.name)}</button>`;
+          return `<button type="button" class="ficha-inv-opt" data-sai="${esc(s.id)}" ${has ? 'aria-selected="true"' : ""} ${full ? "disabled" : ""}>${has ? "× " : ""}${esc(T(s.name))}</button>`;
         })
         .join("");
     }
     if (balList.length) {
-      extras += `<div class="ficha-inv-sec">Agregar balística especial</div>`;
+      extras += `<div class="ficha-inv-sec">${T("Agregar balística especial")}</div>`;
       extras += balList
         .map((b) => {
           const has = (item.ballistics || []).includes(b.id);
-          return `<button type="button" class="ficha-inv-opt" data-bal="${esc(b.id)}" ${has ? 'aria-selected="true"' : ""}>${has ? "× " : ""}${esc(b.name)}</button>`;
+          return `<button type="button" class="ficha-inv-opt" data-bal="${esc(b.id)}" ${has ? 'aria-selected="true"' : ""}>${has ? "× " : ""}${esc(T(b.name))}</button>`;
         })
         .join("");
     }
     if (modList.length) {
-      extras += `<div class="ficha-inv-sec">Agregar módulo (${(item.modules || []).length}/${capMod || "—"})</div>`;
+      extras += `<div class="ficha-inv-sec">${T("Agregar módulo")} (${(item.modules || []).length}/${capMod || "—"})</div>`;
       extras += modList
         .map((m) => {
           const has = (item.modules || []).includes(m.id);
           const full = capMod > 0 && !has && (item.modules || []).length >= capMod;
-          return `<button type="button" class="ficha-inv-opt" data-mod="${esc(m.id)}" ${has ? 'aria-selected="true"' : ""} ${full ? "disabled" : ""}>${has ? "× " : ""}${esc(m.name)}</button>`;
+          return `<button type="button" class="ficha-inv-opt" data-mod="${esc(m.id)}" ${has ? 'aria-selected="true"' : ""} ${full ? "disabled" : ""}>${has ? "× " : ""}${esc(T(m.name))}</button>`;
         })
         .join("");
     }
     if (ndList.length && capNd > 0) {
       const ndOwned = normalizeNeurodata(item.neurodata);
       const ndFull = ndOwned.length >= capNd;
-      extras += `<div class="ficha-inv-sec">Neurodata (${ndOwned.length}/${capNd})</div>`;
+      extras += `<div class="ficha-inv-sec">${T("Neurodata")} (${ndOwned.length}/${capNd})</div>`;
       if (ndOwned.length) {
         extras += ndOwned
           .map((entry, i) => {
@@ -1383,16 +1391,16 @@ window.PBTA_INV = (() => {
             return (
               `<div class="ficha-inv-ndata-owned">` +
               `<span class="ficha-inv-ndata-name">${esc(display)}</span>` +
-              `<button type="button" class="ficha-inv-ndata-rm" data-ndata-rm="${i}" aria-label="Quitar ${esc(display)}" title="Quitar">${TRASH_ICON}</button>` +
+              `<button type="button" class="ficha-inv-ndata-rm" data-ndata-rm="${i}" aria-label="${T("Quitar")} ${esc(display)}" title="${T("Quitar")}">${TRASH_ICON}</button>` +
               `</div>`
             );
           })
           .join("");
       }
-      extras += `<div class="ficha-inv-sec ficha-inv-sec-sub">Agregar</div>`;
+      extras += `<div class="ficha-inv-sec ficha-inv-sec-sub">${T("Agregar")}</div>`;
       extras += ndList
         .map((n) => {
-          return `<button type="button" class="ficha-inv-opt" data-ndata="${esc(n.id)}" ${ndFull ? "disabled" : ""}>${esc(n.name)}</button>`;
+          return `<button type="button" class="ficha-inv-opt" data-ndata="${esc(n.id)}" ${ndFull ? "disabled" : ""}>${esc(T(n.name))}</button>`;
         })
         .join("");
     }
@@ -1400,34 +1408,34 @@ window.PBTA_INV = (() => {
     const attachLabel =
       def.kind === "vestimenta"
         ? item.attached === false
-          ? "Acoplar traje"
-          : "Desacoplar traje"
+          ? T("Acoplar traje")
+          : T("Desacoplar traje")
         : item.attached === false
-          ? "Acoplar al cuerpo"
-          : "Desacoplar del cuerpo";
+          ? T("Acoplar al cuerpo")
+          : T("Desacoplado del cuerpo");
     const attachBtn = def.attachable
       ? `<button type="button" class="ficha-inv-opt" data-act="toggle-attach">${attachLabel}</button>`
       : "";
 
     const changeArsenal = item.arsenalInitial
-      ? `<button type="button" class="ficha-inv-opt" data-act="change-arsenal">Cambiar arma inicial</button>`
+      ? `<button type="button" class="ficha-inv-opt" data-act="change-arsenal">${T("Cambiar arma inicial")}</button>`
       : "";
 
     const deleteBtn = item.arsenalInitial
-      ? `<button type="button" class="ficha-inv-opt" disabled title="Usá Cambiar arma inicial">Eliminar</button>`
+      ? `<button type="button" class="ficha-inv-opt" disabled title="${T("Usá Cambiar arma inicial")}">${T("Eliminar")}</button>`
       : item.cromoFixed
-        ? `<button type="button" class="ficha-inv-opt" disabled title="Neuroranura de creación">Eliminar</button>`
-        : `<button type="button" class="ficha-inv-opt ficha-inv-danger" data-act="delete">Eliminar</button>`;
+        ? `<button type="button" class="ficha-inv-opt" disabled title="${T("Neuroranura de creación")}">${T("Eliminar")}</button>`
+        : `<button type="button" class="ficha-inv-opt ficha-inv-danger" data-act="delete">${T("Eliminar")}</button>`;
 
     return cromoHead + qRow + infoRow + variantRow + statRow + extras + attachBtn + changeArsenal + deleteBtn;
   }
 
   function buildDeleteConfirmMenuHtml(label) {
-    const back = `<button type="button" class="ficha-inv-opt" data-act="delete-back">← Volver</button>`;
-    const head = `<div class="ficha-inv-sec">Eliminar</div>`;
-    const prompt = `<div class="ficha-inv-delete-prompt">¿Eliminar «${esc(label)}»?\n\nSe quitarán bonos EN/MC/RC/TM y efectos de ficha ligados a este elemento.</div>`;
+    const back = `<button type="button" class="ficha-inv-opt" data-act="delete-back">${T("← Volver")}</button>`;
+    const head = `<div class="ficha-inv-sec">${T("Eliminar")}</div>`;
+    const prompt = `<div class="ficha-inv-delete-prompt">${T("¿Eliminar «")}${esc(label)}${T("»?")}\n\n${T("Se quitarán bonos EN/MC/RC/TM y efectos de ficha ligados a este elemento.")}</div>`;
     const confirm =
-      `<button type="button" class="ficha-inv-opt ficha-inv-danger" data-act="delete-confirm">Confirmar eliminación</button>`;
+      `<button type="button" class="ficha-inv-opt ficha-inv-danger" data-act="delete-confirm">${T("Confirmar eliminación")}</button>`;
     return back + head + prompt + confirm;
   }
 
@@ -1436,7 +1444,7 @@ window.PBTA_INV = (() => {
     if (item?.catalogId) {
       menu.innerHTML = buildItemMenuHtml(item);
     } else if ((item?.label || "").trim()) {
-      menu.innerHTML = `<button type="button" class="ficha-inv-opt ficha-inv-danger" data-act="delete">Eliminar</button>`;
+      menu.innerHTML = `<button type="button" class="ficha-inv-opt ficha-inv-danger" data-act="delete">${T("Eliminar")}</button>`;
     } else {
       menu.innerHTML = buildCatalogMenuHtml(row.dataset.ledger || "chaperia");
     }
@@ -1444,41 +1452,41 @@ window.PBTA_INV = (() => {
   }
 
   function buildNeurodataPromptHtml(opt) {
-    const back = `<button type="button" class="ficha-inv-opt" data-act="ndata-back">← Volver</button>`;
-    const head = `<div class="ficha-inv-sec">${esc(opt.name)}</div>`;
+    const back = `<button type="button" class="ficha-inv-opt" data-act="ndata-back">${T("← Volver")}</button>`;
+    const head = `<div class="ficha-inv-sec">${esc(T(opt.name))}</div>`;
     const prompt = `<div class="ficha-inv-ndata-prompt">${esc(
-      opt.ndataPrompt || "Describe brevemente el contenido"
+      T(opt.ndataPrompt || "Describe brevemente el contenido")
     )}</div>`;
     const input =
       `<input type="text" class="ficha-inv-ndata-input" data-ndata-input maxlength="48" ` +
-      `autocomplete="off" spellcheck="false" aria-label="${esc(opt.name)}" />`;
+      `autocomplete="off" spellcheck="false" aria-label="${esc(T(opt.name))}" />`;
     const confirm =
-      `<button type="button" class="ficha-inv-opt ficha-inv-ndata-confirm" data-act="ndata-confirm" data-ndata="${esc(opt.id)}">Confirmar</button>`;
+      `<button type="button" class="ficha-inv-opt ficha-inv-ndata-confirm" data-act="ndata-confirm" data-ndata="${esc(opt.id)}">${T("Confirmar")}</button>`;
     return back + head + prompt + input + confirm;
   }
 
   function buildPsiqueLoadMenuHtml(item, form, canAssignStat) {
-    const head = `<div class="ficha-inv-sec">Degeneración neural</div>`;
-    const sub = `<div class="ficha-inv-sec-sub">Elegí −1 en:</div>`;
+    const head = `<div class="ficha-inv-sec">${T("Degeneración neural")}</div>`;
+    const sub = `<div class="ficha-inv-sec-sub">${T("Elegí −1 en:")}</div>`;
     const opts = STATS.map((k) => {
       const on = item.stat === k;
       const ok = typeof canAssignStat === "function" ? canAssignStat(form, item, k) : true;
       return (
         `<button type="button" class="ficha-inv-opt ficha-inv-opt-stat${on ? " is-on-stat" : ""}" ` +
         `data-psique-stat="${k}" ${on ? 'aria-selected="true"' : ""} ${ok ? "" : "disabled"}>` +
-        `[${k.toUpperCase()}]</button>`
+        `[${STAT(k)}]</button>`
       );
     }).join("");
     return head + sub + opts;
   }
 
   function buildArsenalChangeMenuHtml(choices, currentName) {
-    const head = `<div class="ficha-inv-sec">Arma inicial</div>`;
-    const back = `<button type="button" class="ficha-inv-opt" data-act="arsenal-back">← Volver</button>`;
+    const head = `<div class="ficha-inv-sec">${T("Arma inicial")}</div>`;
+    const back = `<button type="button" class="ficha-inv-opt" data-act="arsenal-back">${T("← Volver")}</button>`;
     const opts = (choices || [])
       .map((w) => {
         const on = String(w).toLowerCase() === String(currentName || "").toLowerCase();
-        return `<button type="button" class="ficha-inv-opt" data-arsenal-pick="${esc(w)}" ${on ? 'aria-selected="true"' : ""}>${on ? "× " : ""}${esc(w)}</button>`;
+        return `<button type="button" class="ficha-inv-opt" data-arsenal-pick="${esc(w)}" ${on ? 'aria-selected="true"' : ""}>${on ? "× " : ""}${esc(T(w))}</button>`;
       })
       .join("");
     return back + head + opts;
@@ -1589,7 +1597,7 @@ window.PBTA_INV = (() => {
           menu.innerHTML = buildCatalogMenuHtml(column2);
         }
       } else if (!item2?.catalogId) {
-        menu.innerHTML = `<button type="button" class="ficha-inv-opt ficha-inv-danger" data-act="delete">Eliminar</button>`;
+        menu.innerHTML = `<button type="button" class="ficha-inv-opt ficha-inv-danger" data-act="delete">${T("Eliminar")}</button>`;
       } else {
         menu.innerHTML = buildItemMenuHtml(item2);
       }
@@ -1663,7 +1671,7 @@ window.PBTA_INV = (() => {
     const addId = btn.dataset.add;
     if (addId) {
       if (!wouldFitNewParent(form, ledger, maxRows)) {
-        window.alert("No hay líneas libres en esta columna para un ítem nuevo.");
+        window.alert(T("No hay líneas libres en esta columna para un ítem nuevo."));
         return;
       }
       const def = CAT().get(addId);
@@ -1698,7 +1706,7 @@ window.PBTA_INV = (() => {
       if (btn.dataset.psiqueStat) {
         const stat = btn.dataset.psiqueStat;
         if (typeof ctx.canAssignPsiqueStat === "function" && !ctx.canAssignPsiqueStat(form, item, stat)) {
-          window.alert("Esa característica no puede bajar de −4 por degeneración neural.");
+          window.alert(T("Esa característica no puede bajar de −4 por degeneración neural."));
           return;
         }
         item.stat = stat;
@@ -1755,14 +1763,14 @@ window.PBTA_INV = (() => {
       if (cap > 0 && arr.length >= cap) return;
       const note = menu.querySelector("[data-ndata-input]")?.value?.trim() || "";
       if (!note) {
-        window.alert("Escribí una descripción breve.");
+        window.alert(T("Escribí una descripción breve."));
         menu.querySelector("[data-ndata-input]")?.focus();
         return;
       }
       arr.push({ id, note });
       const next = { ...item, neurodata: arr };
       if (!wouldFitSub(form, ledger, next, maxRows)) {
-        window.alert("No hay líneas libres para esa neurodata.");
+        window.alert(T("No hay líneas libres para esa neurodata."));
         return;
       }
       item.neurodata = arr;
@@ -1847,7 +1855,7 @@ window.PBTA_INV = (() => {
         set.add(id);
         const next = { ...item, accessories: [...set] };
         if (!wouldFitSub(form, ledger, next, maxRows)) {
-          window.alert("No hay líneas libres para ese accesorio.");
+          window.alert(T("No hay líneas libres para ese accesorio."));
           return;
         }
         item.accessories = [...set];
@@ -1872,7 +1880,7 @@ window.PBTA_INV = (() => {
         set.add(id);
         const next = { ...item, sai: [...set] };
         if (!wouldFitSub(form, ledger, next, maxRows)) {
-          window.alert("No hay líneas libres para ese SAI.");
+          window.alert(T("No hay líneas libres para ese SAI."));
           return;
         }
       }
@@ -1892,7 +1900,7 @@ window.PBTA_INV = (() => {
         set.add(id);
         const next = { ...item, ballistics: [...set] };
         if (!wouldFitSub(form, ledger, next, maxRows)) {
-          window.alert("No hay líneas libres para esa balística.");
+          window.alert(T("No hay líneas libres para esa balística."));
           return;
         }
       }
@@ -1915,7 +1923,7 @@ window.PBTA_INV = (() => {
         set.add(id);
         const next = { ...item, modules: [...set] };
         if (!wouldFitSub(form, ledger, next, maxRows)) {
-          window.alert("No hay líneas libres para ese módulo.");
+          window.alert(T("No hay líneas libres para ese módulo."));
           return;
         }
       }
@@ -1957,7 +1965,7 @@ window.PBTA_INV = (() => {
       arr.push({ id, note: "" });
       const next = { ...item, neurodata: arr };
       if (!wouldFitSub(form, ledger, next, maxRows)) {
-        window.alert("No hay líneas libres para esa neurodata.");
+        window.alert(T("No hay líneas libres para esa neurodata."));
         return;
       }
       item.neurodata = arr;
@@ -1986,11 +1994,11 @@ window.PBTA_INV = (() => {
 
     if (btn.dataset.act === "delete-confirm") {
       if (item.arsenalInitial || item.arsenalFixed) {
-        window.alert("El arsenal inicial no se elimina. Usá «Cambiar arma inicial».");
+        window.alert(T("El arsenal inicial no se elimina. Usá «Cambiar arma inicial»."));
         return;
       }
       if (item.cromoFixed) {
-        window.alert("La neuroranura inicial no se elimina.");
+        window.alert(T("La neuroranura inicial no se elimina."));
         return;
       }
       input.value = "";
@@ -2003,14 +2011,14 @@ window.PBTA_INV = (() => {
 
     if (btn.dataset.act === "delete") {
       if (item.arsenalInitial || item.arsenalFixed) {
-        window.alert("El arsenal inicial no se elimina. Usá «Cambiar arma inicial».");
+        window.alert(T("El arsenal inicial no se elimina. Usá «Cambiar arma inicial»."));
         return;
       }
       if (item.cromoFixed) {
-        window.alert("La neuroranura inicial no se elimina.");
+        window.alert(T("La neuroranura inicial no se elimina."));
         return;
       }
-      const label = formatItem(item) || item.label || "este elemento";
+      const label = formatItem(item) || item.label || T("este elemento");
       const menu = row.querySelector(".ficha-inv-menu");
       if (menu) {
         menu.innerHTML = buildDeleteConfirmMenuHtml(label);

@@ -92,7 +92,7 @@ window.PBTA_CATALOGO = (() => {
     bal("carbono", "Balas de carbono", "Carb", "Pistola y fusil +1 daño; escopeta y rifle +3."),
     bal(
       "entrelazado",
-      "Celdas entrelazado cuántico",
+      "Celdas de entrelazamiento cuántico",
       "Entrel",
       "Disparos atraviesan al primer objetivo (rifle: hasta 3 objetivos)."
     ),
@@ -432,7 +432,7 @@ window.PBTA_CATALOGO = (() => {
       id: "protocolo-velo",
       name: "Protocolo velo",
       detail:
-        "Anula la desventaja al entrar en la antigua red y enlaces remotos.\nImplementarlo es muy difícil incluso para netrunners veteranos.\nSi fallas al implementarlo, sigues expuesto a las IA de la red antigua.\nDoble 1: el protocolo se desactiva; IA pueden minar/invasar el procesador cerebral → consecuencias catastróficas (Director).",
+        "Anula la desventaja al entrar en la antigua red y enlaces remotos.\nImplementarlo es muy difícil incluso para netrunners veteranos.\nSi fallas al implementarlo, sigues expuesto a las IA de la red antigua.\nDoble 1: el protocolo se desactiva; IA pueden minar/invadir el procesador cerebral → consecuencias catastróficas (Director).",
     }),
   ];
 

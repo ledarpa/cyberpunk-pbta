@@ -17,6 +17,7 @@ from chapters import CHAPTER_FILES  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 CAPITULOS = ROOT / "docs" / "capitulos"
+CAPITULOS_EN = ROOT / "docs" / "capitulos-en"
 WEB = ROOT / "web"
 DATA = WEB / "data"
 FONT_SRC = ROOT / "docs" / "assets" / "fonts" / "VT323-Regular.ttf"
@@ -26,7 +27,7 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20260929g"
+WEB_BUILD_ID = "20260930a"
 
 # Segunda columna de tabla Calidad → intro+título contornean imagen en wrap.
 CALIDAD_WRAP_COL2 = frozenset({
@@ -70,6 +71,81 @@ PROFESSION_PORTRAITS: dict[str, str] = {
     "Forastero": "forastero",
     "Mercenario": "mercenario",
     "Netrunner": "netrunner",
+}
+
+# Traducción de títulos EN → clave canónica ES. Los ids de heading, el arte,
+# banners y el CSS por-id se keyean por el título ES: en el build EN se
+# canoniza el título antes de consultar los dicts y antes de slugificar.
+TITLE_EN: dict[str, str] = {
+    # 00-sistema
+    "When to Roll (and When Not To)": "Cuándo se tira (y cuándo no)",
+    "The Four Attributes": "Los cuatro atributos",
+    "Rolls (2d6 + Attribute)": "Tiradas (2d6 + atributo)",
+    "Moves": "Movimientos",
+    "The GM's Job": "Rol del Director",
+    # 01-crear-un-cyberpunk — profesiones (retratos + ids canónicos)
+    "Fixer": "Arreglador",
+    "Artist": "Artista",
+    "Biohacker": "Biohacker",
+    "Media": "Comunicador",
+    "Corpo": "Corpo",
+    "Spook": "Espía",
+    "Outsider": "Forastero",
+    "Mercenary": "Mercenario",
+    "Netrunner": "Netrunner",
+    # 02-cyberware-reglas-y-economia — arte / banners / wraps
+    "Attribute boosts": "Mejoras de características",
+    "Neural degradation": "Degeneración neural",
+    "Cyberpsychosis episodes": "Episodios de cyberpsicosis",
+    "Getting your humanity back": "Recuperar la humanidad",
+    # 04-catalogo-cromos — arte de catálogo / banners / rows
+    "Smartgun link": "Conexión de arma inteligente",
+    "Neural link": "Conexión neuronal",
+    "Neurochip": "Neurochip",
+    "Bionic eye": "Ojo biónico",
+    "Bionic ear": "Oído biónico",
+    "Modular digestive system": "Aparato digestivo modular",
+    "Modular respiratory system": "Aparato respiratorio modular",
+    "Armored membrane": "Membrana acorazada",
+    "Nanoplasty": "Nanoplastía",
+    "Perfect skin": "Piel perfecta",
+    "Cyberspine": "Cybervértebras",
+    "Combat arm": "Brazo de combate",
+    "Ballistic limb": "Extremidad balística",
+    "Cyberlegs": "Cyberpiernas",
+    # 05-catalogo-chaperia — arte / banners / wrap intro
+    "Pistol": "Pistola",
+    "Shotgun": "Escopeta",
+    "Assault rifle": "Fusil",
+    "Sniper rifle": "Rifle",
+    "Dart launcher": "Lanzadardos",
+    "Missile launcher": "Lanzamisiles",
+    "Grenades": "Granadas",
+    "Drone": "Drone",
+    "Mobile turret": "Torreta móvil",
+    "Trauma card": "Trauma card",
+    "Ghost mask": "Máscara fantasma",
+    "First aid kit": "Kit de primeros auxilios",
+    "Grapple gun": "Pistola garfio",
+    "Corposuit": "Corposuit",
+    "Tech armor": "Tecnoarmadura",
+}
+
+# Headers de tabla EN → canon ES, solo para lógica de layout (rail, wrap,
+# clase t-calidad). El texto mostrado queda en EN.
+TABLE_HEAD_EN: dict[str, str] = {
+    "Quality": "Calidad",
+    "Subsystems": "Subsistemas",
+    "Available modules": "Módulos disponibles",
+    "Accessories": "Accesorios",
+    "NE boost": "Mejora EN",
+    "Effect": "Efecto",
+    "Modules": "Módulos",
+}
+
+MANUAL_TITLES: dict[str, str] = {
+    "es": "PbtA — Manual de reglas",
+    "en": "PbtA — Rulebook",
 }
 
 # Arte de catálogo (cromos / chapería): título MD → archivos en web/assets/catalog/.
@@ -283,7 +359,7 @@ def list_level(indent: str) -> int:
     return min(2, max(1, len(expanded) // 2))
 
 
-def table_html(rows: list[list[str]], *, rail: bool = False) -> str:
+def table_html(rows: list[list[str]], *, rail: bool = False, lang: str = "es") -> str:
     if not rows:
         return ""
     cols = max(len(r) for r in rows)
@@ -296,7 +372,10 @@ def table_html(rows: list[list[str]], *, rail: bool = False) -> str:
     tbody = "\n".join(body_rows)
     wrap = "table-wrap table-wrap--rail" if rail else "table-wrap"
     # Tablas de Calidad: col1 uniforme en todo el juego (CSS fija su ancho)
-    tcls = ' class="t-calidad"' if norm[0][0].strip() == "Calidad" else ""
+    head0 = norm[0][0].strip()
+    if lang == "en":
+        head0 = TABLE_HEAD_EN.get(head0, head0)
+    tcls = ' class="t-calidad"' if head0 == "Calidad" else ""
     return (
         f'<div class="{wrap}"><table{tcls}>'
         f"<thead><tr>{thead}</tr></thead>"
@@ -305,7 +384,11 @@ def table_html(rows: list[list[str]], *, rail: bool = False) -> str:
     )
 
 
-def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
+def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict], *, lang: str = "es") -> str:
+    # EN: títulos y headers de tabla se canonizan a su clave ES para toda la
+    # lógica (arte, banners, rail/wrap, ids de heading); el display queda EN.
+    canon_title = (lambda t: TITLE_EN.get(t, t)) if lang == "en" else (lambda t: t)
+    canon_head = (lambda h: TABLE_HEAD_EN.get(h, h)) if lang == "en" else (lambda h: h)
     lines = content.splitlines()
     html: list[str] = []
     i = 0
@@ -330,7 +413,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
         nonlocal quote_buffer
         if quote_buffer is None:
             return
-        is_ejemplo = quote_buffer[0].startswith("**Ejemplo")
+        is_ejemplo = quote_buffer[0].startswith(("**Ejemplo", "**Example"))
         if is_ejemplo:
             # La línea "Ejemplo — X" es solo marcador de estilo (rosa):
             # no se emite; el ejemplo arranca directo en la situación.
@@ -382,7 +465,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
     def flush_table() -> None:
         nonlocal table_buffer, pending_catalog_art, catalog_after_first_table, catalog_art_open, art_wrap_rail_plus_list, manual_art_in_wrap, pending_catalog_banner_after_table
         if table_buffer:
-            head = (table_buffer[0][0] if table_buffer[0] else "").strip()
+            head = canon_head((table_buffer[0][0] if table_buffer[0] else "").strip())
             if art_wrap_open and art_wrap_rail_plus_list and head != "Calidad":
                 close_art_wrap()
                 art_wrap_rail_plus_list = False
@@ -392,7 +475,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
             elif catalog_art_open:
                 rail = art_wrap_open or head == "Calidad"
                 catalog_art_open = False
-            html.append(table_html(table_buffer, rail=rail))
+            html.append(table_html(table_buffer, rail=rail, lang=lang))
             table_buffer = []
             if pending_catalog_banner_after_table:
                 html.append(catalog_banner_html(pending_catalog_banner_after_table))
@@ -463,8 +546,8 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
                 cells = parse_row(s)
                 if not cells:
                     return None
-                c0 = cells[0].strip()
-                c1 = cells[1].strip() if len(cells) > 1 else ""
+                c0 = canon_head(cells[0].strip())
+                c1 = canon_head(cells[1].strip()) if len(cells) > 1 else ""
                 return (c0, c1)
         return None
 
@@ -518,16 +601,17 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
             flush_portrait()
             level = len(heading.group(1))
             title = heading.group(2).strip()
+            canon = canon_title(title)
             # ¿Este encabezado trae arte o banner propio? Eso requiere su propio wrap.
             heading_own_art = (
-                level == 3 and title in PROFESSION_PORTRAITS
-            ) or title in CATALOG_ART or title in CATALOG_BANNER or title in CATALOG_BANNER_AFTER_TABLE or title in MANUAL_ART or title in MANUAL_BANNER or title in MANUAL_BANNER_BEFORE_TABLE
+                level == 3 and canon in PROFESSION_PORTRAITS
+            ) or canon in CATALOG_ART or canon in CATALOG_BANNER or canon in CATALOG_BANNER_AFTER_TABLE or canon in MANUAL_ART or canon in MANUAL_BANNER or canon in MANUAL_BANNER_BEFORE_TABLE
             # h4 sin arte propio dentro de un wrap abierto → no cortar el wrap:
             # el contenido (texto, tablas) sigue contorneando la imagen de la sección madre.
             keep_wrap_open = level >= 4 and not heading_own_art and art_wrap_open
             if not keep_wrap_open:
                 close_catalog_section()
-            hid = slugify(title, used_ids)
+            hid = slugify(canon, used_ids)
             toc.append({"id": hid, "level": level, "title": title})
             heading_html = f'<h{level} id="{escape(hid)}">{inline_md(title)}</h{level}>'
             wrap_heading = False
@@ -538,15 +622,15 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
                 i += 1
                 continue
 
-            manual_art = MANUAL_ART.get(title)
-            manual_banner = MANUAL_BANNER.get(title)
-            manual_banner_mid = MANUAL_BANNER_BEFORE_TABLE.get(title)
+            manual_art = MANUAL_ART.get(canon)
+            manual_banner = MANUAL_BANNER.get(canon)
+            manual_banner_mid = MANUAL_BANNER_BEFORE_TABLE.get(canon)
             if manual_art:
                 html.append(heading_html)
-                if title in MANUAL_ART_TABLE_WRAP:
+                if canon in MANUAL_ART_TABLE_WRAP:
                     pending_manual_art_wrap = manual_art
                     pending_manual_art_anchor = "table"
-                elif title in MANUAL_ART_COPY_WRAP:
+                elif canon in MANUAL_ART_COPY_WRAP:
                     pending_manual_art_wrap = manual_art
                     pending_manual_art_anchor = "copy"
                 else:
@@ -564,9 +648,9 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
                 pending_manual_banner_before_table = manual_banner_mid
             else:
                 if level == 3:
-                    pending_portrait = PROFESSION_PORTRAITS.get(title)
-                banner = CATALOG_BANNER.get(title)
-                banner_after_table = CATALOG_BANNER_AFTER_TABLE.get(title)
+                    pending_portrait = PROFESSION_PORTRAITS.get(canon)
+                banner = CATALOG_BANNER.get(canon)
+                banner_after_table = CATALOG_BANNER_AFTER_TABLE.get(canon)
                 if banner:
                     html.append(heading_html)
                     html.append(catalog_banner_html(banner))
@@ -574,7 +658,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
                     html.append(heading_html)
                     pending_catalog_banner_after_table = banner_after_table
                 else:
-                    art = CATALOG_ART.get(title)
+                    art = CATALOG_ART.get(canon)
                     if art:
                         pending_catalog_art = art
                         nxt = next_nonempty(i + 1)
@@ -602,7 +686,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
                             pending_art_wrap = True
                             wrap_heading = True
                             catalog_after_first_table = False
-                        elif title in CATALOG_ART_INTRO_WRAP:
+                        elif canon in CATALOG_ART_INTRO_WRAP:
                             pending_art_wrap = True
                             wrap_heading = True
                             catalog_after_first_table = False
@@ -615,14 +699,14 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
                     else:
                         html.append(heading_html)
 
-                    if wrap_heading and pending_catalog_art:
-                        if all(s in ART_HEADING_OUTSIDE_WRAP for s in pending_catalog_art):
-                            html.append(heading_html)
-                            emit_catalog_art(pending_catalog_art, wrap=True)
-                        else:
-                            emit_catalog_art(pending_catalog_art, wrap=True)
-                            html.append(heading_html)
-                        pending_catalog_art = None
+                if wrap_heading and pending_catalog_art:
+                    if all(s in ART_HEADING_OUTSIDE_WRAP for s in pending_catalog_art):
+                        html.append(heading_html)
+                        emit_catalog_art(pending_catalog_art, wrap=True)
+                    else:
+                        emit_catalog_art(pending_catalog_art, wrap=True)
+                        html.append(heading_html)
+                    pending_catalog_art = None
             i += 1
             continue
 
@@ -659,7 +743,10 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict]) -> str:
             i += 1
             continue
 
-        if stripped.startswith("**En la mesa:**") or stripped.startswith("En la mesa:"):
+        if any(
+            stripped.startswith(p)
+            for p in ("**En la mesa:**", "En la mesa:", "**At the table:**", "At the table:")
+        ):
             close_lists()
             html.append(f'<p class="mesa">{inline_md(stripped)}</p>')
             flush_portrait()
@@ -728,35 +815,60 @@ def patch_index_cache() -> None:
         html_path.write_text(patched, encoding="utf-8")
 
 
-def main() -> None:
-    WEB.mkdir(parents=True, exist_ok=True)
-    DATA.mkdir(parents=True, exist_ok=True)
+def build_manual(lang: str) -> tuple[dict, list[str]]:
+    """Construye el payload del manual en un idioma.
+
+    EN: usa docs/capitulos-en/ con fallback por capítulo al español;
+    devuelve la lista de capítulos que quedaron en fallback.
+    """
+    src = CAPITULOS if lang == "es" else CAPITULOS_EN
     used: dict[str, int] = {}
     toc: list[dict] = []
     parts: list[str] = []
+    fallback: list[str] = []
 
     for name in CHAPTER_FILES:
-        path = CAPITULOS / name
+        path = src / name
+        if not path.exists() and lang == "en":
+            path = CAPITULOS / name
+            fallback.append(name)
         if not path.exists():
             raise FileNotFoundError(path)
         text = path.read_text(encoding="utf-8")
         text = re.sub(r"^> \*\*Borrador.*$\n?", "", text, flags=re.M)
         parts.append(f'<article class="chapter" data-file="{escape(name)}">')
-        parts.append(md_to_html(text, used, toc))
+        parts.append(md_to_html(text, used, toc, lang=lang))
         parts.append("</article>")
 
-    body = "\n".join(parts)
     payload = {
-        "html": body,
+        "html": "\n".join(parts),
         "toc": toc,
-        "title": "PbtA — Manual de reglas",
+        "title": MANUAL_TITLES[lang],
     }
-    js = (
-        "window.PBTA_MANUAL = "
-        + json.dumps(payload, ensure_ascii=False)
-        + ";\n"
+    return payload, fallback
+
+
+def write_manual_js() -> list[str]:
+    es_payload, _ = build_manual("es")
+    en_payload, en_fallback = build_manual("en")
+    (DATA / "manual.js").write_text(
+        "window.PBTA_MANUAL = " + json.dumps(es_payload, ensure_ascii=False) + ";\n",
+        encoding="utf-8",
     )
-    (DATA / "manual.js").write_text(js, encoding="utf-8")
+    (DATA / "manual-en.js").write_text(
+        "window.PBTA_MANUAL_EN = " + json.dumps(en_payload, ensure_ascii=False) + ";\n",
+        encoding="utf-8",
+    )
+    return en_fallback
+
+
+def main() -> None:
+    WEB.mkdir(parents=True, exist_ok=True)
+    DATA.mkdir(parents=True, exist_ok=True)
+
+    en_fallback = write_manual_js()
+    if en_fallback:
+        print(f"EN con fallback a ES: {', '.join(en_fallback)}")
     shutil.copy2(ASCII_SRC, DATA / "portada-ascii.txt")
     fonts = WEB / "fonts"
     fonts.mkdir(parents=True, exist_ok=True)
@@ -764,7 +876,7 @@ def main() -> None:
     shutil.copy2(FONT_SRC_WOFF2, fonts / "VT323-Regular.woff2")
     write_build_js()
     patch_index_cache()
-    print(f"OK {DATA / 'manual.js'} ({len(js)} chars, {len(toc)} headings, build={WEB_BUILD_ID})")
+    print(f"OK {DATA / 'manual.js'} + manual-en.js (build={WEB_BUILD_ID})")
 
 
 if __name__ == "__main__":

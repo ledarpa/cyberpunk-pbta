@@ -3,6 +3,7 @@
   const ACTIVE_KEY = "pbta-active-character";
   const EMPTY_NAME = "Sin nombre";
   const FICHA = () => window.PBTA_FICHA;
+  const T = (s) => window.PBTA_I18N?.t(s) ?? s;
 
   let user = null; // { username } | null
   let characters = []; // { id, name, updatedAt }
@@ -51,7 +52,7 @@
       } else if (!data && raw && /<html/i.test(raw)) {
         msg = "Respuesta no válida del servidor (¿servidor estático sin /api?)";
       }
-      const err = new Error(msg);
+      const err = new Error(T(msg));
       err.status = res.status;
       err.data = data;
       throw err;
@@ -64,8 +65,8 @@
   }
 
   function displayName(raw) {
-    const n = String(raw ?? "").trim();
-    return n || EMPTY_NAME;
+    const n = T(String(raw ?? "").trim());
+    return n || T(EMPTY_NAME);
   }
 
   function sheetNombre() {
@@ -76,9 +77,11 @@
     return String(sheet?.nombre || "").trim();
   }
 
+  /** Nombre para la API/storage: fallback siempre ES canónico. */
   function nameFromSheet(sheet) {
-    if (sheet && typeof sheet === "object") return displayName(sheet.nombre);
-    return displayName(sheet);
+    const raw = sheet && typeof sheet === "object" ? sheet.nombre : sheet;
+    const n = String(raw ?? "").trim();
+    return n || EMPTY_NAME;
   }
 
   function setStatus(text, kind = "") {
@@ -116,7 +119,7 @@
 
   function syncAuthChrome() {
     if (els.badge) {
-      els.badge.textContent = user ? user.username : "Anónimo";
+      els.badge.textContent = user ? user.username : T("Anónimo");
       els.badge.dataset.mode = user ? "player" : "guest";
     }
     if (els.authBtn) els.authBtn.hidden = !!user;
@@ -141,9 +144,9 @@
       setStatus("");
       return;
     }
-    if (saving) setStatus("Guardando…", "busy");
-    else if (dirty) setStatus("Sin guardar", "dirty");
-    else setStatus("Guardado", "clean");
+    if (saving) setStatus(T("Guardando…"), "busy");
+    else if (dirty) setStatus(T("Sin guardar"), "dirty");
+    else setStatus(T("Guardado"), "clean");
   }
 
   function syncCharTrigger() {
@@ -207,10 +210,7 @@
 
   async function refreshCharacters() {
     const data = await api("/api/characters");
-    characters = (data.characters || []).map((c) => ({
-      ...c,
-      name: displayName(c.name),
-    }));
+    characters = (data.characters || []).map((c) => ({ ...c }));
     fillCharMenu();
     syncCharTrigger();
   }
@@ -308,7 +308,7 @@
       }
       const modal = els.dirtyModal;
       if (!modal) {
-        resolve(window.confirm("Hay cambios sin guardar. ¿Descartar?") ? "discard" : "cancel");
+        resolve(window.confirm(T("Hay cambios sin guardar. ¿Descartar?")) ? "discard" : "cancel");
         return;
       }
       openModal(modal);
@@ -318,7 +318,7 @@
           await saveActive();
           resolve("proceed");
         } catch (err) {
-          setStatus(err.message || "Error al guardar", "error");
+          setStatus(err.message || T("Error al guardar"), "error");
           resolve("cancel");
         }
       };
@@ -395,7 +395,7 @@
       syncAuthChrome();
       await ensurePlayerSheet();
     } catch (err) {
-      if (errEl) errEl.textContent = err.message || "Error";
+      if (errEl) errEl.textContent = err.message || T("Error");
     }
   }
 
@@ -407,7 +407,7 @@
       if (!modal || !activeId) {
         resolve(
           window.confirm(
-            `Vas a eliminar permanentemente «${label}». Esta acción es irreversible. ¿Continuar?`
+            `${T("Vas a eliminar permanentemente «")}${label}${T("». Esta acción es ")}${T("irreversible")}${T(". ¿Continuar?")}`
           )
         );
         return;
@@ -415,8 +415,8 @@
       const lead = modal.querySelector("[data-delete-char-lead]");
       if (lead) {
         lead.innerHTML =
-          `Vas a eliminar permanentemente «<strong>${escapeHtml(label)}</strong>». ` +
-          `Esta acción es <strong>irreversible</strong>: no se puede recuperar.`;
+          `${T("Vas a eliminar permanentemente «")}<strong>${escapeHtml(label)}</strong>${T("». Esta acción es ")}` +
+          `<strong>${T("irreversible")}</strong>${T(": no se puede recuperar.")}`;
       }
       openModal(modal);
       const onConfirm = () => {
@@ -475,9 +475,9 @@
       fillCharMenu();
       syncCharTrigger();
       syncAuthChrome();
-      setStatus("Personaje eliminado", "clean");
+      setStatus(T("Personaje eliminado"), "clean");
     } catch (err) {
-      setStatus(err.message || "Error al eliminar", "error");
+      setStatus(err.message || T("Error al eliminar"), "error");
     }
   }
 
@@ -501,7 +501,7 @@
       syncSaveButton();
       document.getElementById("ficha-form")?.elements?.namedItem?.("nombre")?.focus?.();
     } catch (err) {
-      setStatus(err.message || "Error", "error");
+      setStatus(err.message || T("Error"), "error");
     }
   }
 
@@ -515,7 +515,7 @@
     try {
       await loadCharacter(id);
     } catch (err) {
-      setStatus(err.message || "Error", "error");
+      setStatus(err.message || T("Error"), "error");
       fillCharMenu();
       syncCharTrigger();
     }
@@ -565,7 +565,7 @@
       try {
         await saveActive();
       } catch (err) {
-        setStatus(err.message || "Error al guardar", "error");
+        setStatus(err.message || T("Error al guardar"), "error");
       }
     });
     els.newBtn?.addEventListener("click", () => onNewCharacter());
@@ -626,6 +626,7 @@
     gateDirty,
     restoreActiveOrReset,
     saveActive,
+    syncAuthChrome,
     boot,
   };
 

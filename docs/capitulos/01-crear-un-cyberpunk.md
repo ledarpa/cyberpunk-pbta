@@ -107,7 +107,7 @@ Tienes un primo —o un hermano de oficio— que corta carne y cable con la mism
 > **Ejemplo — Biohacker**
 > El implante ocular del cliente echa chispas azules y el ascensor del edificio está bloqueado por un ICE de seguridad que no figura en ningún catálogo.
 >
-> **Jugador:** «Abro el panel del ascensor y puenteeo el firmware con mi kit. Improviso, como siempre.»
+> **Jugador:** «Abro el panel del ascensor y puenteo el firmware con mi kit. Improviso, como siempre.»
 >
 > **DJ:** «EN, claramente. Tirá.»
 >
@@ -217,7 +217,7 @@ En Night City eres el olor a aceite y desierto que entra cuando alguien abre la 
 >
 > La ciudad te ofrece otra cosa. Te ofrece un contrato, un cromo en cuotas, un techo con cámaras. Y cuando no servís más, te ofrece la calle. Nosotros no tenemos calle: tenemos ruta, y la ruta es de todos o no es de nadie. El que se queda sin rueda a las tres de la mañana no llama a una grúa, silba, y el convoy para. Siempre para.
 >
-> ¿Que hay ratas entre nosotros? Sí. Los Raffen Shiv también son hijos del éxodo, pero eligieron saquear a los que caminan igual que ellos. Por eso, cuando veas polvo en el horizonte, mirá dos veces antes de sonreír. El desierto no distingue. Nosotros sí.
+> ¿Qué hay ratas entre nosotros? Sí. Los Raffen Shiv también son hijos del éxodo, pero eligieron saquear a los que caminan igual que ellos. Por eso, cuando veas polvo en el horizonte, mirá dos veces antes de sonreír. El desierto no distingue. Nosotros sí.
 
 ---
 
@@ -246,7 +246,7 @@ Sabes que la Calle te mira como arma andante… y no se equivoca del todo. Tambi
 >
 > **Jugador:** «El blindaje. Que pague el cuerpo, para eso está.»
 >
-> **Jugador (narra):** «Primer ráfaga a la esquina, dos asoman, dos caen. Cambio de posición como me enseñaron: nunca dos veces desde el mismo agujero. El cronómetro del HUD marca 1:40. Una ráfaga me agarra el costado y el blindaje subcutáneo se apaga con un chasquido — siento el calor, no el dolor, eso viene después. No importa. 2:30. Les regalo el pasillo metro a metro, nunca la espalda. 3:00. El cliente está en el aire. Me replegó pisando charcos de mi propio refrigerante. El informe dirá: objetivo cumplido, daño material aceptable. El daño material soy yo. Se factura igual.»
+> **Jugador (narra):** «Primer ráfaga a la esquina, dos asoman, dos caen. Cambio de posición como me enseñaron: nunca dos veces desde el mismo agujero. El cronómetro del HUD marca 1:40. Una ráfaga me agarra el costado y el blindaje subcutáneo se apaga con un chasquido — siento el calor, no el dolor, eso viene después. No importa. 2:30. Les regalo el pasillo metro a metro, nunca la espalda. 3:00. El cliente está en el aire. Me repliego pisando charcos de mi propio refrigerante. El informe dirá: objetivo cumplido, daño material aceptable. El daño material soy yo. Se factura igual.»
 
 ---
 

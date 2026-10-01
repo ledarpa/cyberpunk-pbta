@@ -12,6 +12,9 @@
   const PORTRAIT_INNER_H = PORTRAIT_H - 2; // interior 32×11
   const PORTRAIT_MAX_BYTES = 100 * 1024;
   const BUILD = window.PBTA_BUILD || { id: "", professions: {} };
+  const I18N = () => window.PBTA_I18N;
+  const T = (s) => I18N()?.t(s) ?? s;
+  const STAT = (k) => I18N()?.stat(k) ?? String(k).toUpperCase();
   let portraitCustom = false;
   const GHOST = "ficha-g";
   const LOGO_FALLBACK = [
@@ -108,10 +111,10 @@
       <div class="ficha-layout">
         <div class="ficha-col1">
           <pre class="ficha-logo" id="ficha-logo" aria-label="Cyberpunk"></pre>
-          <pre class="ficha-pre ficha-pre-main" aria-label="Identidad">${colMainHtml()}</pre>
+          <pre class="ficha-pre ficha-pre-main" aria-label="${T("Identidad")}">${colMainHtml()}</pre>
         </div>
-        <pre class="ficha-pre ficha-pre-ledger" aria-label="Cromos">${ledgerHtml("cromos", "Cromos", 40)}</pre>
-        <pre class="ficha-pre ficha-pre-ledger" aria-label="Chapería">${ledgerHtml("chaperia", "Chapería", 39)}</pre>
+        <pre class="ficha-pre ficha-pre-ledger" data-ledger-title="cromos" aria-label="${T("Cromos")}">${ledgerHtml("cromos", T("Cromos"), 40)}</pre>
+        <pre class="ficha-pre ficha-pre-ledger" data-ledger-title="chaperia" aria-label="${T("Chapería")}">${ledgerHtml("chaperia", T("Chapería"), 39)}</pre>
       </div>`;
   }
 
@@ -127,24 +130,24 @@
    */
   function colMainHtml() {
     const identity = [
-      fillField("nombre", "Nombre:\\>", "ficha-fill-nombre"),
-      fillField("jugador", "Jugador:\\>"),
+      fillField("nombre", T("Nombre:\\>"), "ficha-fill-nombre"),
+      fillField("jugador", T("Jugador:\\>")),
       professionField(),
-      `<span class="ficha-id-line">@Psique:\\><span class="${GHOST}">_______</span>${psiqueBoxes()}</span>`,
+      `<span class="ficha-id-line">${T("@Psique:\\>")}<span class="${GHOST}">_______</span>${psiqueBoxes()}</span>`,
     ].join("");
     const headPad = Array.from({ length: 3 }, () => col1Row()).join("");
-    return `${headPad}${identity}${col1Row()}${portraitGridHtml()}${col1Row()}${atributoLines().join("")}${col1Row()}${saludLines().join("")}${col1Row()}${fillField("experiencia", "Experiencia:\\>", "", { stars: true })}${col1Row()}`;
+    return `${headPad}${identity}${col1Row()}${portraitGridHtml()}${col1Row()}${atributoLines().join("")}${col1Row()}${saludLines().join("")}${col1Row()}${fillField("experiencia", T("Experiencia:\\>"), "", { stars: true })}${col1Row()}`;
   }
 
   /** Marco foto: esquinas verdes + zona clic/drag para imagen (object-fit: cover). */
   function portraitGridHtml() {
     return (
       `<span class="ficha-row ficha-portrait-host">` +
-      `<span class="ficha-portrait" id="ficha-portrait" tabindex="0" aria-label="Foto del personaje">` +
+      `<span class="ficha-portrait" id="ficha-portrait" tabindex="0" aria-label="${T("Foto del personaje")}">` +
       `<input class="ficha-portrait-file" type="file" accept="image/*" hidden>` +
       `<span class="ficha-portrait-media">` +
       `<img class="ficha-portrait-img" alt="">` +
-      `<button type="button" class="ficha-portrait-remove" aria-label="Eliminar foto" title="Eliminar foto">` +
+      `<button type="button" class="ficha-portrait-remove" aria-label="${T("Eliminar foto")}" title="${T("Eliminar foto")}">` +
       `<svg class="ficha-portrait-remove-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">` +
       `<path d="M5.5 2h5l.5 1H14v1H2V3h2.5l.5-1zM3 6h10l-.9 8H3.9L3 6zm3 1v6h1V7H6zm3 0v6h1V7H9z"/>` +
       `</svg></button>` +
@@ -164,15 +167,23 @@
    * Guiones bajos fijos (Manipulación Cognitiva → un solo _).
    */
   function atributoLines() {
-    const head = "Atributos:\\>";
+    const head = T("Atributos:\\>");
     const gap = "  ";
     const contPad = " ".repeat(head.length + gap.length);
-    const rows = [
-      ["Enlaces Neuronales", "en", 5],
-      ["Manipulación Cognitiva", "mc", 1],
-      ["Reacción Cinética", "rc", 6],
-      ["Tejido Muscular", "tm", 8],
-    ];
+    // Label + guiones = 23ch en ambos idiomas (alineación de columna).
+    const rows = I18N()?.isEN?.()
+      ? [
+          ["Neural Engine", "en", 10],
+          ["Cognitive Manipulation", "mc", 1],
+          ["Kinetic Response", "rc", 7],
+          ["Muscular Tissue", "tm", 8],
+        ]
+      : [
+          ["Enlaces Neuronales", "en", 5],
+          ["Manipulación Cognitiva", "mc", 1],
+          ["Reacción Cinética", "rc", 6],
+          ["Tejido Muscular", "tm", 8],
+        ];
     return rows.map(([label, name, under], i) => {
       const prefix = i === 0 ? `${head}${gap}` : contPad;
       return col1Row(
@@ -183,7 +194,7 @@
 
   /** Salud:\> a la izquierda; todos los bloques de cuadros arrancan en la misma columna. */
   function saludLines() {
-    const head = "Salud:\\>";
+    const head = T("Salud:\\>");
     const headPad = " ".repeat(head.length);
     const arrow = " -> ";
     // Referencia: fila Normal (5 cuadros) cerrando a COL1_CH → columna de inicio de cuadros
@@ -200,11 +211,11 @@
       return `${prefix}${" ".repeat(pad)}${label}${arrow}${boxesHtml}`;
     };
     return [
-      mk(head, "Normal", tightBoxes("salud", 0, 5, false)),
+      mk(head, T("Normal"), tightBoxes("salud", 0, 5, false)),
       mk(headPad, "-1", tightBoxes("salud", 5, 4, true)),
       mk(headPad, "-2", tightBoxes("salud", 10, 4, true)),
       mk(headPad, "-3", tightBoxes("salud", 15, 4, true)),
-      mk(headPad, "Falla Integral", tightBoxes("salud", 20, 2, true)),
+      mk(headPad, T("Falla Integral"), tightBoxes("salud", 20, 2, true)),
     ].map((line) => col1Row(line));
   }
 
@@ -232,7 +243,7 @@
       `<span class="ficha-ledger-wrap ficha-inv-wrap" style="--ch:${underscores}">` +
       `<span class="${GHOST} ficha-ledger-ghost" aria-hidden="true">${"_".repeat(underscores)}</span>` +
       `<span class="ficha-typed-cover" aria-hidden="true"></span>` +
-      `<button type="button" class="ficha-inv-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="${ledger} ${idx + 1}"></button>` +
+      `<button type="button" class="ficha-inv-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="${T(ledger === "cromos" ? "Cromos" : "Chapería")} ${idx + 1}"></button>` +
       `<input type="hidden" name="${ledger}-${idx}" data-ledger="${ledger}" data-inv="1" value="" style="--ch:${underscores}">` +
       `</span>` +
       `<span class="ficha-inv-menu" role="listbox" hidden></span>` +
@@ -318,16 +329,16 @@
     const opts = professions
       .map(
         (p) =>
-          `<button type="button" class="ficha-prof-opt" role="option" data-value="${esc(p)}">${esc(p)}</button>`
+          `<button type="button" class="ficha-prof-opt" role="option" data-value="${esc(p)}">${esc(T(p))}</button>`
       )
       .join("");
     return (
       `<span class="ficha-fill-line ficha-prof-line">` +
-      `<span class="ficha-fill-label">Profesión:\\></span>` +
+      `<span class="ficha-fill-label">${T("Profesión:\\>")}</span>` +
       `<span class="ficha-fill-track ficha-prof-wrap">` +
       `<span class="${GHOST} ficha-fill-ghost" aria-hidden="true">${"_".repeat(96)}</span>` +
       `<span class="ficha-typed-cover" aria-hidden="true"></span>` +
-      `<button type="button" class="ficha-inline ficha-prof-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Profesión"></button>` +
+      `<button type="button" class="ficha-inline ficha-prof-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="${T("Profesión")}"></button>` +
       `<input type="hidden" name="profesion" value="" data-profesion="1">` +
       `</span>` +
       `<span class="ficha-prof-menu" role="listbox" hidden>${opts}</span>` +
@@ -645,12 +656,13 @@
     if (!input) return;
     const v = normalizeProfession(input.value);
     input.value = v;
+    const display = T(v);
     const line = input.closest(".ficha-prof-line");
     const wrap = input.closest(".ficha-prof-wrap");
     const trigger = wrap?.querySelector(".ficha-prof-trigger");
     const ghost = wrap?.querySelector(".ficha-fill-ghost");
     const menu = line?.querySelector(".ficha-prof-menu");
-    if (trigger) trigger.textContent = v;
+    if (trigger) trigger.textContent = display;
     menu?.querySelectorAll(".ficha-prof-opt").forEach((opt) => {
       opt.setAttribute("aria-selected", String(opt.dataset.value === v));
     });
@@ -658,7 +670,7 @@
       ghost.textContent = "_".repeat(96);
       ghost.style.marginLeft = "0";
     }
-    if (wrap) setTypedCover(wrap, [...v].length);
+    if (wrap) setTypedCover(wrap, [...display].length);
     if (!portraitCustom) syncPortraitField();
   }
 
@@ -808,14 +820,14 @@
     saludDetachAnchor = anchor;
 
     const items = listDetachableCromos();
-    const head = `<div class="ficha-salud-detach-sec">Desacoplar cromo</div>`;
+    const head = `<div class="ficha-salud-detach-sec">${T("Desacoplar cromo")}</div>`;
     let body = "";
     if (!items.length) {
-      body = `<div class="ficha-salud-detach-empty">No hay cromos acoplados</div>`;
+      body = `<div class="ficha-salud-detach-empty">${T("No hay cromos acoplados")}</div>`;
     } else {
       body = items
         .map((it) => {
-          const label = INV?.formatItem(it, 28) || INV?.defOf(it)?.name || "Cromo";
+          const label = INV?.formatItem(it, 28) || T(INV?.defOf(it)?.name || "Cromo");
           return (
             `<button type="button" class="ficha-salud-detach-opt" role="option" data-detach-id="${esc(it.id)}">` +
             `${esc(label)}</button>`
@@ -934,7 +946,7 @@
     }).join("");
     return (
       `[<span class="ficha-stat-wrap">` +
-      `<button type="button" class="ficha-inline ficha-stat-trigger ficha-stat-zero" data-stat-trigger="${name}" aria-haspopup="listbox" aria-expanded="false" aria-label="${name}">0</button>` +
+      `<button type="button" class="ficha-inline ficha-stat-trigger ficha-stat-zero" data-stat-trigger="${name}" aria-haspopup="listbox" aria-expanded="false" aria-label="${STAT(name)}">0</button>` +
       `<input type="hidden" name="${name}" value="0" data-stat="1">` +
       `<span class="ficha-stat-menu" role="listbox" hidden>${opts}</span>` +
       `</span>]`
@@ -1056,7 +1068,7 @@
   function boxBtn(name, group, size, starred) {
     const inner = boxInnerHtml(false, size === "wide", !!starred);
     const starAttr = starred ? ` data-star="true"` : "";
-    return `<button type="button" class="ficha-box ficha-box-${size}" name="${name}" data-group="${group}" data-size="${size}"${starAttr} aria-pressed="false" aria-label="Casilla">[<span class="ficha-box-inner">${inner}</span>]</button>`;
+    return `<button type="button" class="ficha-box ficha-box-${size}" name="${name}" data-group="${group}" data-size="${size}"${starAttr} aria-pressed="false" aria-label="${T("Casilla")}">[<span class="ficha-box-inner">${inner}</span>]</button>`;
   }
 
   function boxInnerHtml(on, wide, starred) {
@@ -1080,9 +1092,8 @@
   function contentPastPageBottom(page) {
     const limit = page.getBoundingClientRect().bottom - 1;
     const past = (el) => !!el && el.getBoundingClientRect().bottom > limit;
-    for (const label of ["Cromos", "Chapería"]) {
-      const pre = form.querySelector(`.ficha-pre-ledger[aria-label="${label}"]`);
-      const wraps = pre?.querySelectorAll(".ficha-ledger-wrap");
+    for (const pre of form.querySelectorAll(".ficha-pre-ledger")) {
+      const wraps = pre.querySelectorAll(".ficha-ledger-wrap");
       if (past(wraps?.[wraps.length - 1])) return true;
     }
     const exp = form.querySelector('input[name="experiencia"]')?.closest(".ficha-fill-line");
@@ -1356,7 +1367,7 @@
         setPortraitImage(dataUrl, { custom: true });
         noteDirty();
       } catch {
-        window.alert("No se pudo procesar la imagen.");
+        window.alert(T("No se pudo procesar la imagen."));
       }
     };
 
@@ -1865,15 +1876,11 @@
     form.style.setProperty("--portrait-inner-h", String(PORTRAIT_INNER_H));
   }
 
-  function bootSheet() {
-    form.innerHTML = buildSheetHtml();
-    setPortraitMetrics();
-    loadLogo();
-    bindSheet();
+  let formLevelBound = false;
+  function bindFormLevel() {
+    if (formLevelBound) return;
+    formLevelBound = true;
     bindSaludDetachMenu();
-    bindPortrait();
-    bindStatPickers();
-    bindProfessionPicker();
     window.PBTA_INV?.bindInventory({
       form,
       saveSheet: noteDirty,
@@ -1888,22 +1895,6 @@
       },
       canAssignPsiqueStat,
     });
-    try {
-      localStorage.removeItem(LEGACY_STORAGE_KEY);
-    } catch {
-      /* ignore */
-    }
-    syncAllTypedMasks();
-    syncAllStatColors();
-    syncProfessionField();
-    syncPortraitField();
-    syncArsenalField();
-    syncNeuroranuraField();
-    refreshAllInvRows();
-    markFixedLedgerRows();
-    captureStatsBaseline();
-    applyInventoryStats();
-    syncJugadorField();
     form.addEventListener("input", (ev) => {
       const el = ev.target;
       if (el instanceof HTMLInputElement) {
@@ -1923,7 +1914,6 @@
       noteDirty();
     });
     form.addEventListener("change", noteDirty);
-    requestFitSheet();
     // Re-fit cuando termina de cargar la fuente real (fallback → VT323)
     if (document.fonts) document.fonts.onloadingdone = requestFitSheet;
     window.addEventListener("resize", fitSheet);
@@ -1938,7 +1928,47 @@
         }).observe(panel);
       }
     }
+  }
+
+  /** Render + binds per-element. Los listeners de form van una sola vez. */
+  function mountSheet() {
+    form.innerHTML = buildSheetHtml();
+    setPortraitMetrics();
+    loadLogo();
+    bindSheet();
+    bindPortrait();
+    bindStatPickers();
+    bindProfessionPicker();
+    bindFormLevel();
+    requestFitSheet();
+  }
+
+  function bootSheet() {
+    mountSheet();
+    try {
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
+    syncAllTypedMasks();
+    syncAllStatColors();
+    syncProfessionField();
+    syncPortraitField();
+    syncArsenalField();
+    syncNeuroranuraField();
+    refreshAllInvRows();
+    markFixedLedgerRows();
+    captureStatsBaseline();
+    applyInventoryStats();
+    syncJugadorField();
     markClean();
+  }
+
+  /** Cambio de idioma: re-monta la hoja y restaura los datos tal cual. */
+  function rebuild() {
+    const data = collect();
+    mountSheet();
+    applySheet(data);
   }
 
   window.PBTA_FICHA = {
@@ -1950,6 +1980,7 @@
     noteDirty,
     onDirtyChange,
     setJugadorAccount,
+    rebuild,
   };
 
   bootSheet();

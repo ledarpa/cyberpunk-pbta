@@ -147,6 +147,51 @@ body {
   overflow: visible;
 }
 
+/* Selector de idioma (ES/EN) — control segmentado, estética terminal. */
+.lang-switch {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--line);
+  flex: 0 0 auto;
+  margin-left: 0.25rem;
+}
+
+.lang-btn {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-right: 1px solid var(--line);
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  padding: 0.3rem 0.5rem;
+}
+
+.lang-btn:last-child {
+  border-right: 0;
+}
+
+.lang-btn:hover,
+.lang-btn:focus-visible {
+  color: var(--bright);
+  outline: none;
+}
+
+.lang-btn.is-active {
+  background: var(--green);
+  color: #000;
+}
+
+@media (max-width: 760px) {
+  .lang-btn {
+    font-size: 14px;
+    padding: 0.25rem 0.4rem;
+  }
+}
+
 .player-badge {
   color: var(--muted);
   font-size: 18px;

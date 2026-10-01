@@ -217,7 +217,7 @@ Módulos (varios reemplazan la audición convencional mientras estén activos)
 | Amplificador de dB | Grito tipo megáfono. **+1 MC** |
 | Emisor de banda ancha | Voz: entonación, rango amplio, sub/supersónico. **+1 MC** |
 | Filtro de toxinas | Detecta tóxicos orales; los expulsa a recipiente removible. **+1 TM** |
-| Sintetizador de voz humana | Emula tono humano (oir la voz o neurodata con tonos). **+1 MC** |
+| Sintetizador de voz humana | Emula tono humano (oír la voz o neurodata con tonos). **+1 MC** |
 | Sintetizador No-one | Voz 100 % genérica e irreconocible |
 | Turbina de aliento | Cápsulas de gas; al activar, corte respiratorio hasta salir de la zona o acabar el gas. **Un uso por cápsula** |
 
