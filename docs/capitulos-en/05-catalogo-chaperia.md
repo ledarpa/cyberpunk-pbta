@@ -450,6 +450,8 @@ Modes (Military only, after activating the protocol)
 
 Unrecognizable to optical systems (physical or holographic). CM advantage vs facial recognition. Doesn't fool anyone with the same capability.
 
+> The mask lies to the cameras, not to the street: you're unreadable to the system and suspicious to anyone with eyes. "The same capability" means any equivalent recognition — another ghost mask, a cyberoptic with the facial recognition module — and against that there's no CM advantage: when the tech ties, the fiction decides.
+
 ### Tech armor
 
 Servos and plating.

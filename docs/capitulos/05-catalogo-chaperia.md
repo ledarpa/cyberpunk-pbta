@@ -450,6 +450,8 @@ Modos (solo Militar, tras activar protocolo)
 
 Irreconocible para sistemas ópticos (físicos u holográficos). Ventaja MC vs reconocimiento facial. No engaña a quien tenga la misma capacidad.
 
+> La máscara le miente a las cámaras, no a la calle: sos ilegible para el sistema y sospechoso para cualquiera que te mire. «La misma capacidad» es cualquier reconocimiento equivalente — otra máscara fantasma, una cyberóptica con módulo de reconocimiento facial — y contra eso no hay ventaja MC: cuando el empate es técnico, lo define la ficción.
+
 ### Tecnoarmadura
 
 Servomotores y placas.
