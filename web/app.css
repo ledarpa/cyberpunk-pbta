@@ -1832,7 +1832,9 @@ table.t-modulo tbody td:first-child {
   margin: 0;
   shape-outside: none;
   aspect-ratio: 436 / 640;
-  height: var(--balistica-h, 13rem);
+  /* Tamaño fijo (era medido por JS sobre el bloque viejo con la tabla de
+     Tecnoherramienta dentro): 266×390px, idéntico en ES y EN. */
+  height: 24.375rem;
   width: auto;
   max-width: none;
 }

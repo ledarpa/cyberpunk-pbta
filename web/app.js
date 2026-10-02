@@ -93,7 +93,6 @@
   function runArtLayoutPass() {
     safeLayoutArtWraps();
     layoutMejoraArt();
-    layoutBalisticaArt();
     layoutDroneArt();
     layoutPrimerosAuxiliosArt();
     layoutTraumaCardArt();
@@ -178,10 +177,6 @@
     layoutArtToBlock(book.querySelector(".book-item-art--mejora_de_atributos"));
   }
 
-  function layoutBalisticaArt() {
-    layoutArtToBlock(book.querySelector(".book-item-art--balistica"));
-  }
-
   function layoutDroneArt() {
     layoutArtToBlock(book.querySelector(".book-item-art--drone"));
   }
@@ -256,7 +251,6 @@
       if (im) im.addEventListener("load", fn);
     };
     onImg(".book-item-art--mejora_de_atributos img", layoutMejoraArt);
-    onImg(".book-item-art--balistica img", layoutBalisticaArt);
     onImg(".book-item-art--drone img", layoutDroneArt);
     onImg(".book-item-art--primeros_auxilios img", layoutPrimerosAuxiliosArt);
     onImg(".book-item-art--trauma_card img", layoutTraumaCardArt);
@@ -320,10 +314,6 @@
 
   function layoutMejoraArt() {
     layoutArtToBlock(book.querySelector(".book-item-art--mejora_de_atributos"));
-  }
-
-  function layoutBalisticaArt() {
-    layoutArtToBlock(book.querySelector(".book-item-art--balistica"));
   }
 
   function layoutDroneArt() {

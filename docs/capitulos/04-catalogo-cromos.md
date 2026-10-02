@@ -393,6 +393,11 @@ Accesorios
 
 Solo en módulo de cybervértebra. Arma inteligente integrada + enlace SAI automático (ver chapería). +1 RC.
 
+> **Ejemplo — Extremidad balística**
+> El guardia corre hacia la consola de la puerta blindada. «Que no la cierre.» El DJ: «RC, dale.» 2d6+RC: **9**.
+>
+> «El SAI pinta la silueta tras el vidrio antes de que yo la vea. La muñeca gira, el cañón asoma y el disparo sale solo: el guardia cae tras el mostrador. El pasillo se tiñe de rojo. Nadie va a encontrar el arma: no la hay.»
+
 #### Tecnoherramienta
 
 Brazo para cyberimplantes y trabajo de netrunner.

@@ -393,6 +393,11 @@ Accessories
 
 Only on a cyberspine module. Integrated smartgun + automatic SAI link (see hardware). +1 KR.
 
+> **Example — Ballistic limb**
+> The guard sprints for the blast door console. "Don't let him seal it." The DJ: "KR, roll it." 2d6+KR: **9**.
+>
+> "The SAI paints the silhouette behind the glass before I even see it. The wrist turns, the barrel slides out and the shot fires itself: the guard drops behind the counter. Nobody's going to find the weapon: there isn't one."
+
 #### Tech-tool
 
 An arm for cyberimplants and netrunner work.

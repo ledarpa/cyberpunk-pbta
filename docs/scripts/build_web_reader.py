@@ -27,7 +27,7 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20261001f"
+WEB_BUILD_ID = "20261001g"
 
 # Segunda columna de tabla Calidad → intro+título contornean imagen en wrap.
 CALIDAD_WRAP_COL2 = frozenset({
@@ -58,6 +58,12 @@ ART_HEADING_OUTSIDE_WRAP: frozenset[str] = frozenset({
     "nanoplastia",
     "piel_perfecta",
     "vertebras",
+})
+
+# h4 que corta el wrap del arte de la sección madre:
+# su sección arranca debajo de la imagen (full width).
+HEADING_BREAKS_ART_WRAP: frozenset[str] = frozenset({
+    "Tecnoherramienta",
 })
 
 # Retratos de profesión (nombre display → slug PNG).
@@ -112,6 +118,7 @@ TITLE_EN: dict[str, str] = {
     "Cyberspine": "Cybervértebras",
     "Combat arm": "Brazo de combate",
     "Ballistic limb": "Extremidad balística",
+    "Tech-tool": "Tecnoherramienta",
     "Cyberlegs": "Cyberpiernas",
     # 05-catalogo-chaperia — arte / banners / wrap intro
     "Pistol": "Pistola",
@@ -620,7 +627,12 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict], *, lang:
             ) or canon in CATALOG_ART or canon in CATALOG_BANNER or canon in CATALOG_BANNER_AFTER_TABLE or canon in MANUAL_ART or canon in MANUAL_BANNER or canon in MANUAL_BANNER_BEFORE_TABLE
             # h4 sin arte propio dentro de un wrap abierto → no cortar el wrap:
             # el contenido (texto, tablas) sigue contorneando la imagen de la sección madre.
-            keep_wrap_open = level >= 4 and not heading_own_art and art_wrap_open
+            keep_wrap_open = (
+                level >= 4
+                and not heading_own_art
+                and art_wrap_open
+                and canon not in HEADING_BREAKS_ART_WRAP
+            )
             if not keep_wrap_open:
                 close_catalog_section()
             hid = slugify(canon, used_ids)
