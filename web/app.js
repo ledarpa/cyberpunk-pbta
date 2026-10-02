@@ -41,10 +41,8 @@
     get(k) { try { return localStorage.getItem(k); } catch { return null; } },
     set(k, v) { try { localStorage.setItem(k, v); } catch {} },
   };
-  let lang = (() => {
-    const v = store.get(LANG_KEY);
-    return v === "en" || v === "es" ? v : "es";
-  })();
+  // Idioma: preferencia guardada → autodetección del navegador (lógica única en PBTA_I18N).
+  let lang = window.PBTA_I18N?.lang() ?? "es";
   let data = MANUALS[lang] || MANUALS.es;
   let manualScrollTop = 0;
   let headingObserver = null;

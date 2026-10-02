@@ -1,13 +1,25 @@
 /** i18n de ficha + player: display ES→EN. Storage y lógica quedan en ES canónico. */
 window.PBTA_I18N = (() => {
   const KEY = "pbta-lang";
-  const lang = () => {
+  /** Preferencia guardada (elección explícita en el selector) o null. */
+  function storedLang() {
     try {
-      return localStorage.getItem(KEY) === "en" ? "en" : "es";
+      const v = localStorage.getItem(KEY);
+      return v === "en" || v === "es" ? v : null;
     } catch {
-      return "es";
+      return null;
     }
-  };
+  }
+  /** Sin preferencia guardada: autodetección por idioma del navegador
+   *  (en-* → EN; cualquier otro → ES, default del juego). */
+  function detectedLang() {
+    const list =
+      (typeof navigator !== "undefined" &&
+        (navigator.languages?.length ? navigator.languages : [navigator.language])) ||
+      [];
+    return list.some((l) => /^en\b/i.test(String(l || ""))) ? "en" : "es";
+  }
+  const lang = () => storedLang() ?? detectedLang();
   const isEN = () => lang() === "en";
 
   const STAT_DISPLAY = {
