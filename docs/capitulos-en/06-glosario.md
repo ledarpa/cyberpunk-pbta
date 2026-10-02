@@ -69,13 +69,13 @@
 | Profession | In one line |
 | --- | --- |
 | Fixer | The Street's middleman: contacts, favors, market. |
-| Artist | Public voice / cultural agitator (Rockerboy). |
+| Artist | Public voice / cultural agitator. |
 | Biohacker | Garage tech and black market; flesh and cable. |
 | Media | Investigates and exposes under corporate fire. |
 | Corpo | Exec: hallway warfare and black projects. |
 | Spook | Infiltration, identities, secrets without shine. |
 | Outsider | Nomad: convoy, clan, routes outside the law. |
-| Mercenary | Wolf: contract violence, body as weapon. |
+| Mercenary | Hammer: contract violence, body as weapon. |
 | Netrunner | Ghost of the Net: data, ICE, interfaces. |
 
 ---

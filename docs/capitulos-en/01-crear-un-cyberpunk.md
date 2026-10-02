@@ -225,7 +225,7 @@ In Night City you're the smell of oil and desert that comes in when someone open
 
 **At the table:** NE [-1] · CM [-1] · KR [+1] · MT [+1]. **Starting arsenal:** pistol, shotgun, assault rifle or sniper rifle + improvised pistol.
 
-You were born with a gun in your flesh hand. The other hand —metal, the one that builds death with catalog precision— came later, when the original body wasn't enough anymore. You're a Wolf: hired muscle, enforcer, contract cybersoldier. Whether under a corporate flag or in "police actions" that never get called wars, the trade is the same: turning violence into billable output.
+You were born with a gun in your flesh hand. The other hand —metal, the one that builds death with catalog precision— came later, when the original body wasn't enough anymore. You're a Solo: hired muscle, enforcer, contract cybersoldier. Whether under a corporate flag or in "police actions" that never get called wars, the trade is the same: turning violence into billable output.
 
 Most of yours came out of private armies or official campaigns that left more chrome than medals behind. Every wound pushes in more hardware: weapon-limbs, armor under the skin, chips sharpening reflexes, combat drugs buying seconds at the cost of years. If you climb to the top of the samurai ladder, maybe you make ronin: assassin, escort, or hammer for whoever pays your obscene rate. The market loves the best. The market also discards them without a funeral.
 
