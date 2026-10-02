@@ -71,11 +71,11 @@
 | Arreglador | Intermediario de la Calle: contactos, favores, mercado. |
 | Artista | Voz pública / agitador cultural. |
 | Biohacker | Tech de garaje y mercado negro; carne y cable. |
-| Comunicador | Periodista: investiga y expone bajo fuego corporativo. |
+| Comunicador | Reportero: investiga y expone bajo fuego corporativo. |
 | Corpo | Ejecutivo: guerra de pasillos y proyectos negros. |
 | Espía | Infiltración, identidades, secretos sin brillo. |
 | Forastero | Nómade: convoy, clan, ruta al margen de la ley. |
-| Mercenario | Martillo: violencia de contrato, cuerpo como arma. |
+| Mercenario | Ejecutor: violencia de contrato, cuerpo como arma. |
 | Netrunner | Fantasma de la Red: datos, ICE, interface. |
 
 ---
