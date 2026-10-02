@@ -106,7 +106,7 @@ window.PBTA_CATALOGO = (() => {
       "goma",
       "Proyectiles de goma y descarga",
       "Goma",
-      "Daño no letal a tejido biológico y cibernética."
+      "Daño no letal a tejido biológico y cybernética."
     ),
     bal(
       "rastreador",
@@ -123,7 +123,7 @@ window.PBTA_CATALOGO = (() => {
       "Crio",
       "Supervivientes congelados 1d6/2 turnos, radio 3 m; mitad de acciones."
     ),
-    bal("misil-pem", "PEM", "PEM", "Anula cibernética/electrónica en 15 m durante 2d6 turnos."),
+    bal("misil-pem", "PEM", "PEM", "Anula cybernética/electrónica en 15 m durante 2d6 turnos."),
     bal(
       "misil-teletaladro",
       "Teletaladro",
@@ -402,7 +402,7 @@ window.PBTA_CATALOGO = (() => {
       short: "Gr. PEM",
       hasQuality: false,
       saiSlots: null,
-      detail: "Caja de 8. Anula cibernética y electrónica en 5 m durante 1d6 turnos.",
+      detail: "Caja de 8. Anula cybernética y electrónica en 5 m durante 1d6 turnos.",
       accessories: [],
       sai: [],
     }),
@@ -1041,13 +1041,13 @@ window.PBTA_CATALOGO = (() => {
         mil: "vip",
       },
       detail:
-        "Membresía Trauma Team en el bolsillo; monitoriza biológico y cibernético. Si caes, llega transporte aéreo con biohackers y escolta militar.\nPago mensual; cada activación gasta la tarjeta (hay que renovar membresía).",
+        "Membresía Trauma Team en el bolsillo; monitoriza biológico y cybernético. Si caes, llega transporte aéreo con biohackers y escolta militar.\nPago mensual; cada activación gasta la tarjeta (hay que renovar membresía).",
       detailByQuality: {
         impro: "Llega en 15 min; te dejan en el domicilio de la suscripción tras estabilizar",
         corr: "Llega en 5 min; te dejan en el domicilio de la suscripción tras estabilizar",
         hitech:
           "Llega en 5 min; te dejan en el domicilio de la suscripción tras estabilizar + 1 día de terapia: curado y reparado al 50%",
-        mil: "Llega en 5 min; Cubren 100% de gastos y tiempo de tratamiento necesario (salud y cibernética)",
+        mil: "Llega en 5 min; Cubren 100% de gastos y tiempo de tratamiento necesario (salud y cybernética)",
       },
     }),
   ];

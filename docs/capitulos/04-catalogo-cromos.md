@@ -344,7 +344,7 @@ Fluidos (aparato circulatorio auxiliar)
 
 - Combustible: duplica daño por fuego/explosión en objeto empapado.
 
-- Tinta: opaco; desventaja en la próxima tirada de RC del oponente; ciega ópticas orgánicas o cibernéticas hasta retirarla con cuidado.
+- Tinta: opaco; desventaja en la próxima tirada de RC del oponente; ciega ópticas orgánicas o cybernéticas hasta retirarla con cuidado.
 
 ---
 

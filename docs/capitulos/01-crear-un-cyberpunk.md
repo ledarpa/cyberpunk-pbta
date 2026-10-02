@@ -129,7 +129,7 @@ Ellos fabrican la verdad a medida. Tú la desarmas en vivo. Las Corporaciones de
 
 Cuando excavas, primero llega el encubrimiento: funcionarios, abogados, perros falderos con traje. Después la amenaza. Después el intento de borrarte del aire. Una vez te cancelaron el netblog entero; volviste con tu equipo y empujaste la historia hasta que la Dirección tuvo que tragar. Te han apuntado demasiadas veces. Por eso un mercenario camina a tu sombra y un netrunner bueno —caro, nervioso, imprescindible— escarba la Red mientras tú miras a cámara. No alcanza con ser valiente. Hay que ser mejor que la máquina de olvido corporativa.
 
-La semana pasada: una farmacéutica vendiendo veneno en la Calle con envoltorio médico. Esta semana: una guerra secreta en el sur con cibertropas y cifras de muertos que ningún boletín oficial va a admitir. Mañana puede ser un cargamento “posible nuclear” camino a un puerto que nadie quiere nombrar. Cada pista es un detonador. Cada emisión, una apuesta a que tu cara sigue en pantalla y no en una fosa.
+La semana pasada: una farmacéutica vendiendo veneno en la Calle con envoltorio médico. Esta semana: una guerra secreta en el sur con cybertropas y cifras de muertos que ningún boletín oficial va a admitir. Mañana puede ser un cargamento “posible nuclear” camino a un puerto que nadie quiere nombrar. Cada pista es un detonador. Cada emisión, una apuesta a que tu cara sigue en pantalla y no en una fosa.
 
 Sabes que tu propia Corporación mediática te usa tanto como tú la usas a ella. Sponsors, ratings, límites “editoriales”. Juegas ese juego sin olvidar el otro: el de la Calle, donde la gente necesita nombres, pruebas y alguien que diga en voz alta lo que todos susurran. Si te callas, el silencio no es neutral: es cómplice. Así que cargas el equipo, avisas a tus apoyos y sales otra vez. Exponer bastardos no es un eslogan. Es tu forma de no convertirte en uno.
 
@@ -225,7 +225,7 @@ En Night City eres el olor a aceite y desierto que entra cuando alguien abre la 
 
 **En la mesa:** EN [-1] · MC [-1] · RC [+1] · TM [+1]. **Arsenal inicial:** pistola, escopeta, fusil o rifle + pistola impr.
 
-Naciste con un arma en la mano de carne. La otra —la de metal, la que fabrica muerte con precisión de catálogo— llegó después, cuando el cuerpo original ya no alcanzó. Eres Solo: guarda de alquiler, ejecutor, cibersoldado de contrato. Ya sea bajo bandera corporativa o en “acciones policiales” que nunca se llaman guerras, tu oficio es el mismo: convertir violencia en resultado facturable.
+Naciste con un arma en la mano de carne. La otra —la de metal, la que fabrica muerte con precisión de catálogo— llegó después, cuando el cuerpo original ya no alcanzó. Eres Ejecutor: guarda de alquiler, guardaespaldas, cybersoldado de contrato. Ya sea bajo bandera corporativa o en “acciones policiales” que nunca se llaman guerras, tu oficio es el mismo: convertir violencia en resultado facturable.
 
 La mayoría de los tuyos salió de ejércitos privados o de campañas oficiales que dejaron más cromo que medallas. Cada herida empuja más hardware: extremidades-arma, blindaje bajo la piel, chips que afilan reflejos, combat drugs que compran segundos a costa de años. Si llegas a la cima del escalafón samurái, tal vez te conviertas en ronin: asesino, escolta o ejecutor para quien pague tu tarifa obscena. El mercado adora a los mejores. El mercado también los descarta sin funeral.
 

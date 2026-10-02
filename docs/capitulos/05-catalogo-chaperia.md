@@ -181,7 +181,7 @@ SAI
 | Daño | **1 punto** con **10+**; **7–9** sin daño |
 | Otro | Silenciosa |
 
-Lanza dardos cibernéticos o químicos.
+Lanza dardos cybernéticos o químicos.
 
 SAI por calidad: Improvisada sin SAI · 1 / 2 / 3 subsistemas.
 
@@ -240,7 +240,7 @@ Se venden en cajas de 8 unidades.
 | **Fragmentación** | **3d6** explosivo, radio **5 m** |
 | **Gas** | Nube tóxica **5 m**, **1d6** turnos; **1d6** daño por turno dentro del radio |
 | **Humo y partículas** | Anula visión orgánica, cyberóptica y radar EM **1d6** turnos, radio **5 m**. Respirar: **6−** en TM pierde el primer turno. Filtro de toxinas anula lo respiratorio |
-| **PEM** | Anula cibernética y electrónica en **5 m** durante **1d6** turnos |
+| **PEM** | Anula cybernética y electrónica en **5 m** durante **1d6** turnos |
 
 ---
 
@@ -255,7 +255,7 @@ Todas las armas de fuego o energía incluyen munición estándar. Munición espe
 | Balas de carbono | Pistola y fusil **+1** daño; escopeta y rifle **+3** |
 | Celdas de entrelazamiento cuántico | Disparos atraviesan al primer objetivo (rifle: hasta **3** objetivos) |
 | Celdas sobrecargadas | Disparar **2 veces** al mismo objetivo en el turno (segundo disparo: RC con **−1**) |
-| Proyectiles de goma y descarga | Daño **no letal** a tejido biológico y cibernética |
+| Proyectiles de goma y descarga | Daño **no letal** a tejido biológico y cybernética |
 | Rastreador | Sin daño; **1** proyectil por cargador (resto del cargador = transmisor/receptor) |
 
 #### Misiles
@@ -264,7 +264,7 @@ Todas las armas de fuego o energía incluyen munición estándar. Munición espe
 | --- | --- |
 | Explosivo | **+1d6** daño, radio **3 m** |
 | Criogénico | Supervivientes congelados **1d6/2** turnos, radio **3 m**; mitad de acciones |
-| PEM | Anula cibernética/electrónica en **15 m** durante **2d6** turnos |
+| PEM | Anula cybernética/electrónica en **15 m** durante **2d6** turnos |
 | Teletaladro | Tras impacto, taladro a 90° + corrosión; en **1d6+1** turnos, agujero para que entre **una persona** |
 
 #### Dardos (lanzadardos)
@@ -383,7 +383,7 @@ Lista blanca precargada; dispara al enemigo más cercano: 1d6/turno. Tirada de a
 
 ### Trauma card
 
-Membresía Trauma Team en el bolsillo; monitoriza biológico y cibernético. Si caes, llega transporte aéreo con biohackers y escolta militar.
+Membresía Trauma Team en el bolsillo; monitoriza biológico y cybernético. Si caes, llega transporte aéreo con biohackers y escolta militar.
 
 - Pago mensual; cada activación gasta la tarjeta (hay que renovar membresía).
 
@@ -392,7 +392,7 @@ Membresía Trauma Team en el bolsillo; monitoriza biológico y cibernético. Si 
 | **Cliente** | Llega en **15 min**; te dejan en el domicilio de la suscripción tras estabilizar |
 | **Miembro** | **5 min** |
 | **Preferencial** | Tras **1 día** de terapia: curado y reparado al **50%** |
-| **VIP** | Cubren **100%** de gastos y tiempo de tratamiento necesario (salud y cibernética) |
+| **VIP** | Cubren **100%** de gastos y tiempo de tratamiento necesario (salud y cybernética) |
 
 
 ---
