@@ -359,9 +359,20 @@ A quality-X kit can repair pieces up to the tier indicated (penalty in parenthes
 
 Pressure hook or magnet; the cable reels in (target toward you, or you toward the anchor point, depending on weight). Range 50 m. Can snag people.
 
+> **Example — Grapple gun**
+> The service stairs end at a welded door. Below, the patrol's lights are already rounding the corner. Dante, Mercenary, looks at the building across the street: fifty meters of empty air and an antenna that looks eager to help.
+>
+> —I shoot the grapple at the antenna and cross over the cable before they spot me.
+>
+> —RC —says the GM—: pulse, timing on the winch, and a cable you've never met. Roll.
+>
+> 2d6 + 1. Comes up **10**. The grapple bites the antenna on the first shot, the cable goes taut, and Dante crosses the alley flying low. Below, the patrol finds the welded door and starts arguing over whose fault it is.
+
 ### Mobile turret
 
 Preloaded whitelist; fires at the nearest enemy: 1d6/turn. The turret's acting roll: 2d6+0.
+
+> For the turret, "enemy" is anyone not on its whitelist — an ally without clearance counts as a threat. The turret's acting roll (2d6+0) belongs to the turret, not the players: use it when something contests its work (a sprint to cover, a live hack), not for every routine burst.
 
 ### Trauma card
 

@@ -359,9 +359,20 @@ El kit de calidad X puede reparar piezas hasta la categoría indicada (penalizad
 
 Gancho por presión o imán; cable retrae (objetivo hacia ti o tú hacia el punto, según peso). Alcance 50 m. Puede capturar personas.
 
+> **Ejemplo — Pistola garfio**
+> La escalera de servicio termina en una puerta soldada. Abajo, las luces de la patrulla ya doblan la esquina. Dante, Mercenario, mira el edificio de enfrente: cincuenta metros de vacío y una antena con cara de querer ayudarlo.
+>
+> —Disparo el garfio a la antena y me cruzo por el cable antes de que me vean.
+>
+> —RC —dice el DJ—: pulso, timing de la corriente y un cable que no conocés. Tirá.
+>
+> 2d6 + 1. Sale **10**. El garfio muerde la antena al primer disparo, el cable se tensa y Dante cruza el callejón volando bajo. Abajo, la patrulla encuentra la puerta soldada y empieza a discutir de quién es la culpa.
+
 ### Torreta móvil
 
 Lista blanca precargada; dispara al enemigo más cercano: 1d6/turno. Tirada de actuación de la torreta: 2d6+0.
+
+> Para la torreta, «enemigo» es cualquiera que no figure en su lista blanca — un aliado sin clearance cuenta como amenaza. La Tirada de actuación (2d6+0) es de la torreta, no de los jugadores: usala cuando algo dispute su trabajo (una carrera a la cobertura, un hackeo en vivo), no para cada ráfaga rutinaria.
 
 ### Trauma card
 
