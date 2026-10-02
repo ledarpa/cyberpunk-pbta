@@ -316,6 +316,13 @@ Presentación variable (instrumento, caja de sonido, etc.). Colocado en un punto
 | Silencioso | Casi inaudible; solo en silencio total |
 | Vigilante | Cámara/micrófono + almacenamiento; enlace a HUD de implantes si lo tienes |
 
+> **Ejemplo — Una herramienta en acción**
+> El Biohacker está en su taller de containers, olor a soldadura y fritanga, y necesita saber cuántos guardias hay en la clínica clandestina de enfrente sin moverse de la silla. Saca su drone corriente —dos subsistemas: vigilante y silencioso— y lo tira por la ventilación. «Lo paseo por el techo y mapeo la clínica.» El DJ: «EN». 2d6+EN: **7**.
+>
+> El DJ ofrece: el drone vuelve tocado y hay que repararlo, o alguien capta la señal de control y triangularla es cuestión de tiempo, o el video sale incompleto, sin el sótano. Ella elige la señal.
+>
+> «El drone se desliza por el ducto sin hacer ruido —silencioso, casi inaudible, solo lo escucharías en el vacío— y yo miro todo por su cámara en la pantalla rota del taller. Vigilante grabando: dos guardias en recepción, uno dormido en el pasillo, cámaras en cada esquina, la puerta del quirófano con teclado. Cinco metros por turno, paciente, deja que el drone respire. Anoto todo en la pizarra con marcador. Cuando lo traigo de vuelta, una lucecita me parpadea en el analizador: alguien rastreó la señal de control. No saben dónde estoy todavía, pero ya están mirando. La chapería no me toca el @Psique, me toca otra cosa: la suerte. Y la mía acaba de quedar fichada.»
+
 ### Emulador biométrico
 
 Conecta a terminal de acceso; burla reconocimiento biométrico.
@@ -387,12 +394,6 @@ Membresía Trauma Team en el bolsillo; monitoriza biológico y cibernético. Si 
 | **Preferencial** | Tras **1 día** de terapia: curado y reparado al **50%** |
 | **VIP** | Cubren **100%** de gastos y tiempo de tratamiento necesario (salud y cibernética) |
 
-> **Ejemplo — Una herramienta en acción**
-> El Biohacker está en su taller de containers, olor a soldadura y fritanga, y necesita saber cuántos guardias hay en la clínica clandestina de enfrente sin moverse de la silla. Saca su drone corriente —dos subsistemas: vigilante y silencioso— y lo tira por la ventilación. «Lo paseo por el techo y mapeo la clínica.» El DJ: «EN». 2d6+EN: **7**.
->
-> El DJ ofrece: el drone vuelve tocado y hay que repararlo, o alguien capta la señal de control y triangularla es cuestión de tiempo, o el video sale incompleto, sin el sótano. Ella elige la señal.
->
-> «El drone se desliza por el ducto sin hacer ruido —silencioso, casi inaudible, solo lo escucharías en el vacío— y yo miro todo por su cámara en la pantalla rota del taller. Vigilante grabando: dos guardias en recepción, uno dormido en el pasillo, cámaras en cada esquina, la puerta del quirófano con teclado. Cinco metros por turno, paciente, deja que el drone respire. Anoto todo en la pizarra con marcador. Cuando lo traigo de vuelta, una lucecita me parpadea en el analizador: alguien rastreó la señal de control. No saben dónde estoy todavía, pero ya están mirando. La chapería no me toca el @Psique, me toca otra cosa: la suerte. Y la mía acaba de quedar fichada.»
 
 ---
 

@@ -316,6 +316,13 @@ Variable presentation (an instrument, a boombox, etc.). Placed at a spot; remote
 | Silent | Nearly inaudible; you'd only hear it in total silence |
 | Watchman | Camera/microphone + storage; links to your implant HUD if you have one |
 
+> **Example — A tool in action**
+> The Biohacker is in her container workshop, solder and fried-food smell in the air, and she needs to know how many guards are in the clandestine clinic across the street without leaving her chair. She pulls out her street-grade drone —two subsystems: watchman and silent— and sends it through the vents. "I walk it over the roof and map the clinic." The GM: "EN." 2d6+EN: **7**.
+>
+> The GM offers: the drone comes back hit and needs repairs, or someone picks up the control signal and triangulating it is just a matter of time, or the footage comes out incomplete, no basement. She takes the signal.
+>
+> "The drone slides through the duct without a sound —silent, nearly inaudible, you'd only hear it in a vacuum— and I watch everything through its camera on the workshop's broken screen. Watchman recording: two guards at reception, one asleep in the hallway, cameras on every corner, the OR door with a keypad. Five meters a turn, patient, let the drone breathe. I write it all on the whiteboard in marker. When I bring it back, a little light blinks on the analyzer: someone traced the control signal. They don't know where I am yet, but they're already looking. Hardware doesn't touch my @Psyche; it touches something else: luck. And mine just got tagged."
+
 ### Biometric emulator
 
 Plugs into an access terminal; fools biometric recognition.
@@ -387,12 +394,6 @@ Trauma Team membership in your pocket; monitors your biological and cybernetic s
 | **Preferred** | After **1 day** of therapy: healed and repaired to **50%** |
 | **VIP** | They cover **100%** of costs and treatment time (health and cybernetics) |
 
-> **Example — A tool in action**
-> The Biohacker is in her container workshop, solder and fried-food smell in the air, and she needs to know how many guards are in the clandestine clinic across the street without leaving her chair. She pulls out her street-grade drone —two subsystems: watchman and silent— and sends it through the vents. "I walk it over the roof and map the clinic." The GM: "NE." 2d6+NE: **7**.
->
-> The GM offers: the drone comes back hit and needs repairs, or someone picks up the control signal and triangulating it is just a matter of time, or the footage comes out incomplete, no basement. She takes the signal.
->
-> "The drone slides through the duct without a sound —silent, nearly inaudible, you'd only hear it in a vacuum— and I watch everything through its camera on the workshop's broken screen. Watchman recording: two guards at reception, one asleep in the hallway, cameras on every corner, the OR door with a keypad. Five meters a turn, patient, let the drone breathe. I write it all on the whiteboard in marker. When I bring it back, a little light blinks on the analyzer: someone traced the control signal. They don't know where I am yet, but they're already looking. Hardware doesn't touch my @Psyche; it touches something else: luck. And mine just got tagged."
 
 ---
 
