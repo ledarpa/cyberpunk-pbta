@@ -125,7 +125,7 @@ Tienes un primo —o un hermano de oficio— que corta carne y cable con la mism
 
 **En la mesa:** EN [0] · MC [+1] · RC [-1] · TM [0]. **Arsenal inicial:** pistola.
 
-Ellos fabrican la verdad a medida. Tú la desarmas en vivo. Las Corporaciones derraman tóxicos, compran jueces, desatan guerras de proxy y sonríen en los screamsheets. El Gobierno no las frena: es un cliente más. El último dique entre el monopolio total y la Calle todavía medio despierta son los Media… y tú estás en esa trinchera con un pase de prensa, contactos en cada rave y una audiencia que todavía cree —o finge creer— que la información puede dolerles a los de arriba.
+Ellos fabrican la verdad a medida. Tú la desarmas en vivo. Las Corporaciones derraman tóxicos, compran jueces, desatan guerras de proxy y sonríen en los screamsheets. El Gobierno no las frena: es un cliente más. El último dique entre el monopolio total y la Calle todavía medio despierta son los Cronistas… y tú estás en esa trinchera con un pase de prensa, contactos en cada rave y una audiencia que todavía cree —o finge creer— que la información puede dolerles a los de arriba.
 
 Cuando excavas, primero llega el encubrimiento: funcionarios, abogados, perros falderos con traje. Después la amenaza. Después el intento de borrarte del aire. Una vez te cancelaron el netblog entero; volviste con tu equipo y empujaste la historia hasta que la Dirección tuvo que tragar. Te han apuntado demasiadas veces. Por eso un mercenario camina a tu sombra y un netrunner bueno —caro, nervioso, imprescindible— escarba la Red mientras tú miras a cámara. No alcanza con ser valiente. Hay que ser mejor que la máquina de olvido corporativa.
 
@@ -154,7 +154,7 @@ Sabes que tu propia Corporación mediática te usa tanto como tú la usas a ella
 
 **En la mesa:** EN [0] · MC [+1] · RC [0] · TM [-1]. **Arsenal inicial:** pistola.
 
-En otro siglo te habrían llamado yuppie con MBA y sonrisa de catálogo. Hoy eres Exec: alma hipotecada a la Compañía, acceso a pisos donde el aire se filtra y la moral no. Las Corporaciones no influyen en el mundo cyberpunk. Lo administran. Gobiernos, mercados, ejércitos, órbita baja. Quien controla la torre controla el tablero. Tú entraste para subir. Todavía no decidiste si fue ambición o miedo a quedarte abajo.
+En otro siglo te habrían llamado yuppie con MBA y sonrisa de catálogo. Hoy eres Ejecutivo: alma hipotecada a la Compañía, acceso a pisos donde el aire se filtra y la moral no. Las Corporaciones no influyen en el mundo cyberpunk. Lo administran. Gobiernos, mercados, ejércitos, órbita baja. Quien controla la torre controla el tablero. Tú entraste para subir. Todavía no decidiste si fue ambición o miedo a quedarte abajo.
 
 La vida de ejecutivo junior no es un open space con café gratis. Es una guerra de pasillos. Los de abajo matarían por tu silla. Los de arriba matarían para que no llegues a la suya. Sabotaje, soborno, chantaje, “accidentes” de ascenso: rutina. Cada joven lobo mantiene mercenarios y netrunners como quien mantiene un seguro de vida… o un arma bajo el escritorio. El premio es poder real. El castigo es la Calle, o una necropsia que nadie investigará.
 
@@ -202,7 +202,7 @@ El cuerpo paga el precio que el informe no menciona. Implantes discretos, hábit
 
 **En la mesa:** EN [0] · MC [-1] · RC [0] · TM [+1]. **Arsenal inicial:** pistola, escopeta, fusil o rifle.
 
-Cuando el colapso financiero barrió empleos y casas, las carreteras se llenaron de gente que ya no tenía dirección postal. Disturbios, toques de queda, corporaciones comprando lo que el Estado no podía sostener. De ese éxodo nació algo que la ciudad aún mira de reojo: los Nomads, los forasteros. No son turistas. Son un pueblo en movimiento, unido por deuda compartida, sangre y la certeza de que quedarse quieto es morir de a poco.
+Cuando el colapso financiero barrió empleos y casas, las carreteras se llenaron de gente que ya no tenía dirección postal. Disturbios, toques de queda, corporaciones comprando lo que el Estado no podía sostener. De ese éxodo nació algo que la ciudad aún mira de reojo: los Nómades, los forasteros. No son turistas. Son un pueblo en movimiento, unido por deuda compartida, sangre y la certeza de que quedarse quieto es morir de a poco.
 
 Tu vida es el convoy, el clan, el pacto de no abandonar al que se queda sin rueda a las tres de la madrugada. Familias, clanes, tribus, naciones: escalas de lealtad más reales que cualquier ciudadanía. Las Siete Naciones tienen líderes, rutas y orgullo. Los Raffen Shiv son la sombra en el asfalto: parias, bandidos, la prueba de que también entre nómadas hay quien solo entiende el lenguaje del saqueo. Tú sabes de qué lado caminas… o finges no saberlo cuando el trabajo lo exige.
 
@@ -225,13 +225,13 @@ En Night City eres el olor a aceite y desierto que entra cuando alguien abre la 
 
 **En la mesa:** EN [-1] · MC [-1] · RC [+1] · TM [+1]. **Arsenal inicial:** pistola, escopeta, fusil o rifle + pistola impr.
 
-Naciste con un arma en la mano de carne. La otra —la de metal, la que fabrica muerte con precisión de catálogo— llegó después, cuando el cuerpo original ya no alcanzó. Eres Solo: guarda de alquiler, ejecutor, cibersoldado de contrato. Ya sea bajo bandera corporativa o en “acciones policiales” que nunca se llaman guerras, tu oficio es el mismo: convertir violencia en resultado facturable.
+Naciste con un arma en la mano de carne. La otra —la de metal, la que fabrica muerte con precisión de catálogo— llegó después, cuando el cuerpo original ya no alcanzó. Eres Lobo: guarda de alquiler, ejecutor, cibersoldado de contrato. Ya sea bajo bandera corporativa o en “acciones policiales” que nunca se llaman guerras, tu oficio es el mismo: convertir violencia en resultado facturable.
 
 La mayoría de los tuyos salió de ejércitos privados o de campañas oficiales que dejaron más cromo que medallas. Cada herida empuja más hardware: extremidades-arma, blindaje bajo la piel, chips que afilan reflejos, combat drugs que compran segundos a costa de años. Si llegas a la cima del escalafón samurái, tal vez te conviertas en ronin: asesino, escolta o martillo para quien pague tu tarifa obscena. El mercado adora a los mejores. El mercado también los descarta sin funeral.
 
 El precio no es poesía. Es adicción, paranoia y un cuerpo que ya no reconoce del todo como propio. Tus instintos están tan entrenados que la calma se siente como fallo del sistema. No confías en madres, amantes ni “hermanos de unidad”: en este trabajo la traición es un beneficio marginal. Una noche duermes en un ático con vista a torres iluminadas. La siguiente, en un callejón que huele a ozono y sangre seca. Misma persona. Mismo gatillo. Distinto recibo.
 
-Sabes que la Calle te mira como arma andante… y no se equivoca del todo. También sabes que sin gente como tú, los Exec no salen del ascensor y los Media no llegan vivos a la emisión. No pides que te quieran. Pides que paguen por adelantado y que el contrato diga claro quién muere si alguien improvisa. En el fondo, todos compran lo mismo: la ilusión de control a través de tu gatillo. Ser el mejor no es gloria. Es sobrevivir una noche más siendo exactamente lo que Night City fabricó: una solución letal con nombre en la factura.
+Sabes que la Calle te mira como arma andante… y no se equivoca del todo. También sabes que sin gente como tú, los Ejecutivos no salen del ascensor y los Cronistas no llegan vivos a la emisión. No pides que te quieran. Pides que paguen por adelantado y que el contrato diga claro quién muere si alguien improvisa. En el fondo, todos compran lo mismo: la ilusión de control a través de tu gatillo. Ser el mejor no es gloria. Es sobrevivir una noche más siendo exactamente lo que Night City fabricó: una solución letal con nombre en la factura.
 
 > **Ejemplo — Mercenario**
 > Contrato simple: retener el pasillo tres minutos mientras el cliente evacúa. Cuatro hostiles, armamento pesado, ya doblaron la esquina.

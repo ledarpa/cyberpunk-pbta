@@ -75,7 +75,7 @@
 | Corpo | Exec: hallway warfare and black projects. |
 | Spook | Infiltration, identities, secrets without shine. |
 | Outsider | Nomad: convoy, clan, routes outside the law. |
-| Mercenary | Solo: contract violence, body as weapon. |
+| Mercenary | Wolf: contract violence, body as weapon. |
 | Netrunner | Ghost of the Net: data, ICE, interfaces. |
 
 ---
