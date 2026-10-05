@@ -81,3 +81,6 @@
 ---
 
 Cyberpunk-PbtA is unofficial content provided under the Homebrew Content Policy of R. Talsorian Games and is not approved or endorsed by RTG. This content references materials that are the property of R. Talsorian Games and its licensees.
+
+
+Cyberpunk-PbtA is powered by the Apocalypse, inspired by and based on Apocalypse World by Meguey Baker and Vincent Baker (apocalypse-world.com).
