@@ -1119,6 +1119,18 @@ table.t-modulo tbody td:first-child {
   width: calc(20ch + 0.8rem);
 }
 
+/* Trauma card (| Nivel | Servicio |): col Nivel angosta al contenido
+   («Preferencial» = 12ch) — el ancho sobrante va a Servicio, que es el
+   texto largo. En móvil le devuelve ~35px a la columna útil. */
+table.t-nivel {
+  table-layout: fixed;
+}
+
+table.t-nivel thead th:first-child,
+table.t-nivel tbody td:first-child {
+  width: calc(12ch + 1rem);
+}
+
 /* Tablas compactas Calidad/* al lado del dibujo */
 .table-wrap--rail {
   clear: none;
