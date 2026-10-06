@@ -893,7 +893,8 @@ const MOD_SLOTS = { impro: 1, corr: 2, hitech: 3, mil: 4 };
       id: "piernas-cuadrupedo",
       name: "Cuadrúpedo",
       short: "Cuadrúpedo",
-      detail: "Modo potencia 1d6 turnos; 12 h para recargar.",
+      detail:
+        "Solo en módulo de cybervértebra (orugas plegables o cuadrúpedo equivalente). En reposo: tamaño mochila pequeña.",
       statsByQuality: {
         impro: { rc: 1 },
         corr: { rc: 2 },
@@ -911,8 +912,7 @@ const MOD_SLOTS = { impro: 1, corr: 2, hitech: 3, mil: 4 };
       id: "piernas-velocista",
       name: "Velocista",
       short: "Velocista",
-      detail:
-        "Solo en módulo de cybervértebra (orugas plegables o cuadrúpedo equivalente). En reposo: tamaño mochila pequeña.",
+      detail: "Modo potencia 1d6 turnos; 12 h para recargar.",
       statsByQuality: {
         impro: { rc: 1 },
         corr: { tm: 1, rc: 1 },

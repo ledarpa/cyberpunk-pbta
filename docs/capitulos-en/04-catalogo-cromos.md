@@ -431,7 +431,7 @@ Always in pairs; one pair = one module. A replacement, not a prosthesis: the pai
 
 #### Quadruped
 
-Power mode 1d6 turns; 12 h to recharge.
+Only on a cyberspine module (folding tracks or the quadruped equivalent). At rest: small backpack size.
 
 | Quality | Run / KR |
 | --- | --- |
@@ -442,13 +442,13 @@ Power mode 1d6 turns; 12 h to recharge.
 
 #### Sprinter
 
-Only on a cyberspine module (folding tracks or the quadruped equivalent). At rest: small backpack size.
+Power mode 1d6 turns; 12 h to recharge.
 
 | Quality | Movement |
 | --- | --- |
 | Improvised | +50% speed (3 actions every 2 turns); 3 m jump; **+1 KR** |
 | Street | +100% (2 actions/turn); 6 m jump; **+1 MT, +1 KR** |
-| Hi-Tech | +150% (5 actions every 2 turns); 12 m jump; **+1 MT, **+2 KR** |
+| Hi-Tech | +150% (5 actions every 2 turns); 12 m jump; **+1 MT, +2 KR** |
 | Military | +200% (3 actions/turn); 20 m jump; **+2 MT, +2 KR** |
 
 

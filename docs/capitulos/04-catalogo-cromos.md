@@ -431,7 +431,7 @@ Siempre de a pares; un par = un módulo. Reemplazo no prótesis: siempre el par 
 
 #### Cuadrúpedo
 
-Modo potencia 1d6 turnos; 12 h para recargar.
+Solo en módulo de cybervértebra (orugas plegables o cuadrúpedo equivalente). En reposo: tamaño mochila pequeña.
 
 | Calidad | Correr / RC |
 | --- | --- |
@@ -442,7 +442,7 @@ Modo potencia 1d6 turnos; 12 h para recargar.
 
 #### Velocista
 
-Solo en módulo de cybervértebra (orugas plegables o cuadrúpedo equivalente). En reposo: tamaño mochila pequeña.
+Modo potencia 1d6 turnos; 12 h para recargar.
 
 | Calidad | Movimiento |
 | --- | --- |
