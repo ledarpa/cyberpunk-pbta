@@ -433,23 +433,23 @@ Siempre de a pares; un par = un módulo. Reemplazo no prótesis: siempre el par 
 
 Modo potencia 1d6 turnos; 12 h para recargar.
 
-| Calidad | Movimiento |
-| --- | --- |
-| Improvisado | +50 % velocidad (3 acciones cada 2 turnos); salto 3 m; **+1 RC** |
-| Corriente | +100 % (2 acciones/turno); salto 6 m; **+1 TM, +1 RC** |
-| Hi-Tech | +150 % (5 acciones cada 2 turnos); salto 12 m; **+1 TM, +2 RC** |
-| Militar | +200 % (3 acciones/turno); salto 20 m; **+2 TM, +2 RC** |
-
-#### Velocista
-
-Solo en módulo de cybervértebra (orugas plegables o cuadrúpedo equivalente). En reposo: tamaño mochila pequeña.
-
 | Calidad | Correr / RC |
 | --- | --- |
 | Improvisado | ×2 velocidad; **+1 RC** |
 | Corriente | ×3; **+2 RC** |
 | Hi-Tech | ×4; **+3 RC** |
 | Militar | ×5; **+4 RC** |
+
+#### Velocista
+
+Solo en módulo de cybervértebra (orugas plegables o cuadrúpedo equivalente). En reposo: tamaño mochila pequeña.
+
+| Calidad | Movimiento |
+| --- | --- |
+| Improvisado | +50 % velocidad (3 acciones cada 2 turnos); salto 3 m; **+1 RC** |
+| Corriente | +100 % (2 acciones/turno); salto 6 m; **+1 TM, +1 RC** |
+| Hi-Tech | +150 % (5 acciones cada 2 turnos); salto 12 m; **+1 TM, +2 RC** |
+| Militar | +200 % (3 acciones/turno); salto 20 m; **+2 TM, +2 RC** |
 
 
 ---
