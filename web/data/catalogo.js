@@ -17,6 +17,7 @@ window.PBTA_CATALOGO = (() => {
   /** Solo cuando el texto completo no entra en la línea del ledger. */
   const Q_SHORT = { impro: "Imp", corr: "Corr", hitech: "Hi-T", mil: "Mil" };
   const SAI_SLOTS = { impro: 0, corr: 1, hitech: 2, mil: 3 };
+const MOD_SLOTS = { impro: 1, corr: 2, hitech: 3, mil: 4 };
 
   const sai = (id, name, shortName, detail) => ({
     id,
@@ -548,7 +549,7 @@ window.PBTA_CATALOGO = (() => {
       short: "Ojo",
       detail:
         "Glóbulo + músculos + chip de asistencia. Con el ojo apagado pero funcional, enciende pasivo el colorimétrico convencional. Cada ojo = un cromo. Módulos del mismo ojo funcionan juntos.",
-      moduleSlots: SAI_SLOTS,
+      moduleSlots: MOD_SLOTS,
       modules: [
         acc("colorimetria", "Colorimetría de banda ancha", "Color+MC", {
           detail: "Más colores; detecta láseres de seguridad.",
@@ -594,7 +595,7 @@ window.PBTA_CATALOGO = (() => {
       short: "Oído",
       detail:
         "Reemplazo del sistema auditivo. Con todos los módulos apagados y el oído operativo, enciende pasivo el audiométrico convencional.",
-      moduleSlots: SAI_SLOTS,
+      moduleSlots: MOD_SLOTS,
       modules: [
         acc("db", "Adecuador de dB", "dB+RC", {
           detail: "Protege oído del daño por volumen; sensibilidad manual a sonidos mínimos.",
@@ -630,7 +631,7 @@ window.PBTA_CATALOGO = (() => {
       short: "Digest",
       detail:
         "Órganos sintéticos modulares. Sin módulos: modo reposo = digestivo orgánico sin mejoras. Solo uno en todo el cuerpo.",
-      moduleSlots: SAI_SLOTS,
+      moduleSlots: MOD_SLOTS,
       modules: [
         acc("amp-db", "Amplificador de dB", "Amp+MC", {
           detail: "Grito tipo megáfono.",
@@ -662,7 +663,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Aparato respiratorio modular",
       short: "Resp",
       detail: "Sin módulos = respiratorio orgánico en reposo. Solo uno en el cuerpo.",
-      moduleSlots: SAI_SLOTS,
+      moduleSlots: MOD_SLOTS,
       modules: [
         acc("olfato", "Amplificador olfativo", "Olf+EN", {
           detail: "Olor con más precisión.",
@@ -737,7 +738,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Cybervértebras",
       short: "Vértebras",
       detail: "Columna y nervios reemplazados por control corporal automatizado. Modular.",
-      moduleSlots: SAI_SLOTS,
+      moduleSlots: MOD_SLOTS,
       modules: [
         acc("extremidad-extra", "Cyberextremidad adicional", "Extra", {
           detail: "Cada módulo añade una extremidad (antropomórfica o función específica).",
@@ -757,7 +758,7 @@ window.PBTA_CATALOGO = (() => {
       short: "Corazón",
       detail:
         "Multi-bomba de 4 cavidades; evita fallos cardíacos naturales o por estrés; conduce fluidos sintéticos. Hasta 2 corazones biónicos por personaje.",
-      moduleSlots: SAI_SLOTS,
+      moduleSlots: MOD_SLOTS,
       modules: [
         acc("adrenalina", "Inyector de adrenalina", "Adren+RC", {
           detail:
@@ -793,7 +794,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Brazo de combate",
       short: "BrazoC",
       detail: "Brazo de combate modular. Los módulos heredan la calidad del brazo.",
-      moduleSlots: SAI_SLOTS,
+      moduleSlots: MOD_SLOTS,
       modules: [
         acc("sable-mantis", "Sable Mantis", "Mantis+TM", {
           detail: "Hojas hasta 1 m.",
@@ -851,7 +852,7 @@ window.PBTA_CATALOGO = (() => {
       name: "Tecnoherramienta",
       short: "TecnoH",
       detail: "Brazo para cyberimplantes y trabajo de netrunner.",
-      moduleSlots: SAI_SLOTS,
+      moduleSlots: MOD_SLOTS,
       modules: [
         acc("kit-montaje", "Kit de montaje", "Mont+EN", {
           detail: "Reparación de emergencia en cyberware.",
