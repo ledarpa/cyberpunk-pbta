@@ -1,9 +1,10 @@
-#let logo-lines = read("../assets/portada-ascii.txt").split("\n").map(l => l.trim()).filter(l => l != "")
+#let logo-lines = read("../assets/portada-ascii.txt").split("\n").map(l => l.replace("\u{a0}", " ")).map(l => l.replace(regex(" +$"), "")).filter(l => l != "")
 
 #let c = (
   text: rgb("#101010"),
   black: rgb("#000000"),
   gray: rgb("#555555"),
+  soft: rgb("#8a8a8a"),
   muted: rgb("#767676"),
   th-bg: rgb("#e6e6e6"),
   th-fg: rgb("#000000"),
@@ -25,7 +26,7 @@
   ]),
 ))
 
-#let h-rule = text(size: 12.5pt, fill: c.gray)[===================================]
+#let h-rule = text(size: 14pt, fill: c.gray)[===================================]
 
 #let cover-page() = {
   set align(center)
@@ -34,14 +35,14 @@
   v(0.5cm)
   text(size: 16pt, fill: c.black, tracking: 1.6pt)[MANUAL DE REGLAS]
   v(0.14cm)
-  text(size: 11.5pt, fill: c.gray)[v1.0]
+  text(size: 11pt, fill: c.gray)[v1.0]
   v(0.85cm)
   image("../.generated/pdf/assets/manual/night_city.png", width: 78%)
 }
 
 #let toc-entry(h) = context {
   let page-num = locate(h.location()).page()
-  let size = if h.level == 1 { 11.5pt } else { 11pt }
+  let size = 11pt
   let level-minus-one = h.level - 1
   let indent = level-minus-one * 6pt
   pad(
@@ -51,7 +52,7 @@
       column-gutter: (0pt, 5pt, 5pt),
       box(width: indent)[],
       text(size: size, h.body),
-      box(baseline: 0%, height: 0.2em, move(dy: -0.75em, line(length: 100%, stroke: (paint: c.gray, thickness: 0.8pt, dash: "dotted", cap: "butt")))),
+      text(size: size, fill: c.gray)[#repeat[.]],
       text(size: size, str(page-num)),
     ),
   )
@@ -61,16 +62,17 @@
   let entries = query(heading.where(outlined: true)).filter(h => h.level <= 3)
   let items = entries.map(h => toc-entry(h))
   let half = calc.floor(items.len() / 2)
-  grid(
+  pad(top: 14pt, grid(
     columns: (1fr, 1fr),
     column-gutter: 22pt,
     stack(spacing: 0pt, ..items.slice(0, half)),
     stack(spacing: 0pt, ..items.slice(half)),
-  )
+  ))
 }
 
 #let chapter-block(body) = {
   pagebreak(weak: true)
+  set par(leading: 7.8pt, spacing: 14pt)
   columns(2, gutter: 20pt, body)
 }
 
@@ -79,7 +81,7 @@
   set page(paper: "a4", margin: (top: 1.5cm, bottom: 1.55cm, x: 1.35cm), numbering: none, footer: context {
     let p = counter(page).get().first()
     if p > 1 {
-      align(center, text(fill: c.gray, size: 10pt)[-- #counter(page).display("1") --])
+      align(center, text(fill: c.gray, size: 11pt)[-- #counter(page).display("1") --])
     }
   })
   set par(leading: 0.24em, spacing: 0.8em, justify: false)
@@ -88,12 +90,12 @@
 
   show heading.where(level: 1): it => {
     block(sticky: true, breakable: false, width: 100%)[
-      #align(center)[#h-rule#linebreak()#text(size: 15pt, fill: c.black, it.body)#linebreak()#h-rule]
+      #align(center)[#h-rule#linebreak()#text(size: 14pt, fill: c.black, it.body)#linebreak()#h-rule]
     ]
   }
-  show heading.where(level: 2): it => block(sticky: true, breakable: false, above: 11pt, below: 3pt, width: 100%, text(size: 17pt, fill: c.black, it.body))
-  show heading.where(level: 3): it => block(sticky: true, breakable: false, above: 9pt, below: 3pt, width: 100%, text(size: 14pt, fill: c.gray, it.body))
-  show heading.where(level: 4): it => block(sticky: true, breakable: false, above: 7pt, below: 2pt, width: 100%, text(size: 12.5pt, fill: c.black, it.body))
+  show heading.where(level: 2): it => block(sticky: true, breakable: false, above: 14pt, below: 14pt, width: 100%, text(size: 14pt, fill: c.black, it.body))
+  show heading.where(level: 3): it => block(sticky: true, breakable: false, above: 12pt, below: 12pt, width: 100%, text(size: 14pt, fill: c.gray, it.body))
+  show heading.where(level: 4): it => block(sticky: true, breakable: false, above: 10pt, below: 10pt, width: 100%, text(size: 14pt, fill: c.black, it.body))
 
   cover-page()
   pagebreak()
@@ -102,33 +104,45 @@
   body
 }
 
-#let fig(path, width: 100%) = block(above: 6pt, below: 6pt, width: 100%, align(center, image(path, width: width)))
+#let fig-float(path, width: 100%) = place(bottom + center, float: true, scope: "column", clearance: 6pt, image(path, width: width))
 
-#let figrow(paths, width: 31%) = block(above: 6pt, below: 6pt, width: 100%, align(center, grid(columns: paths.len(), column-gutter: 6pt, ..paths.map(p => image(p, width: width)))))
+#let banner(path, width: 85%) = block(above: 4pt, below: 8pt, width: 100%, align(center, image(path, width: width)))
 
-#let tbl(head, rows) = {
+#let fig(path, width: 100%) = block(above: 10pt, below: 10pt, width: 100%, align(center, image(path, width: width)))
+
+#let figrow(paths, frs) = block(above: 10pt, below: 10pt, width: 100%, grid(columns: frs, column-gutter: 6pt, ..paths.map(p => image(p, width: 100%))))
+
+#let tbl(head, rows, cols: auto) = {
   let num-cols = head.len()
-  let cols = if num-cols == 3 { ((7fr, 18fr, 25fr)) } else if num-cols == 2 { ((2fr, 3fr)) } else { (..range(num-cols).map(_ => 1fr)) }
-  block(above: 6pt, below: 7pt, table(
-    columns: cols,
-    inset: (x: 5pt, y: 3.5pt),
-    stroke: 0.6pt + c.line,
-    table.header(..head.map(h => table.cell(fill: c.th-bg, text(fill: c.th-fg, h)))),
-    ..rows.flatten(),
+  let cols = if cols != auto { cols } else if num-cols == 3 { ((7fr, 18fr, 25fr)) } else if num-cols == 2 { ((2fr, 3fr)) } else { (..range(num-cols).map(_ => 1fr)) }
+  block(above: 10pt, below: 11pt, grid(
+    columns: 1,
+    rows: (auto, auto),
+    block(
+      fill: c.th-bg,
+      inset: (x: 5pt, y: 3.5pt),
+      grid(columns: cols, ..head.map(h => text(fill: c.th-fg, h))),
+    ),
+    table(
+      columns: cols,
+      inset: (x: 5pt, y: 3.5pt),
+      stroke: (top: none, x: none, left: none, right: none, y: 0.6pt + c.line, bottom: 0.6pt + c.line),
+      ..rows.flatten(),
+    ),
   ))
 }
 
-#let quote(body) = block(width: 100%, above: 5pt, below: 5pt, stroke: (left: 2.5pt + c.gray), inset: (left: 8pt, top: 1pt, bottom: 1pt, right: 4pt), text(fill: c.gray, body))
+#let quote(body) = block(width: 100%, above: 10pt, below: 10pt, stroke: (left: 2.5pt + c.soft), inset: (left: 8pt, top: 1pt, bottom: 1pt, right: 4pt), text(fill: c.soft, body))
 
-#let ejemplo(body) = block(width: 100%, above: 5pt, below: 5pt, stroke: (left: 2.5pt + c.gray), inset: (left: 8pt, top: 1pt, bottom: 1pt, right: 4pt), text(fill: c.gray, body))
+#let ejemplo(body) = block(width: 100%, above: 10pt, below: 10pt, stroke: (left: 2.5pt + c.gray), inset: (left: 8pt, top: 1pt, bottom: 1pt, right: 4pt), text(fill: c.gray, body))
 
-#let mesa(body) = text(fill: c.gray, body)
+#let mesa(body) = text(fill: c.soft, body)
 
 #let legal(body) = text(size: 8.5pt, fill: c.muted, body)
 
-#let sep() = block(above: 9pt, below: 11pt, width: 100%, align(center, text(fill: c.gray)[----------------------------]))
+#let sep() = block(above: 14pt, below: 14pt, width: 100%, align(center, text(fill: c.gray)[----------------------------]))
 
 #let acc(body) = text(fill: c.black, body)
-#let emc(body) = text(fill: c.gray, body)
-#let hl(body) = text(fill: c.gray, body)
+#let emc(body) = text(fill: c.soft, body)
+#let hl(body) = text(fill: c.soft, body)
 #let mono(body) = text(fill: c.black, body)

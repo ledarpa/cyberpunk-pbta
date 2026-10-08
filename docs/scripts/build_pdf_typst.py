@@ -125,6 +125,22 @@ def fig_line(path: str, width: str = "100%") -> str:
     return f'#fig("{path}", width: {width})'
 
 
+CATALOG_ART_AFTER_TEXT = {"Cybervértebras"}
+
+
+PROFESSION_IMG_POS = {
+    "Arreglador": "title",
+    "Artista": "intro",
+    "Biohacker": "intro",
+    "Comunicador": "example_end",
+    "Corpo": "intro",
+    "Espía": "intro",
+    "Forastero": "example_end",
+    "Mercenario": "arsenal",
+    "Netrunner": "title",
+}
+
+
 def convert_chapter(text: str) -> str:
     blocks: list[str] = []
     lines = text.splitlines()
@@ -137,9 +153,14 @@ def convert_chapter(text: str) -> str:
     pend_after: str | None = None
     list_lines: list[str] | None = None
     prev_marker: str | None = None
+    pend_prof: str | None = None
+    pend_prof_pos: str | None = None
+    intro_count: int = 0
+    pend_after_text: str | None = None
+    legal_started: bool = False
 
     def flush_quote() -> None:
-        nonlocal quote_buf
+        nonlocal quote_buf, pend_prof, pend_prof_pos
         if quote_buf is None:
             return
         is_ejemplo = bool(quote_buf) and quote_buf[0].startswith("**Ejemplo")
@@ -149,7 +170,16 @@ def convert_chapter(text: str) -> str:
         if not paras:
             return
         body = "\n\n".join(paras)
-        blocks.append(f"#ejemplo[{body}]" if is_ejemplo else f"#quote[{body}]")
+        if is_ejemplo and pend_prof:
+            if pend_prof_pos == "intro":
+                blocks.append(pend_prof)
+            blocks.append(f"#ejemplo[{body}]")
+            if pend_prof_pos == "example_end":
+                blocks.append(pend_prof)
+            pend_prof = None
+            pend_prof_pos = None
+        else:
+            blocks.append(f"#ejemplo[{body}]" if is_ejemplo else f"#quote[{body}]")
 
     def flush_table() -> None:
         nonlocal table_buf, pend_before, pend_after
@@ -158,13 +188,31 @@ def convert_chapter(text: str) -> str:
         if pend_before:
             blocks.append(fig_line(pend_before))
             pend_before = None
+        raw_head = [cell.strip() for cell in table_buf[0]]
         head = [inline_typ(cell) for cell in table_buf[0]]
         rows = []
         for row in table_buf[1:]:
             cells = [inline_typ(cell) for cell in row]
             rows.append("(" + ", ".join(f"[{cell}]" for cell in cells) + ")")
+        cols_arg = ""
+        if len(raw_head) == 3 and raw_head[0] == "Código":
+            cols_arg = ", cols: (5fr, 8fr, 16fr)"
+        elif len(raw_head) == 3 and raw_head[0] == "Total":
+            cols_arg = ", cols: (2fr, 3fr, 9fr)"
+        elif len(raw_head) == 2 and raw_head[0] == "Aspecto" and len(table_buf) > 1 and table_buf[1][0].strip() == "Qué es":
+            cols_arg = ", cols: (5fr, 13fr)"
+        elif len(raw_head) == 2 and raw_head[0] == "Bonificación a la característica":
+            cols_arg = ", cols: (1fr, 1fr)"
+        elif len(raw_head) == 2 and raw_head[0] == "Casillas @Psique":
+            cols_arg = ", cols: (1fr, 4fr)"
+        elif len(raw_head) == 2 and raw_head[0] == "Calidad":
+            cols_arg = ", cols: (5fr, 16fr)"
+        elif len(raw_head) == 2 and raw_head[0] == "Módulo":
+            cols_arg = ", cols: (13fr, 27fr)"
+        elif len(raw_head) == 2 and raw_head[0] == "SAI":
+            cols_arg = ", cols: (11fr, 29fr)"
         blocks.append(
-            "#tbl((" + ", ".join(f"[{h}]" for h in head) + "), (" + ", ".join(rows) + "))"
+            "#tbl((" + ", ".join(f"[{h}]" for h in head) + "), (" + ", ".join(rows) + ")" + cols_arg + ")"
         )
         table_buf = []
         if pend_after:
@@ -172,7 +220,7 @@ def convert_chapter(text: str) -> str:
             pend_after = None
 
     def close_list() -> None:
-        nonlocal list_lines, prev_marker
+        nonlocal list_lines, prev_marker, pend_prof
         if list_lines is not None:
             blocks.append("\n".join(list_lines))
             list_lines = None
@@ -187,20 +235,44 @@ def convert_chapter(text: str) -> str:
             blocks.append(fig_line(pend_after))
             pend_after = None
 
+    def flush_prof() -> None:
+        nonlocal pend_prof, pend_prof_pos, pend_after_text
+        if pend_prof:
+            blocks.append(pend_prof)
+            pend_prof = None
+            pend_prof_pos = None
+        if pend_after_text:
+            blocks.append(pend_after_text)
+            pend_after_text = None
+
     def heading_block(level: int, title: str) -> None:
-        nonlocal pend_before, pend_after
+        nonlocal pend_before, pend_after, pend_prof, pend_prof_pos, intro_count, pend_after_text
         canon = title.strip()
         blocks.append("=" * level + " " + inline_typ(title))
         manual_art = W.MANUAL_ART.get(canon)
         if manual_art:
             width = "70%" if canon in W.MANUAL_ART_SIZE else "55%"
+            special_width = {"2d6": "100%", "degeneracion": "100%", "mejora_de_atributos": "92%", "recuperar_humanidad": "100%", "ojo": "100%", "cyberoido": "100%"}
+            if manual_art in special_width:
+                width = special_width[manual_art]
             blocks.append(fig_line(asset("manual", manual_art), width))
         elif canon in W.MANUAL_BANNER:
-            blocks.append(fig_line(asset("manual", W.MANUAL_BANNER[canon])))
+            banner_slug = W.MANUAL_BANNER[canon]
+            if banner_slug in ("tiradas", "director"):
+                blocks.append(f'#banner("{asset("manual", banner_slug)}")')
+            else:
+                blocks.append(fig_line(asset("manual", banner_slug)))
         elif canon in W.MANUAL_BANNER_BEFORE_TABLE:
             pend_before = asset("manual", W.MANUAL_BANNER_BEFORE_TABLE[canon])
         elif level == 3 and canon in W.PROFESSION_PORTRAITS:
-            blocks.append(fig_line(asset("professions", W.PROFESSION_PORTRAITS[canon]), "42%"))
+            prof_img = fig_line(asset("professions", W.PROFESSION_PORTRAITS[canon]), "100%")
+            pos = PROFESSION_IMG_POS.get(canon, "title")
+            if pos == "title":
+                blocks.append(prof_img)
+            else:
+                pend_prof = prof_img
+                pend_prof_pos = pos
+                intro_count = 0
         elif canon in W.CATALOG_BANNER:
             blocks.append(fig_line(asset("catalog", W.CATALOG_BANNER[canon])))
         elif canon in W.CATALOG_BANNER_AFTER_TABLE:
@@ -208,11 +280,21 @@ def convert_chapter(text: str) -> str:
         elif canon in W.CATALOG_ART:
             arts = W.CATALOG_ART[canon]
             if len(arts) == 1:
-                blocks.append(fig_line(asset("catalog", arts[0]), "42%"))
+                art_line = fig_line(asset("catalog", arts[0]), "100%")
             else:
+                from PIL import Image as PILImage
+                aspects = []
+                for s in arts:
+                    with PILImage.open(ROOT / "web" / "assets" / "catalog" / f"{s}.png") as im:
+                        aspects.append(im.width / im.height)
+                total = sum(aspects)
+                frs = ", ".join(f"{a / total:.4f}fr" for a in aspects)
                 paths = ", ".join(f'"{asset("catalog", s)}"' for s in arts)
-                width = "40%" if len(arts) == 2 else "31%"
-                blocks.append(f"#figrow(({paths}), width: {width})")
+                art_line = f"#figrow(({paths}), ({frs}))"
+            if canon in CATALOG_ART_AFTER_TEXT:
+                pend_after_text = art_line
+            else:
+                blocks.append(art_line)
 
     while i < n:
         raw = lines[i]
@@ -236,6 +318,7 @@ def convert_chapter(text: str) -> str:
         if stripped == "---":
             close_list()
             flush_pends()
+            flush_prof()
             blocks.append("#sep()")
             i += 1
             continue
@@ -244,6 +327,7 @@ def convert_chapter(text: str) -> str:
         if m:
             close_list()
             flush_pends()
+            flush_prof()
             heading_block(len(m.group(1)), m.group(2))
             i += 1
             continue
@@ -270,6 +354,10 @@ def convert_chapter(text: str) -> str:
             close_list()
             flush_pends()
             blocks.append("#mesa[" + inline_typ(stripped) + "]")
+            if pend_prof and pend_prof_pos == "arsenal":
+                blocks.append(pend_prof)
+                pend_prof = None
+                pend_prof_pos = None
             i += 1
             continue
 
@@ -295,6 +383,9 @@ def convert_chapter(text: str) -> str:
         if stripped.startswith(("Cyberpunk-PbtA", "This work is licensed")):
             close_list()
             flush_pends()
+            if not legal_started:
+                blocks.append("#colbreak()")
+                legal_started = True
             blocks.append("#legal[" + inline_typ(stripped) + "]")
             i += 1
             continue
@@ -302,12 +393,22 @@ def convert_chapter(text: str) -> str:
         close_list()
         flush_pends()
         blocks.append(inline_typ(stripped))
+        if pend_after_text:
+            blocks.append(pend_after_text)
+            pend_after_text = None
+        if pend_prof and pend_prof_pos == "mid_intro":
+            intro_count += 1
+            if intro_count >= 2:
+                blocks.append(pend_prof)
+                pend_prof = None
+                pend_prof_pos = None
         i += 1
 
     flush_table()
     close_list()
     flush_quote()
     flush_pends()
+    flush_prof()
     return "\n\n".join(blocks)
 
 
@@ -331,7 +432,14 @@ def build_manual_typ() -> Path:
     for name in CHAPTER_FILES:
         text = (CAPITULOS / name).read_text(encoding="utf-8")
         text = re.sub(r"^> \*\*Borrador.*$\n?", "", text, flags=re.M)
-        parts.append("#chapter-block[\n" + convert_chapter(text) + "\n]")
+        content = convert_chapter(text)
+        if name == "06-glosario.md":
+            idx = content.find("== Profesiones")
+            if idx >= 0:
+                parts.append("#chapter-block[\n" + content[:idx].rstrip() + "\n]")
+                parts.append("#chapter-block[\n" + content[idx:] + "\n]")
+                continue
+        parts.append("#chapter-block[\n" + content + "\n]")
     typ_path = OUT_DIR / "manual.typ"
     typ_path.write_text("\n\n".join(parts) + "\n", encoding="utf-8")
     return typ_path
