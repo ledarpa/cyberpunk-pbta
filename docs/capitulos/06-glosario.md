@@ -84,3 +84,5 @@ Cyberpunk-PbtA is unofficial content provided under the Homebrew Content Policy 
 
 
 Cyberpunk-PbtA is powered by the Apocalypse, inspired by and based on Apocalypse World by Meguey Baker and Vincent Baker (apocalypse-world.com).
+
+This work is licensed under a Creative Commons Attribution 4.0 International License. To view a copy of this license, visit creativecommons.org.

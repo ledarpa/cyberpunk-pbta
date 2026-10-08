@@ -5,7 +5,8 @@ Una salida web desde una sola prosa:
 | | Dónde |
 |--|--------|
 | **Fuente** | `docs/capitulos/` |
-| **Web** | [cyberpunk-pbta.vercel.app](https://cyberpunk-pbta.vercel.app) · [Hoja de personaje](https://cyberpunk-pbta.vercel.app/#hoja-personaje) · fuente en `web/` (`vercel.json`) |
+| **Web** | [cyberpunk-pbta.vercel.app](https://cyberpunk-pbta.vercel.app) · Hoja de personaje · fuente en `web/` (`vercel.json`) |
+| **PDF** | `docs/typst/build/manual.pdf` — diseño en `docs/typst/template.typ`, generado desde los mismos capítulos md |
 
 Capítulos: `00` Sistema → `01` Crear un Cyberpunk → `02` Cyberware → `04` Cromos → `05` Chapería → `06` Glosario.
 
@@ -19,6 +20,18 @@ La versión Word se descartó: se reconstruye desde cero cuando toque.
 python3 docs/scripts/build_web_reader.py                # web/data + fuente + portada
 ./docs/assets/fonts/install.sh                          # VT323 en el Mac, una vez
 ```
+
+## PDF (Typst)
+
+```bash
+python3 docs/scripts/build_typst.py                     # manual.pdf + previews PNG (build/)
+```
+
+Convierte `docs/capitulos/` → `docs/typst/build/manual.typ` y compila con typst (brew).
+El diseño vive en `docs/typst/template.typ`: terminal fósforo del lector adaptado a papel
+(VT323 en títulos/tablas/chips, cuerpo serif, arte pixel de catálogo junto a cada entrada).
+Ojo: varios «png» del lector son JPEG de extensión mentirosa; el build los re-linka en
+`docs/typst/build/img/` con la extensión real porque typst decodifica por extensión.
 
 Original mecánico (solo lectura): `docs/ref/pbta-original.docx`. Inventario: `docs/inventario-reglas.md`.
 

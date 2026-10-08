@@ -27,7 +27,7 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20261001s"
+WEB_BUILD_ID = "20261006a"
 
 # Segunda columna de tabla Calidad → intro+título contornean imagen en wrap.
 CALIDAD_WRAP_COL2 = frozenset({
@@ -813,8 +813,8 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict], *, lang:
                 pending_manual_art_wrap,
                 anchor=pending_manual_art_anchor,
             )
-        # Disclaimers legales (RTG Homebrew Policy + crédito PbtA/Bakers): párrafos marcados
-        cls = ' class="legal"' if stripped.startswith("Cyberpunk-PbtA") else ""
+        # Disclaimers legales (RTG Homebrew Policy + crédito PbtA/Bakers + CC BY 4.0): párrafos marcados
+        cls = ' class="legal"' if stripped.startswith(("Cyberpunk-PbtA", "This work is licensed")) else ""
         html.append(f"<p{cls}>{inline_md(stripped)}</p>")
         i += 1
 

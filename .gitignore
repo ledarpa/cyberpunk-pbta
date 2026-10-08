@@ -8,5 +8,6 @@
 .env.*
 node_modules/
 docs/.generated/
+docs/typst/build/
 .env*
 shots/
