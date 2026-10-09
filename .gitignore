@@ -1,13 +1,11 @@
 .DS_Store
-**/.DS_Store
 *.tmp
 *.bak
 ~$*
 .vercel
-.env
-.env.*
-node_modules/
-docs/.generated/
-docs/typst/build/
 .env*
+node_modules/
+__pycache__/
+*.pyc
+docs/.generated/
 shots/
