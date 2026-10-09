@@ -12,7 +12,7 @@ Capítulos: `00` Sistema → `01` Crear un Cyberpunk → `02` Cyberware → `04`
 
 Traducción EN: fuentes en `docs/capitulos-en/` (mismos nombres de archivo). El build genera `web/data/manual.js` (ES) + `manual-en.js` (EN) con fallback por capítulo al español; el selector ES/EN de la barra superior persiste en `localStorage`. Los títulos EN que llevan arte/banner/CSS se mapean en `TITLE_EN` del build (`docs/scripts/build_web_reader.py`). La **ficha de personaje también es bilingüe** (`web/i18n.js`, display-only; storage y claves internas quedan en ES).
 
-Referencia de diseño de la ficha web: `docs/ref/ficha.docx` (la versión Word del manual se descartó).
+Versión anterior del proyecto (era Word: original mecánico, ficha, borrador y bake-off de ejemplos, memoria de traducción EN): `docs/master.old.1.zip`.
 
 ## Web
 
@@ -42,4 +42,4 @@ python3 docs/scripts/optimize_assets.py   # comprime web/assets/ (pngquant/oxipn
 ```
 
 Cuentas y despliegue de auth: `docs/ACCOUNTS.md` · `docs/AUTH_DEPLOY.md` · esquema en `sql/schema.sql`.
-Original mecánico (solo lectura): `docs/ref/pbta-original.docx`. Inventario: `docs/inventario-reglas.md`.
+Original mecánico y materiales de la era Word: `docs/master.old.1.zip`. Inventario: `docs/inventario-reglas.md`.
