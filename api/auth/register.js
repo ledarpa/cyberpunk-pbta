@@ -1,8 +1,7 @@
 const { sql } = require("../_lib/db");
-const { json, readBody } = require("../_lib/http");
+const { json } = require("../_lib/http");
 const {
-  validateUsername,
-  validatePassword,
+  readCredentials,
   hashPassword,
   signToken,
   setSessionCookie,
@@ -14,19 +13,9 @@ module.exports = async function handler(req, res) {
     return;
   }
   try {
-    const body = await readBody(req);
-    const username = String(body.username || "").trim();
-    const password = String(body.password || "");
-    const uErr = validateUsername(username);
-    if (uErr) {
-      json(res, 400, { error: uErr });
-      return;
-    }
-    const pErr = validatePassword(password);
-    if (pErr) {
-      json(res, 400, { error: pErr });
-      return;
-    }
+    const creds = await readCredentials(req, res);
+    if (!creds) return;
+    const { username, password } = creds;
 
     const passwordHash = await hashPassword(password);
     let row;

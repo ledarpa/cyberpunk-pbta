@@ -28,25 +28,11 @@ window.PBTA_INV = (() => {
     return T(def?.qualityTags?.[q] || CAT()?.Q_TAG?.[q] || String(q || "").toLowerCase());
   }
 
-  function saiCap(def, quality) {
-    if (!def?.saiSlots) return 0;
-    return def.saiSlots[quality] ?? 0;
-  }
-
-  function moduleCap(def, quality) {
-    if (!def?.moduleSlots) return 0;
-    return def.moduleSlots[quality] ?? 0;
-  }
-
-  function neurodataCap(def, quality) {
-    if (!def?.neurodataSlots) return 0;
-    return def.neurodataSlots[quality] ?? 0;
-  }
-
-  function statPoolCap(def, quality) {
-    if (!def?.statPoolByQuality) return 0;
-    return def.statPoolByQuality[quality] ?? 0;
-  }
+  const capOf = (prop) => (def, quality) => def?.[prop]?.[quality] ?? 0;
+  const saiCap = capOf("saiSlots");
+  const moduleCap = capOf("moduleSlots");
+  const neurodataCap = capOf("neurodataSlots");
+  const statPoolCap = capOf("statPoolByQuality");
 
   function statPoolKeys(def) {
     return def?.statPoolKeys?.length ? def.statPoolKeys : STATS;

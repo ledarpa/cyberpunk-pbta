@@ -140,5 +140,17 @@
     fitPrompt(pre);
   }
 
-  window.PBTA_LOGO = { format, fitPrompt, fitToWidth, paint, normalize, esc };
+  /** Fetch único + normalización del texto de portada (portada, TOC, ficha). */
+  let asciiCache = null;
+  function loadText() {
+    if (asciiCache) return Promise.resolve(asciiCache);
+    return fetch("data/portada-ascii.txt")
+      .then((r) => (r.ok ? r.text() : Promise.reject()))
+      .then((t) => {
+        asciiCache = normalize(t);
+        return asciiCache;
+      });
+  }
+
+  window.PBTA_LOGO = { format, fitPrompt, fitToWidth, paint, normalize, esc, loadText };
 })();

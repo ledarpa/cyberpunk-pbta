@@ -171,77 +171,6 @@
     }
   }
 
-  function layoutMejoraArt() {
-    layoutArtToBlock(book.querySelector(".book-item-art--mejora_de_atributos"));
-  }
-
-  function layoutDroneArt() {
-    layoutArtToBlock(book.querySelector(".book-item-art--drone"));
-  }
-
-  function layoutPrimerosAuxiliosArt() {
-    layoutArtToBlock(book.querySelector(".book-item-art--primeros_auxilios"));
-  }
-
-  function layoutTraumaCardArt() {
-    layoutArtToBlock(book.querySelector(".book-item-art--trauma_card"));
-  }
-
-  /** Brazo de combate: la row de 2 imágenes compone UNA imagen —
-      alto = bloque intro+tabla; ancho de cada fig por su ratio natural. */
-  function layoutBrazoRow() {
-    const art = book.querySelector(".book-item-art--sable_mantis");
-    const row = art && art.closest(".book-item-art-row");
-    const wrap = art && art.closest(".book-art-wrap");
-    const copy = wrap && wrap.querySelector(".book-art-wrap-copy");
-    const p = copy && copy.querySelector(":scope > p, :scope > ul");
-    const rail = copy && copy.querySelector(":scope > .table-wrap--rail");
-    if (!art || !row || !p || !rail) return;
-    const figs = [...row.querySelectorAll(":scope > .book-item-art")];
-    const imgs = figs.map((f) => f.querySelector("img"));
-
-    const clear = () => {
-      row.style.removeProperty("height");
-      row.style.removeProperty("width");
-      figs.forEach((f) => {
-        f.style.removeProperty("width");
-        f.style.removeProperty("height");
-      });
-      imgs.forEach((im) => {
-        im.style.removeProperty("width");
-        im.style.removeProperty("height");
-      });
-    };
-    if (innerWidth <= 760 || imgs.some((im) => !im.complete || !im.naturalWidth)) {
-      clear();
-      return;
-    }
-
-    const gap = parseFloat(getComputedStyle(row).columnGap) || 0;
-    for (let i = 0; i < 6; i++) {
-      const top = p.getBoundingClientRect().top;
-      const bottom = rail.getBoundingClientRect().bottom;
-      const h = bottom - top;
-      if (h < 40) return;
-      const ws = imgs.map((im) =>
-        Math.max(1, Math.round(h * (im.naturalWidth / im.naturalHeight)))
-      );
-      const w = ws.reduce((a, b) => a + b, 0) + gap * (imgs.length - 1);
-      const fr = row.getBoundingClientRect();
-      if (Math.abs(fr.height - h) < 0.5 && Math.abs(fr.width - w) < 1) break;
-      row.style.height = `${h.toFixed(2)}px`;
-      row.style.width = `${w}px`;
-      figs.forEach((f, idx) => {
-        f.style.width = `${ws[idx]}px`;
-        f.style.height = "100%";
-      });
-      imgs.forEach((im) => {
-        im.style.width = "100%";
-        im.style.height = "100%";
-      });
-    }
-  }
-
   /** Listeners de load por dibujo: se re-ligan en cada render (DOM nuevo). */
   function bindBookArt() {
     const onImg = (sel, fn) => {
@@ -640,8 +569,9 @@
     });
   }
 
-  function normalizeAscii(text) {
-    return (window.PBTA_LOGO ? window.PBTA_LOGO.normalize(text) : text.replace(/\u00a0/g, " ")).replace(/\n+$/, "");
+  /** Texto ASCII de portada (cacheado en PBTA_LOGO: una sola fetch por sesión). */
+  function fetchCoverAscii() {
+    return window.PBTA_LOGO.loadText();
   }
 
   function fitAsciiArt(pre, boxW, boxH, baseSize) {
@@ -662,16 +592,6 @@
       pre.style.fontSize = `${px}px`;
     }
     if (window.PBTA_LOGO) window.PBTA_LOGO.fitPrompt(pre);
-  }
-
-  function fetchCoverAscii() {
-    if (fetchCoverAscii.cache) return Promise.resolve(fetchCoverAscii.cache);
-    return fetch("data/portada-ascii.txt")
-      .then((r) => (r.ok ? r.text() : Promise.reject()))
-      .then((t) => {
-        fetchCoverAscii.cache = normalizeAscii(t);
-        return fetchCoverAscii.cache;
-      });
   }
 
   function loadCover() {

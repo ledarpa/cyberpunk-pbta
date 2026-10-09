@@ -260,9 +260,14 @@
       fitFichaLogo();
       requestFitSheet();
     };
-    fetch("data/portada-ascii.txt")
-      .then((r) => (r.ok ? r.text() : Promise.reject()))
-      .then((text) => paint(window.PBTA_LOGO ? window.PBTA_LOGO.normalize(text) : text))
+    const logo = window.PBTA_LOGO;
+    if (!logo) {
+      paint(LOGO_FALLBACK);
+      return;
+    }
+    logo
+      .loadText()
+      .then(paint)
       .catch(() => paint(LOGO_FALLBACK));
   }
 

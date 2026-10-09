@@ -4,6 +4,7 @@
   const EMPTY_NAME = "Sin nombre";
   const FICHA = () => window.PBTA_FICHA;
   const T = (s) => window.PBTA_I18N?.t(s) ?? s;
+  const escapeHtml = (s) => window.PBTA_LOGO.esc(s);
 
   let user = null; // { username } | null
   let characters = []; // { id, name, updatedAt }
@@ -126,7 +127,7 @@
     if (els.logoutBtn) els.logoutBtn.hidden = !user;
     if (els.charWrap) els.charWrap.hidden = !user;
     if (els.newBtn) els.newBtn.hidden = !user;
-    if (els.deleteBtn) els.deleteBtn.hidden = !user || !activeId;
+    syncDeleteBtn();
     if (els.status) els.status.hidden = !user;
     if (!user) closeCharMenu();
     FICHA()?.setJugadorAccount?.(user?.username || null);
@@ -208,6 +209,34 @@
     return list[0]?.id || null;
   }
 
+  /** Visibilidad del botón eliminar: requiere sesión + personaje activo. */
+  function syncDeleteBtn() {
+    if (els.deleteBtn) els.deleteBtn.hidden = !user || !activeId;
+  }
+
+  /** Reemplaza la entrada del personaje si existe; si no, va al frente. */
+  function upsertCharacter(entry) {
+    const idx = characters.findIndex((c) => c.id === entry.id);
+    if (idx >= 0) characters[idx] = entry;
+    else characters.unshift(entry);
+  }
+
+  /** Crea el personaje en la nube, lo activa (applySheet/markClean) y lo inserta en la lista. */
+  async function createRemoteCharacter() {
+    const data = await api("/api/characters", {
+      method: "POST",
+      body: { name: EMPTY_NAME, sheet: {} },
+    });
+    const c = data.character;
+    const entry = { id: c.id, name: nameFromSheet(c.sheet), updatedAt: c.updatedAt };
+    if (characters.length) characters.unshift(entry);
+    else characters = [entry];
+    rememberActive(c.id);
+    FICHA()?.applySheet?.(c.sheet || {});
+    FICHA()?.markClean?.();
+    return entry;
+  }
+
   async function refreshCharacters() {
     const data = await api("/api/characters");
     characters = (data.characters || []).map((c) => ({ ...c }));
@@ -221,39 +250,24 @@
     const sheet = ch.sheet && typeof ch.sheet === "object" ? ch.sheet : {};
     const label = nameFromSheet(sheet);
     rememberActive(ch.id);
-    const idx = characters.findIndex((c) => c.id === ch.id);
-    if (idx >= 0) characters[idx] = { id: ch.id, name: label, updatedAt: ch.updatedAt };
-    else characters.unshift({ id: ch.id, name: label, updatedAt: ch.updatedAt });
+    upsertCharacter({ id: ch.id, name: label, updatedAt: ch.updatedAt });
     FICHA()?.applySheet?.(sheet);
     FICHA()?.markClean?.();
     fillCharMenu();
     syncCharTrigger();
     syncSaveButton();
-    if (els.deleteBtn) els.deleteBtn.hidden = !user || !activeId;
+    syncDeleteBtn();
     return ch;
   }
 
   async function ensurePlayerSheet() {
     await refreshCharacters();
     if (!characters.length) {
-      const created = await api("/api/characters", {
-        method: "POST",
-        body: { name: EMPTY_NAME, sheet: {} },
-      });
-      characters = [
-        {
-          id: created.character.id,
-          name: EMPTY_NAME,
-          updatedAt: created.character.updatedAt,
-        },
-      ];
-      rememberActive(created.character.id);
-      FICHA()?.applySheet?.(created.character.sheet || {});
-      FICHA()?.markClean?.();
+      await createRemoteCharacter();
       fillCharMenu();
       syncCharTrigger();
       syncSaveButton();
-      if (els.deleteBtn) els.deleteBtn.hidden = !user || !activeId;
+      syncDeleteBtn();
       return;
     }
     const id = preferredActiveId(characters);
@@ -272,10 +286,8 @@
         body: { name, sheet },
       });
       const ch = data.character;
-      const idx = characters.findIndex((c) => c.id === ch.id);
       const label = nameFromSheet(ch.sheet || sheet);
-      if (idx >= 0) characters[idx] = { id: ch.id, name: label, updatedAt: ch.updatedAt };
-      else characters.unshift({ id: ch.id, name: label, updatedAt: ch.updatedAt });
+      upsertCharacter({ id: ch.id, name: label, updatedAt: ch.updatedAt });
       fillCharMenu();
       syncCharTrigger();
       FICHA().markClean();
@@ -437,14 +449,6 @@
     });
   }
 
-  function escapeHtml(s) {
-    return String(s)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-  }
-
   async function onDeleteCharacter() {
     if (!user || !activeId) return;
     const id = activeId;
@@ -454,20 +458,7 @@
       characters = characters.filter((c) => c.id !== id);
       if (!characters.length) {
         rememberActive(null);
-        const data = await api("/api/characters", {
-          method: "POST",
-          body: { name: EMPTY_NAME, sheet: {} },
-        });
-        characters = [
-          {
-            id: data.character.id,
-            name: EMPTY_NAME,
-            updatedAt: data.character.updatedAt,
-          },
-        ];
-        rememberActive(data.character.id);
-        FICHA()?.applySheet?.(data.character.sheet || {});
-        FICHA()?.markClean?.();
+        await createRemoteCharacter();
       } else {
         const nextId = preferredActiveId(characters) || characters[0].id;
         await loadCharacter(nextId);
@@ -484,18 +475,7 @@
   async function onNewCharacter() {
     if (!(await gateDirty({ onDiscard: restoreActiveOrReset }))) return;
     try {
-      const data = await api("/api/characters", {
-        method: "POST",
-        body: { name: EMPTY_NAME, sheet: {} },
-      });
-      characters.unshift({
-        id: data.character.id,
-        name: EMPTY_NAME,
-        updatedAt: data.character.updatedAt,
-      });
-      rememberActive(data.character.id);
-      FICHA()?.applySheet?.(data.character.sheet || {});
-      FICHA()?.markClean?.();
+      await createRemoteCharacter();
       fillCharMenu();
       syncCharTrigger();
       syncSaveButton();

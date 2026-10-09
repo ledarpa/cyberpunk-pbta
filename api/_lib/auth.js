@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const { SignJWT, jwtVerify } = require("jose");
-const { parseCookies, setCookie } = require("./http");
+const { json, readBody, parseCookies, setCookie } = require("./http");
 
 const COOKIE = "pbta_session";
 const USERNAME_RE = /^[a-zA-Z0-9_]{3,32}$/;
@@ -27,6 +27,24 @@ function validatePassword(password) {
     return "Contraseña: mínimo 6 caracteres";
   }
   return null;
+}
+
+/** Lee + valida username/password del body; escribe el 400 y devuelve null si falla. */
+async function readCredentials(req, res) {
+  const body = await readBody(req);
+  const username = String(body.username || "").trim();
+  const password = String(body.password || "");
+  const uErr = validateUsername(username);
+  if (uErr) {
+    json(res, 400, { error: uErr });
+    return null;
+  }
+  const pErr = validatePassword(password);
+  if (pErr) {
+    json(res, 400, { error: pErr });
+    return null;
+  }
+  return { username, password };
 }
 
 async function hashPassword(password) {
@@ -87,6 +105,7 @@ module.exports = {
   TOKEN_MAX_AGE,
   validateUsername,
   validatePassword,
+  readCredentials,
   hashPassword,
   verifyPassword,
   signToken,
