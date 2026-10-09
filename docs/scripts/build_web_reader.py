@@ -13,7 +13,7 @@ SCRIPTS = Path(__file__).resolve().parent
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from chapters import CHAPTER_FILES  # noqa: E402
+from chapters import CHAPTER_FILES, chapter_text  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 CAPITULOS = ROOT / "docs" / "capitulos"
@@ -28,14 +28,6 @@ _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)
 
 # Versión única del build web (cache bust + data/build.js).
 WEB_BUILD_ID = "20261006a"
-
-# Segunda columna de tabla Calidad → intro+título contornean imagen en wrap.
-CALIDAD_WRAP_COL2 = frozenset({
-    "Módulos disponibles",
-    "Accesorios",
-    "Mejora EN",
-    "Efecto",
-})
 
 # Metadatos de maquetación por slug (única fuente: CSS data-* + JS layout).
 ART_META: dict[str, dict[str, str]] = {
@@ -159,6 +151,15 @@ MANUAL_TITLES: dict[str, str] = {
     "en": "PbtA — Rulebook",
 }
 
+# Clase CSS de tabla por header de primera columna (canon ES).
+TABLE_CLASS: dict[str, str] = {
+    "Calidad": "t-calidad",
+    "Aspecto": "t-aspecto",
+    "Casillas @Psique": "t-psique",
+    "Módulo": "t-modulo",
+    "Nivel": "t-nivel",
+}
+
 # Arte de catálogo (cromos / chapería): título MD → archivos en web/assets/catalog/.
 CATALOG_ART: dict[str, list[str]] = {
     # Armas
@@ -208,25 +209,20 @@ CATALOG_BANNER_AFTER_TABLE: dict[str, str] = {
 }
 
 # Ilustraciones del manual (capítulos, no catálogo): float derecha junto al texto.
-MANUAL_ART: dict[str, str] = {    "Cuándo se tira (y cuándo no)": "2d6",    "Mejoras de características": "mejora_de_atributos",    "Degeneración neural": "degeneracion",    "Recuperar la humanidad": "recuperar_humanidad",    "Ojo biónico": "ojo",    "Oído biónico": "cyberoido",        # Membrana acorazada - usa membrana_acorazada.png del catalog    "Membrana acorazada": "membrana_acorazada",        # Nanoplastia - usa nanoplastia.png del catalog    "Nanoplastia": "nanoplastia",        # Piel perfecta - usa piel_perfecta.png del manual    "Piel perfecta": "piel_perfecta",        # Cibervértebras - usa vertebras.png del catalog    "Cibervértebras": "vertebras",        # Extremidad balística - usa balistica.png del catalog    "Extremidad balística": "balistica",        # Armas del armamento inicial    "Pistola": "pistola",    "Escopeta": "escopeta",    "Fusil": "fusil",    "Rifle": "rifle",    "Lanzamisiles": "lanzamisiles",        # Otros    "Drone": "drone",    "Kit de primeros auxilios": "primeros_auxilios",    "Traumacard": "trauma_card",        # Los ya existentes mantenidos    "Conexión dearma inteligente": "conexion_neuronal",    "Conexión neuronal": "conexion_neuronal",    "Neurochip": "neurochip",
+# OJO: en la versión anterior este dict estaba aplastado a una línea y un
+# comentario inline (`# Membrana acorazada…`) comentaba en silencio todas las
+# entradas posteriores: solo estas 6 claves eran efectivas. El resto del
+# contenido muerto (Membrana, Pistola, Conexión neuronal…) se servía por
+# CATALOG_ART / MANUAL_BANNER, como sigue haciendo.
+MANUAL_ART: dict[str, str] = {
+    "Cuándo se tira (y cuándo no)": "2d6",
+    "Mejoras de características": "mejora_de_atributos",
+    "Degeneración neural": "degeneracion",
+    "Recuperar la humanidad": "recuperar_humanidad",
+    "Ojo biónico": "ojo",
+    "Oído biónico": "cyberoido",
 }
-# Validation: ensure all MANUAL_ART asset paths exist
-_MANUAL_ART_VALIDATE: bool = False
-try:
-    manual_dir = Path(__file__).resolve().parents[2] / 'web' / 'assets' / 'manual'
-    catalog_dir = Path(__file__).resolve().parents[2] / 'web' / 'assets' / 'catalog'
-    for title, stem in MANUAL_ART.items():
-        # Check both manual/{stem}.png and catalog/{stem}.png
-        manual_path = manual_dir / f'{stem}.png'
-        catalog_path = catalog_dir / f'{stem}.png'
-        if not manual_path.exists() and not catalog_path.exists():
-            print(f'WARNING: MANUAL_ART entry "{title}" references non-existent asset stem "{stem}"')
-            print(f'  Looked for: manual/{stem}.png and catalog/{stem}.png')
-    if _MANUAL_ART_VALIDATE:
-        pass  # validation runs at import time if enabled
-except Exception as e:
-    print(f'MANUAL_ART validation error: {e}')
- 
+
 MANUAL_BANNER: dict[str, str] = {
     "Episodios de cyberpsicosis": "cyberpsicosis",
     "Rol del Director": "director",
@@ -260,6 +256,14 @@ def asset_url(path: str) -> str:
     return f"{path}?v={WEB_BUILD_ID}"
 
 
+def _figure_img(slug: str, src: str, extra: str = "") -> str:
+    """Figura de arte de catálogo/manual: esqueleto único, attrs por caller."""
+    return (
+        f'<figure class="book-item-art book-item-art--{escape(slug)}"{extra} '
+        f'aria-hidden="true"><img src="{src}" alt="" loading="lazy"></figure>'
+    )
+
+
 def profession_portrait_html(slug: str) -> str:
     src = escape(asset_url(f"assets/professions/{slug}.png"))
     return (
@@ -269,17 +273,9 @@ def profession_portrait_html(slug: str) -> str:
     )
 
 
-def catalog_banner_html(slug: str) -> str:
-    src = escape(asset_url(f"assets/catalog/{slug}.png"))
-    return (
-        '<figure class="book-item-banner" aria-hidden="true">'
-        f'<img src="{src}" alt="" loading="lazy">'
-        "</figure>"
-    )
-
-
-def manual_banner_html(slug: str) -> str:
-    src = escape(asset_url(f"assets/manual/{slug}.png"))
+def banner_html(kind: str, slug: str) -> str:
+    """Banner panorámico: assets/{kind}/{slug}.png (kind = catalog | manual)."""
+    src = escape(asset_url(f"assets/{kind}/{slug}.png"))
     return (
         '<figure class="book-item-banner" aria-hidden="true">'
         f'<img src="{src}" alt="" loading="lazy">'
@@ -296,10 +292,10 @@ def manual_art_html(
 ) -> str:
     src = escape(asset_url(f"assets/manual/{slug}.png"))
     anchor_attr = f' data-art-anchor="{escape(anchor)}"' if anchor else ""
-    return (
-        f'<figure class="book-item-art book-item-art--{escape(slug)}" '
-        f'data-art-layout="{escape(layout)}" data-art-size="{escape(size)}"{anchor_attr} '
-        f'aria-hidden="true"><img src="{src}" alt="" loading="lazy"></figure>'
+    return _figure_img(
+        slug,
+        src,
+        f' data-art-layout="{escape(layout)}" data-art-size="{escape(size)}"{anchor_attr}',
     )
 
 
@@ -313,10 +309,7 @@ def art_figure_html(slug: str) -> str:
         attrs += f' data-art-size="{escape(size)}"'
     if anchor := meta.get("anchor"):
         attrs += f' data-art-anchor="{escape(anchor)}"'
-    return (
-        f'<figure class="book-item-art book-item-art--{escape(slug)}"{attrs} '
-        f'aria-hidden="true"><img src="{src}" alt="" loading="lazy"></figure>'
-    )
+    return _figure_img(slug, src, attrs)
 
 
 def catalog_art_html(slugs: list[str]) -> str:
@@ -386,18 +379,7 @@ def table_html(rows: list[list[str]], *, rail: bool = False, lang: str = "es") -
     head0 = norm[0][0].strip()
     if lang == "en":
         head0 = TABLE_HEAD_EN.get(head0, head0)
-    if head0 == "Calidad":
-        tcls = ' class="t-calidad"'
-    elif head0 == "Aspecto":
-        tcls = ' class="t-aspecto"'
-    elif head0 == "Casillas @Psique":
-        tcls = ' class="t-psique"'
-    elif head0 == "Módulo":
-        tcls = ' class="t-modulo"'
-    elif head0 == "Nivel":
-        tcls = ' class="t-nivel"'
-    else:
-        tcls = ""
+    tcls = f' class="{TABLE_CLASS[head0]}"' if head0 in TABLE_CLASS else ""
     return (
         f'<div class="{wrap}"><table{tcls}>'
         f"<thead><tr>{thead}</tr></thead>"
@@ -500,7 +482,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict], *, lang:
             html.append(table_html(table_buffer, rail=rail, lang=lang))
             table_buffer = []
             if pending_catalog_banner_after_table:
-                html.append(catalog_banner_html(pending_catalog_banner_after_table))
+                html.append(banner_html("catalog", pending_catalog_banner_after_table))
                 pending_catalog_banner_after_table = None
             if manual_art_in_wrap and manual_art_anchor == "table":
                 close_art_wrap()
@@ -589,7 +571,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict], *, lang:
             close_lists()
             flush_portrait()
             if pending_manual_banner_before_table and not is_table_sep(stripped):
-                html.append(manual_banner_html(pending_manual_banner_before_table))
+                html.append(banner_html("manual", pending_manual_banner_before_table))
                 pending_manual_banner_before_table = None
             if pending_manual_art_wrap and not is_table_sep(stripped):
                 open_manual_art_wrap(
@@ -669,7 +651,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict], *, lang:
                     )
             elif manual_banner:
                 html.append(heading_html)
-                html.append(manual_banner_html(manual_banner))
+                html.append(banner_html("manual", manual_banner))
             elif manual_banner_mid:
                 html.append(heading_html)
                 pending_manual_banner_before_table = manual_banner_mid
@@ -680,7 +662,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict], *, lang:
                 banner_after_table = CATALOG_BANNER_AFTER_TABLE.get(canon)
                 if banner:
                     html.append(heading_html)
-                    html.append(catalog_banner_html(banner))
+                    html.append(banner_html("catalog", banner))
                 elif banner_after_table:
                     html.append(heading_html)
                     pending_catalog_banner_after_table = banner_after_table
@@ -692,26 +674,14 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict], *, lang:
                         cols = peek_first_table_cols(i + 1)
                         first_th = cols[0] if cols else None
                         col2 = cols[1] if cols else ""
-                        if first_th == "Calidad" and col2 == "Subsistemas":
+                        if first_th == "Calidad":
+                            # Toda tabla Calidad contornea la imagen en wrap;
+                            # Subsistemas (Drone) además mete el ul de stats
+                            # dentro del wrap (rail + lista).
                             pending_art_wrap = True
                             wrap_heading = True
-                            art_wrap_rail_plus_list = True
-                            catalog_after_first_table = False
-                        elif first_th == "Calidad" and nxt.startswith("|"):
-                            pending_art_wrap = True
-                            wrap_heading = True
-                            catalog_after_first_table = False
-                        elif first_th == "Calidad" and col2 in CALIDAD_WRAP_COL2:
-                            pending_art_wrap = True
-                            wrap_heading = True
-                            catalog_after_first_table = False
-                        elif first_th == "Calidad" and col2 == "Módulos":
-                            pending_art_wrap = True
-                            wrap_heading = True
-                            catalog_after_first_table = False
-                        elif first_th == "Calidad":
-                            pending_art_wrap = True
-                            wrap_heading = True
+                            if col2 == "Subsistemas":
+                                art_wrap_rail_plus_list = True
                             catalog_after_first_table = False
                         elif canon in CATALOG_ART_INTRO_WRAP:
                             pending_art_wrap = True
@@ -747,7 +717,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict], *, lang:
             # Banners panorámicos del manual: ![](assets/manual/slug.png)
             if src_path.startswith("assets/manual/") and src_path.endswith(".png"):
                 slug = Path(src_path).stem
-                html.append(manual_banner_html(slug))
+                html.append(banner_html("manual", slug))
             else:
                 src = escape(asset_url(src_path))
                 alt_attr = f' alt="{escape(alt)}"' if alt else ' alt=""'
@@ -861,8 +831,7 @@ def build_manual(lang: str) -> tuple[dict, list[str]]:
             fallback.append(name)
         if not path.exists():
             raise FileNotFoundError(path)
-        text = path.read_text(encoding="utf-8")
-        text = re.sub(r"^> \*\*Borrador.*$\n?", "", text, flags=re.M)
+        text = chapter_text(path)
         parts.append(f'<article class="chapter" data-file="{escape(name)}">')
         parts.append(md_to_html(text, used, toc, lang=lang))
         parts.append("</article>")

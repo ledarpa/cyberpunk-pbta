@@ -1,4 +1,7 @@
-"""Orden de capítulos para Word y web."""
+"""Orden canónico de capítulos + lectura compartida para los builds web y PDF."""
+
+import re
+from pathlib import Path
 
 CHAPTER_FILES = [
     "00-sistema.md",
@@ -8,3 +11,10 @@ CHAPTER_FILES = [
     "05-catalogo-chaperia.md",
     "06-glosario.md",
 ]
+
+_BORRADOR_RE = re.compile(r"^> \*\*Borrador.*$\n?", re.M)
+
+
+def chapter_text(path: Path) -> str:
+    """Texto del capítulo sin la línea «> **Borrador…» del encabezado."""
+    return _BORRADOR_RE.sub("", path.read_text(encoding="utf-8"))

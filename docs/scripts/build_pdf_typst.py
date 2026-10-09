@@ -16,7 +16,7 @@ SCRIPTS = Path(__file__).resolve().parent
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from chapters import CHAPTER_FILES
+from chapters import CHAPTER_FILES, chapter_text
 import build_web_reader as W
 
 ROOT = SCRIPTS.parents[1]
@@ -127,6 +127,43 @@ def fig_line(path: str, width: str = "100%") -> str:
 
 CATALOG_ART_AFTER_TEXT = {"Cybervértebras"}
 
+# Ancho de fig por slug de arte del manual (default: 70%/55% según tamaño).
+MANUAL_ART_WIDTH: dict[str, str] = {
+    "2d6": "100%",
+    "degeneracion": "100%",
+    "mejora_de_atributos": "92%",
+    "recuperar_humanidad": "100%",
+    "ojo": "100%",
+    "cyberoido": "100%",
+}
+
+# Proporciones de columnas Typst por forma de tabla: (ncols, header[0], cols).
+# Primera coincidencia gana; «Aspecto» exige además fila[0] == "Qué es".
+TABLE_COLS: list[tuple[int, str, str]] = [
+    (3, "Código", "(5fr, 8fr, 16fr)"),
+    (3, "Total", "(2fr, 3fr, 9fr)"),
+    (2, "Aspecto", "(5fr, 13fr)"),
+    (2, "Bonificación a la característica", "(1fr, 1fr)"),
+    (2, "Casillas @Psique", "(1fr, 4fr)"),
+    (2, "Calidad", "(5fr, 16fr)"),
+    (2, "Módulo", "(13fr, 27fr)"),
+    (2, "SAI", "(11fr, 29fr)"),
+]
+
+
+def table_cols_arg(table_buf: list[list[str]]) -> str:
+    ncols = len(table_buf[0])
+    head0 = table_buf[0][0].strip() if table_buf[0] else ""
+    for n, h0, spec in TABLE_COLS:
+        if ncols != n or head0 != h0:
+            continue
+        if h0 == "Aspecto":
+            if len(table_buf) > 1 and table_buf[1][0].strip() == "Qué es":
+                return ", cols: " + spec
+            continue
+        return ", cols: " + spec
+    return ""
+
 
 PROFESSION_IMG_POS = {
     "Arreglador": "title",
@@ -188,29 +225,12 @@ def convert_chapter(text: str) -> str:
         if pend_before:
             blocks.append(fig_line(pend_before))
             pend_before = None
-        raw_head = [cell.strip() for cell in table_buf[0]]
         head = [inline_typ(cell) for cell in table_buf[0]]
         rows = []
         for row in table_buf[1:]:
             cells = [inline_typ(cell) for cell in row]
             rows.append("(" + ", ".join(f"[{cell}]" for cell in cells) + ")")
-        cols_arg = ""
-        if len(raw_head) == 3 and raw_head[0] == "Código":
-            cols_arg = ", cols: (5fr, 8fr, 16fr)"
-        elif len(raw_head) == 3 and raw_head[0] == "Total":
-            cols_arg = ", cols: (2fr, 3fr, 9fr)"
-        elif len(raw_head) == 2 and raw_head[0] == "Aspecto" and len(table_buf) > 1 and table_buf[1][0].strip() == "Qué es":
-            cols_arg = ", cols: (5fr, 13fr)"
-        elif len(raw_head) == 2 and raw_head[0] == "Bonificación a la característica":
-            cols_arg = ", cols: (1fr, 1fr)"
-        elif len(raw_head) == 2 and raw_head[0] == "Casillas @Psique":
-            cols_arg = ", cols: (1fr, 4fr)"
-        elif len(raw_head) == 2 and raw_head[0] == "Calidad":
-            cols_arg = ", cols: (5fr, 16fr)"
-        elif len(raw_head) == 2 and raw_head[0] == "Módulo":
-            cols_arg = ", cols: (13fr, 27fr)"
-        elif len(raw_head) == 2 and raw_head[0] == "SAI":
-            cols_arg = ", cols: (11fr, 29fr)"
+        cols_arg = table_cols_arg(table_buf)
         blocks.append(
             "#tbl((" + ", ".join(f"[{h}]" for h in head) + "), (" + ", ".join(rows) + ")" + cols_arg + ")"
         )
@@ -252,9 +272,7 @@ def convert_chapter(text: str) -> str:
         manual_art = W.MANUAL_ART.get(canon)
         if manual_art:
             width = "70%" if canon in W.MANUAL_ART_SIZE else "55%"
-            special_width = {"2d6": "100%", "degeneracion": "100%", "mejora_de_atributos": "92%", "recuperar_humanidad": "100%", "ojo": "100%", "cyberoido": "100%"}
-            if manual_art in special_width:
-                width = special_width[manual_art]
+            width = MANUAL_ART_WIDTH.get(manual_art, width)
             blocks.append(fig_line(asset("manual", manual_art), width))
         elif canon in W.MANUAL_BANNER:
             banner_slug = W.MANUAL_BANNER[canon]
@@ -430,9 +448,7 @@ def build_manual_typ() -> Path:
         '#import "../../pdf/theme.typ": *\n#show: manual',
     ]
     for name in CHAPTER_FILES:
-        text = (CAPITULOS / name).read_text(encoding="utf-8")
-        text = re.sub(r"^> \*\*Borrador.*$\n?", "", text, flags=re.M)
-        content = convert_chapter(text)
+        content = convert_chapter(chapter_text(CAPITULOS / name))
         if name == "06-glosario.md":
             idx = content.find("== Profesiones")
             if idx >= 0:
