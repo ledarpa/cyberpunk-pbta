@@ -27,7 +27,16 @@ FONTS = ROOT / "docs" / "assets" / "fonts"
 
 GEN_ASSETS = "../.generated/pdf/assets"
 
-def mono_png(src: Path, dst: Path) -> None:
+ROTATED_CATALOG_ART = {
+    "pistola": "ccw",
+    "escopeta": "ccw",
+    "fusil": "ccw",
+    "rifle": "ccw",
+    "lanzadardos": "cw",
+    "lanzamisiles": "ccw",
+}
+
+def mono_png(src: Path, dst: Path, rotate: str | None = None) -> None:
     from PIL import Image, ImageOps
 
     im = Image.open(src)
@@ -49,6 +58,10 @@ def mono_png(src: Path, dst: Path) -> None:
             break
     inv = gray.point(lambda p: max(0, min(255, 255 - int(p * 255 / vmax))))
     inv = inv.point(lambda p: 255 if p >= 250 else p)
+    if rotate == "cw":
+        inv = inv.transpose(Image.ROTATE_270)
+    elif rotate == "ccw":
+        inv = inv.transpose(Image.ROTATE_90)
     dst.parent.mkdir(parents=True, exist_ok=True)
     inv.save(dst)
 
@@ -62,7 +75,7 @@ def asset(kind: str, slug: str) -> str:
         else:
             raise FileNotFoundError(src)
     dst = OUT_DIR / "assets" / kind / f"{slug}.png"
-    mono_png(src, dst)
+    mono_png(src, dst, rotate=(ROTATED_CATALOG_ART.get(slug) if kind == "catalog" else None))
     return f"{GEN_ASSETS}/{kind}/{slug}.png"
 
 
