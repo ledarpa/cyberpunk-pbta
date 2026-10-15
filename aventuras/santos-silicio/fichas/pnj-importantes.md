@@ -66,7 +66,7 @@ Silenciosa por diseño: sintetizador No-one en la garganta cuando interviene (vo
 
 ## Nadia Ferreira — la compañera viva de la unidad de Varga
 
-*Aparece en: Misión I (complicación opcional del doc).*
+*Aparece en: El Santo de Titanio (complicación opcional del doc).*
 
 Sargento de enlace del antiguo equipo de Varga. Cincuenta y pocos, prótesis de cadera civil de mala calidad, cojea. Dirige un taller legal de reciclaje en el Anillo y odiaba a Helix mucho antes de saber qué es Helix.
 
@@ -85,7 +85,7 @@ Sargento de enlace del antiguo equipo de Varga. Cincuenta y pocos, prótesis de 
 
 ## Goro «Doce Pisos» — superviviente de la instalación del hangar
 
-*Aparece en: Misión I, escena 2.*
+*Aparece en: El Santo de Titanio, escena 2.*
 
 Técnico de mantenimiento del complejo. Lleva tres días escondido en un foso de carga con medio brazo quemado. Habla en frases cortas porque cada frase larga le sube el pulso y el monitor lo delata.
 
@@ -104,7 +104,7 @@ Técnico de mantenimiento del complejo. Lleva tres días escondido en un foso de
 
 ## Ikram «Ecoboy» Saïd — el paciente que escapó de la red
 
-*Aparece en: Misión II, escena 1.*
+*Aparece en: La Madre de los Descartados, escena 1.*
 
 Dieciocho años, recién operado por Mara con implantes de segunda mano. Escapó de la clínica y ahora oye voces ajenas: no síntomas, **personas reales conectadas en la red** que no saben que él las escucha.
 
@@ -122,7 +122,7 @@ Helix lo etiquetaría «testigo de clase B: neutralizable». Si los jugadores lo
 
 ---
 
-## Colectivo de pacientes de la red (Misión II, escenas 2–3)
+## Colectivo de pacientes de la red (La Madre de los Descartados, escenas 2–3)
 
 El doc pide tres figuras sociales distintas. Individualizadas aquí:
 
@@ -139,7 +139,7 @@ Ex-enfermero del sistema corporativo, lo despidió la primera vez que abarató i
 
 ## Kuno Letelier — testigo técnico de UMBRAL
 
-*Aparece en: Misión III, escena 1–2 (antiguo colega de Simón).*
+*Aparece en: El Hombre que Sobró, escena 1–2 (antiguo colega de Simón).*
 
 Sesenta años, jubilado forzado de Helix con NDA clavado en el contrato de la pensión. Sufre de parkinsonismo temprano: el manual dice que los cromos pueden curar; él no puede pagarlos. Esa es su amargura y su credibilidad.
 
@@ -158,7 +158,7 @@ Sesenta años, jubilado forzado de Helix con NDA clavado en el contrato de la pe
 
 ## El proveedor — «Vial11», distribuidor de implantes defectuosos
 
-*Aparece en: Misión II (pista) y donde el grupo vaya a comprar repuestos.*
+*Aparece en: La Madre de los Descartados (pista) y donde el grupo vaya a comprar repuestos.*
 
 Una cara con corposuit Improvisado encima de una camiseta del equipo local. No es Corpo real: es el último escalón de una cadena que sí lo es. Vendió implantes defectuosos a bajo coste a la clínica de Mara y, semanas después, dejó de responder el canal. Las notificaciones de incompatibilidad llegaron a él; su jefa las borró de la vista pública.
 

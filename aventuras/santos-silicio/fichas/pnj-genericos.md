@@ -31,7 +31,7 @@ PNJ de relleno vivo para el Domo y las tres cacerías. Cada tipo trae una **plan
 **Variantes:**
 
 1. **Equipo «Omega»** — la unidad de recuperación rival del prólogo («ese equipo no tendrá sus escrúpulos»). Mismas stats base **+1 de disciplina**: no interrogan, no avisan, limpian. Marcan la diferencia entre «captura» y «eliminación» del reloj de Veyra. Su oficial, **Sabela Urrutia**, MC +2: la cara amable que firma la lista de daños colaterales.
-2. **Pereo «Muro» Ergün** — TM +3, membrana acorazada Corr. (absorbe 1, +1 TM), escudo balístico físico. Camina lento para que veas que no le importa. Es el que primero entra por la puerta en cualquier instalación de la Misión I.
+2. **Pereo «Muro» Ergün** — TM +3, membrana acorazada Corr. (absorbe 1, +1 TM), escudo balístico físico. Camina lento para que veas que no le importa. Es el que primero entra por la puerta en cualquier instalación de la cacería del Santo de Titanio.
 3. **Reclutas de sector (x2 por ficha)** — EN 0, RC +1, Estructura 4, fusil Imp. sin SAI. Corren si quedan solos. Sirven para dar volumen sin inflar el peligro real: la amenaza es el sistema, no ellos.
 
 ---
@@ -103,7 +103,7 @@ PNJ de relleno vivo para el Domo y las tres cacerías. Cada tipo trae una **plan
 **Variantes:**
 
 1. **«Nullpointer», Sasha Reine** — netrunner asignada por Helix como «apoyo» del grupo. Competente, cordial, y reporta todo a Veyra. No es traición: es cláusula 12 de su contrato. Si el grupo la trata bien, empieza a tardar en reportar. Es el termómetro de la relación con la corporación.
-2. **Bruno «Cable»** — netrunner de calle, caro y nervioso. Trabaja desde una balsa de contenedores que cambia de fondeadero. No entra a la Red vieja sin protocolo velo, y le cobra el doble si hay ICE militar (el subsuelo de la Misión III le da urticaria).
+2. **Bruno «Cable»** — netrunner de calle, caro y nervioso. Trabaja desde una balsa de contenedores que cambia de fondeadero. No entra a la Red vieja sin protocolo velo, y le cobra el doble si hay ICE militar (el subsuelo de la cacería del Hombre que Sobró le da urticaria).
 
 ---
 
@@ -128,7 +128,7 @@ PNJ de relleno vivo para el Domo y las tres cacerías. Cada tipo trae una **plan
 
 **Variantes:**
 
-1. **Ingrid Mayer** — recursos humanos «legales»: bloquea cuentas, congela pagos y revoca permisos con una firma (presión económica de la sección 10 del doc). Impecable en la forma, letal en el fondo. Le agradan los PJ puntuales: los mortifica más.
+1. **Ingrid Mayer** — recursos humanos «legales»: bloquea cuentas, congela pagos y revoca permisos con una firma (presión económica de la sección 8 del doc). Impecable en la forma, letal en el fondo. Le agradan los PJ puntuales: los mortifica más.
 2. **Facundo Lenz** — oficial de protocolo y archivo: pierde expedientes por precio, sella puertas «por error» por más. El censor que la campaña necesita cada vez que los PJs quieran probar algo ante Helix.
 
 ---

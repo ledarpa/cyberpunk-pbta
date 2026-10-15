@@ -12,13 +12,14 @@ Documento completo para la dirección de juego
 - 2. La verdad detrás de los casos (solo dirección de juego)
 - 3. Prólogo común: La oferta
 - 4. Cómo funciona la trilogía
-- 5. Misión I: El Santo de Titanio
-- 6. Misión II: La Madre de los Descartados
-- 7. Misión III: El Hombre que Sobró
-- 8. Sistema de pistas y conclusión compartida
-- 9. La @Psique en la campaña
-- 10. Helix Dynasty y Adrián Veyra
-- 11. Herramientas de dirección y desenlaces
+- 5. Misiones
+  - El Santo de Titanio
+  - La Madre de los Descartados
+  - El Hombre que Sobró
+- 6. Sistema de pistas y conclusión compartida
+- 7. La @Psique en la campaña
+- 8. Helix Dynasty y Adrián Veyra
+- 9. Herramientas de dirección y desenlaces
 
 ## 1. Concepto y promesa de campaña
 
@@ -326,7 +327,11 @@ Todas las profesiones deben poder contribuir y la información esencial debe ten
 
 Principio PBTA: un fallo debe cambiar la situación, añadir un coste, revelar una verdad peligrosa o poner a alguien en riesgo. No debe hacer desaparecer la única pista que permite continuar.
 
-## 5. Misión I: El Santo de Titanio
+## 5. Misiones
+
+Las tres cacerías, en cualquier orden. La estructura común, la duración sugerida y las reglas de continuidad están en la sección 4.
+
+# El Santo de Titanio
 
 La carne es debilidad. La misión enfrenta al grupo con un veterano militar que se considera una versión mejorada de sí mismo y que ha dejado de reconocer límites humanos como razones válidas para detenerse.
 
@@ -395,7 +400,7 @@ En la matriz hay un registro de diagnóstico que muestra que un filtro de traduc
 
 «No me hicieron más fuerte. Me enseñaron a interpretar cada límite como una amenaza. Después se sorprendieron cuando empecé a eliminar los límites».
 
-## 6. Misión II: La Madre de los Descartados
+# La Madre de los Descartados
 
 El sufrimiento es un error. Esta cacería gira en torno a una cirujana que quiere terminar con el dolor y la soledad conectando mentes, aunque eso destruya la autonomía de quienes intenta salvar.
 
@@ -460,7 +465,7 @@ Los registros de la red contienen datos agregados que no deberían poder compara
 
 «Les enseñaron a soportar el dolor y lo llamaron humanidad. Yo encontré una forma de compartirlo. Ahora ustedes quieren devolverles el derecho a sufrir solos».
 
-## 7. Misión III: El Hombre que Sobró
+# El Hombre que Sobró
 
 La humanidad es una etapa. Esta historia presenta a un científico que no busca dominar a otros ni salvarlos: quiere dejar atrás las limitaciones de la cognición biológica.
 
@@ -521,7 +526,7 @@ Simón conserva el diseño más completo de la arquitectura UMBRAL. Sus registro
 
 «No estoy intentando convertirme en una máquina. Estoy intentando averiguar qué parte de mí necesita seguir siendo humana para que todavía pueda llamarme yo».
 
-## 8. Sistema de pistas y conclusión compartida
+## 6. Sistema de pistas y conclusión compartida
 
 ### Tres fragmentos, una explicación
 
@@ -553,7 +558,7 @@ Posibles cierres:
 
 El final queda abierto porque la ciudad no cambia de un día para otro. Sin embargo, la pregunta central sí tiene respuesta: los personajes han visto qué ocurre cuando una organización mide la vida humana como un coste técnico.
 
-## 9. La @Psique en la campaña
+## 7. La @Psique en la campaña
 
 Esta sección recoge las reglas proporcionadas para el sistema. No introduce costes, duraciones ni cantidades de recuperación que no estén definidas.
 
@@ -583,7 +588,7 @@ Los episodios deben crear complicaciones jugables, no arrebatar permanentemente 
 
 Los tres objetivos ofrecen espejos distintos para la mesa: Varga normaliza la violencia; Mara justifica la pérdida de autonomía por compasión; Simón trata las emociones como datos. No afirmes que todos los personajes con mucha @Psique terminarán igual: las historias personales y las decisiones importan.
 
-## 10. Helix Dynasty y Adrián Veyra
+## 8. Helix Dynasty y Adrián Veyra
 
 ### Helix Dynasty
 
@@ -609,7 +614,7 @@ Veyra debe resultar imponente por los recursos que controla, no porque siempre t
 
 Usa solo los recursos que resulten creíbles en la situación. Si Helix puede resolver cualquier problema con un botón, las decisiones de los personajes pierden valor. La corporación es poderosa, no omnisciente.
 
-## 11. Herramientas de dirección y desenlaces
+## 9. Herramientas de dirección y desenlaces
 
 ### Regla de oro: no bloquees la historia
 

@@ -32,7 +32,7 @@ El sufrimiento es un error. Mara dejó de entender la identidad individual como 
 | Ojo biónico (izquierdo) | Seguimiento de microexpresiones ×2 (**+2 MC**; redundancia) + visión UV | Lee miedo, dolor y mentira con precisión asquerosa |
 | Sistema de sensores de estado (Hi-Tech) | — | Monitoriza signos vitales de **todos los nodos de la red** en tiempo real; si un paciente sufre, ella lo siente primero y reacciona |
 
-*Carga: 7 cromos → 2 casillas por degeneración neural + 2 por episodios clínicos acumulados = **@Psique 4** (cyberpsicosis mayor: episodios de escena completa, como describe la sección 9 del doc).*
+*Carga: 7 cromos → 2 casillas por degeneración neural + 2 por episodios clínicos acumulados = **@Psique 4** (cyberpsicosis mayor: episodios de escena completa, como describe la sección 7 del doc).*
 
 ### Chapería encima
 

@@ -19,13 +19,14 @@ Campaña de horror tecnológico y conspiración corporativa para **Cyberpunk PBT
 2. La verdad detrás de los casos (solo dirección)
 3. Prólogo común: La oferta
 4. Cómo funciona la trilogía
-5. Misión I: El Santo de Titanio
-6. Misión II: La Madre de los Descartados
-7. Misión III: El Hombre que Sobró
-8. Sistema de pistas y conclusión compartida (Proyecto UMBRAL)
-9. La @Psique en la campaña
-10. Helix Dynasty y Adrián Veyra
-11. Herramientas de dirección y desenlaces
+5. Misiones (cada cacería es un capítulo independiente, en cualquier orden):
+   - El Santo de Titanio
+   - La Madre de los Descartados
+   - El Hombre que Sobró
+6. Sistema de pistas y conclusión compartida (Proyecto UMBRAL)
+7. La @Psique en la campaña
+8. Helix Dynasty y Adrián Veyra
+9. Herramientas de dirección y desenlaces
 
 Las tres cacerías son independientes pero comparten el misterio del Proyecto UMBRAL; jugando las tres (en cualquier orden) se reconstruye la verdad sobre Helix Dynasty.
 

@@ -52,6 +52,7 @@
   let data = MANUALS[lang] || MANUALS.es;
   let manualScrollTop = 0;
   let headingObserver = null;
+  let aventurasObserver = null;
 
   if (!data || !book) {
     document.body.innerHTML = "<p style='padding:2rem'>Falta data/manual.js. Ejecutá docs/scripts/build_web_reader.py</p>";
@@ -223,6 +224,14 @@
         a.textContent = item.title;
         a.dataset.id = id;
         frag.appendChild(a);
+        for (const ch of item.children ?? []) {
+          const c = document.createElement("a");
+          c.href = `#${ch.id}`;
+          c.className = "l3 toc-aventura-child";
+          c.textContent = ch.title;
+          c.dataset.id = ch.id;
+          frag.appendChild(c);
+        }
       }
     }
     tocEl.replaceChildren(frag);
@@ -255,6 +264,42 @@
     const boxW = Math.max(48, sidebar.clientWidth - 24);
     const boxH = 36;
     fitAsciiArt(pre, boxW, boxH, 10);
+  }
+
+  /** Spy de la vista aventuras: H1s del libro → ítems del sidebar.
+   *  Orden del DOM = título de la aventura, luego sus children (misiones + PNJ). */
+  function observeAventurasHeadings() {
+    if (aventurasObserver) aventurasObserver.disconnect();
+    if (!aventurasBook || !aventurasPanel || !("IntersectionObserver" in window)) return;
+    const av = window.PBTA_AVENTURAS;
+    const heads = [...aventurasBook.querySelectorAll("h1")];
+    if (!av?.items?.length || !heads.length) return;
+    const map = new Map();
+    let idx = 0;
+    for (const item of av.items) {
+      if (heads[idx]) map.set(heads[idx++].id, `${AVENTURA_PREFIX}${item.id}`);
+      for (const ch of item.children ?? []) {
+        if (heads[idx]) map.set(heads[idx++].id, ch.id);
+      }
+    }
+    let current = null;
+    aventurasObserver = new IntersectionObserver(
+      (entries) => {
+        if (!isAventurasView()) return;
+        const vis = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        const tid = vis.length ? map.get(vis[0].target.id) : current;
+        if (!tid || tid === current) return;
+        current = tid;
+        for (const a of tocEl.querySelectorAll("a")) {
+          a.classList.toggle("is-active", a.dataset.id === tid);
+        }
+        tocEl.querySelector(`a[data-id="${tid}"]`)?.scrollIntoView({ block: "nearest" });
+      },
+      { root: aventurasPanel, rootMargin: "0px 0px -72% 0px", threshold: [0, 1] }
+    );
+    heads.forEach((h) => aventurasObserver.observe(h));
   }
 
   /** Índice del último heading visible sobre el viewport (posición de lectura). */
@@ -356,8 +401,10 @@
     if (isFichaView()) {
       setActiveToc(FICHA_ID);
     } else if (isAventurasView()) {
-      // El libro de aventuras no depende del idioma: solo refresca el índice activo
+      // El libro de aventuras no depende del idioma, pero renderBook() reemplazó
+      // su DOM: reconectar el spy y refrescar el índice activo
       setActiveToc(AVENTURAS_ID);
+      observeAventurasHeadings();
     } else {
       scrollToHeadingIndex(idx);
     }
@@ -415,6 +462,7 @@
   function showFichaView() {
     manualScrollTop = reader.scrollTop;
     if (headingObserver) headingObserver.disconnect();
+    if (aventurasObserver) aventurasObserver.disconnect();
     document.body.classList.remove("view-manual", "view-aventuras");
     document.body.classList.add("view-ficha");
     // El índice arranca oculto en la ficha; la hamburguesa lo abre como drawer
@@ -447,16 +495,21 @@
     // La búsqueda queda activa sobre el libro de aventuras; reset limpio al cruzar vista
     setSearchEnabled(false);
     setSearchEnabled(true);
+    // Hijo del sidebar (ancla av-*) → scroll al heading; ítem raíz → arriba del libro
+    const anchor = id && id.startsWith("av-") ? document.getElementById(id) : null;
+    if (aventurasPanel) {
+      if (anchor) anchor.scrollIntoView({ block: "start" });
+      else aventurasPanel.scrollTop = 0;
+    }
     setActiveToc(id || AVENTURAS_ID);
     history.replaceState(null, "", `#${id || AVENTURAS_ID}`);
-    if (aventurasPanel) {
-      aventurasPanel.scrollTop = 0;
-      aventurasPanel.focus({ preventScroll: true });
-    }
+    observeAventurasHeadings();
+    if (aventurasPanel) aventurasPanel.focus({ preventScroll: true });
   }
 
   function showManualView(id) {
     const fromAventuras = isAventurasView();
+    if (aventurasObserver) aventurasObserver.disconnect();
     document.body.classList.remove("view-ficha", "view-aventuras");
     document.body.classList.add("view-manual");
     // Cerrar el drawer del índice al volver al manual
@@ -503,7 +556,8 @@
       showFichaView();
       return;
     }
-    const isAventura = id === AVENTURAS_ID || id.startsWith(AVENTURA_PREFIX);
+    const isAventura =
+      id === AVENTURAS_ID || id.startsWith(AVENTURA_PREFIX) || id.startsWith("av-");
     if (isFichaView()) {
       const player = window.PBTA_PLAYER;
       if (player?.isLoggedIn?.() && window.PBTA_FICHA?.isDirty?.()) {

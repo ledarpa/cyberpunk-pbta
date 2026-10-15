@@ -27,7 +27,7 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20261015a"
+WEB_BUILD_ID = "20261015b"
 
 # Aventuras publicadas en el lector (apartado «Aventuras» de la barra lateral).
 # Cada entrada: id (link virtual), dir bajo aventuras/, archivo md, título display.
@@ -38,6 +38,16 @@ AVENTURAS: list[dict[str, str]] = [
         "file": "Los_Santos_del_Silicio.md",
         "title": "Los santos del silicio",
     },
+]
+
+# Fichas publicadas bajo el capítulo «Personajes no jugadores» (en orden).
+# El README.md de fichas entra como intro (sin su H1 ni su índice de archivos).
+FICHA_FILES: list[str] = [
+    "objetivo-varga.md",
+    "objetivo-mara.md",
+    "objetivo-simon.md",
+    "pnj-importantes.md",
+    "pnj-genericos.md",
 ]
 
 # Metadatos de maquetación por slug (única fuente: CSS data-* + JS layout).
@@ -876,21 +886,27 @@ def write_manual_js() -> list[str]:
     return en_fallback
 
 
-def strip_indice_web(text: str) -> str:
-    """Solo build web: la barra lateral ya navega; el índice interno del doc sobra."""
+def strip_md_section(text: str, heading: str) -> str:
+    """Elimina la sección «## <heading>» completa (heading incluido) hasta el próximo ##."""
     out: list[str] = []
     skip = False
+    marker = f"## {heading}"
     for line in text.splitlines():
         if skip:
             if line.startswith("## "):
                 skip = False
             else:
                 continue
-        if line.strip() == "## Índice de contenidos":
+        if line.strip() == marker:
             skip = True
             continue
         out.append(line)
     return "\n".join(out)
+
+
+def demote_headings(text: str) -> str:
+    """Baja todos los headings un nivel (fichas: H1 propio → H2 bajo el capítulo PNJ)."""
+    return re.sub(r"^(#{1,5}) ", r"#\1 ", text, flags=re.M)
 
 
 def build_aventuras() -> dict:
@@ -898,20 +914,49 @@ def build_aventuras() -> dict:
 
     Mismo conversor que el manual (misma estética); ids con prefijo «av-»
     para no colisionar con los headings del manual en el DOM de la página.
+    Las fichas del directorio fichas/ se publican como capítulo final
+    «Personajes no jugadores»; children = H1s de la aventura (título aparte),
+    que app.js muestra como sub-ítems del sidebar.
     """
     items = []
     for av in AVENTURAS:
-        path = ROOT / "aventuras" / av["dir"] / av["file"]
-        if not path.exists():
-            raise FileNotFoundError(path)
-        html = md_to_html(
-            strip_indice_web(path.read_text(encoding="utf-8")),
-            {},
-            [],
-            lang="es",
-            id_prefix="av-",
-        )
-        items.append({"id": av["id"], "title": av["title"], "html": html})
+        av_dir = ROOT / "aventuras" / av["dir"]
+        adventure_md = (av_dir / av["file"]).read_text(encoding="utf-8")
+        used: dict[str, int] = {}
+        parts: list[str] = [
+            md_to_html(
+                strip_md_section(adventure_md, "Índice de contenidos"),
+                used,
+                [],
+                lang="es",
+                id_prefix="av-",
+            )
+        ]
+        fichas_dir = av_dir / "fichas"
+        if fichas_dir.exists():
+            pnj: list[str] = ['<h1 id="av-personajes-no-jugadores">Personajes no jugadores</h1>']
+            readme = fichas_dir / "README.md"
+            if readme.exists():
+                readme_md = strip_md_section(readme.read_text(encoding="utf-8"), "Índice")
+                readme_md = re.sub(r"^# .*$\n?", "", readme_md, count=1, flags=re.M)
+                pnj.append(md_to_html(readme_md, used, [], lang="es", id_prefix="av-"))
+            for name in FICHA_FILES:
+                ficha = fichas_dir / name
+                if ficha.exists():
+                    pnj.append(
+                        md_to_html(
+                            demote_headings(ficha.read_text(encoding="utf-8")),
+                            used,
+                            [],
+                            lang="es",
+                            id_prefix="av-",
+                        )
+                    )
+            parts.append("\n".join(pnj))
+        html = "\n".join(parts)
+        h1s = re.findall(r"<h1 id=\"(av-[^\"]+)\">(.*?)</h1>", html)
+        children = [{"id": hid, "title": title} for hid, title in h1s[1:]]
+        items.append({"id": av["id"], "title": av["title"], "html": html, "children": children})
     return {"title": "Aventuras", "items": items}
 
 
