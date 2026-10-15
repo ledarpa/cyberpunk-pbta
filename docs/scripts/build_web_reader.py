@@ -27,7 +27,18 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20261006a"
+WEB_BUILD_ID = "20261015a"
+
+# Aventuras publicadas en el lector (apartado «Aventuras» de la barra lateral).
+# Cada entrada: id (link virtual), dir bajo aventuras/, archivo md, título display.
+AVENTURAS: list[dict[str, str]] = [
+    {
+        "id": "santos-silicio",
+        "dir": "santos-silicio",
+        "file": "Los_Santos_del_Silicio.md",
+        "title": "Los santos del silicio",
+    },
+]
 
 # Metadatos de maquetación por slug (única fuente: CSS data-* + JS layout).
 ART_META: dict[str, dict[str, str]] = {
@@ -388,7 +399,14 @@ def table_html(rows: list[list[str]], *, rail: bool = False, lang: str = "es") -
     )
 
 
-def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict], *, lang: str = "es") -> str:
+def md_to_html(
+    content: str,
+    used_ids: dict[str, int],
+    toc: list[dict],
+    *,
+    lang: str = "es",
+    id_prefix: str = "",
+) -> str:
     # EN: títulos y headers de tabla se canonizan a su clave ES para toda la
     # lógica (arte, banners, rail/wrap, ids de heading); el display queda EN.
     canon_title = (lambda t: TITLE_EN.get(t, t)) if lang == "en" else (lambda t: t)
@@ -620,7 +638,7 @@ def md_to_html(content: str, used_ids: dict[str, int], toc: list[dict], *, lang:
             )
             if not keep_wrap_open:
                 close_catalog_section()
-            hid = slugify(canon, used_ids)
+            hid = f"{id_prefix}{slugify(canon, used_ids)}"
             toc.append({"id": hid, "level": level, "title": title})
             heading_html = f'<h{level} id="{escape(hid)}">{inline_md(title)}</h{level}>'
             wrap_heading = False
@@ -858,6 +876,52 @@ def write_manual_js() -> list[str]:
     return en_fallback
 
 
+def strip_indice_web(text: str) -> str:
+    """Solo build web: la barra lateral ya navega; el índice interno del doc sobra."""
+    out: list[str] = []
+    skip = False
+    for line in text.splitlines():
+        if skip:
+            if line.startswith("## "):
+                skip = False
+            else:
+                continue
+        if line.strip() == "## Índice de contenidos":
+            skip = True
+            continue
+        out.append(line)
+    return "\n".join(out)
+
+
+def build_aventuras() -> dict:
+    """Payload del apartado «Aventuras»: un libro independiente por aventura.
+
+    Mismo conversor que el manual (misma estética); ids con prefijo «av-»
+    para no colisionar con los headings del manual en el DOM de la página.
+    """
+    items = []
+    for av in AVENTURAS:
+        path = ROOT / "aventuras" / av["dir"] / av["file"]
+        if not path.exists():
+            raise FileNotFoundError(path)
+        html = md_to_html(
+            strip_indice_web(path.read_text(encoding="utf-8")),
+            {},
+            [],
+            lang="es",
+            id_prefix="av-",
+        )
+        items.append({"id": av["id"], "title": av["title"], "html": html})
+    return {"title": "Aventuras", "items": items}
+
+
+def write_aventuras_js() -> None:
+    (DATA / "aventuras.js").write_text(
+        "window.PBTA_AVENTURAS = " + json.dumps(build_aventuras(), ensure_ascii=False) + ";\n",
+        encoding="utf-8",
+    )
+
+
 def main() -> None:
     WEB.mkdir(parents=True, exist_ok=True)
     DATA.mkdir(parents=True, exist_ok=True)
@@ -865,6 +929,7 @@ def main() -> None:
     en_fallback = write_manual_js()
     if en_fallback:
         print(f"EN con fallback a ES: {', '.join(en_fallback)}")
+    write_aventuras_js()
     shutil.copy2(ASCII_SRC, DATA / "portada-ascii.txt")
     fonts = WEB / "fonts"
     fonts.mkdir(parents=True, exist_ok=True)
@@ -872,7 +937,7 @@ def main() -> None:
     shutil.copy2(FONT_SRC_WOFF2, fonts / "VT323-Regular.woff2")
     write_build_js()
     patch_index_cache()
-    print(f"OK {DATA / 'manual.js'} + manual-en.js (build={WEB_BUILD_ID})")
+    print(f"OK {DATA / 'manual.js'} + manual-en.js + aventuras.js (build={WEB_BUILD_ID})")
 
 
 if __name__ == "__main__":

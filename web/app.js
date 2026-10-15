@@ -3,6 +3,8 @@
   const tocEl = document.getElementById("toc");
   const reader = document.getElementById("reader");
   const fichaPanel = document.getElementById("ficha-panel");
+  const aventurasPanel = document.getElementById("aventuras-panel");
+  const aventurasBook = document.getElementById("aventuras-book");
   const q = document.getElementById("q");
   const meta = document.getElementById("search-meta");
   const prevBtn = document.getElementById("search-prev");
@@ -12,6 +14,8 @@
   const sidebar = document.getElementById("sidebar");
 
   const FICHA_ID = "hoja-personaje";
+  const AVENTURAS_ID = "aventuras";
+  const AVENTURA_PREFIX = "aventura:";
   const LANG_KEY = "pbta-lang";
   const MANUALS = {
     es: window.PBTA_MANUAL,
@@ -26,6 +30,7 @@
       next: "Siguiente",
       coverSub: "MANUAL DE REGLAS",
       ficha: "Hoja de personaje",
+      aventuras: "Aventuras",
     },
     en: {
       tocToggle: "Contents",
@@ -35,6 +40,7 @@
       next: "Next",
       coverSub: "RULEBOOK",
       ficha: "Character sheet",
+      aventuras: "Adventures",
     },
   };
   const store = {
@@ -57,10 +63,22 @@
   /** Render completo del manual (idioma activo): DOM + TOC + arte + observer. */
   function renderBook() {
     book.innerHTML = data.html;
+    renderAventurasBook();
     renderToc(data.toc || []);
     bindBookArt();
     runArtLayout();
-    if (!isFichaView()) observeHeadings();
+    if (!isPanelView()) observeHeadings();
+  }
+
+  /** Libro de aventuras: mismo conversor que el manual, ids «av-» propios. */
+  function renderAventurasBook() {
+    if (!aventurasBook) return;
+    const scroll = aventurasPanel ? aventurasPanel.scrollTop : 0;
+    const av = window.PBTA_AVENTURAS;
+    aventurasBook.innerHTML = (av?.items ?? [])
+      .map((it) => `<article class="chapter" data-aventura="${it.id}">${it.html}</article>`)
+      .join("");
+    if (aventurasPanel) aventurasPanel.scrollTop = scroll;
   }
 
   renderBook();
@@ -189,6 +207,24 @@
     fichaLink.textContent = t().ficha;
     fichaLink.dataset.id = FICHA_ID;
     frag.appendChild(fichaLink);
+    const av = window.PBTA_AVENTURAS;
+    if (av?.items?.length) {
+      const aventurasLink = document.createElement("a");
+      aventurasLink.href = `#${AVENTURAS_ID}`;
+      aventurasLink.className = "l1 toc-aventuras";
+      aventurasLink.textContent = t().aventuras;
+      aventurasLink.dataset.id = AVENTURAS_ID;
+      frag.appendChild(aventurasLink);
+      for (const item of av.items) {
+        const id = `${AVENTURA_PREFIX}${item.id}`;
+        const a = document.createElement("a");
+        a.href = `#${id}`;
+        a.className = "l2 toc-aventura";
+        a.textContent = item.title;
+        a.dataset.id = id;
+        frag.appendChild(a);
+      }
+    }
     tocEl.replaceChildren(frag);
     loadTocCoverAscii();
   }
@@ -223,7 +259,7 @@
 
   /** Índice del último heading visible sobre el viewport (posición de lectura). */
   function currentHeadingIndex() {
-    if (isFichaView()) return null;
+    if (isPanelView()) return null;
     const heads = [...book.querySelectorAll("h1, h2, h3")];
     if (!heads.length) return null;
     const top = reader.getBoundingClientRect().top;
@@ -319,6 +355,9 @@
     window.PBTA_PLAYER?.syncAuthChrome?.();
     if (isFichaView()) {
       setActiveToc(FICHA_ID);
+    } else if (isAventurasView()) {
+      // El libro de aventuras no depende del idioma: solo refresca el índice activo
+      setActiveToc(AVENTURAS_ID);
     } else {
       scrollToHeadingIndex(idx);
     }
@@ -345,6 +384,15 @@
     return document.body.classList.contains("view-ficha");
   }
 
+  function isAventurasView() {
+    return document.body.classList.contains("view-aventuras");
+  }
+
+  /** Cualquier pantalla no-manual (ficha, aventuras): sin observer ni scroll del lector. */
+  function isPanelView() {
+    return isFichaView() || isAventurasView();
+  }
+
   function setActiveToc(id) {
     for (const a of tocEl.querySelectorAll("a")) {
       a.classList.toggle("is-active", a.dataset.id === id);
@@ -367,13 +415,14 @@
   function showFichaView() {
     manualScrollTop = reader.scrollTop;
     if (headingObserver) headingObserver.disconnect();
-    document.body.classList.remove("view-manual");
+    document.body.classList.remove("view-manual", "view-aventuras");
     document.body.classList.add("view-ficha");
     // El índice arranca oculto en la ficha; la hamburguesa lo abre como drawer
     document.body.classList.remove("toc-open");
     scrim.hidden = true;
     toggle.setAttribute("aria-expanded", "false");
     reader.hidden = true;
+    if (aventurasPanel) aventurasPanel.hidden = true;
     fichaPanel.hidden = false;
     setSearchEnabled(false);
     setActiveToc(FICHA_ID);
@@ -383,8 +432,32 @@
     fichaPanel.focus({ preventScroll: true });
   }
 
+  function showAventurasView(id) {
+    manualScrollTop = reader.scrollTop;
+    if (headingObserver) headingObserver.disconnect();
+    document.body.classList.remove("view-manual", "view-ficha");
+    document.body.classList.add("view-aventuras");
+    document.body.classList.remove("toc-open");
+    scrim.hidden = true;
+    const mobile = window.matchMedia("(max-width: 760px)").matches;
+    toggle.setAttribute("aria-expanded", mobile ? "false" : "true");
+    reader.hidden = true;
+    fichaPanel.hidden = true;
+    if (aventurasPanel) aventurasPanel.hidden = false;
+    // La búsqueda queda activa sobre el libro de aventuras; reset limpio al cruzar vista
+    setSearchEnabled(false);
+    setSearchEnabled(true);
+    setActiveToc(id || AVENTURAS_ID);
+    history.replaceState(null, "", `#${id || AVENTURAS_ID}`);
+    if (aventurasPanel) {
+      aventurasPanel.scrollTop = 0;
+      aventurasPanel.focus({ preventScroll: true });
+    }
+  }
+
   function showManualView(id) {
-    document.body.classList.remove("view-ficha");
+    const fromAventuras = isAventurasView();
+    document.body.classList.remove("view-ficha", "view-aventuras");
     document.body.classList.add("view-manual");
     // Cerrar el drawer del índice al volver al manual
     document.body.classList.remove("toc-open");
@@ -392,7 +465,9 @@
     const mobile = window.matchMedia("(max-width: 760px)").matches;
     toggle.setAttribute("aria-expanded", mobile ? "false" : "true");
     fichaPanel.hidden = true;
+    if (aventurasPanel) aventurasPanel.hidden = true;
     reader.hidden = false;
+    if (fromAventuras) setSearchEnabled(false); // cruza vista: limpia término/marcas de aventuras
     setSearchEnabled(true);
     observeHeadings();
     const targetId = document.getElementById(id) ? id : "portada";
@@ -428,18 +503,34 @@
       showFichaView();
       return;
     }
+    const isAventura = id === AVENTURAS_ID || id.startsWith(AVENTURA_PREFIX);
     if (isFichaView()) {
       const player = window.PBTA_PLAYER;
       if (player?.isLoggedIn?.() && window.PBTA_FICHA?.isDirty?.()) {
         player
           .gateDirty({ onDiscard: () => player.restoreActiveOrReset?.() })
           .then((ok) => {
-            if (ok) showManualView(id);
+            if (!ok) return;
+            if (isAventura) showAventurasView(id);
+            else showManualView(id);
           });
         return;
       }
     }
-    showManualView(id);
+    if (isAventura) showAventurasView(id);
+    else showManualView(id);
+  }
+
+  /** Libro visible: manual o aventuras (la búsqueda opera sobre el activo). */
+  function activeBook() {
+    return isAventurasView() && aventurasBook ? aventurasBook : book;
+  }
+
+  function clampAventurasScroll() {
+    if (!aventurasPanel) return;
+    const max = Math.max(0, aventurasPanel.scrollHeight - aventurasPanel.clientHeight);
+    if (aventurasPanel.scrollTop > max) aventurasPanel.scrollTop = max;
+    if (aventurasPanel.scrollTop < 0) aventurasPanel.scrollTop = 0;
   }
 
   function clampReaderScroll() {
@@ -495,6 +586,10 @@
     sidebar.addEventListener("scroll", clampSidebarScroll, { passive: true });
     blockWheelPastEdge(reader, clampReaderScroll);
     blockWheelPastEdge(sidebar, clampSidebarScroll);
+    if (aventurasPanel) {
+      aventurasPanel.addEventListener("scroll", clampAventurasScroll, { passive: true });
+      blockWheelPastEdge(aventurasPanel, clampAventurasScroll);
+    }
     blockWheelPastEdge(fichaPanel, () => {
       const max = Math.max(0, fichaPanel.scrollHeight - fichaPanel.clientHeight);
       if (fichaPanel.scrollTop > max) fichaPanel.scrollTop = max;
@@ -525,7 +620,7 @@
 
   function observeHeadings() {
     if (headingObserver) headingObserver.disconnect();
-    if (isFichaView()) return;
+    if (isPanelView()) return;
     const heads = [...book.querySelectorAll("h1, h2, h3")];
     const cover = document.getElementById("portada");
     if (cover) heads.unshift(cover);
@@ -534,7 +629,7 @@
     let current = null;
     headingObserver = new IntersectionObserver(
       (entries) => {
-        if (isFichaView()) return;
+        if (isPanelView()) return;
         const vis = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
@@ -603,7 +698,7 @@
         nextBtn.hidden = true;
         return;
       }
-      hits = highlight(book, term);
+      hits = highlight(activeBook(), term);
       meta.hidden = false;
       prevBtn.hidden = false;
       nextBtn.hidden = false;
@@ -641,10 +736,13 @@
   }
 
   function clearMarks() {
-    for (const mark of [...book.querySelectorAll("mark")]) {
-      const parent = mark.parentNode;
-      parent.replaceChild(document.createTextNode(mark.textContent), mark);
-      parent.normalize();
+    for (const root of [book, aventurasBook]) {
+      if (!root) continue;
+      for (const mark of [...root.querySelectorAll("mark")]) {
+        const parent = mark.parentNode;
+        parent.replaceChild(document.createTextNode(mark.textContent), mark);
+        parent.normalize();
+      }
     }
   }
 

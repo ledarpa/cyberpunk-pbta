@@ -5,6 +5,7 @@ Una salida web desde una sola prosa:
 | | Dónde |
 |--|--------|
 | **Fuente** | `docs/capitulos/` |
+| **Aventuras** | `aventuras/` (santos-silicio) → apartado «Aventuras» del lector web (`web/data/aventuras.js`) |
 | **Web** | [cyberpunk-pbta.vercel.app](https://cyberpunk-pbta.vercel.app) · Hoja de personaje · fuente en `web/` (`vercel.json`) |
 | **PDF** | `docs/pdf/manual-es.pdf` + `docs/pdf/ficha.pdf` — diseño en `docs/pdf/theme.typ` / `docs/pdf/ficha.typ`, generados desde los mismos capítulos md |
 
@@ -17,7 +18,7 @@ Versión anterior del proyecto (era Word: original mecánico, ficha, borrador y 
 ## Web
 
 ```bash
-python3 docs/scripts/build_web_reader.py                # web/data + fuente + portada
+python3 docs/scripts/build_web_reader.py                # web/data (manual ES/EN + aventuras) + fuente + portada
 ./docs/assets/fonts/install.sh                          # VT323 en el Mac, una vez
 ```
 

@@ -4209,3 +4209,43 @@ table.t-nivel tbody td:first-child {
   border-top: 1px solid var(--line);
   padding-top: 0.45rem;
 }
+
+/* --- Aventuras (pantalla independiente) --- */
+/* Mismo lector que el manual: panel scrollable + .book = tipografía idéntica. */
+.aventuras-panel {
+  grid-area: 1 / 1;
+  min-height: 0;
+  min-width: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  padding: var(--pad);
+  padding-bottom: calc(var(--pad) + var(--safe-b));
+  background: var(--bg);
+}
+
+.aventuras-panel[hidden] {
+  display: none !important;
+}
+
+.aventuras-page {
+  width: 100%;
+}
+
+.aventuras-kicker {
+  margin: 0.4rem 0 0;
+  text-align: center;
+  color: var(--yellow);
+  font-size: 17px;
+  letter-spacing: 0.08em;
+}
+
+.aventuras-panel .book {
+  margin-top: 0.9rem;
+}
+
+.toc .toc-aventuras {
+  margin-top: 0.55rem;
+  border-top: 1px solid var(--line);
+  padding-top: 0.45rem;
+}
