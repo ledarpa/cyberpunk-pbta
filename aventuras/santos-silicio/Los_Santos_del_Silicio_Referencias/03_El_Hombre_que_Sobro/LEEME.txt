@@ -1,0 +1,13 @@
+# El Hombre que Sobró
+
+Concepto visual: Conciencia biomecánica integrada en servidores, cuerpo fusionado con cables y hardware.
+
+Referencia: Biomechanical Network Integration (image embedded in Qlik Community article)
+
+Página de origen:
+https://community.qlik.com/t5/Member-Articles/Calling-Generative-AI-systems-via-the-Qlik-Sense-REST-Connector/ta-p/2090429
+
+URL directa de la imagen:
+https://community.qlik.com/t5/image/serverpage/image-id/111561i8124058FB63A2F5C?v=v2
+
+Nota: la imagen está descargada localmente como «referencia.png» (verificada, formato correcto). El resto de la carpeta contiene solo esta nota y la fuente. Las imágenes son referencias de terceros y pueden tener derechos de autor; consultá las condiciones de uso con el autor o sitio antes de reutilizarla fuera de referencia personal.

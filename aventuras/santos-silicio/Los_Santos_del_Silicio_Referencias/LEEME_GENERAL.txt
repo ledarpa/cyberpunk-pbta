@@ -1,0 +1,14 @@
+LOS SANTOS DEL SILICIO — REFERENCIAS VISUALES
+
+El paquete organiza referencias para las tres cacerías y la corporación Helix Dynasty.
+
+ESTADO: las imágenes fueron descargadas y verificadas localmente. Cada carpeta contiene:
+- referencia.jpg / referencia.png / referencia.webp — copia local de la imagen de referencia.
+- LEEME.txt — fuente, URL de origen y condiciones de uso.
+
+Nota sobre la URL de la carpeta 01: la URL del CSV original apuntaba a un
+subdominio de CloudFront incorrecto (d2ol7oe51mr4n6). La URL vigente, extraída
+de la página de origen, es d2ol7oe51mr4n9.cloudfront.net.
+
+Las imágenes son referencias de terceros y pueden tener derechos de autor; consultá
+las condiciones de cada fuente antes de reutilizarlas o distribuirlas.
