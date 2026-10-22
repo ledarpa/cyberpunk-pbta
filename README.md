@@ -5,7 +5,7 @@ Una salida web desde una sola prosa:
 | | Dónde |
 |--|--------|
 | **Fuente** | `docs/capitulos/` |
-| **Aventuras** | `aventuras/` (santos-silicio) → apartado «Aventuras» del lector web (`web/data/aventuras.js`) |
+| **Aventuras** | `aventuras/` (santos-silicio, protocolo-rojo) → apartado «Aventuras» del lector web (`web/data/aventuras.js`) |
 | **Web** | [cyberpunk-pbta.vercel.app](https://cyberpunk-pbta.vercel.app) · Hoja de personaje · fuente en `web/` (`vercel.json`) |
 | **PDF** | `docs/pdf/manual-es.pdf` + `docs/pdf/ficha.pdf` — diseño en `docs/pdf/theme.typ` / `docs/pdf/ficha.typ`, generados desde los mismos capítulos md |
 

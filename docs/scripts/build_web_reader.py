@@ -27,7 +27,7 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20261015b"
+WEB_BUILD_ID = "20261022"
 
 # Aventuras publicadas en el lector (apartado «Aventuras» de la barra lateral).
 # Cada entrada: id (link virtual), dir bajo aventuras/, archivo md, título display.
@@ -37,6 +37,12 @@ AVENTURAS: list[dict[str, str]] = [
         "dir": "santos-silicio",
         "file": "Los_Santos_del_Silicio.md",
         "title": "Los santos del silicio",
+    },
+    {
+        "id": "protocolo-rojo",
+        "dir": "protocolo-rojo",
+        "file": "Protocolo_Rojo.md",
+        "title": "Protocolo Rojo",
     },
 ]
 
@@ -912,8 +918,9 @@ def demote_headings(text: str) -> str:
 def build_aventuras() -> dict:
     """Payload del apartado «Aventuras»: un libro independiente por aventura.
 
-    Mismo conversor que el manual (misma estética); ids con prefijo «av-»
-    para no colisionar con los headings del manual en el DOM de la página.
+    Mismo conversor que el manual (misma estética); ids con prefijo
+    «av-<id-aventura>-» para no colisionar con los headings del manual ni
+    entre aventuras en el DOM de la página.
     Las fichas del directorio fichas/ se publican como capítulo final
     «Personajes no jugadores»; children = H1s de la aventura (título aparte),
     que app.js muestra como sub-ítems del sidebar.
@@ -921,6 +928,7 @@ def build_aventuras() -> dict:
     items = []
     for av in AVENTURAS:
         av_dir = ROOT / "aventuras" / av["dir"]
+        av_prefix = f"av-{av['id']}-"
         adventure_md = (av_dir / av["file"]).read_text(encoding="utf-8")
         used: dict[str, int] = {}
         parts: list[str] = [
@@ -929,17 +937,17 @@ def build_aventuras() -> dict:
                 used,
                 [],
                 lang="es",
-                id_prefix="av-",
+                id_prefix=av_prefix,
             )
         ]
         fichas_dir = av_dir / "fichas"
         if fichas_dir.exists():
-            pnj: list[str] = ['<h1 id="av-personajes-no-jugadores">Personajes no jugadores</h1>']
+            pnj: list[str] = [f'<h1 id="{av_prefix}personajes-no-jugadores">Personajes no jugadores</h1>']
             readme = fichas_dir / "README.md"
             if readme.exists():
                 readme_md = strip_md_section(readme.read_text(encoding="utf-8"), "Índice")
                 readme_md = re.sub(r"^# .*$\n?", "", readme_md, count=1, flags=re.M)
-                pnj.append(md_to_html(readme_md, used, [], lang="es", id_prefix="av-"))
+                pnj.append(md_to_html(readme_md, used, [], lang="es", id_prefix=av_prefix))
             for name in FICHA_FILES:
                 ficha = fichas_dir / name
                 if ficha.exists():
@@ -949,7 +957,7 @@ def build_aventuras() -> dict:
                             used,
                             [],
                             lang="es",
-                            id_prefix="av-",
+                            id_prefix=av_prefix,
                         )
                     )
             parts.append("\n".join(pnj))
