@@ -27,7 +27,7 @@ ASCII_SRC = ROOT / "docs" / "assets" / "portada-ascii.txt"
 _LIST_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<marker>[-*]|\d+\.)\s+(?P<body>.+)$")
 
 # Versión única del build web (cache bust + data/build.js).
-WEB_BUILD_ID = "20261022"
+WEB_BUILD_ID = "20261022b"
 
 # Aventuras publicadas en el lector (apartado «Aventuras» de la barra lateral).
 # Cada entrada: id (link virtual), dir bajo aventuras/, archivo md, título display.

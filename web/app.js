@@ -53,6 +53,7 @@
   let manualScrollTop = 0;
   let headingObserver = null;
   let aventurasObserver = null;
+  let activeAventura = null; // id del apartado de aventura activo (PBTA_AVENTURAS.items[].id)
 
   if (!data || !book) {
     document.body.innerHTML = "<p style='padding:2rem'>Falta data/manual.js. Ejecutá docs/scripts/build_web_reader.py</p>";
@@ -71,14 +72,39 @@
     if (!isPanelView()) observeHeadings();
   }
 
-  /** Libro de aventuras: mismo conversor que el manual, ids «av-» propios. */
-  function renderAventurasBook() {
+  function aventuraItems() {
+    return window.PBTA_AVENTURAS?.items ?? [];
+  }
+
+  /** Resuelve la aventura dueña de un id de sidebar/hash:
+   *  «aventura:<id>», ancla «av-<id>-*» o el legado «aventuras» → primera. */
+  function aventuraFor(id) {
+    const items = aventuraItems();
+    if (!items.length) return null;
+    if (!id || id === AVENTURAS_ID) return items[0];
+    if (id.startsWith(AVENTURA_PREFIX)) {
+      return items.find((it) => it.id === id.slice(AVENTURA_PREFIX.length)) ?? items[0];
+    }
+    if (id.startsWith("av-")) {
+      return items.find((it) => id.startsWith(`av-${it.id}-`)) ?? items[0];
+    }
+    return items[0];
+  }
+
+  /** Libro de aventuras: cada aventura es un apartado propio; solo la activa
+   *  vive en el DOM (mismo conversor que el manual, ids «av-» por aventura). */
+  function renderAventurasBook(id) {
     if (!aventurasBook) return;
     const scroll = aventurasPanel ? aventurasPanel.scrollTop : 0;
-    const av = window.PBTA_AVENTURAS;
-    aventurasBook.innerHTML = (av?.items ?? [])
-      .map((it) => `<article class="chapter" data-aventura="${it.id}">${it.html}</article>`)
-      .join("");
+    const items = aventuraItems();
+    let item = null;
+    if (id) item = aventuraFor(id);
+    else if (activeAventura) item = items.find((it) => it.id === activeAventura) ?? null;
+    if (!item) item = items[0] ?? null; // arranque: primera aventura
+    activeAventura = item?.id ?? null;
+    aventurasBook.innerHTML = item
+      ? `<article class="chapter" data-aventura="${item.id}">${item.html}</article>`
+      : "";
     if (aventurasPanel) aventurasPanel.scrollTop = scroll;
   }
 
@@ -210,29 +236,25 @@
     frag.appendChild(fichaLink);
     const av = window.PBTA_AVENTURAS;
     if (av?.items?.length) {
-      const aventurasLink = document.createElement("a");
-      aventurasLink.href = `#${AVENTURAS_ID}`;
-      aventurasLink.className = "l1 toc-aventuras";
-      aventurasLink.textContent = t().aventuras;
-      aventurasLink.dataset.id = AVENTURAS_ID;
-      frag.appendChild(aventurasLink);
-      for (const item of av.items) {
+      // Cada aventura es un apartado propio de la barra (l1), como la Hoja;
+      // la primera lleva el separador visual (regla .toc-aventuras del CSS).
+      av.items.forEach((item, i) => {
         const id = `${AVENTURA_PREFIX}${item.id}`;
         const a = document.createElement("a");
         a.href = `#${id}`;
-        a.className = "l2 toc-aventura";
+        a.className = `l1 toc-aventura${i === 0 ? " toc-aventuras" : ""}`;
         a.textContent = item.title;
         a.dataset.id = id;
         frag.appendChild(a);
         for (const ch of item.children ?? []) {
           const c = document.createElement("a");
           c.href = `#${ch.id}`;
-          c.className = "l3 toc-aventura-child";
+          c.className = "l2 toc-aventura-child";
           c.textContent = ch.title;
           c.dataset.id = ch.id;
           frag.appendChild(c);
         }
-      }
+      });
     }
     tocEl.replaceChildren(frag);
     loadTocCoverAscii();
@@ -267,20 +289,19 @@
   }
 
   /** Spy de la vista aventuras: H1s del libro → ítems del sidebar.
-   *  Orden del DOM = título de la aventura, luego sus children (misiones + PNJ). */
+   *  Solo la aventura activa está en el DOM: heads[0] = su título,
+   *  los siguientes = sus children, en orden. */
   function observeAventurasHeadings() {
     if (aventurasObserver) aventurasObserver.disconnect();
     if (!aventurasBook || !aventurasPanel || !("IntersectionObserver" in window)) return;
-    const av = window.PBTA_AVENTURAS;
+    const item = aventuraItems().find((it) => it.id === activeAventura);
     const heads = [...aventurasBook.querySelectorAll("h1")];
-    if (!av?.items?.length || !heads.length) return;
+    if (!item || !heads.length) return;
     const map = new Map();
     let idx = 0;
-    for (const item of av.items) {
-      if (heads[idx]) map.set(heads[idx++].id, `${AVENTURA_PREFIX}${item.id}`);
-      for (const ch of item.children ?? []) {
-        if (heads[idx]) map.set(heads[idx++].id, ch.id);
-      }
+    if (heads[idx]) map.set(heads[idx++].id, `${AVENTURA_PREFIX}${item.id}`);
+    for (const ch of item.children ?? []) {
+      if (heads[idx]) map.set(heads[idx++].id, ch.id);
     }
     let current = null;
     aventurasObserver = new IntersectionObserver(
@@ -402,8 +423,8 @@
       setActiveToc(FICHA_ID);
     } else if (isAventurasView()) {
       // El libro de aventuras no depende del idioma, pero renderBook() reemplazó
-      // su DOM: reconectar el spy y refrescar el índice activo
-      setActiveToc(AVENTURAS_ID);
+      // su DOM: reconectar el spy y refrescar el índice del apartado activo
+      setActiveToc(activeAventura ? `${AVENTURA_PREFIX}${activeAventura}` : AVENTURAS_ID);
       observeAventurasHeadings();
     } else {
       scrollToHeadingIndex(idx);
@@ -495,14 +516,18 @@
     // La búsqueda queda activa sobre el libro de aventuras; reset limpio al cruzar vista
     setSearchEnabled(false);
     setSearchEnabled(true);
-    // Hijo del sidebar (ancla av-*) → scroll al heading; ítem raíz → arriba del libro
-    const anchor = id && id.startsWith("av-") ? document.getElementById(id) : null;
+    // Apartado por aventura: montar solo la dueña del id (aventura:*, ancla av-*,
+    // legado «aventuras» → primera). El ancla se busca DESPUÉS de re-render.
+    const item = aventuraFor(id);
+    if (item && item.id !== activeAventura) renderAventurasBook(`${AVENTURA_PREFIX}${item.id}`);
+    const anchor = item && id && id.startsWith("av-") ? document.getElementById(id) : null;
     if (aventurasPanel) {
       if (anchor) anchor.scrollIntoView({ block: "start" });
       else aventurasPanel.scrollTop = 0;
     }
-    setActiveToc(id || AVENTURAS_ID);
-    history.replaceState(null, "", `#${id || AVENTURAS_ID}`);
+    const tocId = item ? (anchor ? id : `${AVENTURA_PREFIX}${item.id}`) : AVENTURAS_ID;
+    setActiveToc(tocId);
+    history.replaceState(null, "", `#${tocId}`);
     observeAventurasHeadings();
     if (aventurasPanel) aventurasPanel.focus({ preventScroll: true });
   }
